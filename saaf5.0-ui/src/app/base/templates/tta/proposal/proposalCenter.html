@@ -1,0 +1,114 @@
+<div ng-controller="proposalCenterCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                     <!--   <button class="btn btn-default" type="button" ng-click="btnDeptFee()">
+                            <i class="fa fa-search" aria-hidden="true"></i>查看部门协定标准
+                        </button>-->
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDiscard,btnChange,btnCutVersion,btnDetail,btnExport" data-disabled-for-table="dataTable">
+                        <button class="btn btn-default" ng-click="btnChange()" ng-disabled="!showinfo || !dataTable.selectRow">
+                        </button>
+                        <button class="btn btn-default" ng-click="btnCutVersion()" ng-disabled="!showcutinfo || !dataTable.selectRow">
+                        </button>
+                        <button class="btn btn-default" ng-click="btnDiscard()" ng-disabled="!isOrderMake || !dataTable.selectRow">
+                        </button>
+                    </div>
+
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <!--{key:'description',label:'描述'},-->
+                    <!--{key:'isadmin',label:'是否管理员',type:'lookCode',lookCode:'YES_OR_NO'},-->
+                    <!--{key:'internalUser',label:'是否EBS用户',type:'lookCode',lookCode:'YES_OR_NO'},-->
+
+                    <div search-form
+                         data-legend="[
+                            {key:'orderNbr',label:'单据号'},
+                            {key:'creationDate1',label:'制单时间', type:'time', endDate:'creationDate2'},
+                            {key:'creationDate2',label:'到', type:'time', startDate:'creationDate1'},
+                            {key:'status',label:'状态',type:'lookCode',lookCode:'PROPOSAL_STATUS'},
+                            {key:'proposalYear',label:'Proposal制作年度'},
+                            {key:'vendorNbr',label:'供应商编码'},
+                            {key:'vendorName',label:'供应商名称'},
+                            {key:'createdName',label:'制单人'}
+
+                        ]"
+                         ng-model="params"
+                            ></div>
+
+                </div>
+
+                <!-- {'value':'originProposalId','name':'原proposalId'},-->
+               <!-- {'value':'originProposalId','name':'上一版本'},-->
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="false"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="proposalFind"
+                         data-legend="[
+                             {'value':'isCollection','name':'是否是补录单','boolean':'icon'},
+                             {'value':'orderNbr','name':'单据号'},
+                             {'value':'orderNbrVersion','name':'单据号_版本号'},
+                             {'value':'deptCode1','name':'部门编码'},
+                             {'value':'deptDesc1','name':'部门名称'},
+                             {'value':'proposalNbr','name':'Proposal编号'},
+                             {'value':'vendorNbr','name':'供应商编号'},
+                             {'value':'vendorName','name':'供应商名称'},
+                             {'value':'proposalYear','name':'Proposal制作年度'},
+                              {'value':'creationDate','name':'制单日期'},
+                              {'value':'lastUpdateDate','name':'更新单据日期'},
+                              {'value':'approveDate','name':'审批通过日期'},
+                              {'value':'statusName','name':'单据状态'},
+                              {'value':'versionCode','name':'PROPOSAL版本号'},
+                              {'value':'createdName','name':'制单人'},
+                              {'value':'isTransdepart','name':'是否有跨部门标识','boolean':'icon'},
+                              {'value':'newPaymentName','name':'新品收款方式'},
+                              {'value':'newStoreQty','name':'新品店铺数量'},
+                              {'value':'plnAdjustScale','name':'品牌计划调整比例'},
+                              {'value':'isCrossYear','name':'Cross-year是否跨年','boolean':'icon'},
+                              {'value':'beginDate','name':'有效期从'},
+                              {'value':'endDate','name':'有效期到'},
+                              {'value':'currentUserName','name':'当前审批人'},
+                              {'value':'waitTime','name':'当前审批人停留时长(小时)'},
+                              {'value':'isPlnConfirm','name':'品牌计划表是否确认','boolean':'icon'},
+                              {'value':'isTermsConfirm','name':'TTA Terms是否确认','boolean':'icon'},
+                              {'value':'isDepartConfirm','name':'部门协定标准是否确认','boolean':'icon'},
+                              {'value':'isNewConfirm','name':'新品种推广服务费是否确认','boolean':'icon'},
+                              {'value':'isQuestConfirm','name':'问卷是否确认','boolean':'icon'}
+                             ]"
+                         data-click-row="clickRowCallback"
+                            ></div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+</div>

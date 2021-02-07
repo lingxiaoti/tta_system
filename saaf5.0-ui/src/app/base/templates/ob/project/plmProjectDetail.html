@@ -1,0 +1,558 @@
+<div ng-controller="plmProjectDetailCtrl" class="bigdata">
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" permission-btn="btnSave"   ng-click="btnSave(plmProjectInfoForm.$invalid)" ng-disabled="headerData.billStatus=='ABANDONED'" data-validate-form="plmProjectInfoForm"></button>
+                <button class="btn btn-default" permission-btn="btnSubmit"   ng-click="btnSubmit(plmProjectInfoForm.$invalid)" ng-disabled = "headerData.billStatus=='SUBMITTED'||headerData.billStatus=='ABANDONED'||projectProductDataTable.length==0" data-validate-form="plmProjectInfoForm"></button>
+                <button class="btn btn-default" permission-btn="btnDiscard"   ng-click="btnDiscard()" ng-disabled = "!headerData.plmProjectId||headerData.billStatus=='ABANDONED'"></button>
+            </div>
+
+
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+            <!--------------------- 输入表单  --->
+
+            <div class=" mt10 pb5  oh"
+                 data-des="此节点必需－用于识别输入表单的指令">
+
+                <form id="plmProjectInfoForm" name="plmProjectInfoForm">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>基本信息</span>
+                    </header>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">新增单号</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.projectNumber">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"> 单据状态</span>
+                            </label>
+
+                            <div lookup-code="PLM_PROJECT_STATUS" data-required="true" ng-model="headerData.billStatus"
+                                 required  id="billStatus" ng-disabled="true" name="billStatus">
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">创建人</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.creatorName">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">创建日期</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.creationDate">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>Range</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3" required
+                                   name="Range"
+                                   ng-model="headerData.projectRange">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>项目名称</span>
+                            </label>
+
+                            <input required data-required-msg="请填写项目名称"
+                                   type="text" class="form-control radius3"  id="projectName"
+                                   name="projectName"
+                                   ng-model="headerData.projectName">
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>供应商类型</span>
+                            </label>
+
+                            <div lookup-code="PLM_SUPPLIER_TYPE" data-required="true" ng-model="headerData.supplierType"
+                                 ng-disabled="headerData.billStatus=='SUBMITTED'"
+                                 required  id="supplierType" name="supplierType">
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>供应商名称</span></label>
+                            <input type="text" class="form-control radius3 readonly-white" required name="supplierName" ng-model="headerData.supplierName" readonly>
+                            <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" ng-click="showSupplier()"
+                                    ng-disabled="headerData.billStatus=='SUBMITTED'"
+                                    class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">招标编码</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3"
+                                   ng-model="headerData.biddingCode"
+                                   ng-disabled="true"
+                            >
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-8 col-md-9">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">备注</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3"
+                                   ng-disabled="headerData.billStatus=='SUBMITTED'"
+                                   ng-model="headerData.remarks">
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="row"></div>
+
+                </form>
+            </div>
+
+
+            <div class="col-xs-12 col-md-12 br p0">
+
+                <ul id="tab" class="nav nav-tabs">
+
+                    <li class="active">
+                        <a href="#projectProductDetail" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>产品明细</label></a>
+                    </li>
+
+                    <li>
+                        <a href="#projectException" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>项目异常</label></a>
+                    </li>
+
+                </ul>
+
+                <div id="tabContent" class="tab-content">
+
+                    <!-- 产品明细 -->
+                    <div class="tab-pane fade in active col-md-12" id="projectProductDetail">
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+
+                            <div class="btn-group btn-group-xs pull-right" ng-if="true">
+                                <div class="btn-group btn-group-xs" ng-if="true">
+
+                                    <button type="button" ng-click="addProductDetail()" class="btn btn-default btn-xs"
+                                            id="addProductDetailButton"
+                                            ng-disabled = "headerData.billStatus=='SUBMITTED'||headerData.billStatus=='ABANDONED'||!headerData.supplierName||headerData.supplierName==''||userType=='60'"
+                                    >
+                                        <i class="fa fa-plus">  新增</i>
+                                    </button>
+
+                                    <button type="button" ng-click="delProductDetail()" class="btn btn-default btn-xs"
+                                            ng-disabled = "projectProductDataTable.selectRow==undefined||headerData.billStatus=='SUBMITTED'||headerData.billStatus=='ABANDONED'||userType=='60'"
+                                            id="delProductDetailButton">
+                                        <i class="fa fa-trash">  删除</i>
+                                    </button>
+                                    <div class="btn-group btn-group-xs pull-right" ng-style="myStyle">
+                                        <button class="btn btn-default a-black" onclick="window.location.href='app/base/templates/ob/exampleFile/projectProductDetail.xlsx'" ><i class="fa fa-file-excel-o"></i>下载模板</button>
+                                        <button type="button" class="btn btn-default" saaf-xls-import-component
+                                                ng-disabled = "!headerData.plmProjectId||headerData.billStatus=='SUBMITTED'||headerData.billStatus=='ABANDONED'||!headerData.supplierName||headerData.supplierName==''||userType=='60'"
+                                                data-list-options="{
+                                                        productName:{headName:'产品名称',require:true},
+                                                        productCategoryName:{headName:'产品品类',require:true},
+                                                        producerName:{headName:'生产商名称'},
+                                                    }" data-info="{headerData:{{headerData}}}"
+                                                data-url="savePlmProjectInfoInfo" data-after-action="search(data)"
+                                                data-message="导入将清空原有数据" >
+                                            <i class="fa fa-upload"></i>导入
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="data-table">
+                            <table
+                                    class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                <tr class="text-center">
+                                    <th>序号</th>
+                                    <th>OB_ID</th>
+                                    <th>Barcode</th>
+                                    <th><i class="red">*</i>产品名称</th>
+                                    <th><i class="red">*</i>产品品类</th>
+                                    <th><i class="red">*</i>单据状态</th>
+                                    <th><i class="red" ng-if="headerData.supplierType==='TRADER'">*</i>生产商名称</th>
+                                    <th>产品创建人</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-center" ng-repeat="row in projectProductDataTable"
+                                    ng-class="{'active':projectProductDataTable.selectRow==$index}"
+                                    ng-click="projectProductDataTable.selectRow=$index">
+                                    <td>{{$index+1}}</td>
+                                    <td><input class="form-control input-xs" required ng-model="row.obId"  ng-click="findDetail(row)"
+                                               ng-readonly="true" style="color: #1e90c2;cursor: pointer;">
+                                    </td>
+                                    <td><input class="form-control input-xs" ng-model="row.barcode"
+                                               ng-readonly="true">
+                                    </td>
+                                    <td><input class="form-control input-xs" ng-model="row.productName"
+                                               ng-disabled="headerData.billStatus=='SUBMITTED'"
+                                               ng-required="true" >
+                                    </td>
+                                    <td>
+
+                                        <div class="form-control input-xs" style="width: 100%;" lookup-code="PLM_PROJECT_PRODUCT_CATEGORY" data-required="true" ng-model="row.productCategory"
+                                             ng-disabled="headerData.billStatus=='SUBMITTED'"
+                                             required  id="productCategory" name="productCategory">
+                                        </div>
+
+                                    </td>
+                                    <td>
+                                        <div class="form-control input-xs" style="width: 100%;" lookup-code="PLM_OB_PRODUCT_BILL_STATUS" data-required="true" ng-model="row.productBillStatus"
+                                             required  id="productBillStatus" name="productBillStatus" disabled>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="input-group input-group-xs">
+                                            <input type="text" class="form-control radius3" title="{{row.producerName}}"
+                                                   ng-model="row.producerName" ng-disabled="true">
+                                            <span class="input-group-btn ng-scope">
+                                                <button type="button" ng-click="showProducer($index)"
+                                                        ng-disabled="headerData.billStatus=='SUBMITTED'||userType=='60'"
+                                                        class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {{row.productCreator}}
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!-- 项目异常 -->
+                    <div class="tab-pane fade in col-md-12" id="projectException">
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+
+                            <div class="btn-group btn-group-xs pull-right" >
+                                <button type="button" ng-click="addProjectException()" class="btn btn-default btn-xs"
+                                        id="addProjectException" ng-disabled ="!headerData.plmProjectId||headerData.billStatus=='ABANDONED'||headerData.billStatus==='TODO'||userType=='60'"
+                                >
+                                    <i class="fa fa-plus">  新增</i>
+                                </button>
+
+                                <!--<button type="button" ng-click="saveProjectException()" class="btn btn-default btn-xs "-->
+                                        <!--id="saveProjectException" ng-disabled ="!headerData.plmProjectId||headerData.billStatus=='ABANDONED'"-->
+                                <!--&gt;-->
+                                    <!--<i class="fa fa-save">  保存</i>-->
+                                <!--</button>-->
+
+                                <button type="button" ng-click="delProjectException()" class="btn btn-default btn-xs"
+                                        id="delProjectException"
+                                        ng-disabled = "projectExceptionDataTable.selectRow==undefined||headerData.billStatus=='ABANDONED'||userType=='60'"
+                                >
+                                    <i class="fa fa-trash">  删除</i>
+                                </button>
+
+                            </div>
+                        </div>
+                        <div class="data-table">
+                            <table
+                                    class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                <tr class="text-center">
+                                    <th>序号</th>
+                                    <th><i class="red">*</i>涉及的产品</th>
+                                    <th><i class="red">*</i>异常发生的时间</th>
+                                    <th><i class="red">*</i>异常发生的阶段</th>
+                                    <th style="width: 600px"><i class="red">*</i>异常详情</th>
+                                    <th>处理结果</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-center" ng-repeat="row in projectExceptionDataTable"
+                                    ng-class="{'active':projectExceptionDataTable.selectRow==$index}"
+                                    ng-click="projectExceptionDataTable.selectRow=$index">
+                                    <td>{{$index+1}}</td>
+                                    <td>
+                                        <div class="input-group input-group-xs">
+                                            <input type="text" class="form-control radius3"
+                                                   ng-model="row.exceptionProductName" ng-disabled="true">
+                                            <span class="input-group-btn ng-scope">
+                                                 <button type="button"
+
+                                                         ng-click="showExceptionProduct($index)" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                    <td><input type="text" required class="form-control radius3 input-xs"
+                                               id="startDataActive"
+                                               date-time-picker
+                                               data-enddate="{{today}}"
+                                               data-date-format="yyyy-mm-dd"
+                                               data-min-View="2" ng-model="row.exceptionOccurrenceTime"
+
+
+                                    >
+                                    </td>
+                                    <td>
+
+                                        <div class="form-control input-xs" style="width: 100%;" lookup-code="PLM_EXCEPTION_OCCURRENCE_STAGE" data-required="true" ng-model="row.exceptionOccurrenceStage"
+                                             required  id="exceptionOccurrenceStage" name="exceptionOccurrenceStage"
+
+                                        >
+                                        </div>
+
+                                    </td>
+                                    <td><input class="form-control input-xs" ng-model="row.exceptionDetails"
+
+                                    >
+                                    </td>
+                                    <td><input class="form-control input-xs" ng-model="row.results"
+
+                                    >
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- tabContent -->
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="saveModal" tabindex="-1"
+         data-backdrop="static" role="dialog"
+         aria-labelledby="accessoryModalLabel">
+        <div class="modal-dialog " style="margin-top: 5%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title pull-left" id="saveTitle">保存</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row"></div>
+
+                    <!--<div class="form-group col-xs-12 col-md-12">-->
+                        <!--<div class="input-group input-group-xs">-->
+
+                            <!--<label class="input-group-addon bn">-->
+                                <!--<span class="w100">驳回原因</span>-->
+                            <!--</label>-->
+
+                            <!--<input type="text" ng-disabled="false" class="form-control radius3"-->
+                                   <!--ng-model="rejectReason">-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <span style="font-size: medium">录入数据未保存,是否保存</span>
+                    <div class="row"></div>
+
+                </div>
+                <div class="modal-footer ">
+                    <div style="text-align: center">
+                        <button style="" type="button" class="btn btn-default"
+                                ng-click="closeHeadTab()"
+                                data-dismiss="modal">否
+                        </button>
+                        <button type="button" id="saveUnsavedButton"
+                                ng-click="btnSave(plmProjectInfoForm.$invalid)" class="btn btn-primary mr10">是
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="discardModal" tabindex="-1"
+         data-backdrop="static" role="dialog"
+         aria-labelledby="accessoryModalLabel">
+        <div class="modal-dialog " style="margin-top: 5%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            ng-click="refindFile()"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title pull-left" id="disgardTitle">作废</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row"></div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">作废原因</span>
+                            </label>
+
+                            <input type="text" ng-disabled="false" class="form-control radius3"
+                                   ng-model="discardReason">
+                        </div>
+                    </div>
+                    <div class="row"></div>
+
+                </div>
+                <div class="modal-footer ">
+                    <div style="text-align: center">
+                        <button style="" type="button" class="btn btn-default"
+                                ng-click="refindFile()"
+                                data-dismiss="modal">取消
+                        </button>
+                        <button type="button" id="disgardButton"
+                                ng-click="discardAction()" class="btn btn-primary mr10">作废
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div lov-list="exceptionProductLov" role="dialog" data-title="选择异常产品" id="exceptionProduct" ng-model="current.em"
+         data-url="findPlmProjectProductDetailInfo"
+         data-dynamic-params='{"plmProjectId": plmProjectId,"productBillStatus_in":"COMPLETED,DEVELOPING,TOBEADDED,TODO"}'
+         data-callback="selectExceptionProductReturn"
+         data-auto-request="false"
+         data-return-value=""
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'productName','value':'productName','name':'产品名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'产品品类','key':'productCategoryName'},{'name':'生产商名称','key':'producerName'}]"
+         data-search-key="[{'key':'productName_like','placeholder':'产品名称'},
+                          {'key':'producerName_like','placeholder':'生产商名称'}]"
+    >
+    </div>
+
+    <div lov-list="supplierInfoLov" role="dialog" data-title="选择供应商" id="supplierInfoId" ng-model="current.em"
+         data-url="userFind"
+         data-dynamic-params='{"status":"Y","userType":"60"}'
+         data-callback="selectSupplierInfoReturn"
+         data-auto-request="false"
+         data-return-value=""
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'userId','value':'userName','name':'供应商名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'userName','placeholder':'供应商名称'}
+                          ]"
+    >
+    </div>
+
+    <div lov-list="producerInfoLov" role="dialog" data-title="选择生产商" id="producerInfoId" ng-model="current.em"
+         data-url="userFind"
+         data-dynamic-params='{"status":"Y","userType":"60"}'
+         data-callback="selectProducerInfoReturn"
+         data-auto-request="false"
+         data-return-value=""
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'userId','value':'userName','name':'生产商名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'userName','placeholder':'生产商名称'}]"
+    >
+    </div>
+
+
+
+
+</div>

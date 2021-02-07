@@ -1,0 +1,184 @@
+<div ng-controller="processMonitoringCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ">
+                    <div class="btn-group btn-group-xs ml10">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>搜索
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>重置
+                        </button>
+
+                        <button class="btn btn-default" type="button" permission-btn="" ng-click="btnEnd()" ng-disabled="!dataTable.selectRow || dataTable.selectRow.status !==0">
+                            <i class="fa fa-stop-circle-o" aria-hidden="true"></i>终止
+                        </button>
+
+                        <button class="btn btn-default" type="button" permission-btn=""  ng-click="btnSend()"  ng-disabled="!dataTable.selectRow || dataTable.selectRow.status!==0">
+                            <i class="fa fa-send-o" aria-hidden="true"></i>转交
+                        </button>
+                        <button class="btn btn-default" type="button"  permission-btn="btnSendBatch" ng-click="btnSendBatch()"  ng-disabled="!dataTable.selectRowList || dataTable.selectRowList.length < 1">
+                            <!--<i class="fa fa-send-o" aria-hidden="true"></i>批量转交-->
+                        </button>
+                      <!--  <button class="btn btn-default" type="button" ng-click="btnApplyEnd()">
+                            <i class="fa fa-stop" aria-hidden="true"></i>终止申请
+                        </button>-->
+                    </div>
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>高级查询
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>数据全屏
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{cursorcolor: '#333333',cursorwidth:10,zindex:1}" data-des="此节点必需-滚动内容及指令">
+                <!--------------------- 输入表单  --->
+                <form class=" mt10 pb5 input-form bb  " input-form data-des="此节点必需－用于识别输入表单的指令">
+                    <div class="form-group col-xs-6 col-md-3 none" resp-change="">  </div>
+                    <div search-form
+                         data-legend="[
+
+                         {label:'申请时间',ngStart:'startDate',ngEnd:'endTime',type:'dateTimeRange'},
+                         {key:'status',label:'流程分类',type:'ztreeSelect',
+                          options:{
+                            url:'processListCategories',
+                            label:'流程分类',
+                            simpledata: {enable:true,idKey:'categoryId',pIdKey:'parentId',rootPId:-1},
+                            keys: {name:'categoryName'},
+                            height:250,
+                            returnValue:'categoryName',
+                            returnKey:'categoryId'
+                          }
+                          },
+
+                           {key:'billNo',label:'单据编号'},
+                            {key:'title',label:'流程标题'},
+                             {key:'drafter',label:'流程发起人'},
+                             {key:'processer',label:'审批人'},
+                            {key:'communicated',label:'发消息',type:'lookupCode',lookupCode:'YES_OR_NO'},
+                           {key:'status',label:'流程状态',type:'lookupCode',lookupCode:'PROCESS_BPM_STATUS'},
+                        ]"
+                         ng-model="params"
+                    ></div>
+                </form>
+                <!--------------------- ./  输入表单  --->
+                <!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="processFindBpmLists"
+                         data-keys="{key:'cur_taskId',asKey:'taskIds'}"
+                         data-checked-type="checkbox"
+                         data-callback="[{value:'title',callback:'clickColumns'}]"
+                         data-legend='[
+                            {"value": "billNo","name": "单据编号"},
+                            {"value": "title","name": "流程标题"},
+                            {"value": "categoryName","name": "流程分类"},
+                            {"value": "userFullName","name": "流程发起人"},
+                            {"value": "startTime","name": "申请时间"},
+                            {"value": "cur_taskName","name": "审批节点"},
+                            {"value": "cur_userFullName","name": "审批人"},
+                            {"value": "statusName","name": "待办状态"},
+                            {"value": "communicated","name": "发消息" ,boolean:"icon"},
+                            {"value": "durationDHM","name": "处理时长"}]'
+                    ></div>
+                </div>
+                <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+            </div>
+        </div>
+    </div>
+
+    <form  name="approvalForm"  id="approvalForm" >
+        <div class="modal fade" id="approvalFormModal" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            {{ approvalTitle }}
+                        </h4>
+                    </div>
+
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col col-xs-12 col-md-12"  ng-if="approvalTitle==='终止流程'">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>{{ $l('终止理由') }}：</span></label>
+                                        <textarea required class="radius3-4 w100p" rows="3" ng-model="addParams.reason " name="approvalreason" ></textarea>
+                                    </div>
+                                </div>
+
+
+
+                                <div ng-if="approvalTitle==='任务转交' || approvalTitle==='任务批量转交'">
+
+                                    <div class="form-group col col-xs-12 col-md-12"  ng-if="approvalTitle==='任务转交'" >
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span
+                                                    class=""><i class="red">*</i>{{ $l('任务节点') }}：</span></label>
+                                            <select class="form-control radius3" required name="addParamsTaskId"  ng-model="addParams.taskId">
+                                                <option value="">请选择</option>
+                                                <option ng-repeat="item in taskList" value="{{item.taskId}}"> {{ item.taskName}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col col-xs-12 col-md-12"  >
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span
+                                                    class=""><i class="red">*</i>{{ $l('办理人') }}：</span></label>
+                                            <input class="radius3 form-control" required  readonly ng-model="showParams.userName" name="approvalpeople" >
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#lovUserFind" >
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true">{{ $l('取消')}}
+                            </button>
+                            <button type="button" ng-click="btnSave()"
+                                    validate-form-btn="approvalForm" class="btn btn-primary mr10">确定
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+    </form>
+    <div lov-list="lovUserFind" id="lovUserFind" data-url="processFindInternalUsers" ng-model="current.userFind" data-title="办理人"
+
+         data-return-key="addParams.userId"
+         data-return-value="showParams.userName"
+         data-search-key="[{'key':'userFullName','placeholder':'请输入员工姓名'},{'key':'userName','placeholder':'请输入员工编号'}]"
+         data-keys="{'key':'userId','value':'userFullName',hide: true}"
+         data-other-column="[{key:'userName',name:'账号'},{key:'userFullName',name:'员工姓名'}]"
+    ></div>
+</div>

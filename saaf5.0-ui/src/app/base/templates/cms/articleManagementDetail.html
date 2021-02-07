@@ -1,0 +1,171 @@
+<div ng-controller="articleManagementDetailCtrl">
+    <div inner-frame class="form bg-white" id="rooForm">
+        <form  name="paramForm" id="paramForm">
+            <div class="bg-gray-white bt">
+                <div class="bg-gray-white p5">
+                    <!--        <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                                <button class="btn btn-default" type="submit">
+                                    <i class="fa fa-save" aria-hidden="true"></i>
+                                    保存
+                                </button>
+                            </div>-->
+                    <!-- <div class="btn-group btn-group-xs pull-right "
+                          permission-buttons="btnSave" data-disabled-for-table="dataTable">
+                     </div>-->
+
+                    <button permission-btn="btnSave"  data-validate-form="paramForm" class="btn btn-default btn-xs pull-right" >
+                    </button>
+
+                    <div class="btn-group btn-group-xs ">
+                        <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                            <i class="fa fa-square-o"></i>
+                            数据全屏
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div main-scroll-style="main-scroll-style">
+                <div class="nicescroll-height  bg-white " ng-nicescroll="ng-nicescroll"
+                     nice-option="{{niceOpction}}">
+                    <!--------------------- 输入表单  --->
+                    <div class=" mt10 pb5 bb oh">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>文章详情</span>
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>文章标题</span>
+                                </label>
+
+                                <input required type="text" class="form-control radius3" name="articleTitle"
+                                       ng-model="current.articleTitle" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span required class="w100" class="pl10"><i
+                                            class="red">*</i>文章描述</span>
+                                </label>
+
+                                <input type="text" required class="form-control radius3" name="articleAuthor"
+                                       ng-model="current.articleDescription" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>文章类型</span>
+                                </label>
+
+                                <div data-required="true" lookup-code="ARTICLE_TYPE" required="" name="currentArticleType"
+                                     ng-model="current.articleType"></div>
+
+
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3" ng-if="isAdmin">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>系统编码</span>
+                                </label>
+
+                                <div data-required="true" required="" name="currentSystemCode" lookup-code="SYSTEM_CODE" ng-model="current.systemCode" ng-disabled="true"></div>
+
+
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>是否首页显示</span>
+                                </label>
+                                <div data-required="true" lookup-code="YES_OR_NO" required="" ng-model="current.enabledFlag" name="currentEnabledFlag"></div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>发布时间</span>
+                                </label>
+
+
+                                <input type="text" required class="form-control radius3 input-xs" name="currentArticlePublishDate"
+                                       date-time-picker data-is-today="true"
+                                       data-date-format="yyyy-mm-dd hh:ii:ss"
+                                       data-min-view="0" ng-model="current.articlePublishDate">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10">BU</span>
+                                </label>
+
+                                <select class="form-control radius3" ng-model="current.orgId">
+                                    <option value="" class="ng-binding">请选择</option>
+                                    <option ng-repeat="item in buData" value="{{item.orgId}}" ng-bind="item.orgDescription"></option>
+                                </select>
+
+
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>是否置顶</span>
+                                </label>
+
+                                <div data-required="true" required="" name="currentTopFlag" data-callback="topFlagChang" lookup-code="YES_OR_NO" ng-model="current.topFlag"></div>
+
+
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3" ng-if="current.topFlag=='Y'">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>置顶失效时间</span>
+                                </label>
+                                <input type="text" class="form-control radius3 input-xs" required
+                                       date-time-picker name="currentTopToDate"
+                                       data-date-format="yyyy-mm-dd hh:ii:ss"
+                                       data-min-View="0" ng-model="current.topToDate">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-sm-12">
+                            <p class="red f12">*如需上传图片，请选择小于2M的图片</p>
+                            <div class="input-group input-group-xs w">
+                                <!--<label class="input-group-addon bn">-->
+                                <!--<span class="w80 inline-block tr"> 内容</span>-->
+                                <!--</label>-->
+                                <textarea ng-click="" id="articleContent" class=" ueditor w" style="z-index: 0"
+                                          config="_simpleConfig"
+                                          ng-model="current.articleContent">
+										</textarea>
+                                <!--<div class="ueditor" ng-model="content"></div>-->
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+</div>
+

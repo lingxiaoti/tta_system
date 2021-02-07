@@ -1,0 +1,99 @@
+<div class="modal fade" id="{{id}}" data-des="" data-backdrop="static" tabindex="-1">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    {{title}}
+                </h4>
+            </div>
+            <form class="ngValid" name="funcMenuForm" ng-submit="save()">
+                <div class="modal-body">
+                    <div class="form-group col-xs-12 col-md-6"
+                         ng-repeat=" item in formList">
+                        <div class="input-group input-group-xs" ng-if="item.type == undefined || item.type ==text">
+                            <label class="input-group-addon bn">
+                                <span class="w100" style="display: inline-table;"><i class="red"
+                                                      ng-if="item.isRequire">*</i>{{item.label}}：</span></label>
+                            <input type="text" class="form-control radius3" ng-required="item.isRequire"
+                                   ng-disabled="item.disabled"
+                                   ng-model="ngModel[item.key]">
+
+                        </div>
+
+
+                        <div class="input-group input-group-xs" ng-if="item.type  == 'time'">
+                            <label class="input-group-addon bn">
+                                <span class="w100" style="display: inline-table;"><i class="red"
+                                                      ng-if="item.isRequire">*</i>{{item.label}}：</span></label>
+
+                            <input type="text" class="form-control radius3" date-time-picker
+                                   data-date-format="yyyy-mm-dd"
+                                   ng-required="item.isRequire"
+                                   data-is-today="{{item.isToday ? true:false}}"
+                                   data-min-View="2" ng-model="ngModel[item.key]">
+                        </div>
+
+                        <div class="input-group input-group-xs" ng-if="item.type =='lookCode'">
+                            <label class="input-group-addon bn">
+                                <span class="w100"  style="display: inline-table;"> <i class="red"
+                                                       ng-if="item.isRequire">*</i>{{item.label}}：</span></label>
+                            <div lookup-code="{{item.lookCode}}" data-required="{{item.isRequire}}"
+                                 ng-model="ngModel[item.key]"></div>
+                        </div>
+                        <div class="input-group input-group-xs" ng-if="item.type =='lov'">
+                            <label class="input-group-addon bn">
+                                <span class="w100"  style="display: inline-table;"> <i class="red"
+                                                       ng-if="item.isRequire">*</i>{{item.label}}：</span></label>
+                            <!--<div lookup-code="{{item.lookCode}}" data-required="{{item.isRequire}}"-->
+                            <!--ng-model="ngModel[item.key]"></div>-->
+
+                            <input type="text" class="form-control radius3" ng-model="ngModel[item.key]" disabled
+                                   required>
+                            <span class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="lov(item.callback)" type="button"
+                                    ><i class="fa fa-search"></i></button>
+                                </span>
+                        </div>
+
+
+                    </div>
+                    <!--<div class="form-group col-xs-12 col-md-6">-->
+                    <!--<div class="input-group input-group-xs">-->
+                    <!--<label class="input-group-addon bn">-->
+                    <!--<span class="w100"><i class="red"-->
+                    <!--ng-if="item.isRequire">*</i>{{item.label}}：</span></label>-->
+
+                    <!--<input type="text" class="form-control radius3" date-time-picker-->
+                    <!--data-date-format="yyyy-mm-dd"-->
+                    <!--data-is-today="true"-->
+                    <!--data-min-View="2" ng-model="ngModel[item.key]">-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group col-xs-12 col-md-6">-->
+                    <!--<div class="input-group input-group-xs">-->
+                    <!--<label class="input-group-addon bn">-->
+                    <!--<span class="w100"> <i class="red"-->
+                    <!--ng-if="item.isRequire">*</i>{{item.label}}：</span></label>-->
+                    <!--<div lookup-code="{{item.lookCode}}" data-required="{{item.isRequire}}"-->
+                    <!--ng-model="ngModel[item.key]"></div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="cb"></div>
+                </div>
+
+                <div class="modal-footer ">
+                    <div style="text-align:center">
+                        <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                        </button>
+                        <button type="submit" id="saveButton" class="btn btn-primary mr10">确定</button>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>

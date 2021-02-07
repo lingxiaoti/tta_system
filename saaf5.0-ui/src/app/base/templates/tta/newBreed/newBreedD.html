@@ -1,0 +1,211 @@
+<div ng-controller="newBreedDCtrl" class="gridtable">
+    <div class="bg-gray-white bt">
+        <div class="bg-gray-white p5">
+            <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                <div resp-change="" style="display: none"></div>
+                <button type="button" ng-click="btnSave()" permission-btn="btnSave" data-validate-form="newForm"
+                        class="btn btn-default">
+                </button>
+                <button type="button" ng-click="btnDel('H')" permission-btn="btnDel" data-validate-form="newForm"
+                        class="btn btn-default">
+                </button>
+            </div>
+            <div class="btn-group btn-group-xs ">
+                <button class="btn btn-primary" ng-click="fullWindow($event)">
+                    <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                </button>
+            </div>
+        </div>
+    </div>
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+            <!--------------------- 输入表单  --->
+
+            <form name="newForm" class=" mt10 pb5 bb oh"
+                  data-des="此节点必需－用于识别输入表单的指令">
+
+                <header class="col-xs-12 mb10">
+                    <i class="fa fa-cog" aria-hidden="true"></i>
+                    <span>新品种设置信息</span>
+                </header>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>年份</span></label>
+                        <input class="form-control radius3" data-date-format="yyyy"
+                               data-max-view="4" data-min-view="4" data-start-view="4"
+                               date-time-picker="" name="newbreedYear" ng-model="new.newbreedYear "
+                               required
+                               type="text">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>新品种属性名称</span></label>
+                        <div lookup-code="NB_NAME" required="true" name="breedName"   ng-model="new.breedName" ></div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>创建日期</span></label>
+                        <input type="text" disabled class="form-control radius3 input-xs"
+                               date-time-picker data-is-today="true" name="creationDate"
+                               data-date-format="yyyy-mm-dd"
+                               data-min-View="2" ng-model="new.creationDate">
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><i class="red">* </i>公司部门编码</span></label>
+                        <input class="form-control radius3" ng-model="new.deptCode" name="deptCode"
+                               readonly required type="text"/>
+                        <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getDeptCode()" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><i class="red">* </i>公司部门名称</span></label>
+                        <input class="form-control radius3" data-required-msg="部门名称" ng-model="new.deptName"
+                               readonly type="text">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>是否生效</span></label>
+                        <label class="radio-inline" ng-click="changeEnableFlag('1')">
+                            <input type="radio" name="isEffective" value="1" ng-model="new.isEffective"
+                                   ng-checked="new.isEffective=='1'">是
+                        </label>
+                        <label class="radio-inline" ng-click="changeEnableFlag('0')">
+                            <input type="radio" name="isEffective" value="0" ng-model="new.isEffective"
+                                   ng-checked="new.isEffective=='0'">否
+                        </label>
+                    </div>
+                </div>
+                <div class="row"></div>
+                <div>
+                    <label style="margin-left: 10px"><i class="fa fa-list-alt"></i>详情</label>
+                    <div permission-buttons="btnNew,btnDel" class="btn-group btn-group-xs ml5 pull-right">
+                        <button type="button" class="btn btn-default btn-xs " ng-disabled="dataTable.selectRow==undefined" ng-click="btnDel('L')"><i class="fa fa-trash-o fa-lg"></i>删除</button>
+                        <button type="button" class="btn btn-default btn-xs" ng-click="btnNew()"><i class="fa fa-plus">增加</i></button>
+                    </div>
+
+                </div>
+
+                <div class="data-table">
+                    <!--<th>标识</th>-->
+                    <!--<td><input class="form-control input-xs" ng-model="row.tag"-->
+                    <!--ng-readonly="!updateCheck&&row.newFlag!='Y'"></td>-->
+                    <!--</td>-->
+                    <table
+                            class="table table-bordered table-hover table-condensed">
+                        <thead class="bg-gray-white">
+                        <tr class="text-center">
+                            <th>品类编码</th>
+                            <th>品类名称</th>
+                            <th>收取范围</th>
+                            <th>单位</th>
+                            <th>采购类型</th>
+                            <th>店铺类型</th>
+                            <th>标准值</th>
+                            <th>是否启用</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="text-center" ng-repeat="row in dataTable"
+                            ng-class="{'active':dataTable.selectRow==$index}"
+                            ng-click="dataTable.selectRow=$index">
+                            <td>
+                                <div class="input-group input-group-xs">
+                                    <input class="form-control radius3" ng-model="row.deptCode" name="{{'deptCode'+$index}}"
+                                           readonly required type="text"/>
+                                    <span class="input-group-btn ng-scope">
+                                        <button class="btn btn-default" ng-click="getDeptCodeL()" type="button">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group input-group-xs">
+                                    <input class="form-control radius3" ng-model="row.deptName"
+                                           readonly required type="text"/>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="input-group input-group-xs">
+                                    <div lookup-code="NB_RANGE" required  name="{{'range'+$index}}" ng-model="row.range" data-paramcallback ="nbRangeChange" data-row="{{dataTable.indexOf(row)}}"></div>
+                                </div>
+                            </td>
+                            <td><input class="form-control input-xs" required disabled ng-model="row.unit" name ="{{'unit'+$index}}"></td>
+                            <td>
+                                <div class="input-group input-group-xs">
+                                    <div lookup-code="NB_PURCHASE_TYPE"  ng-disabled="row.range=='3'" ng-required="row.range !='3'"  name="{{'purchaseType'+$index}}" ng-model="row.purchaseType"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group input-group-xs">
+                                    <div lookup-code="NB_STORE_TYPE" ng-disabled="row.range !='3'" ng-required="row.range=='3'"  name="{{'storeType'+$index}}" ng-model="row.storeType"></div>
+                                </div>
+                            </td>
+                            <td><input type="text" required class="form-control input-xs" placeholder="不超过两位小数" name="{{'standard'+$index}}" ng-model="row.standard" numberd></td>
+                            <td>
+                                <div class="input-group input-group-xs">
+                                    <div lookup-code="YES_OR_NO" required  name="{{'isEnable'+$index}}" ng-model="row.isEnable"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!--<div saaf-table-tfoot="dataTable.data"></div>-->
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div lov-list="selectDept" role="dialog" data-title="选择部门信息" id="selectDeptId" ng-model="current.em"
+         data-url="findDeptPagination"
+         data-dynamic-params='{"flag": "findDept","departmentType":"20"}'
+         data-callback="selectDeptReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+         data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                          {'key':'departmentName','placeholder':'部门名称'}]"
+    >
+    </div>
+
+    <div lov-list="selectDept" role="dialog" data-title="选择部门信息" id="selectDeptIdL" ng-model="current.em"
+         data-url="findDeptPagination"
+         data-dynamic-params='{"flag": "findDept","departmentType":"30"}'
+         data-callback="selectDeptLReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+         data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                          {'key':'departmentName','placeholder':'部门名称'}]"
+    >
+    </div>
+</div>

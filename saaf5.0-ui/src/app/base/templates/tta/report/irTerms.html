@@ -1,0 +1,312 @@
+<div ng-controller="irTermsCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+
+                        <div class="btn-group btn-group-xs "  permission-buttons="btnExport" data-disabled-for-table="dataTable">
+
+                        </div>
+                       <!-- <button class="btn btn-default" type="button" ng-click="btnModify()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>编辑
+                        </button>
+
+                        <button class="btn btn-default" type="button" ng-click="submitApproval()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>提交审批
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="changePerson()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>转交
+                        </button>-->
+                    </div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <!--{key:'description',label:'描述'},-->
+                    <!--{key:'isadmin',label:'是否管理员',type:'lookCode',lookCode:'YES_OR_NO'},-->
+                    <!--{key:'internalUser',label:'是否EBS用户',type:'lookCode',lookCode:'YES_OR_NO'},-->
+
+                  <!--  <div ng-if="batchId == undefined">
+                        <div search-form
+                             data-legend="[
+                            {key:'endDate',label:'年至今截止月份：', type:'time', 'date':'yyyy-mm',endDate:'endDate'},
+                            {key:'orderNbr',label:'proposal单号'},
+                            {key:'vendorNbr',label:'供应商编码'},
+                            {key:'vendorName',label:'供应商名称'},
+                            {key:'deptDesc',label:'deptDesc'},
+                             {key:'brandCn',label:'品牌'},
+                        ]"
+                             ng-model="params"
+                        ></div>
+                    </div>-->
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">年至今截止月份:</span></label>
+                            <input type="text" required class="form-control radius3 input-xs"
+                                   date-time-picker data-is-today="true" name="yearMonth"
+                                   data-date-format="yyyy-mm"
+                                   data-min-View="3" ng-model="params.endDate"
+                                   autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">proposal单号：</span>
+                            </label>
+                            <input class="form-control radius3"   name="orderNbr"
+                                   ng-model="params.orderNbr" type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">供应商编码：</span>
+                            </label>
+                            <input class="form-control radius3"   name="orderNbr"
+                                   ng-model="params.vendorNbr" type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">供应商名称：</span>
+                            </label>
+                            <input class="form-control radius3"   name="orderNbr"
+                                   ng-model="params.vendorName" type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">品牌：</span>
+                            </label>
+                            <input class="form-control radius3"   name="orderNbr"
+                                   ng-model="params.brandCn" type="text">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">部门：</span></label>
+                            <input class="form-control radius3" ng-model="params.deptDesc"
+                                   type="text" readonly>
+                            <span class="input-group-btn ng-scope">
+                             <button class="btn btn-default"  ng-click="paramsCancel()"
+                                     type="button"><i class="fa fa-remove"></i></button>
+                            <button class="btn btn-default" ng-click="getDeptCode()"
+                                    type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            </span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="true"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="irTermsFind"
+                         data-keys="{'key':'batchId'}"
+                         data-legend="[
+                             {'value':'orderNbr','name':'proposal单号'},
+                             {'value':'deptDesc','name':'deptDesc'},
+                             {'value':'vendorNbr','name':'供应商编码'},
+                             {'value':'vendorName','name':'供应商名称'},
+                             {'value':'brandCn','name':'品牌'},
+                             {'value':'netpurchase','name':'折扣前采购额（含税）/元'},
+                             {'value':'predictNetpurchase','name':'预估全年折扣前采购额（含税）/元'},
+
+                             {'value':'irPredictRate','name':'预计IR%'},
+                             {'value':'passFirst','name':'是否已达第一层'},
+                             {'value':'passList','name':'是否已达最后一层'},
+                             {'value':'irPredictAmount','name':'预计IR$(含税）'},
+                             {'value':'nextIrRate','name':'下一层目标的IR%'},
+                             {'value':'nextPurchaseAmount','name':'为达到下一层目标需追加的采购额 （含税）'},
+                             {'value':'addAffterIrIncludeTaxAmount','name':'追加后的IR$（含税）'},
+                             {'value':'addIrIncludeTaxAmount','name':'IR 增加额（含税）'},
+                             {'value':'returnRate','name':'投资回报率'},
+
+                             {'value':'firstExcludeTax','name':'第一层【(折扣前)不含税采购额】'},
+                             {'value':'firstIncludeTax','name':'第一层【(折扣前)含税采购额】'},
+                             {'value':'firstRate','name':'第一层【佣金比例】'},
+
+                             {'value':'secondExcludeTax','name':'第二层【(折扣前)不含税采购额】'},
+                             {'value':'secondIncludeTax','name':'第二层【(折扣前)含税采购额】'},
+                             {'value':'secondRate','name':'第二层【佣金比例】'},
+
+                             {'value':'thirdExcludeTax','name':'第三层【(折扣前)不含税采购额】'},
+                             {'value':'thirdIncludeTax','name':'第三层【(折扣前)含税采购额】'},
+                             {'value':'thirdRate','name':'第三层【佣金比例】'},
+
+                             {'value':'fourthExcludeTax','name':'第四层【(折扣前)不含税采购额】'},
+                             {'value':'fourthIncludeTax','name':'第四层【(折扣前)含税采购额】'},
+                             {'value':'fourthRate','name':'第四层【佣金比例】'},
+
+                             {'value':'fifthExcludeTax','name':'第五层【(折扣前)不含税采购额】'},
+                             {'value':'fifthIncludeTax','name':'第五层【(折扣前)含税采购额】'},
+                             {'value':'fifthRate','name':'第五层【佣金比例】'},
+
+                             {'value':'sixthExcludeTax','name':'第六层【(折扣前)不含税采购额】'},
+                             {'value':'sixthIncludeTax','name':'第六层【(折扣前)含税采购额】'},
+                             {'value':'sixthRate','name':'第六层【佣金比例】'},
+
+                             {'value':'seventhExcludeTax','name':'第七层【(折扣前)不含税采购额】'},
+                             {'value':'seventhIncludeTax','name':'第七层【(折扣前)含税采购额】'},
+                             {'value':'seventhRate','name':'第七层【佣金比例】'},
+
+                             {'value':'eighthExcludeTax','name':'第八层【(折扣前)不含税采购额】'},
+                             {'value':'eighthIncludeTax','name':'第八层【(折扣前)含税采购额】'},
+                             {'value':'eighthRate','name':'第八层【佣金比例】'},
+                             ]"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+    <div data-auto-request="true" data-callback="selectDeptFeeAReturn" data-checked-type="checkbox"
+         data-dynamic-params='{"flag": "findDept","departmentType":"30","parentDepartmentId":""}'
+         data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+         data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+	                       {'key':'departmentName','placeholder':'部门名称'}]"
+         data-show-index="false"
+         data-title="选择部门信息"
+         data-type="competitor"
+         data-url="findDeptPagination"
+         id="deptFeeALov"
+         lov-list="brandPlnDeptLov"
+         ng-model="current.em"
+         role="dialog"
+    >
+    </div>
+
+
+    <div lov-list="userLovList" id="userLov" role="dialog" data-title="选择用户" ng-model="code1"
+         data-url="attendanceFeeFindUser"
+         data-dynamic-params='{"userId": ""}'
+         data-callback="selecUserReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'userId','value':'userId','userFullName':'用户名'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'userFullName':'用户名','key':'userFullName'}]"
+         data-search-key="[{'key':'userId','placeholder':'用户ID'},
+                          {'key':'userFullName','placeholder':'用户名'}]"
+    >
+    </div>
+
+
+    <div class="modal fade" id="msgCfgModal" data-des="收藏夹" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        {{modalTitle}}
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm" ng-submit="btnSave()">
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">BIC Remark</span></label>
+
+                                <textarea rows="5"  class="w400 radius3" name="bicRemark"
+                                          maxlength="500" ng-model="addParams.bicRemark">
+                                </textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-7 col-md-7">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">Follow up action</span></label>
+                                <input required type="text" class="form-control radius3" name="followUpAction"
+                                       maxlength="255" ng-model="addParams.followUpAction">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-7 col-md-7">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">extra PO planning</span></label>
+                                <input required type="text" class="form-control radius3" name="extraPoPlanning"
+                                       maxlength="255" ng-model="addParams.extraPoPlanning">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">Remark</span></label>
+
+                                <textarea rows="5"  class="w400 radius3" name="Remark"
+                                          maxlength="500" ng-model="addParams.remark">
+                                </textarea>
+                            </div>
+                        </div>
+
+
+
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button type="submit" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+</div>

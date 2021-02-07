@@ -1,0 +1,122 @@
+<!-- Created by lijiayao on 2018-08-17 -->
+
+<div ng-controller="maternityBenefitsApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOrUpdateOaHrBirth"
+         data-api-get="findOaHrBirthDetailById" data-api-del=""  data-api-update="updateOaHrBirth">
+        <div class="col-md-12 pt15">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                            {key:'deptName',label:'申请部门',readonly:true,required:true},
+                            {key:'personName',label:'申请人',readonly:true,required:true},
+                            {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                            {key:'billNo',label:'申请单号',readonly:true},
+                            {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                            {key:'statusStr',label:'状态',readonly:true},
+                        ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                          {key:'applyType',label:'申请类别',type:'lookCode',lookCode:'HRBIRTH_APPLY_TYPE',required:true},
+                          {key:'consignee',label:'收件人',required:true,maxlength:100,placeholder:' '},
+                          {key:'contactNumber',label:'联系电话',required:true,validFormat:'mobile',maxlength:50,placeholder:' '},
+                          {key:'address',label:'收件地址',required:true,maxlength:2000,placeholder:' '},
+                        ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>申请原因</span></label>
+                        <textarea class="form-control" rows="1" auto-textarea="" ng-model="formParams.resonDesc" maxlength="500" placeholder="字数限制500"" required name="resonDesc" style="height: auto"></textarea>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 pt15" ng-if="formParams.applyType==='1'">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>子女情况</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="btn-group btn-group-xs ml5 pull-right">
+                <button type="button" class="btn btn-default btn-xs"
+                        ng-hide="formType === 'readonly' || action === 'detail'"
+                        ng-click="tableEndit.addTableRows()"><i class="fa fa-plus">增加</i></button>
+            </div>
+            <div base-data-table-edit="tableEndit"
+                data-legend="[
+                    {value:'childrenName',name:'子女姓名',required:true,maxlength:100,placeholder:' '},
+                    {value:'childrenBirthday',name:'出生日期',required:true,callback:'back',type:'time','date':'yyyy-mm-dd'},
+                    {value:'startDay',name:'申领开始时间',disabled:true,'date':'yyyy-mm-dd'},
+                    {value:'endDay',name:'申领结束时间',disabled:true,'date':'yyyy-mm-dd'},
+                ]"
+                data-form-params-key="items"
+                ng-model="formParams">
+            </div>
+        </div>
+        <!-- 查看详情，审批中可见 -->
+        <div class="col-md-12" ng-if="action == 'detail'">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>产品明细</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="btn-group btn-group-xs ml5 pull-right">
+                <button type="button" class="btn btn-default btn-xs"
+                        ng-hide="formType === 'readonly' || action === 'detail'"
+                        ng-click="tableEndit1.addTableRows()"><i class="fa fa-plus">增加</i></button>
+            </div>
+            <div base-data-table-edit="tableEndit1"
+                data-legend="[
+                    {value:'productSku',name:'产品SKU',required:true,target:'#productSkuHrBirth',disabled:true,type:'lov',callback:'setRowIndex'},
+                    {value:'productName',name:'产品名称',disabled:true},
+                    {value:'productUnit',name:'单位',disabled:true},
+                    {value:'productQuantity',name:'数量',required:true,maxlength:100,validFormat:'number=2'},
+                ]"
+                data-form-params-key="secItems"
+                ng-model="formParams">
+            </div>
+        </div>
+        <!-- 快递信息，审批通过可见 -->
+        <div class="col-md-12" ng-if="formParams.status == 'ALLOW'">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>快递信息</h5>
+            <div base-data-table-edit="tableEndit2"
+                 data-legend="[
+                    {value:'expressDate',name:'发货日期',disabled:true},
+                    {value:'expressCompany',name:'快递公司',disabled:true},
+                    {value:'expressNo',name:'快递单号',disabled:true}
+                ]"
+                 data-form-params-key="expressItems"
+                 ng-model="formParams">
+            </div>
+        </div>
+
+        <div class="col-md-12 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+    </div>
+    <div lov-list="applicant" role="dialog" data-title="请选择产品" id="productSkuHrBirth" ng-model="code1"
+        data-url="findPaginationHrBirth"
+        data-pagination="{'pageIndex':'1','pageRows':'5'}"
+        data-checked-type="radio"
+        data-auto-request = 'false'
+        data-keys="{'key':'itemName','value':'itemCode',name:'产品SKU'}"
+        data-other-column="[
+                  {'name':'产品名称','key':'itemName'},
+                  {'name':'单位','key':'unit_'},
+                 ]"
+        data-show-index="false"
+        data-search-key="[{'key':'itemName','placeholder':'产品名称'},{'key':'itemCode','placeholder':'产品SKU'}]"
+        data-callback="setRowInput"
+        data-cancel-callback="clearRowInput"
+    ></div>
+</div>

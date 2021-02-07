@@ -1,0 +1,1301 @@
+<div ng-controller="userDetailCtrl" class="bigdata">
+  <div>
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+      <div class=" pull-right ml10">
+
+        <div class="btn-group btn-group-xs">
+          <button class="btn btn-default" permission-btn="btnSave" data-validate-form="userForm"></button>
+
+        </div>
+
+
+      </div>
+      <div class="btn-group btn-group-xs ">
+        <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+        </button>
+      </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+      <div class="nicescroll-height  bg-white " ng-nicescroll
+           nice-option="{{niceOpction}}"
+           data-des="此节点必需-滚动内容及指令">
+
+        <!--------------------- 输入表单  --->
+
+        <div class=" mt10 pb5  oh"
+             data-des="此节点必需－用于识别输入表单的指令">
+
+          <form id="userForm" name="userForm">
+            <header class="col-xs-12 mb10">
+              <i class="fa fa-cog" aria-hidden="true"></i>
+              <span>{{$l('账户信息')}}</span>
+            </header>
+
+
+            <div class="form-group col-xs-4 col-md-3">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100"><i class="red">*</i>{{$l('登录用户')}} </span>
+                </label>
+                <input ng-disabled="params.userId" required data-required-msg="请填写登录用户名"
+                       type="text" class="form-control radius3" account="" id="paramsUserName"
+                       name="paramsUserName"
+                       ng-model="params.userName">
+              </div>
+            </div>
+            <!--<div class="form-group col-xs-4 col-md-3">-->
+            <!--<div class="input-group input-group-xs">-->
+            <!--<label class="input-group-addon bn">-->
+            <!--<span class="w100"> <i class="red">*</i>-->
+            <!--{{$l('登录名称')}}</span>-->
+            <!--</label>-->
+            <!--<input type="text" class="form-control radius3" required-->
+            <!--ng-model="params.userFullName">-->
+            <!--</div>-->
+            <!--</div>-->
+            <div class="form-group col-xs-4 col-md-3">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                                    <span class="w100"> <i class="red"
+                                                           ng-show="params.userType==='20'">*</i>{{$l('员工姓名')}}</span>
+                </label>
+                <input type="text" class="form-control radius3" ng-model="params.personName"
+                       name="paramsPersonName" id="paramsPersonName" data-required-msg="请选择员工"
+                       disabled ng-required="params.userType==='20'">
+                <span class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="getName()" type="button"><i
+                                      class="fa fa-search"></i></button>
+                                </span>
+              </div>
+            </div>
+            <div class="form-group col-xs-4 col-md-3">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100"> <i class="red">*</i>{{$l('用户类型')}}</span>
+                </label>
+                <div lookup-code="USER_TYPE" data-required="true" ng-model="params.userType"
+                     ng-change="cancelPassword();"
+                     id="paramsUserType" name="paramsUserType"></div>
+              </div>
+            </div>
+            <!--<div class="form-group col-xs-4 col-md-3">
+            <div class="input-group input-group-xs">
+            <label class="input-group-addon bn">
+            <span class="w100">{{$l('关联经销商')}}</span>
+            </label>
+            <input type="text" readonly class="form-control radius3" ng-model="params.bbdCode">
+
+            </div>
+            </div>
+            <div class="form-group col-xs-4 col-md-3">
+            <div class="input-group input-group-xs">
+            <label class="input-group-addon bn">
+            <span class="w100">{{$l('部门/省区')}}</span>
+            </label>
+            <input type="text" readonly class="form-control radius3" ng-model="params.bbdCode">
+
+            </div>
+            </div>-->
+            <div class="form-group col-xs-4 col-md-3">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100"><i class="red" ng-show="!params.encryptedPassword">*</i>{{$l('账户密码')}}</span>
+                </label>
+                <input type="password" placeholder="{{ params.encryptedPassword ?'******':''}}"
+                       class="form-control radius3"
+                       name="inPassword" id="inPassword"
+                       ng-model="params.inPassword" maxlength="30">
+              </div>
+              <!--ng-required="!params.encryptedPassword"-->
+            </div>
+            <div class="form-group col-xs-4 col-md-3">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100">{{$l('手机号码')}}</span>
+                </label>
+                <input type="text" maxlength="11" class="form-control radius3" mobile=""
+                       name="paramsPhoneNumber"
+                       ng-model="params.phoneNumber">
+              </div>
+            </div>
+            <div class="form-group col-xs-4 col-md-3">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100">{{$l('用户描述')}}</span>
+                </label>
+                <input type="text" class="form-control radius3" ng-model="params.userDesc">
+              </div>
+            </div>
+            <div class="form-group col-xs-4 col-md-3" ng-show="currentResp.isAdmin">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100">{{$l('是否管理员')}}</span>
+                </label>
+                <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" class=" radius3"
+                       ng-model="params.isadmin">
+              </div>
+            </div>
+            <div class="form-group col-xs-4 col-md-3">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100">{{$l('是否EBS用户')}}</span>
+                </label>
+                <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" class=" radius3"
+                       ng-model="params.internalUser">
+              </div>
+            </div>
+            <div class="form-group col-xs-4 col-md-3">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100"><i class="red">*</i>{{$l('生效日期')}}</span>
+                </label>
+
+
+                <input type="text" class="form-control radius3" date-time-picker date
+                       data-date-format="yyyy-mm-dd" required name="paramsStartDate"
+                       id="paramsStartDate"
+                       data-is-today="{{ idModify }}"
+                       data-min-view="2" ng-model="params.startDate">
+
+              </div>
+            </div>
+            <div class="form-group col-xs-4 col-md-3">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100">{{$l('失效日期')}}</span>
+                </label>
+
+                <input type="text" class="form-control radius3" date-time-picker date
+                       data-date-format="yyyy-mm-dd" name="paramsEndDate" id="paramsEndDate"
+                       data-min-view="2" ng-model="params.endDate">
+              </div>
+            </div>
+
+            <!--                        <div class="form-group col-xs-4 col-md-3" ng-show="params.userType == '30'">-->
+            <!--                            <div class="input-group input-group-xs" ng-show="params.userType == '30'">-->
+            <!--                                <label class="input-group-addon bn">-->
+            <!--                                <span class="w100"><i-->
+            <!--                                        class="red">*</i>{{$l('所属服务店')}}：</span></label>-->
+            <!--                                <input type="text" disabled class="form-control radius3"-->
+            <!--                                       ng-model="params.serviceStoreName">-->
+            <!--                                <span class="input-group-btn">-->
+            <!--                                                <button class="btn btn-default" ng-click="getServiceStoreInfo()"-->
+            <!--                                                        type="button">-->
+            <!--                                                    <i class="fa fa-search"></i></button></span>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+
+            <div class="form-group col-xs-4 col-md-3">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100">{{$l('GROUP_CODE')}}：</span></label>
+                <input type="text" disabled class="form-control radius3"
+                       ng-model="params.groupCode" name="groupCode">
+                <span class="input-group-btn">
+                                                <button class="btn btn-default" ng-click="getGroupCodeInfo()"
+                                                        type="button">
+                                                    <i class="fa fa-search"></i></button></span>
+              </div>
+            </div>
+
+            <div class="form-group col-xs-4 col-md-3">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100">{{$l('GROUP_NAME')}}：</span></label>
+                <input type="text" disabled class="form-control radius3"
+                       ng-model="params.groupName" name="groupName" readonly>
+              </div>
+            </div>
+
+            <div class="form-group col-xs-4 col-md-3">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100">{{$l('邮件地址')}} </span>
+                </label>
+                <input
+                  type="text" class="form-control radius3" id="paramsEmailAddress"
+                  name="paramsEmailAddress"
+                  ng-model="params.emailAddress" email>
+              </div>
+            </div>
+
+            <div class="form-group col-xs-4 col-md-3" ng-show="params.userType=='60'">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100"><i class="red">*</i> 权限规则</span>
+                </label>
+                <div lookup-code="VMI_AUTHORITY_RULE" ng-model="params.authorityRule"
+                     id="authorityRule" name="authorityRule"></div>
+              </div>
+            </div>
+
+            <div class="form-group col-xs-4 col-md-3" ng-show="params.userType=='60'">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100"> <i class="red">*</i>{{$l('数据时间段')}}</span>
+                </label>
+                <div lookup-code="VMI_DATA_TIME_PERIOD"  ng-model="params.dataTimePeriod"
+                     id="dataTimePeriod" name="dataTimePeriod"></div>
+              </div>
+            </div>
+
+            <div class="form-group col-xs-4 col-md-3" ng-show="params.userType=='60'">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                  <span class="w100"> <i class="red">*</i>销售数据可提前天数</span>
+                </label>
+                <div lookup-code="VMI_SALE_AMT_LIMITED_DAY"  ng-model="params.saleAmtLimitedDay"
+                     id="saleAmtLimitedDay" name="saleAmtLimitedDay"></div>
+              </div>
+            </div>
+
+            <div class="form-group col-xs-8 col-md-8">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn"><span class="w100">图标地址</span></label>
+                <input saaf-img="" data-img-url="row.accessPath" data-has-up="false"
+                       data-delete-action="imGdeleteAction(logoImg,row)"
+                       ng-repeat="row in logoImg ">
+                <input saaf-img data-max-length="1" data-size="50*50"
+                       data-add-action="imgAddAction(logoImg,'','',$returnMessage)">
+              </div>
+            </div>
+
+
+            <div class="row"></div>
+
+            <!-- <div class="col-md-6">
+                 <div style="line-height: 30px">
+                     <label style="margin-left: 10px"><i class="fa fa-list-alt"></i> {{$l('微信号')}}</label>
+
+                 </div>
+                 <div class="data-table">
+                     <div base-data-table="wechatTable"
+                          ng-params="wechatParams"
+                          data-show-index="true"
+                          data-url="wechatFind"
+                          data-auto-request="false"
+                          data-page-size="10"
+                          data-paging-show="false"
+                          data-legend="[{'value':'wxOpenId','name':'微信OPEN id'}]"
+                     ></div>
+                 </div>
+             </div>-->
+            <!--<div class="col-md-12">
+                <div style="line-height: 30px">
+                    <label style="margin-left: 10px"><i class="fa fa-list-alt"></i> {{$l('职责分配')}}</label>
+                    <button type="button" class="btn btn-default btn-xs  pull-right"  ng-click="" ng-show="currentIsadmin == 'Y'" permission-btn="btnNewResp"
+                            ng-disabled="params.userId == undefined" data-toggle="modal"
+                            data-target="#rpLov"><i class="fa fa-plus">添加职责</i></button>
+                    <button type="button" class="btn btn-default btn-xs  pull-right" ng-click="" ng-show="currentIsadmin != 'Y'" permission-btn="btnNewResp"
+                            ng-disabled="params.userId == undefined" data-toggle="modal"
+                            data-target="#rpLov1"><i class="fa fa-plus">添加职责</i></button>
+                    <button type="button" class="btn btn-default btn-xs mr10 pull-right" ng-click="" permission-btn="btnDelResp"
+                            ng-disabled="!rpTable.selectRow"
+                          ><i class="fa fa-plus">删除职责</i></button>
+                </div>
+                <div class="data-table">
+                    <div base-data-table="rpTable" id="rpTable"
+                         ng-params="rpParams"
+
+                         data-show-index="true"
+                         data-auto-request="false"
+                         data-url="findResponsibilityByUserId"
+
+                         data-paging-show="false"
+                         data-legend="[
+                 {'value':'responsibilityName','name':'职责名称'},
+                 {'value':'responsibilityCode','name':'职责编码'},
+                 {'value':'responsibilityDesc','name':'职责描述'},
+                 ]"
+                    ></div>
+                </div>
+            </div>-->
+            <!--<div class="col-md-12 pt15 pb30">
+                <h5><span class="fa fa-cog mr15"></span>关联profile
+                    <button class="btn btn-default btn-xs fr" data-toggle="modal" permission-btn=""
+                            ng-click="btnNewProfile()"
+                            data-target="#profile-lov">新增
+                    </button>
+                    <button type="button" class="btn btn-default btn-xs  mr10 pull-right" ng-click="" permission-btn="btnDelProfile"
+                            ng-disabled="!currentProfileRow"  ><i class="fa fa-plus">删除Profile</i></button>
+                </h5>
+
+                <div lov-list="profileList" role="dialog" data-title="关联Profile" id="profile-lov"
+                     ng-model="current.profile"
+                     data-url="baseProfileFind"
+                     data-params='{deleteFlag:0}'
+                     data-callback="setProfile"
+                     data-checked-type="radio"
+                     data-keys="{'key':'profileId','value':'profileName',name:'Profile名称'}"
+                     data-show-index="true"
+                     data-other-column="[{'name':'profile编码','key':'profileCode'}]"
+                     data-search-key="{'key':'profileName','placeholder':'profile名称'}"
+                     data-pagination="{'pageIndex':'1','pageRows':'5'}"
+                >
+                </div>
+                <table class=" table-hover report-data  ">
+                    <thead>
+                    <tr>
+                        <th>Profile名称</th>
+                        <th>Profile编码</th>
+                        <th>Profile描述</th>
+                        <th>Profile值</th>
+                        <th>数据源</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat=" row in profileData" ng-click="profileRow(row,$index)" ng-class="{active:$index===currentProfileRow.index}">
+                        <td>{{ row.profileName}}</td>
+                        <td>{{ row.profileCode}}</td>
+                        <td>{{ row.profileDesc}}</td>
+
+                        <td ng-class="{'has-error':!row.profileValue}">
+
+                            <div class="input-group input-group-xs" ng-if="row.profileCode=='VENDOR' || row.profileCode=='VENDOR_GROUP'  || row.profileCode=='VENDOR_EXTERAL'">
+                                <input style="float: none" ng-if="row.profileCode=='VENDOR' || row.profileCode=='VENDOR_GROUP'  || row.profileCode=='VENDOR_EXTERAL'" type="text" class="form-control radius3" required ng-model="row.profileValueTxt"
+                                       readonly>
+
+                                <span class="input-group-btn" >
+                            <button ng-if="row.profileCode=='VENDOR'" class="btn btn-default" data-toggle="modal" data-target="#vendorLov" ng-click="getProfileVal()" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            <button ng-if="row.profileCode=='VENDOR_GROUP'" class="btn btn-default" data-toggle="modal" data-target="#vendorGroupLov" ng-click="getProfileVal()" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        <button ng-if="row.profileCode=='VENDOR_EXTERAL'" class="btn btn-default" data-toggle="modal" data-target="#vendorExteralLov" ng-click="getProfileVal()" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                                    </button>
+                        </span>
+
+                            </div>
+
+
+                            <select ng-if="row.profileCode!='VENDOR' && row.profileCode!='VENDOR_GROUP' && row.profileCode!='VENDOR_EXTERAL'" ng-model="row.profileValue" class=" from-input input-xs">
+                                <option ng-repeat="item in row.option" value="{{item.VAL}}">
+                                    {{item.TXT}}
+                                </option>
+                            </select>
+                        </td>
+
+                        <td>{{ row.dsName}}</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>-->
+            <!--3/27 modify by gjc-->
+            <!--start-->
+            <div class="col-md-12">
+              <div class="picBox">
+                <ul id="myTab" class="myNav">
+                  <li class="active">
+                    <a href="#responsibilityAssignment" data-toggle="tab"><span>职责分配</span></a>
+                  </li>
+                  <li>
+                    <a href="#associateProfile" data-toggle="tab"><span>关联profile</span></a>
+                  </li>
+                  <li>
+                    <a href="#groupAllocation" data-toggle="tab"><span>群组分配</span></a>
+                  </li>
+                  <li ng-show="params.userType=='60'" ng-click="dataAuthoritySupplier()">
+                    <a href="#dataAuthority" data-toggle="tab"><span>供应商数据权限</span></a>
+                  </li>
+                </ul>
+                <div id="myTabContent" class="tab-content" style="min-height: 400px;padding: 10px">
+                  <div class="tab-pane fade in active" id="responsibilityAssignment">
+                    <div class="col-xs-12 cb mb10">
+                      <button type="button" class="btn btn-default btn-xs  pull-right" ng-click=""
+                              ng-show="currentIsadmin == 'Y'" permission-btn="btnNewResp"
+                              ng-disabled="params.userId == undefined" data-toggle="modal"
+                              data-target="#rpLov"><i class="fa fa-plus">添加职责</i></button>
+                      <button type="button" class="btn btn-default btn-xs  pull-right" ng-click=""
+                              ng-show="currentIsadmin != 'Y'" permission-btn="btnNewResp"
+                              ng-disabled="params.userId == undefined" data-toggle="modal"
+                              data-target="#rpLov1"><i class="fa fa-plus">添加职责</i></button>
+                      <button type="button" class="btn btn-default btn-xs mr10 pull-right" ng-click=""
+                              permission-btn="btnDelResp"
+                              ng-disabled="!rpTable.selectRow"
+                      ><i class="fa fa-plus">删除职责</i></button>
+                    </div>
+                    <div class="data-table cb">
+                      <div base-data-table="rpTable" id="rpTable"
+                           ng-params="rpParams"
+
+                           data-show-index="true"
+                           data-auto-request="false"
+                           data-url="findResponsibilityByUserId"
+
+                           data-paging-show="false"
+                           data-legend="[
+                                                     {'value':'responsibilityName','name':'职责名称'},
+                                                     {'value':'responsibilityCode','name':'职责编码'},
+                                                     {'value':'responsibilityDesc','name':'职责描述'},
+                                                     ]"
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade in " id="associateProfile">
+                    <div class="col-xs-12 cb mb10">
+                      <button class="btn btn-default btn-xs fr" data-toggle="modal" permission-btn=""
+                              ng-click="btnNewProfile()"
+                              data-target="#profile-lov">新增
+                      </button>
+                      <button type="button" class="btn btn-default btn-xs  mr10 pull-right" ng-click=""
+                              permission-btn="btnDelProfile"
+                              ng-disabled="!currentProfileRow"><i class="fa fa-plus">删除Profile</i></button>
+                    </div>
+
+
+                    <table class=" table-hover report-data  ">
+                      <thead>
+                      <tr>
+                        <th>Profile名称</th>
+                        <th>Profile编码</th>
+                        <th>Profile描述</th>
+                        <th>Profile值</th>
+                        <th>数据源</th>
+
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr ng-repeat=" row in profileData" ng-click="profileRow(row,$index)"
+                          ng-class="{active:$index===currentProfileRow.index}">
+                        <td>{{ row.profileName}}</td>
+                        <td>{{ row.profileCode}}</td>
+                        <td>{{ row.profileDesc}}</td>
+
+                        <td ng-class="{'has-error':!row.profileValue}">
+
+                          <div class="input-group input-group-xs"
+                               ng-if="row.profileCode=='VENDOR' || row.profileCode=='VENDOR_GROUP'  || row.profileCode=='VENDOR_EXTERAL'">
+                            <input style="float: none"
+                                   ng-if="row.profileCode=='VENDOR' || row.profileCode=='VENDOR_GROUP'  || row.profileCode=='VENDOR_EXTERAL'"
+                                   type="text" class="form-control radius3" 
+                                   ng-class="{'spec-input':row.profileCode=='VENDOR'}" required ng-model="row.profileValueTxt"
+                                   readonly>
+                            <input style="float: none;width:30%;"
+                                   ng-if="row.profileCode=='VENDOR'"
+                                   type="text" class="form-control radius3" required ng-model="row.profileValueCode"
+                                   readonly>
+
+                            <span class="input-group-btn">
+										<button ng-if="row.profileCode=='VENDOR'" class="btn btn-default" data-toggle="modal"
+                            data-target="#vendorLov" ng-click="getProfileVal()" type="button">
+											<i class="fa fa-search"></i>
+										</button>
+										<button ng-if="row.profileCode=='VENDOR_GROUP'" class="btn btn-default" data-toggle="modal"
+                            data-target="#vendorGroupLov" ng-click="getProfileVal()" type="button">
+											<i class="fa fa-search"></i>
+										</button>
+                                    <button ng-if="row.profileCode=='VENDOR_EXTERAL'" class="btn btn-default"
+                                            data-toggle="modal" data-target="#vendorExteralLov"
+                                            ng-click="getProfileVal()" type="button">
+											<i class="fa fa-search"></i>
+										</button>
+                              </button>
+									</span>
+
+                          </div>
+
+
+                          <select
+                            ng-if="row.profileCode!='VENDOR' && row.profileCode!='VENDOR_GROUP' && row.profileCode!='VENDOR_EXTERAL'"
+                            ng-model="row.profileValue" class=" from-input input-xs">
+                            <option ng-repeat="item in row.option" value="{{item.VAL}}">
+                              {{item.TXT}}
+                            </option>
+                          </select>
+                        </td>
+
+                        <td>{{ row.dsName}}</td>
+
+                      </tr>
+                      </tbody>
+                    </table>
+
+                  </div>
+                  <div class="tab-pane fade in " id="groupAllocation">
+                    <header class="col-xs-12 mb10">
+                      <div class="pull-right">
+                        <button class="btn btn-default btn-xs" type="button" permission-btn="btnNewGroup">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-default btn-xs" type="button"
+                                ng-disabled="groupTable.selectRowList.length==0" permission-btn="btnDelGroup">
+                          <i class="fa fa-del" aria-hidden="true"></i> {{$l('删除群组')}}
+                        </button>
+                      </div>
+                    </header>
+                    <div style="clear: both"></div>
+                    <div class="data-table cb">
+                      <div base-data-table="groupTable" id="groupTable"
+                           ng-params="groupParams"
+                           data-show-index="true"
+                           data-auto-request="false"
+                           data-checked-type="checkbox"
+                           data-keys="{'key':'assignId'}"
+                           data-url="findUserGroupAssignsForUser"
+                           data-paging-show="false"
+                           data-legend="[
+                                                     {'value':'userGroupCode','name':'群组编码',style:'text-align:left'},
+                                                     {'value':'userGroupName','name':'群组名称'}
+                                                     ]"
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade in " id="dataAuthority">
+                    <div class="col-md-12" style="width: 65%">
+                      <div class="pull-right">
+                        <!--<button class="btn btn-default btn-xs"  type="button" ng-disabled="!supplierList.length" ng-click="saveAuthoritySupplier()">-->
+                          <!--<i class="fa fa-del" aria-hidden="true"></i> {{$l('保存')}}-->
+                        <!--</button>-->
+                        <button class="btn btn-default btn-xs"  type="button" ng-disabled="!supplierList.length" ng-click="indenticalInd('Y')">
+                          <i class="fa fa-del" aria-hidden="true"></i> {{$l('批量置Y')}}
+                        </button>
+                        <button class="btn btn-default btn-xs"  type="button" ng-disabled="!supplierList.length" ng-click="indenticalInd('N')">
+                          <i class="fa fa-del" aria-hidden="true"></i> {{$l('批量置N')}}
+                        </button>
+                      </div>
+
+                      <div class="cb"></div>
+
+                      <div class="data-table mt10" hk-data-table-edit="tableEditData" tablelist="supplierList"
+                           pagingdata="paging" ng-params="soPiLineParamsItem"
+                           data-show-index="true" data-url="findDetailid" data-autosearch="false">
+                        <div ng-nicescroll nice-option="{{niceOpction}}">
+                          <table class="table table-bordered table-hover table-condensed">
+                            <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                            <tr class="text-center">
+                              <th>
+                                <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" class=" radius3"
+                                       ng-model="tableEditData.isCheckedAll"
+                                       ng-change="tableEditData.checkAll(tableEditData.isCheckedAll)"
+                                       ng-disabled="readFlag || (params.status && params.status!='D'&& params.status!='R')">
+                              </th>
+                              <th>序号</th>
+                              <th>供应商编号</th>
+                              <th>供应商名称</th>
+                              <th>供应商货品集</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="row in supplierList track by $index " data-index="{{$index}}">
+                              <td>
+                                <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                       ng-model="row.isChecked"
+                                       ng-disabled="readFlag || (params.status && params.status!='D'&& params.status!='R')">
+                              </td>
+                              <td>{{$index +1}}</td>
+
+                              <td><input class="form-control radius3 input-xs" type="text"
+                                         ng-model="row.vendorNbr"
+                                         ng-readonly="true" style="text-align:center;">
+                              </td>
+
+                              <td><input class="form-control radius3 input-xs" type="text"
+                                         ng-model="row.vendorName"
+                                         ng-readonly="true" style="text-align:center;">
+                              </td>
+                              <td>
+                                <div class="input-group input-group-xs" style="width: 100%">
+                                  <div lookup-code="VMI_INDENTICAL_IND" ng-model="row.indenticalInd"></div>
+                                </div>
+                              </td>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-12" ng-show="params.authorityRule == '2'">
+                      <div class="pull-right">
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                ng-disabled="customizeTableData.getSelectedRows().length==0"
+                                ng-click="btnDel($event)">
+                          <i class="fa fa-adjust"></i>删除
+                        </button>
+
+                        <button type="button" class="btn btn-default btn-xs pull-right" ng-click="btnNew()">
+                          <i class="fa fa-adjust"></i>新增
+                        </button>
+                      </div>
+
+                      <div class="cb"></div>
+
+                      <div class="data-table mt10" hk-data-table-edit="customizeTableData" tablelist="customizeList"
+                           pagingdata="paging" ng-params="customizeParams"
+                           data-show-index="true" data-url="findDetailid" data-autosearch="false">
+                        <div ng-nicescroll nice-option="{{niceOpction}}">
+                          <table class="table table-bordered table-hover table-condensed">
+                            <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                            <tr class="text-center">
+                              <th>
+                                <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" class=" radius3"
+                                       ng-model="customizeTableData.isCheckedAll"
+                                       ng-change="customizeTableData.checkAll(customizeTableData.isCheckedAll)">
+                              </th>
+                              <th>序号</th>
+                              <th>分组</th>
+                              <th>操作类别</th>
+                              <th>货品类型</th>
+                              <th>组别</th>
+                              <th>部门</th>
+                              <th>大类</th>
+                              <th>子分类</th>
+                              <th>货品</th>
+                              <th>品牌(中)</th>
+                              <th>品牌(英)</th>
+                              <th>店所属仓</th>
+                              <th>区域</th>
+                              <th>省</th>
+                              <th>市</th>
+                              <th>市场</th>
+                              <th>仓库</th>
+                              <!--<th>location_list</th>-->
+                              <th>门店</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                              <tr ng-repeat="row in customizeList track by $index " data-index="{{$index}}">
+                                <td>
+                                  <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                         ng-model="row.isChecked">
+                                </td>
+                                <td>
+                                  {{$index +1}}
+                                </td>
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 75px">
+                                    <div lookup-code="VMI_AC_SEQ" ng-model="row.seqNo" ng-disabled="row.type =='EX'"></div>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 75px">
+                                    <div lookup-code="VMI_AC_TYPE" data-row="{{$index}}" ng-model="row.type" data-paramcallback="cleanType"></div>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 80px">
+                                    <div lookup-code="VMI_AC_ITEM_TYPE" data-row="{{$index}}" ng-model="row.itemType" data-paramcallback="cleanItemType" ng-disabled="!row.type"></div>
+                                  </div>
+                                </td>
+
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 80px">
+                                    <!--<span  class="report-td ng-binding ng-scope">{{row.group}}</span>-->
+                                    <input type="text" class="form-control radius3" ng-model="row.groups" ng-disabled="!row.itemType || row.itemType == 'item' || row.itemType == 'brand'">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button" ng-disabled="!row.itemType || row.itemType == 'item' || row.itemType == 'brand'" ng-click="getItemGroup($index)">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 80px">
+                                    <!--<span  class="report-td ng-binding ng-scope">{{row.dept}}</span>-->
+                                    <input type="text" class="form-control radius3" ng-model="row.dept" ng-disabled="!row.itemType || row.itemType == 'item' || row.itemType == 'brand'">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button" ng-disabled="!row.itemType || row.itemType == 'item' || row.itemType == 'brand'" ng-click="getDept($index)">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 80px">
+                                    <!--<span  class="report-td ng-binding ng-scope">{{row.itemClass}}</span>-->
+                                    <input type="text" class="form-control radius3" ng-model="row.classes" ng-disabled="!row.itemType || row.itemType == 'dept' || row.itemType == 'item' || row.itemType == 'brand'">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button" ng-disabled="!row.itemType || row.itemType == 'dept' || row.itemType == 'item' || row.itemType == 'brand'" ng-click="getClass($index)">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 80px">
+                                    <!--<span  class="report-td ng-binding ng-scope">{{row.subClass}}</span>-->
+                                    <input type="text" class="form-control radius3" ng-model="row.subClass" ng-disabled="!row.itemType || row.itemType == 'dept' || row.itemType == 'item' || row.itemType == 'class' || row.itemType == 'brand'">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button" ng-disabled="!row.itemType || row.itemType == 'dept' || row.itemType == 'item' || row.itemType == 'class' || row.itemType == 'brand'" ng-click="getSubClass($index)">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 100px">
+                                    <!--<span  class="report-td ng-binding ng-scope">{{row.item}}</span>-->
+                                    <input type="text" class="form-control radius3" ng-model="row.item"
+                                           ng-disabled="!row.itemType || row.itemType == 'dept' || row.itemType == 'class' || row.itemType == 'subClass' || row.itemType == 'brand'"
+                                           ng-blur="itemBlur($index)">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button" ng-disabled="!row.itemType || row.itemType == 'dept' || row.itemType == 'class' || row.itemType == 'subClass' || row.itemType == 'brand'" ng-click="getItem($index)">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 80px">
+                                    <!--<span  class="report-td ng-binding ng-scope">{{row.brandCn}}</span>-->
+                                    <input type="text" class="form-control radius3" ng-model="row.brandCn"
+                                           ng-disabled="!row.itemType || row.itemType == 'dept' || row.itemType == 'class' || row.itemType == 'subClass'|| row.itemType == 'item'"
+                                           ng-blur="brandBlur($index)">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button" ng-disabled="!row.itemType || row.itemType == 'dept' || row.itemType == 'class' || row.itemType == 'subClass'|| row.itemType == 'item'" ng-click="getBrand($index)">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <input class="form-control radius3 input-xs" type="text" ng-model="row.brandEn" ng-readonly="true">
+                                </td>
+
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 110px">
+                                    <input type="text" class="form-control radius3"  ng-model="row.deliverySourceWh">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button"  ng-click="getDeliverySourceWh($index)">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 80px">
+                                    <!--<span  class="report-td ng-binding ng-scope">{{row.area}}</span>-->
+                                    <input type="text" class="form-control radius3"  ng-model="row.area">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button"  ng-click="getArea($index)">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 80px">
+                                    <input type="text" class="form-control radius3" ng-model="row.province">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button" ng-click="getProvince($index)">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 80px">
+                                    <input type="text" class="form-control radius3" ng-model="row.city">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button" ng-click="getCity($index)">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 100px">
+                                    <!--<span  class="report-td ng-binding ng-scope">{{row.mktId}}</span>-->
+                                    <input type="text" class="form-control radius3" ng-model="row.market">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button" ng-click="getMarket($index)">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 80px">
+                                    <!--<span  class="report-td ng-binding ng-scope">{{row.whId}}</span>-->
+                                    <input type="text" class="form-control radius3"  ng-model="row.wh">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button" ng-click="getVhCode($index)" >
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </td>
+
+                                <!--<td>-->
+                                  <!--<div class="input-group input-group-xs" style="width: 80px">-->
+                                    <!--<span  class="report-td ng-binding ng-scope">{{row.locationList}}</span>-->
+                                    <!--<input type="text" class="form-control radius3" ng-model="row.locationList">-->
+                                    <!--<span class="input-group-btn">-->
+                                      <!--<button class="btn btn-default" type="button">-->
+                                        <!--<i class="fa fa-search"></i>-->
+                                      <!--</button>-->
+                                    <!--</span>-->
+                                  <!--</div>-->
+                                <!--</td>-->
+
+
+                                <td>
+                                  <div class="input-group input-group-xs" style="width: 80px">
+                                    <!--<span  class="report-td ng-binding ng-scope">{{row.locId}}</span>-->
+                                    <input type="text" class="form-control radius3" ng-model="row.store">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button" ng-click="getVsCode($index)">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </td>
+
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+  </form>
+
+  <div lov-list="rpLov" role="dialog" data-title="请选择职责" id="rpLov" ng-model="current.rp"
+       data-return-value="params.lov"
+       data-url="responsibility"
+       dynamic-params="respLovParam"
+       data-callback="saveResp"
+       data-return-type="value"
+       data-pagination="{'pageIndex':'1','pageRows':'5'}"
+       data-checked-type="checkbox"
+       data-keys="{'key':'responsibilityId','value':'responsibilityName',name:'职责'}"
+       data-show-index="true"
+       data-type="competitor"
+       data-other-column="[{'name':'职责编号','key':'responsibilityCode'},{'name':'职责描述','key':'responsibilityDesc'},{'name':'系统编码','key':'systemCode'}]"
+       data-search-key="{'key':'responsibilityName','placeholder':'查找职责'}"
+  >
+  </div>
+
+  <div lov-list="rpLov1" role="dialog" data-title="请选择职责" id="rpLov1" ng-model="current.rp1"
+       data-return-value="params.lov"
+       data-url="findCurrentResponsibilityPagination"
+       dynamic-params="respLovParam"
+       data-callback="saveResp1"
+       data-return-type="value"
+       data-pagination="{'pageIndex':'1','pageRows':'5'}"
+       data-checked-type="checkbox"
+       data-keys="{'key':'responsibilityId','value':'responsibilityName',name:'职责'}"
+       data-show-index="true"
+       data-type="competitor"
+       data-other-column="[{'name':'职责编号','key':'responsibilityCode'},{'name':'职责描述','key':'responsibilityDesc'},{'name':'系统编码','key':'systemCode'}]"
+       data-search-key="{'key':'responsibilityName','placeholder':'查找职责'}"
+  >
+  </div>
+
+  <!-- <div lov-list="serviceStoreInfo" role="dialog" data-title="服务店" id="serviceStoreInfo" ng-model="params.serviceStoreName"
+        data-url="findServiceStoreInfo"
+        data-params='{}'
+        data-callback="selectServiceStore"
+        data-auto-request="true"
+        data-return-type="key"
+        data-pagination="{'pageIndex':'1','pageRows':'5'}"
+        data-checked-type="radio"
+        data-keys="{'key':'storeName','value':'storeName','name':'服务店名称'}"
+        data-show-index="false"
+        data-type="competitor"
+        data-other-column="[{'name':'服务店编码','key':'storeNumber'}]"
+        data-search-key="{'key':'storeName_like','placeholder':'服务店名称'}"
+   >
+   </div>-->
+
+
+  <div lov-list="nameLov" role="dialog" data-title="员工姓名" id="nameLov" ng-model="current.em"
+       data-return-value="params.personName"
+       data-url="personFind"
+       data-params='{}'
+       data-callback="selectPersonReturn"
+       data-auto-request="false"
+       data-return-type="value"
+       data-pagination="{'pageIndex':'1','pageRows':'5'}"
+       data-checked-type="radio"
+       data-keys="{'key':'personId','value':'personNameCn','name':'员工中文名'}"
+       data-show-index="true"
+       data-type="competitor"
+       data-other-column="[{'name':'员工英文名','key':'nameEn'},{'name':'员工编号','key':'employeeNumber'}]"
+       data-search-key="[{'key':'employeeNumber','placeholder':'员工编号'},{'key':'personNameCn','placeholder':'员工中文名'},{'key':'nameEn','placeholder':'员工英文名'}]"
+  >
+  </div>
+
+  <div lov-list="selectDept" role="dialog" data-title="选择部门信息" id="selectDeptId" ng-model="current.dept"
+       data-url="findDeptPagination"
+       data-dynamic-params='{"flag": "findDept","departmentType":"30"}'
+       data-callback="selectDeptReturn"
+       data-auto-request="true"
+       data-return-type="key"
+       data-pagination="{'pageIndex':'1','pageRows':'5'}"
+       data-checked-type="radio"
+       data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+       data-show-index="false"
+       data-type="competitor"
+       data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+       data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                          {'key':'departmentName','placeholder':'部门名称'}]"
+  >
+  </div>
+
+
+  <div lov-list="vendorLov" role="dialog" data-title=" " id="vendorLov" ng-model="code1" class="  "
+       data-url="baseVendorProfilefind"
+       data-callback="vendorCallback"
+       data-params='{}'
+       data-keys="{'key':'vendorNbr','value':'vendorName','name':'名称'}"
+       data-pagination="{'pageIndex':'1','pageRows':'5'}"
+       data-checked-type="radio"
+       data-other-column="[{'name':'编码','key':'vendorNbr'}]"
+       data-show-index="true"
+       data-search-key="[{'key':'vendorName','placeholder':'名称'},{'key':'vendorNbr','placeholder':'编码'}]"
+  >
+  </div>
+
+  <div lov-list="vendorGroupLov" role="dialog" data-title=" " id="vendorGroupLov" ng-model="code1" class="  "
+       data-url="baseVendorGroupProfilefind"
+       data-callback="vendorGroupCallback"
+       data-params='{}'
+       data-keys="{'key':'vgHeadName','value':'vgHeadName','name':'分组'}"
+       data-pagination="{'pageIndex':'1','pageRows':'5'}"
+       data-checked-type="radio"
+       data-show-index="true"
+       data-search-key="[{'key':'vgHeadName','placeholder':'分组'}]"
+  >
+  </div>
+
+
+  <div lov-list="vendorExteralLov" role="dialog" data-title=" " id="vendorExteralLov" ng-model="code1" class="  "
+       data-url="baseVendorExteralProfilefind"
+       data-callback="vendorExteralCallback"
+       data-params='{}'
+       data-keys="{'key':'supplierCode','value':'supplierName','name':'名称'}"
+       data-pagination="{'pageIndex':'1','pageRows':'5'}"
+       data-checked-type="radio"
+       data-other-column="[{'name':'编码','key':'supplierCode'}]"
+       data-show-index="true"
+       data-search-key="[{'key':'supplierName','placeholder':'名称'},{'key':'supplierCode','placeholder':'编码'}]"
+  >
+  </div>
+
+  <!--3/27 add by gjc-->
+  <!--start-->
+  <div lov-list="groupLov" role="dialog" data-title="群组分配" id="groupLov" ng-model="groupData"
+       data-url="findNoAssignsForUser"
+       data-callback="groupCallback"
+       data-auto-request='false'
+       data-params='{}'
+       data-keys="{'key':'lookupCode','value':'meaning','name':'群组名称',hide:'true'}"
+       data-pagination="{'pageIndex':'1','pageRows':'5'}"
+       data-other-column="[{'name':'群组编码','key':'lookupCode'},{'name':'群组名称','key':'meaning'}]"
+       data-checked-type="checkbox"
+       data-show-index="true"
+       data-dynamic-params="{userId:userId}"
+       data-search-key="[{'key':'meaning','placeholder':'群组名称'}]"
+  >
+  </div>
+  <div lov-list="profileList" role="dialog" data-title="关联Profile" id="profile-lov"
+       ng-model="current.profile"
+       data-url="baseProfileFind"
+       data-params='{deleteFlag:0}'
+       data-callback="setProfile"
+       data-checked-type="radio"
+       data-keys="{'key':'profileId','value':'profileName',name:'Profile名称'}"
+       data-show-index="true"
+       data-other-column="[{'name':'profile编码','key':'profileCode'}]"
+       data-search-key="{'key':'profileName','placeholder':'profile名称'}"
+       data-pagination="{'pageIndex':'1','pageRows':'5'}"
+  >
+  </div>
+
+
+
+    <!--供应商权限 start -->
+
+    <!--查询分组-->
+    <div lov-list="itemGroupLov" role="dialog" data-title="group" id="itemGroupLov" ng-model="groupsModel"
+         data-url="findGroups"
+         data-callback="itemGroupCallback"
+         data-cancel-callback="groupCancel"
+         data-checked-type="radio"
+         data-keys="{'key':'groupCode','value':'groupCode',name:'分组'}"
+         data-show-index="true"
+         data-other-column="[{'name':'分组名称','key':'groupName'}]"
+         data-search-key="[{'key':'group','placeholder':'分组'},{'key':'groupName','placeholder':'分组名称'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!--查询部门-->
+    <div lov-list="deptLov" role="dialog" data-title="dept" id="deptLov" ng-model="supplierParams.dept"
+         data-params='{"groups":"{{customizeList[index].groups}}"}'
+         data-url="findDept"
+         data-callback="deptCallback"
+         data-cancel-callback="deptCancel"
+         data-checked-type="radio"
+         data-keys="{'key':'dept','value':'dept',name:'部门'}"
+         data-show-index="true"
+         data-search-key="{'key':'dept','placeholder':'部门'}"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!--查询class-->
+    <div lov-list="classLov" role="dialog" data-title="class" id="classLov" ng-model="supplierParams.class"
+         data-params='{"dept":"{{customizeList[index].dept}}"}'
+         data-url="findClass"
+         data-callback="classCallback"
+         data-cancel-callback="classCancel"
+         data-checked-type="radio"
+         data-keys="{'key':'classes','value':'classes',name:'class'}"
+         data-show-index="true"
+         data-search-key="{'key':'classes','placeholder':'class'}"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!--查询subClass-->
+    <div lov-list="subClassLov" role="dialog" data-title="subClass" id="subClassLov"  ng-model="supplierParams.subClass"
+         data-params='{"dept":"{{customizeList[index].dept}}","classes":"{{customizeList[index].classes}}"}'
+         data-url="findSubClass"
+         data-callback="subClassCallback"
+         data-cancel-callback="subClassCancel"
+         data-checked-type="radio"
+         data-keys="{'key':'subClass','value':'subClass',name:'subClass'}"
+         data-show-index="true"
+         data-search-key="{'key':'subClass','placeholder':'subClass'}"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!--查询货品-->
+    <div lov-list="itemLov" role="dialog" data-title="货品" id="itemLov"  ng-model="supplierParams.item"
+         ng-model=""
+         data-url="findItem"
+         data-callback="itemCallback"
+         data-cancel-callback="itemCancel"
+         data-checked-type="radio"
+         data-keys="{'key':'item','value':'item',name:'货品编号'}"
+         data-show-index="true"
+         data-other-column="[{'name':'货品名称','key':'itemName'}]"
+         data-search-key="[{'key':'itemCode','placeholder':'货品编号'},{'key':'itemDesc','placeholder':'货品名称'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!--查询品牌-->
+    <div lov-list="brandLov" role="dialog" data-title="品牌" id="brandLov"  ng-model="supplierParams.brand"
+         ng-model=""
+         data-url="findBrand"
+         data-callback="brandCallback"
+         data-cancel-callback="brandCancel"
+         data-checked-type="radio"
+         data-keys="{'key':'brandnameCn','value':'brandnameCn',name:'品牌CN'}"
+         data-show-index="true"
+         data-other-column="[{'name':'品牌EN','key':'brandnameEn'}]"
+         data-search-key="[{'key':'brandnameCn','placeholder':'品牌CN'},{'key':'brandnameEn','placeholder':'品牌EN'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!-- 查询 Delivery Source Wh -->
+    <div lov-list="deliverySourceWhLov" role="dialog" data-title="Delivery Source Wh" id="deliverySourceWhLov"  ng-model="supplierParams.deliverySourceWh"
+         ng-model=""
+         data-url="findDeliverySourceWh"
+         data-callback="deliverySourceWhCallback"
+         data-cancel-callback="deliverySourceWhCancel"
+         data-checked-type="radio"
+         data-keys="{'key':'vhCode','value':'vhCode',name:'仓库'}"
+         data-show-index="true"
+         data-auto-request = 'false'
+         data-search-key="[{'key':'warehouse','placeholder':'仓库'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+
+    <!--查询地区-->
+    <div lov-list="areaLov" role="dialog" data-title="地区" id="areaLov"  ng-model="supplierParams.area"
+         data-url="findArea"
+         data-callback="areaCallback"
+         data-cancel-callback="areaCancel"
+         data-checked-type="radio"
+         data-keys="{'key':'areaCh','value':'areaCh',name:'地区CH'}"
+         data-show-index="true"
+         data-other-column="[{'name':'地区EN','key':'areaEn'}]"
+         data-search-key="[{'key':'areaCh','placeholder':'地区CH'},{'key':'areaEn','placeholder':'地区EN'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!--查询省-->
+    <div lov-list="provinceLov" role="dialog" data-title="省" id="provinceLov"  ng-model="supplierParams.province"
+         ng-model=""
+         data-url="findProvince"
+         data-callback="provinceCallback"
+         data-cancel-callback="provinceCancel"
+         data-checked-type="radio"
+         data-keys="{'key':'regionCh','value':'regionCh',name:'省CH'}"
+         data-show-index="true"
+         data-auto-request = 'false'
+         data-other-column="[{'name':'省EN','key':'regionEn'}]"
+         data-search-key="[{'key':'regionCh','placeholder':'省CH'},{'key':'regionEn','placeholder':'省EN'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+
+    <!--查询市-->
+    <div lov-list="cityLov" role="dialog" data-title="市" id="cityLov" ng-model="supplierParams.city"
+         ng-model=""
+         data-url="findCity"
+         data-callback="cityCallback"
+         data-cancel-callback="cityCancel"
+         data-checked-type="radio"
+         data-keys="{'key':'cityCh','value':'cityCh',name:'市CH'}"
+         data-show-index="true"
+         data-auto-request = 'false'
+         data-other-column="[{'name':'市EN','key':'cityEn'}]"
+         data-search-key="[{'key':'cityCh','placeholder':'市CH'},{'key':'cityEn','placeholder':'市EN'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!--查询市场-->
+    <div lov-list="marketLov" role="dialog" data-title="市场" id="marketLov" ng-model="supplierParams.market"
+         ng-model=""
+         data-url="findMarket"
+         data-callback="marketCallback"
+         data-cancel-callback="marketCancel"
+         data-checked-type="radio"
+         data-keys="{'key':'market','value':'market',name:'市场'}"
+         data-show-index="true"
+         data-auto-request = 'false'
+         data-search-key="[{'key':'market','placeholder':'市场'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+
+    <!--查询仓库-->
+    <div lov-list="vhCodeLov" role="dialog" data-title="仓库" id="vhCodeLov" ng-model="supplierParams.vhCode"
+         ng-model=""
+         data-url="findStoreWarehouse"
+         data-callback="vhCodeCallback"
+         data-cancel-callback="vhCodeCancel"
+         data-checked-type="radio"
+         data-keys="{'key':'vhCode','value':'vhCode',name:'仓库'}"
+         data-show-index="true"
+         data-auto-request = 'false'
+         data-search-key="[{'key':'vhCode','placeholder':'仓库'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+
+    <!--查询门店-->
+    <div lov-list="vsCodeLov" role="dialog" data-title="门店" id="vsCodeLov" ng-model="supplierParams.vsCode"
+         ng-model=""
+         data-url="findStore"
+         data-callback="vsCodeCallback"
+         data-cancel-callback="vsCodeCancel"
+         data-checked-type="radio"
+         data-keys="{'key':'vsCode','value':'vsCode',name:'门店'}"
+         data-show-index="true"
+         data-auto-request = 'false'
+         data-other-column="[{'name':'门店名称','key':'vsName'}]"
+         data-search-key="[{'key':'vsCode','placeholder':'门店编号'},{'key':'vsName','placeholder':'门店名称'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+  <!--供应商权限 end -->
+</div></div>
+<style>
+  .picBox {
+    border: 1px solid #eee;
+    position: relative;
+    border-radius: 3px;
+  }
+
+  .picBox .smallSquare {
+    border-left: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: -10px;
+    top: 50px;
+    background-color: #fff;
+    transform: rotate(45deg);
+  }
+
+  .picBox .myNav {
+    display: flex;
+    padding: 0px;
+    margin: 0px 10px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .picBox .myNav li a {
+    display: block;
+    padding: 10px 0px;
+    color: #95837A;
+    text-decoration: none;
+  }
+
+  .picBox .myNav li a span {
+    display: block;
+    border-right: 1px solid #eee;
+    padding: 0px 10px;
+  }
+
+  .picBox .myNav li:nth-of-type(3) a span {
+    border-right: 0px;
+  }
+
+  .picBox .myNav .active a {
+    color: #000;
+  }
+
+  .spec-input {
+    margin-top: 5px;
+    width: 70% !important;
+    vertical-align: top;
+  }
+</style>
+<!--end-->

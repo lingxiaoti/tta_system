@@ -1,0 +1,35 @@
+<div>
+    <div class="btn-group btn-group-xs ml10" ng-show="!isApproval  && (action ==='new'||  action ==='edit')">
+        <button class="btn btn-default" type="button" ng-click="btnSave(true)" validate-form-btn="formArea">
+            <i class="fa fa-search" aria-hidden="true"></i>保存草稿
+        </button>
+        <button class="btn btn-default" type="button" ng-click="btnSubmit()" validate-form-btn="formArea">
+            <i class="fa fa-undo" aria-hidden="true"></i>提交
+        </button>
+    </div>
+    <div class="btn-group btn-group-xs ml10" ng-show="!isApproval && action ==='approval'" >
+        <button class="btn btn-default" type="button" ng-click="btnApproval('Y',true)"  validate-form-btn="formArea">
+            <i class="fa fa-search" aria-hidden="true"></i>保存
+        </button>
+        <button class="btn btn-default" type="button" ng-click="btnApproval('Y',false)" validate-form-btn="formArea">
+            <i class="fa fa-undo" aria-hidden="true"></i>提交审批
+        </button>
+    </div>
+    <div class="btn-group btn-group-xs ml10" ng-show="isApproval">
+        <button class="btn btn-default" type="button" ng-click="showBtnApproval('Y',false,'审批')"  >
+            <i class="fa fa-search" aria-hidden="true"></i>通过
+        </button>
+        <button class="btn btn-default" type="button" ng-click="showBtnApproval('RJ',false,'驳回')" >
+            <i class="fa fa-undo" aria-hidden="true"></i>驳回
+        </button>
+        <button class="btn btn-default" type="button" ng-click="showBtnApproval('RT',false,'驳回重审')" >
+            <i class="fa fa-undo" aria-hidden="true"></i>驳回重审
+        </button>
+        <button class="btn btn-default" type="button" ng-click="showBtnApproval('-1',false,'发消息')" >
+            发消息
+        </button>
+        <button class="btn btn-default" type="button" ng-click="showBtnApproval('-1',false,'增加助审')" >
+            增加助审
+        </button>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<!-- Created by lijiayao on 2018-08-20 -->
+<div ng-controller="entranceGuardApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOaWorkshopEntranceGuard"
+         data-api-get="findOaWorkshopEntranceGuardById" data-api-del="" data-api-update="updateOaWorkshopEntranceGuard">
+        <div class="col-md-12 pt15">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'deptName',label:'申请部门',readonly:true,required:true},
+                        {key:'personName',label:'申请人',readonly:true,required:true},
+                        {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                        {key:'billNo',label:'申请单号',readonly:true},
+                        {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                        {key:'statusStr',label:'状态',readonly:true},
+                        ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'applyType',label:'申请类型',required:true,type:'lookCode',lookCode:'ENT_APPLY_TYPE'},
+                    ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>申请原因</span></label>
+                        <textarea class="form-control" rows="1" auto-textarea="" ng-model="formParams.applyReason" maxlength="500" placeholder="字数限制500" required name="applyReason" style="height: auto"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+        
+    </div>
+</div>

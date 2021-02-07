@@ -1,0 +1,156 @@
+<div ng-controller="baseSSODetailCtrl">
+    <form ng-submit="save()">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <button type="submit" class="btn btn-default" id="saveButton">
+                        <i class="fa fa-floppy-o"
+                           aria-hidden="true"></i>保存
+                    </button>
+                </div>
+                <div class="btn-group btn-group-xs ">
+                </div>
+            </div>
+        </div>
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+
+                <div class=" mt10 pb5 bb oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form>
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>SSO系统</span>
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100"> 系统名称</span></label>
+                                <input type="text" id="lookupType" required class="form-control radius3"
+                                       readonly
+                                       ng-model="params.systemCode">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="pl10"><i class="red">*</i>系统编码</span></label>
+
+                                <div lookup-code="SYSTEM_CODE" ng-model="params.systemCode" id="paramsSystemCode"></div>
+
+
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">URL</span></label>
+                                <input type="text" id="meaning" class="form-control radius3"
+                                       ng-model="params.requestUrl">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">排序</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="params.orderNo">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">请求方式</span></label>
+                                <div lookup-code="POST_TYPE"
+                                     ng-model="params.requestMethod"></div>
+
+                            </div>
+                        </div>
+
+
+                        <!--<div class="form-group col-xs-4 col-md-3">-->
+                        <!--<div class="input-group input-group-xs">-->
+                        <!--<label class="input-group-addon bn"><span class="w100">图标地址</span></label>-->
+                        <!--<input type="text" id="description" class="form-control radius3"-->
+                        <!--ng-model="params.imageUrl">-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">是否生效</span></label>
+                                <input type="checkbox" class=" radius3"
+                                       ng-true-value="'Y'" ng-false-value="'N'" ng-model="params.enableFlag">
+                            </div>
+                        </div>
+                        <div class="row"></div>
+
+                        <div class="form-group col-xs-4 ">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">图标地址</span></label>
+                                <input saaf-img="" data-img-url="row.accessPath" data-has-up="false"
+                                       data-delete-action="imGdeleteAction(logoImg,row)"
+                                       ng-repeat="row in logoImg ">
+                                <input saaf-img data-max-length="1" data-size="50*50"
+                                       data-add-action="imgAddAction(logoImg,'','',$returnMessage)">
+                            </div>
+                        </div>
+
+                        <div class="row"></div>
+
+
+                        <!--<hr width="100%">-->
+                        <div>
+                            <label style="margin-left: 10px"><i class="fa fa-list-alt"></i>参数</label>
+                            <button type="button" class="btn btn-default btn-xs pull-right" ng-click="add()"
+                            ><i class="fa fa-plus">增加</i></button>
+
+                        </div>
+
+                        <div class="data-table">
+
+                            <table
+                                    class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th>参数名称</th>
+                                    <th>值</th>
+                                    <th>标签</th>
+                                    <th>删除</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-center" ng-repeat="row in dataTable"
+                                    ng-class="{'active':dataTable.selectRow==$index}"
+                                    ng-click="dataTable.selectRow=$index">
+                                    <td>
+                                        <input class="form-control input-xs" required ng-model="row.key"
+                                        ></td>
+                                    </td>
+                                    <td>
+                                        <input class="form-control input-xs" ng-model="row.value">
+                                    </td>
+                                    </td>
+                                    <td>
+                                        <input class="form-control input-xs" ng-model="row.tab">
+                                    </td>
+                                    </td>
+                                    <td><a href="" ng-click="deleteAction(row,$index)"><i
+                                            class="fa fa-trash-o fa-lg"></i></a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!--<div saaf-table-tfoot="dataTable.data"></div>-->
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+</div>

@@ -1,0 +1,97 @@
+<div ng-controller="paramsManagementDetailCtrl">
+    <div inner-frame class="form bg-white" id="rooForm">
+        <form  name="paramForm" id="paramForm">
+            <div class="bg-gray-white bt">
+                <div class="bg-gray-white p5">
+                    <button permission-btn="btnSave"  data-validate-form="paramForm" class="btn btn-default btn-xs pull-right" >
+                    </button>
+
+                    <div class="btn-group btn-group-xs ">
+                        <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                            <i class="fa fa-square-o"></i>
+                            数据全屏
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div main-scroll-style="main-scroll-style">
+                <div class="nicescroll-height  bg-white " ng-nicescroll="ng-nicescroll"
+                     nice-option="{{niceOpction}}">
+                    <!--------------------- 输入表单  --->
+                    <div class=" mt10 pb5 bb oh">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>参数配置详情</span>
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>参数名称</span>
+                                </label>
+
+                                <input required type="text" class="form-control radius3" name="paramName"
+                                       ng-model="current.paramKey" placeholder="" ng-disabled="flagEnable">
+                            </div>
+                        </div>
+
+                     <!--   <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>是否sql</span>
+                                </label>
+
+                                <div data-required="true" lookup-code="YES_OR_NO" required="" name="isSql"
+                                     ng-model="current.isSql"></div>
+
+                            </div>
+                        </div>-->
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span  class="w100" class="pl10"><i
+                                            class="red"></i>描述</span>
+                                </label>
+
+                                <input type="text" class="form-control radius3" name="remark"
+                                       ng-model="current.remark" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-sm-12">
+                          <!--  <p class="red f12">*如需上传图片，请选择小于2M的图片</p>-->
+                            <div class="input-group input-group-xs w">
+                                <!--<label class="input-group-addon bn">-->
+                                <!--<span class="w80 inline-block tr"> 内容</span>-->
+                                <!--</label>-->
+                               <!-- <textarea ng-click="" id="articleContent" class=" ueditor w" style="z-index: 0"
+                                          config="_simpleConfig"
+                                          ng-model="current.paramContent">
+										</textarea>-->
+                                <!--<div class="ueditor" ng-model="content"></div>-->
+
+                                <!--<textarea ng-click="" id="articleContent" class="radius3-4 w100p"  style="width: 50%; height: 50%;"
+                                          ng-model="current.paramContent">
+                                </textarea>-->
+
+                                <textarea class="form-control" rows="20" ng-model="current.paramContent" maxlength="500"
+                                          placeholder="字数限制500"  name="signOpinion" style="height: auto">
+
+                                </textarea>
+
+
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+</div>
+

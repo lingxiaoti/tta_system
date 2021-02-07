@@ -1,0 +1,213 @@
+<div ng-controller="myUpcomingCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ">
+                    <div class="btn-group btn-group-xs ml10">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>搜索
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>重置
+                        </button>
+                    </div>
+
+                    <div class="btn-group btn-group-xs ml10" permission-buttons="batchRejected,batchApproval">
+                        <button class="btn btn-default" type="button" ng-click="batchApproval()"  ng-disabled="!dataTable.selectRowList.length>0">
+                             批量审批
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="batchRejected()" ng-disabled="!dataTable.selectRowList.length>0">
+                          批量驳回
+                        </button>
+                    </div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>高级查询
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>数据全屏
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{cursorcolor: '#333333',cursorwidth:10,zindex:1}" data-des="此节点必需-滚动内容及指令">
+                <!--------------------- 输入表单  --->
+                <form class=" mt10 pb5 input-form bb    " input-form style="z-index: 100" data-des="此节点必需－用于识别输入表单的指令">
+                    <div resp-change="" class=" col-xs-6 col-md-4 col-lg-3"></div>
+                    <div search-form
+                         data-legend="[
+                         {ngStart:'applyStartDate',ngEnd:'applyEndDate',label:'申请时间',type:'dateTimeRange'},
+                         {key:'bpm_categoryName',label:'流程分类',type:'ztreeSelect',
+                              options:{
+                                url:'processListCategories',
+                                label:'流程分类',
+                                simpledata: {enable:true,idKey:'categoryId',pIdKey:'parentId',rootPId:-1},
+                                keys: {name:'categoryName'},
+                                height:250,
+                                returnValue:'categoryName',
+                                returnKey:'categoryId'
+                              }
+                          },
+
+                           {key:'billNo',label:'单据编号'},
+                           {key:'title',label:'流程标题'},
+                           {key:'drafter',label:'流程发起人'},
+                           {ngStart:'startDate',ngEnd:'endDate',label:'待办时间',type:'dateTimeRange'},
+                           {key:'communicated',label:'已发消息',type:'lookupCode',lookupCode:'YES_OR_NO'},
+                           {key:'status',label:'待办状态',type:'lookupCode',lookupCode:'PROCESS_BPM_TASK_STATUS'},
+
+                        ]"
+                         ng-model="myProcessParams"
+                    ></div>
+                </form>
+                <!--------------------- ./  输入表单  --->
+                <!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-url="processFindTodoTasks" data-show-index='true'
+                         ng-params="myProcessParams"
+                         data-checked-type="checkbox"
+                         ng-model="currentModel"
+                         data-keys="{key:'taskId',value:'bpm_title'}"
+                         data-callback="[{value:'bpm_title',callback:'clickColumns'}]"
+                         data-legend='[
+                            {"value": "billNo","name": "单据编号"},
+                            {"value": "bpm_title","name": "流程标题"},
+                            {"value": "bpm_categoryName","name": "流程分类"},
+                            {"value": "bpm_userFullName","name": "流程发起人"},
+                            {"value": "bpm_startTime","name": "申请时间"},
+                            {"value": "taskName","name": "审批节点"},
+                            {"value": "status","name": "待办状态"},
+                            {"value": "bpm_communicated","name": "已发消息" ,boolean:"icon"},
+                            {"value": "createTime","name": "待办开始时间"},
+                            {"value": "durationDHM","name": "待处理时长"}]'>
+                    </div>
+                </div>
+                <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+            </div>
+        </div>
+    </div>
+
+    <form  name="approvalForm"  id="approvalForm" >
+        <div class="modal fade" id="approvalFormModal" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            {{ apporvalParamsBtn }}
+                        </h4>
+                    </div>
+
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col col-xs-12 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>{{ $l('审批意见') }}：</span></label>
+
+                                        <textarea class="radius3-4 w100p" rows="4" ng-model="addParams.opinion" name="addParams_userName" required>
+
+                                        </textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group col col-xs-12 col-md-12" ng-if="false">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="">{{ $l('快捷回复') }}：</span></label>
+                                        <select class="form-control radius3 " ng-model="showParams.opinion"
+                                                ng-change="toOpinion()" name="addParams_Opinion">
+                                            <option value="{{ val }}" ng-repeat="val in OpinionsList">{{ val }}</option>
+
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true">{{ $l('取消')}}
+                            </button>
+                            <button type="button" ng-click="btnApproval()"
+                                    validate-form-btn="approvalForm" class="btn btn-primary mr10"> 确定
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+    </form>
+
+    <!--<form  name="entrustPersonForm"  id="entrustPersonForm" >
+        <div class="modal fade" id="entrustPerson" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            委托代办人
+                        </h4>
+                    </div>
+
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col col-xs-12 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>{{ $l('请选择代办人') }}：</span></label>
+                                        <input class="form-control radius3" ng-model="showParams.userName" name="addParams_userName" required disabled>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default btn-xs" data-target="#LovUserList" data-toggle="modal">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true">{{ $l('取消')}}
+                            </button>
+                            <button type="button" ng-click="submitEntrustApprova()"
+                                    validate-form-btn="entrustPersonForm" class="btn btn-primary mr10">{{ $l('确定委托')}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>&lt;!&ndash; /.modal &ndash;&gt;
+    </form>
+
+
+
+    <div lov-list="LovUserList" id="LovUserList" data-url="userFind" ng-model="current.LovUserList" data-title="审批人"
+         data-checked-type="radio"
+         data-return-key="addParams.delegateUserId"
+         data-return-value="showParams.userName"
+         data-search-key="[{'key':'userFullName','placeholder':'请输入员工姓名'},{'key':'userName','placeholder':'请输入员工编号'}]"
+         data-keys="{'key':'userId','value':'userFullName','name':'员工姓名'}"
+         data-other-column="[{key:'userName',name:'员工账号'}]"
+
+    ></div>-->
+</div>

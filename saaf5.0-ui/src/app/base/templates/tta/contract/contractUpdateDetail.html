@@ -1,0 +1,554 @@
+<div ng-controller="contractUpdateDetailCtrl" class="bigdata">
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+
+            <div class="btn-group btn-group-xs">
+                <button type="button" class="btn btn-default ng-scope"   ng-click="btnXZ()">
+                    下载
+                </button>
+                <button type="button" class="btn btn-default ng-scope"   ng-click="btnCreate()">
+                    <i class="fa fa-reorder"></i>生成
+                </button>
+                <button type="button" class="btn btn-default ng-scope" style="display:inline-block"  ng-disabled="!contractHeader.proposalCode" ng-click="btnParentDetail()">
+                    <i class="fa fa-reorder"></i>查看父级报表
+                </button>
+
+                <button class="btn btn-default btn-xs" id="confirmQuestionnaire"
+                        ng-click="btnSave('C',splitVendorForm)"
+                        ng-show = "!contractHeader.proposalId || contractHeader.billStatus != 'C'" type="button"
+                        ng-disabled= "!contractHeader.proposalId && contractHeader.billStatus != 'C'"
+                >
+                    <i class="fa fa-check">确认</i>
+                </button>
+
+                <button class="btn btn-default btn-xs" id="CancelQuestionnaire"
+                        ng-click="btnSave('D',splitVendorForm)"  ng-show="contractHeader.billStatus == 'C'"
+                        type="button"
+                ><i class="fa fa-arrows-h">取消确认</i>
+                </button>
+
+
+                <button class="btn btn-default" permission-btn="btnSave"   ng-click="btnSave('A',splitVendorForm)"
+                        ng-disabled= "!contractHeader.proposalId || contractHeader.billStatus == 'C'" type="button">
+                </button>
+             <!--
+                <button class="btn btn-default" permission-btn="btnSubmit"  ng-disabled="status=='C'||status=='D'"   ng-click="btnSubmit()" ></button>
+                <button class="btn btn-default" permission-btn="btnDiscard"  ng-disabled="status=='A'||status=='D'"   ng-click="btnDiscard()" ></button>
+              -->
+
+            </div>
+
+
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white "
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+             <div class="col-xs-12 col-md-12 br p0">
+                <ul class="nav nav-tabs" id="tab">
+                    <li class="active" ng-click="tabChange('contractBox')">
+                        <a data-toggle="tab" ng-href="#contractBox">
+                            <label>合同输出拆分与编辑界面</label></a>
+                    </li>
+                 <!--   <li  ng-click="tabChange('tradeClause')">
+                            <a data-toggle="tab" ng-href="#tradeClause">
+                                <label>贸易条款</label></a>
+                    </li>-->
+                </ul>
+            </div>
+
+            <div class="tab-content" id="tabContent" >
+
+            <!-- ------------------- 合同输出拆分与编辑界面  -------------------------- -->
+                <div class="tab-pane fade in active col-md-12" id="contractBox">
+                    <div class=" mt10 pb5  oh"
+                        data-des="此节点必需－用于识别输入表单的指令">
+
+                                <header class="col-xs-12 mb10">
+                                    <i class="fa fa-cog" aria-hidden="true"></i>
+                                    <span>合同输出拆分与编辑界面</span>
+                                </header>
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w110"><i class="red">* </i>Proposal合同编号：</span></label>
+                                        <input type="text" id="proposalCode1" class="form-control radius3"
+                                               required   ng-disabled="true"  ng-model="contractHeader.proposalCode" ng-change="getProposalId()"/>
+                                        <span class="input-group-btn ng-scope">
+                                            <button class="btn btn-default" ng-click="getProposalCode()" type="button" ng-disabled="params.contractHId" >
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w110">单据编号：</span></label>
+                                        <input data-required-msg="单据编号" id = "contractCode1" type="text" ng-model="contractHeader.contractCode"
+                                            disabled   class="form-control radius3">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"> <!--<i class="red">*</i>-->单据状态：</span>
+                                        </label>
+
+                                        <div lookup-code="BILL_STATUS" id="billStatus1" data-required="true" ng-model="contractHeader.billStatus"
+                                             disabled  ></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100">制单人：</span></label>
+                                        <input id="createdName1" data-required-msg="制单人" type="text" ng-model="contractHeader.createdUserName"
+                                               disabled    class="form-control radius3">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100">制单日期：</span></label>
+                                        <input id="creationDate1" data-required-msg="制单日期" type="text" ng-model="contractHeader.creationDate"
+                                               disabled    class="form-control radius3">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100">确认日期：</span></label>
+                                        <input id="confirmDate1" data-required-msg="确认日期" type="text" ng-model="contractHeader.confirmDate"
+                                               disabled    class="form-control radius3">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"><!--<i class="red">* </i>-->Proposal年度：</span></label>
+                                        <input id="proposalYear1" data-required-msg="Proposal年度" type="text" ng-model="contractHeader.proposalYear"
+                                            disabled   required class="form-control radius3">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w110">Proposal供应商编号：</span></label>
+                                        <input data-required-msg="供应商编号" id = "vendorNbr" type="text" ng-model="contractHeader.vendorNbr"
+                                               disabled   class="form-control radius3">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"><!--<i class="red">*</i>-->Proposal供应商名称：</span>
+                                        </label>
+                                        <input id="vendorName1" disabled required data-required-msg="请填写供应商名称"
+                                               type="text" class="form-control radius3"
+                                               ng-model="contractHeader.vendorName">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"><!--<i class="red">* </i>-->Proposal版本号：</span></label>
+                                        <input id="proposalVersion1" data-required-msg="Proposal版本号" type="text" ng-model="contractHeader.proposalVersion"
+                                            disabled   required class="form-control radius3">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w110">是否拆分</span>
+                                        </label>
+                                        <input ng-disabled="contractHeader.billStatus == 'C' || vendorContractList.length>0" id="chk" type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" class=" radius3"   ng-click="showBtn()"
+                                            ng-model="contractHeader.isSplit">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w110">是否特批</span>
+                                        </label>
+                                        <input ng-disabled="contractHeader.billStatus == 'C' || vendorContractList.length>0" id="isSpecial" type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" class=" radius3"
+                                               ng-model="contractHeader.isSpecial">
+                                    </div>
+                                </div>
+
+                                <div class="row"></div>
+                    </div>
+
+
+                   <!-- <div id = "hiddenPdfDiv">
+                        <li ng-repeat="row in pdfDataList track by $index">
+                            <button ng-click="pdfPrint(row)" validate-form-btn=""
+                                    class="btn btn-primary mr10">pdf打印
+                            </button>
+                        </li>
+                    </div> -->
+
+                    <div class="col-md-12" >
+
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <h5><span class="fa fa-cog mr15"></span>Proposal条款信息</h5>
+                                </td>
+                                <td align="right" style="margin: 10px;">
+                                    <div class="btn-group btn-group-xs pull-right">
+                                        <div class="btn-group btn-group-xs">
+                                            <button type="button" ng-click="getHeight();proposalInfoIsShow=false" class="btn btn-default btn-xs" ng-show="proposalInfoIsShow"
+                                                                                                            id="hide">
+                                            <i class="fa fa-eye-slash">隐藏</i>
+                                        </button>
+                                            <button type="button" ng-click="getHeight();proposalInfoIsShow=true" class="btn btn-default btn-xs" ng-show="!proposalInfoIsShow"
+                                                    id="show">
+                                                <i class="fa fa-eye">显示</i>
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="row"></div>
+
+
+
+
+
+                        <div class="data-table" id="prodata"  ng-show="proposalInfoIsShow">
+                            <div style="">
+                                <div class="" id="prodataDiv" ng-nicescroll=""
+                                     nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2',cursorwidth:'10px',autohidemode:false,zindex:10}"
+                                >
+                            <form id="contractForm" name="contractForm">
+                                <table class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                    <tr class="text-center">
+                                        <th rowspan="2" style="vertical-align: middle;" >供应商编码</th>
+                                        <th rowspan="2" style="vertical-align: middle;">供应商名称</th>
+                                        <th rowspan="2" style="vertical-align: middle;" >配送仓库</th>
+                                        <th rowspan="2" style="vertical-align: middle;">销售区域</th>
+                                        <th rowspan="2" style="vertical-align: middle;">销售金额</th>
+                                        <th rowspan="2" style="vertical-align: middle;">采购金额</th>
+                                        <th  colspan="2" ng-repeat="row in proposalTitleList track by $index" >
+                                            {{row}}
+                                        </th>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <th ng-repeat="row in proposalTitleBottomList track by $index">{{row}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   <tr class="text-center">
+                                        <td  style="vertical-align: middle;" ng-repeat="row in proposalContractList track by $index">
+                                            <div ng-bind-html="row|tohtml"></div>
+                                        </td>
+                                   </tr>
+                                </tbody>
+                            </table>
+                            </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row"></div>
+                    </div>
+                        <div class="col-md-12" >
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <h5><span class="fa fa-cog mr15"></span>拆分后明细展示</h5>
+                                    </td>
+                                    <td align="right" style="margin: 10px;">
+                                        <div class="btn-group btn-group-xs pull-right">
+                                            <div class="btn-group btn-group-xs">
+                                                <button  ng-disabled="!contractHeader.contractCode ||  contractHeader.billStatus == 'C'"  type="button" ng-disabled="!params.contractHId || billStatus == 'C'" ng-click="getContractVendor()" class="btn btn-default btn-xs"
+                                                        id="appointSupplier">
+                                                    <i class="fa fa-plus">指定供应商</i>
+                                                </button>
+
+                                              <!--  <button class="btn btn-default"  ng-disabled="!vendorContractList || vendorContractList.length == 0"  type="button" ng-click="saveBatchSplitResult(splitVendorForm.$invalid)"
+                                                        validate-form-btn="splitVendorForm"  data-validate-form="splitVendorForm" >
+                                                    <i class="fa fa-save" aria-hidden="true"></i>保存拆分信息
+                                                </button>-->
+
+                                                <button type="button" ng-disabled="vendorContractList.selectRow == undefined || contractHeader.billStatus == 'C'" ng-click="deleteRow()" class="btn btn-default btn-xs"
+                                                        id="delSupplier">
+                                                    <i class="fa fa-trash">删除拆分结果</i>
+                                                </button>
+
+                                                <button type="button" class="btn btn-default ng-scope" style="display:inline-block"  ng-disabled="vendorContractList.selectRow == undefined" ng-click="btnDetail()">
+                                                    <i class="fa fa-reorder"></i>查看子级报表
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div class="row"></div>
+                            <div id ="parentFixedId"  main-scroll-style>
+                            <div class="data-table" id="contractData" style =" height: auto;overflow:auto;position:relative">
+                                <form name="splitVendorForm" id="splitVendorForm">
+                                    <table class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white">
+                                        <tr class="text-center">
+                                            <th rowspan="2" style="vertical-align: middle;">供应商编码</th>
+                                            <th rowspan="2" style="vertical-align: middle;">供应商名称</th>
+                                            <th rowspan="2" style="vertical-align: middle;">配送仓库</th>
+                                            <th rowspan="2" style="vertical-align: middle;">销售区域</th>
+                                            <th rowspan="2" style="vertical-align: middle;">销售金额</th>
+                                            <th rowspan="2" style="vertical-align: middle;">采购金额</th>
+                                            <th rowspan="2" style="vertical-align: middle;">是否需要特批</th>
+                                            <th colspan="2" ng-repeat="row in proposalTitleList track by $index">
+                                                {{row}}
+                                            </th>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <th ng-repeat="row in proposalTitleBottomList track by $index">{{row}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center" ng-repeat="row in vendorContractList track by $index"
+                                            ng-class="{'active':vendorContractList.selectRow==$index}"
+                                            ng-click="vendorContractList.selectRow=$index; vendorContractList.selectRowData = row"
+                                        >
+                                            <td ng-click="vendorContractList.selectCol = $index;"   style="vertical-align: middle;"  ng-repeat="childRow in row | filterByKey : 'fieldName' : 'split_parent_id'"> <!--split_parent_id-->
+
+                                                <!--供应商编码-->
+                                                <div ng-if="childRow.fieldName == 'vendor_code'"  ng-bind-html="childRow.fieldValue|tohtml"></div>
+
+                                                <!--供应商-->
+                                                <div  ng-if="childRow.fieldName == 'vendor_name'"  ng-bind-html="childRow.fieldValue|tohtml"></div>
+
+                                                <!--条款值-->
+                                                <div  ng-if="childRow.fieldName == 'terms_system' &&  userType != 45 && contractHeader.isSplit== 'N'" ng-disabled="contractHeader.billStatus == 'C'"   ng-bind-html="childRow.fieldValue|tohtml"></div>
+
+                                                <textarea  ng-if="childRow.fieldName == 'terms_system' &&  userType == 45 && contractHeader.isSplit== 'Y'"  ng-disabled="contractHeader.billStatus == 'C'"  class="form-control radius3 "
+                                                           ng-model="childRow.fieldValue"
+                                                          style="height:100%; width:300px; background-color:#fff;" >
+                                                </textarea>
+
+
+
+                                                <!--ttaValue值-->
+                                                <input ng-disabled="contractHeader.isSplit== 'N' || contractHeader.billStatus == 'C'" ng-if="childRow.fieldName == 'tta_value'" to-change-number  ng-change="ttaValueFunc($index)"  name="{{'tta_value_' + childRow.id}}" ng-model="childRow.fieldValue" style="width: 90px;"  required  class="form-control input-xs"   type="text">
+
+                                                <!--配送仓库-->
+                                                <div ng-if="childRow.fieldName == 'delivery_granary'"
+                                                     style="width: 180px;" class="input-group input-group-xs">
+                                                    <input class="form-control radius3 readonly-white" name="salesArea"
+                                                           ng-model="childRow.fieldValue" readonly
+                                                           title="{{childRow.fieldValue}}" type="text">
+                                                    <span class="input-group-btn ng-scope">
+                                                         <!--1) 不拆分条款，开放字段"配送仓库"和"销售区域"可编辑。
+                                                        <button ng-disabled="contractHeader.isSplit== 'N' || contractHeader.billStatus == 'C'"  class="btn btn-default" ng-click="clearSelect(childRow)"-->
+                                                        <button ng-disabled="contractHeader.billStatus == 'C'"  class="btn btn-default" ng-click="clearSelect(childRow)"
+                                                                type="button"><i class="fa fa-remove"></i></button>
+                                                        <button ng-disabled="contractHeader.billStatus == 'C'"  class="btn btn-default" data-target="#warehouseChange"
+                                                                data-toggle="modal"
+                                                                ng-disabled="filterData[][$index].warehouseDesc"
+                                                                type="button"><i class="fa fa-search"></i></button>
+                                                    </span>
+                                                </div>
+
+                                                <!--销售区域-->
+                                                <div ng-if="childRow.fieldName == 'sales_area'" style="width: 180px;"  class="input-group input-group-xs">
+                                                    <input class="form-control radius3 readonly-white" name="salesArea"
+                                                           ng-model="childRow.fieldValue" readonly
+                                                           title="{{childRow.fieldValue}}" type="text">
+                                                    <span class="input-group-btn ng-scope">
+                                                        <!-- 1) 不拆分条款，开放字段"配送仓库"和"销售区域"可编辑。
+                                                            <button ng-disabled="contractHeader.isSplit== 'N' || contractHeader.billStatus == 'C'" class="btn btn-default" ng-click="clearSelect(childRow)"
+                                                         -->
+                                                        <button ng-disabled="contractHeader.billStatus == 'C'" class="btn btn-default" ng-click="clearSelect(childRow)"
+                                                                type="button"><i class="fa fa-remove"></i></button>
+                                                        <button ng-disabled="contractHeader.billStatus == 'C'" class="btn btn-default" data-target="#salesAreaChange"
+                                                                data-toggle="modal"
+                                                                ng-disabled="contractParams.warehouseDesc"
+                                                                type="button"><i class="fa fa-search"></i></button>
+                                                    </span>
+                                                </div>
+
+                                                <!--销售金额-->
+                                                <input ng-disabled="contractHeader.isSplit== 'N' || contractHeader.billStatus == 'C'" ng-if="childRow.fieldName == 'sales'"  name="{{'sales_' + childRow.id}}" ng-model="childRow.fieldValue" style="width: 90px;"  required  class="form-control input-xs"  to-change-number type="text">
+
+                                                <!--采购金额-->
+                                                <input ng-disabled="contractHeader.isSplit== 'N' || contractHeader.billStatus == 'C'" ng-if="childRow.fieldName == 'purchase'"  name="{{'purchase_' + childRow.id}}" ng-model="childRow.fieldValue" style="width: 90px;"  required  class="form-control input-xs"  to-change-number type="text">
+
+                                                <!-- 是否需要特批 -->
+                                                <div ng-if="childRow.fieldName == 'is_special'">
+                                                    <input  type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" class="radius3"  ng-disabled="contractHeader.billStatus == 'C'"
+                                                            ng-model="childRow.fieldValue">
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+
+
+                       </div>
+
+                    <!--选择供应商信息 start-->
+                    <div lov-list="cityLovs" role="dialog" data-title="选择供应商信息" id="contractVendors" ng-model="current.em"
+                        data-url="supplierFindLov"
+                        data-dynamic-params='{"flag": "querySlaveVender", venderCode: contractHeader.vendorNbr, contractHId: contractHeader.contractHId}'
+                        data-callback="selectVendor"
+                        data-auto-request="true"
+                        data-return-type="key"
+                        data-pagination="{'pageIndex':'1','pageRows':'5'}"
+                        data-checked-type="checkbox"
+                        data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+                        data-show-index="false"
+                        data-type="competitor"
+                        data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+                        data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                                        {'key':'supplierName','placeholder':'供应商名称'}]"
+                    >
+                    </div>
+                    <!--选择供应商信息 end-->
+
+                    <!--选择proposal信息 start-->
+                    <div lov-list="cityLov" role="dialog" data-title="Proposal信息" id="latentcontractCode" ng-model="current.em"
+                        data-url="proposalFindLov"
+                        data-dynamic-params='{"status": "C", "resource":"contract"}'
+                        data-callback="selectLatentcontractReturn"
+                        data-auto-request="true"
+                        data-return-type="key"
+                        data-pagination="{'pageIndex':'1','pageRows':'5'}"
+                        data-checked-type="radio"
+                        data-keys="{'key':'proposalId','value':'orderNbr','name':'Proposal单号'}"
+                        data-show-index="false"
+                        data-type="competitor"
+                        data-other-column="[{'name':'Proposal年度','key':'proposalYear'},{'name':'供应商编码','key':'vendorNbr'},{'name':'供应商名称','key':'vendorName'},{'name':'Proposal版本号','key':'versionCode'}]"
+                        data-search-key="[{'key':'orderNbr','placeholder':'Proposal单号'},
+                                        {'key':'vendorNbr','placeholder':'供应商编码'},
+                                        {'key':'vendorName','placeholder':'供应商名称'}]"
+                    >
+                    </div>
+                    <!--选择proposal信息 end-->
+
+                    <!--选择销售区域信息 start-->
+                    <div  id="salesAreaChange" class="" data-auto-request="auto" data-callback="selectSalesArea" data-cancel-callback="clearSalesArea"
+                         data-checked-type="checkbox" data-dynamic-params="{lookupType:'TTA_TERMS_AREA'}"
+                         data-keys="{'key':'lookupCode','value':'lookupCode','name':'序号'}"
+                         data-other-column="[{'key':'meaning','name':'销售区域'}]"
+                         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+                         data-search-key="[{'key':'lookupCode_like','placeholder':'序号'},{'key':'meaning_like','placeholder':'销售区域'}]"
+                         data-show-index="false"
+                         data-title="请选择销售区域"
+                         data-type="competitor"
+                         data-url="base_lookupVal"
+                         data-callbackClick = "selectSalesAreaClick"
+                         lov-list
+                         ng-model="salesAreaChange"
+                         role="dialog"
+                    ></div>
+                    <!--选择销售区域信息 end-->
+
+
+                    <!--配送仓库start 信息-->
+                    <div role="dialog" class="modal fade" id="warehouseChange" data-des="配送仓库" data-backdrop="static" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        &times;
+                                    </button>
+                                    <h4 class="modal-title">
+                                        请选择配送仓库
+                                    </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group col-xs-4 col-md-4">
+                                        <div class="input-group input-group-xs">
+                                            <input ng-model="warehouseParamsT.lookupCode_like" class="form-control" placeholder="请输入仓库编码">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-4 col-md-4">
+                                        <div class="input-group input-group-xs">
+                                            <input ng-model="warehouseParamsT.meaning_like" class="form-control" placeholder="请输入仓库名称">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-4 col-md-4">
+                                        <div class="input-group input-group-xs">
+                                            <button class="btn btn-xs btn-primary" type="button" ng-click="warehouseParamsTDataTable.search(1)">查询</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-xs-12 col-md-12">
+                                        <div class="data-table">
+                                            <div base-data-table="warehouseParamsTDataTable"
+                                                 data-auto-request="true"
+                                                 ng-params="warehouseParamsT"
+                                                 data-show-index="true"
+                                                 data-url="base_lookupVal"
+                                                 data-checked-type="checkbox"
+                                                 data-keys="{'key':'lookupValuesId'}"
+                                                 data-legend="[
+                                                     {'value':'lookupCode','name':'仓库编码'},
+                                                     {'value':'meaning','name':'仓库名称'},
+                                                ]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="cb"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" ng-click="selectWarehouse()" class="btn btn-warning btn-sm">
+                                        <span class="fa fa-plus"> 确定新增</span></button>
+                                    <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal" aria-label="Close"><span
+                                            class="fa ">取消</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--配送仓库end-->
+
+
+
+                </div>
+            <!-- ------------------- 合同输出拆分与编辑界面  -------------------------- -->
+
+
+            
+        </div>
+
+  </div>
+</div>

@@ -1,0 +1,250 @@
+<div ng-controller="ttaContractStatusCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+
+        <div class="col-xs-12 col-md-12 br p0">
+
+
+            <div class="tab-content" id="tabContent" style="margin-left: -1%;">
+
+                <!----------------------------------------------------- proposalSummary 页面start ---------------------------------------------->
+                <div class=" col-md-12" id="proposalSummary">
+                    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令"  >
+                        <div class="bg-gray-white bt">
+                            <div class="bg-gray-white p5">
+                                <div class="pull-right ml10">
+                                    <div class="btn-group btn-group-xs ">
+                                        <button class="btn btn-default" type="button" ng-click="searchDataTable();proposalProcessTable.getData()">
+                                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                                        </button>
+                                        <button class="btn btn-default" type="button" ng-click="summaryDataExport();dataExport()" name="fullWindow">
+                                            <i class="fa fa-upload" aria-hidden="true"></i>导出
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="btn-group btn-group-xs ">
+                                   <!-- <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                                    </button>-->
+                                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                            <div class="nicescroll-height  bg-white "
+                                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                                <div class=" mt10 pb5 input-form  oh" input-form
+                                     data-des="此节点必需－用于识别输入表单的指令">
+                                    <!-- 搜索输入框组-->
+                                    <div search-form
+                                         data-legend="[
+                                             {key:'deptName',label:'部门名称'},
+                                             {key:'proposalYear',label:'proposal年份',type:'time','date':'yyyy'}
+                                           ]"
+                                         ng-model="params"
+                                    ></div>
+                                </div>
+
+                                <!--第一部分报表 start-->
+                                <div class="col-xs-12 col-md-12" style="margin-right: -1px;">
+                                        <div class="data-table" id="dataDiv"  ng-nicescroll=""
+                                     nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2',cursorwidth:'10px',autohidemode:false,zindex:10}">
+                                    <form name="dataForm" id="dataForm">
+                                        <table class="table table-bordered table-hover table-condensed" id = "dataTableId"
+                                        >
+                                            <thead class="bg-gray-white">
+                                            <tr class="text-center" style="background: #9BC2E6">
+                                                <th rowspan="2" style="vertical-align: middle;">Department</th>
+                                                <th rowspan="2" style="vertical-align: middle;">Proposal need buyer sumbit to BIC</th>
+                                                <th colspan="2" style="vertical-align: middle;">Pending for Buyer Submition</th>
+                                                <th colspan="{{processNodeList.length}}">Proposal under Internal Process</th>
+                                                <th rowspan="2" style="vertical-align: middle;">BIC审阅回收</th>
+                                                <th rowspan="2" style="vertical-align: middle;">财务审阅回收</th>
+                                                <th rowspan="2" style="vertical-align: middle;">法务审阅回收</th>
+                                                <th rowspan="2" style="vertical-align: middle;">In the pending for Buyer Submition</th>
+                                                <th rowspan="2" style="vertical-align: middle;">In the pending approved</th>
+                                                <th rowspan="2" style="vertical-align: middle;">Proposal approved</th>
+                                                <th rowspan="2" style="vertical-align: middle;">Rate% for In the pending for Buyer Submition</th>
+                                                <th rowspan="2" style="vertical-align: middle;">Rate% for proposal completion</th>
+                                            </tr>
+                                            <tr class="text-center" style="background: #9BC2E6">
+                                                <th>pending to submit</th>
+                                                <th>In the preparation</th>
+                                                <th ng-repeat="row in processNodeList track by $index">{{row.nodeName}}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="tbodyId">
+                                            <tr name="tr_{{$index}}" class="text-center" ng-repeat="row in processDataList track by $index"
+                                                ng-class="{'active':processDataList.selectRow==$index}"
+                                                ng-click="processDataList.selectRow= $index; processDataList.selectRowData = row">
+                                                <td ng-click="dataList.selectCol = $index;" name="td_{{$index}}"   style="vertical-align: middle;"  ng-repeat="childRow in row"> <!--split_parent_id-->
+                                                    {{childRow.nodeValue}}
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </div>
+                                </div>
+                                <!--第一部分报表 end-->
+
+
+                                <!--第二部分报表 start-->
+                                <div >
+                                    <div class=""
+                                          data-des="此节点必需-滚动内容及指令">
+                                        <div class="col-xs-12 col-md-12" style="margin-right: -1px; height: 100%; ">
+                                            <div class=" mt10 pb5 input-form bb oh" input-form
+                                                 data-des="此节点必需－用于识别输入表单的指令">
+
+                                                <!--<div search-form
+                                                     data-legend="[
+                                                        {key:'year',label:'年度'},
+                                                        {key:'supplierCode',label:'供应商编号'},
+                                                        {key:'supplierName',label:'供应商名称'},
+                                                        {key:'orderNo',label:'单据号'}
+                                                       ]"
+                                                     ng-model="searchParam"
+                                                ></div>-->
+
+                                            </div>
+                                            <div id ="proposalStatusParentId" style="" main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                                                <div id ="proposalStatusId" class="data-table" ng-nicescroll="" id="nicescroll_userGroupDeptBrand"
+                                                     nice-option="{{niceOpction}}"
+                                                >
+                                                    <table saaf-table="proposalProcessTable"
+                                                           data-url="findElecContractReport"
+                                                           data-params="params"
+                                                           data-checked-type="radio"
+                                                           data-auto-get-data="true"
+                                                           data-after-get-data="proposalStatusAfterGetData()"
+                                                           data-page-rows="10"
+                                                           id="dataTableId2"
+                                                           class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                                        <thead class="bg-gray-white">
+                                                        <tr class="text-center">
+                                                            <th colspan="12"
+                                                                style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                合同基本信息
+                                                            </th>
+                                                            <th style="vertical-align: middle;background-color: #2F75B5;"></th>
+                                                            <th colspan="{{3 + processField.length * 2}}"
+                                                                style="vertical-align: middle;background-color: #2F75B5;">Proposal 审批进度
+                                                            </th>
+                                                            <th style="vertical-align: middle;background-color: #5B9BD5;"></th>
+                                                        </tr>
+                                                        <tr class="text-center">
+                                                            <th rowspan="2"
+                                                                style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                年度
+                                                            </th>
+                                                            <th colspan="2"
+                                                                style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                Proposal
+                                                            </th>
+                                                            <th style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                合同
+                                                            </th>
+                                                            <th rowspan="2"
+                                                                style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                主/从供应商
+                                                            </th>
+                                                            <th rowspan="2"
+                                                                style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                供应商编号
+                                                            </th>
+                                                            <th rowspan="2"
+                                                                style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                供应商名称
+                                                            </th>
+                                                            <th rowspan="2"
+                                                                style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                品牌_中文
+                                                            </th>
+                                                            <th rowspan="2"
+                                                                style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                合同主要负责部门
+                                                            </th>
+                                                            <th rowspan="2"
+                                                                style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                级别
+                                                            </th>
+                                                            <th rowspan="2"
+                                                                style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                销售模式
+                                                            </th>
+                                                            <th rowspan="2"
+                                                                style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                合同版本
+                                                            </th>
+                                                            <th rowspan="2" style="vertical-align: middle;background-color: #2F75B5;">
+                                                                proposal单据号码+版本号
+                                                            </th>
+                                                            <th rowspan="2" style="vertical-align: middle;background-color: #2F75B5;">
+                                                                Proposal 单据状态
+                                                            </th>
+                                                            <th colspan="2" style="vertical-align: middle;background-color: #2F75B5;">
+                                                                提交人
+                                                            </th>
+                                                            <th colspan="2" style="vertical-align: middle;background-color: #2F75B5;"
+                                                                ng-repeat="value in processField">{{value.meaning}}
+                                                            </th>
+                                                            <th rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                                合同输出日期
+                                                            </th>
+
+                                                        </tr>
+                                                        <tr class="text-center">
+                                                            <th style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                是否需要提交
+                                                            </th>
+                                                            <th style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                不提交的原因
+                                                            </th>
+                                                            <th style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                                是否需要提交
+                                                            </th>
+                                                            <th style="vertical-align: middle;background-color: #2F75B5;">发起人</th>
+                                                            <th style="vertical-align: middle;background-color: #2F75B5;">日期</th>
+                                                            <th style="vertical-align: middle;background-color: #2F75B5;"
+                                                                ng-repeat="value in processChildField">{{value.name}}
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody ng-show="proposalProcessTable.data">
+                                                        <tr class="text-center" ng-repeat="row in proposalProcessTable.data"
+                                                            ng-class="{'active':proposalProcessTable.data.selectRow==$index}"
+                                                        >
+                                                            <td ng-repeat="rowChild in processChildFieldValue">{{row[rowChild]}}</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+
+
+                                                </div>
+                                                <div saaf-table-tfoot="proposalProcessTable"
+                                                     ng-show="proposalProcessTable.data.length>0"></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!--第二部分报表 end-->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!----------------------------------------------------- proposalSummary 页面end ---------------------------------------------->
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>

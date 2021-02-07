@@ -1,0 +1,279 @@
+<div ng-controller="businessApplyFormCtrl" class="gridtable">
+    <!-- Modified by lijiayao on 2018-08-22 -->
+    <div class="data-table" id="processForm" data-api-post="saveOrUpdateOaTravel"
+         data-api-get="findOaTravelDetailById" data-api-del="" data-api-update="updateOaTravel">
+        <div class="col-md-12 pt15">
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <h5><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                          {key:'deptName',label:'申请部门',disabled:true,required:true},
+                          {key:'personName',label:'申请人',disabled:true,required:true},
+                          {key:'positionName',label:'职位',disabled:true,type:'lov',disabled:true,target:'#positionByPersonModel',required:true,length:'maxLength=7'},
+                          {key:'billNo',label:'申请单号',disabled:true},
+                          {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                          {key:'statusStr',label:'状态',disabled:true},
+                        ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><i class="red">*</i>是否自驾车</span></label>
+                        <label class="radio-inline"><input type="radio" ng-model="formParams.isDrive" name="isDrive" ng-value="'Y'"  ng-disabled="true">是</label>
+                        <label class="radio-inline"><input type="radio" ng-model="formParams.isDrive"  name="isDrive" ng-value="'N'"  ng-disabled="true">否</label>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><i class="red">*</i>交通票务预订</span></label>
+                        <label class="radio-inline"><input type="radio" ng-model="formParams.isBookTicket"   name="isBookTicket" ng-value="'Y'"  ng-disabled="true">自己预订</label>
+                        <label class="radio-inline"><input type="radio" ng-model="formParams.isBookTicket"  name="isBookTicket" ng-value="'N'"  ng-disabled="true">行政预订</label>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><i class="red">*</i>住宿预订</span></label>
+                        <label class="radio-inline"><input type="radio" ng-model="formParams.isBookHotel" name="isBookHotel" ng-value="'Y'"  ng-disabled="true">自己预订</label>
+                        <label class="radio-inline"><input type="radio" ng-model="formParams.isBookHotel"  name="isBookHotel" ng-value="'N'" ng-disabled="true" >行政预订</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-4"  >
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>计划出差时间</span></label>
+                        <input type="text" class="form-control radius3 "
+                               date-time-picker=""
+                               ng-readonly="true"
+                               data-start-view="2"
+                               data-date-format="yyyy-mm-dd"
+                               data-min-view="2"
+                               data-enddate="{{ formParams.travelEndDate}}"
+                               ng-change="inputChang()"
+                               ng-disabled="true"
+                               ng-model="formParams.travelBeginDate" required name="returnTime">
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4"  >
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>至</span></label>
+                        <input type="text" class="form-control radius3 "
+                               date-time-picker=""
+                               ng-readonly="true"
+                               data-start-view="2"
+                               data-date-format="yyyy-mm-dd"
+                               data-min-view="2"
+                               data-stratdate="{{ formParams.travelBeginDate}}"
+                               ng-change="inputChang()"
+                               ng-disabled="true"
+                               ng-model="formParams.travelEndDate" required name="returnTime">
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>计划出差天数</span></label>
+                        <input class="form-control" ng-model="formParams.travelDays" ng-disabled="true" max-length="10" placeholder=" " name="travelDays" required/>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-if="ljyParams">
+                <div search-list=""
+                     data-col="4"
+                     ng-model="formParams"
+                     data-legend="[
+                      {key:'statusStr',label:'审批状态'},
+                      {key:'reportStatus',label:'出差报告'},
+                ]"></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>出差事由</span></label>
+                        <textarea class="form-control" rows="3" ng-disabled="true" ng-model="formParams.travelReason" maxlength="500" placeholder="字数限制500"  title="字数限制500" required name="travelReason" style="height: auto"></textarea>
+                        <!-- <input class="form-control" ng-model="formParams.timeoffReason" name="timeoffReason" required/> -->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                        <span class="w100" >同行人员</span>
+                        </label>
+                        <input type="text"  class="form-control radius3" name="personNames"
+                               ng-model="formParams.personNames" placeholder="" ng-disabled="true">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                        <span class="w100" >其他同行员工</span>
+                        </label>
+                        <input type="text"  class="form-control radius3" name="otherPeople"
+                               ng-model="formParams.otherPeople" placeholder="" ng-disabled="true">
+                       <!-- <input type="text" required class="form-control radius3" name="otherPeople"
+                               ng-model="formParams.otherPeople" placeholder="" required ng-disabled="true">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" data-toggle="modal" data-target="#data2">
+                            <i class="fa fa-search"></i></button>
+                        </span>-->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" >
+                <label><span class="fa fa-cog mr15"></span>行程计划
+                </label>
+            </div>
+            <div class="col-md-12 ">
+                <div base-data-table-edit="tableEnditOne"
+                     data-delete-show="false"
+                     data-legend="[
+                        {value:'leaveDate',name:'计划出发时间',required:true,disabled:true},
+                        {value:'leaveAddress',name:'出发城市',required:true,disabled:true},
+                        {value:'arrivalDate',name:'预计到达时间',required:true,disabled:true},
+                        {value:'arrivalAddress',name:'到达城市',disabled:true,required:true},
+                    ]"
+                     data-form-params-key="scheduleItems"
+                     data-second="[
+                        {items:[{name:'工作计划',required:true,type:'label',colspan:1},{value:'jobProject',colspan:3,required:true,maxlength:'500',disabled:true}]},
+
+                    ]"
+                     ng-model="formParams">
+
+                </div>
+            </div>
+
+            <div class="col-md-12 " ng-if="formParams.isBookTicket=='N'">
+                <label><span class="fa fa-cog mr15"></span>交通票务预订</label>
+            </div>
+            <div class="col-md-12 hook-normal" ng-if="formParams.isBookTicket=='N'">
+                <div base-data-table-edit="tableEnditTwo"
+                     data-delete-show="false"
+                        data-legend="[
+                            {value:'leaveTime',name:'出发时间',disabled:true},
+                            {value:'leaveAddress',name:'出发城市',disabled:true},
+                            {value:'arrivalAddress',name:'到达城市',disabled:true},
+                        ]"
+                        data-form-params-key="ticketItems"
+                        data-second="[
+                            {items:[{name:'预订要求',required:true,type:'label',colspan:1},{value:'bookingNote',colspan:2,required:true,disabled:true}]},
+                           {items:[{name:'预订信息',required:true,type:'label',colspan:1},{value:'bookingInfo',type:'textarea',colspan:2,required:true,maxlength:'500',placeholder:'字数限制500',title:'字数限制500'}]},
+                        ]"
+                        ng-model="formParams">
+
+                </div>
+            </div>
+            <div class="col-md-12" ng-if="formParams.isBookHotel=='N'">
+                <label><span class="fa fa-cog mr15"></span>住宿预订
+                </label>
+            </div>
+            <div class="col-md-12 hook-normal" ng-if="formParams.isBookHotel=='N'">
+                <div base-data-table-edit="tableEnditThree"
+                     data-legend="[
+                        {value:'checkInAddress',name:'入住城市',disabled:true},
+                        {value:'checkInDate',name:'入住时间',disabled:true},
+                        {value:'checkOutDate',name:'离店时间',disabled:true},
+                    ]"
+                     data-form-params-key="hotelItems"
+                     data-second="[
+                        {items:[{name:'预订要求',required:true,type:'label',colspan:1},{value:'bookingNote',type:'textarea',maxlength:'500',colspan:2,required:true,disabled:true,placeholder:'字数限制500',title:'字数限制500'}]},
+                        {items:[{name:'预订信息',required:true,type:'label',colspan:1},{value:'bookingInfo',type:'textarea',colspan:2,required:true,maxlength:'500',placeholder:'字数限制500',title:'字数限制500'}]},
+                        ]"
+                     ng-model="formParams">
+
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                     data-file-data="fileData.file"
+                     data-file-filter='{{fileType}}'
+                     data-view-only="fileViewOnly"
+                ></div>
+            </div>
+        </div>
+    </div>
+    <div lov-list="businessApplyMangemetModel" role="dialog" data-title="请选择" id="businessApplyMangemetModel" ng-model="code1"  class=""
+         data-url="findPaginationPersonInfo"
+         data-auto-request="false"
+         data-return-value="formParams.userNames"
+         data-return-key="formParams.userIds"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'userId','value':'personName',name:'人员名称'}"
+         data-other-column="[{'name':'职位名称','key':'positionName'}]"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'personName','placeholder':'请输入姓名'}]"
+    >
+    </div>
+    <div lov-list="data1" role="dialog" data-title="请选择同行人员" id="data1" ng-model="code2"  class=""
+         data-url="findPaginationPersonInfo"
+         data-auto-request="false"
+         data-return-value="formParams.personNames"
+         data-return-key="formParams.personIds"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'personId','value':'personName',name:'人员名称'}"
+         data-other-column="[{'name':'职位名称','key':'positionName'},{'name':'工号','key':'employeeNumber'}]"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'personName','placeholder':'请输入姓名'},{'key':'employeeNumber','placeholder':'请输入工号'}]"
+    >
+    </div>
+    <div lov-list="data2" role="dialog" data-title="请选择抄送人" id="data2" ng-model="code3"  class=""
+         data-url="findPaginationPersonInfo"
+         data-auto-request="false"
+         data-return-value="formParams.otherPeople"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'personId','value':'personName',name:'人员名称'}"
+         data-other-column="[{'name':'职位名称','key':'positionName'},{'name':'工号','key':'employeeNumber'}]"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'personName','placeholder':'请输入姓名'},{'key':'employeeNumber','placeholder':'请输入工号'}]"
+    >
+    </div>
+    <div class="modal fade" id="citysModal" data-des="请选择城市" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        请选择城市
+                    </h4>
+                </div>
+                <form class="ngValid" >
+                    <div class="modal-body oh">
+                        <div city-area="businessCity" ng-model="citys" class="col-xs-12" data-select-level="3"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button type="button" ng-click="citySave()" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>

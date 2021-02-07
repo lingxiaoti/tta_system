@@ -1,0 +1,43 @@
+<div>
+  <ul ng-if="!urlParams.businessKey" class="nav nav-tabs mt10">
+    <li class="active" ng-click="processTabChange('tabForm')">
+      <a href="#tabForm" data-toggle="tab">{{formTitle}}</a>
+    </li>
+    <li ng-click="processTabChange('tabFlowchart')">
+      <a href="#tabFlowchart" data-toggle="tab">流程图</a>
+    </li>
+    <li ng-show="processTabAction=='tabFlowchart'">
+      <ul>
+        <li style="list-style-type: square;float: left;font-size: 20px;color: #cc0033;margin-right: 30px;text-indent: -7px;">
+          <span style="font-size: 14px;">未接收</span>
+        </li>
+        <li style="list-style-type: square;float: left;font-size: 20px;color: #ff6600;margin-right: 30px;text-indent: -7px;">
+          <span style="font-size: 14px;">办理中</span>
+        </li>
+        <li style="list-style-type: square;float: left;font-size: 20px;color: #339933;margin-right: 30px;text-indent: -7px;">
+          <span style="font-size: 14px;">已办结</span>
+        </li>
+        <li style="list-style-type: square;float: left;font-size: 20px;color: #666666;margin-right: 30px;text-indent: -7px;">
+          <span style="font-size: 14px;">预设步骤</span>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div ng-show="processTabAction== 'tabForm'"  class="tab-pane active"
+       id="tabForm" style="border: 0;width:100%;height: 100%;overflow-y: auto;">
+    <form name="formArea" id="formArea" data-des="此节点必需－用于识别输入表单的指令">
+      <div ng-transclude></div>
+    </form>
+  </div>
+  <div ng-if="!urlParams.businessKey" ng-show="processTabAction== 'tabFlowchart'" class="tab-pane " id="tabFlowchart"
+       style="border: 0;width:100%;height: 100%; position: relative;">
+    <div style="position: absolute; z-index: 1; top: 3px; right: 36px;">
+      <a class="btn btn-xs btn-primary" ng-click="zoom('zoom')"><i class="fa fa-search-minus"></i>缩小</a>
+      <a class="btn btn-xs btn-primary" ng-click="zoom('enlarge')"><i class="fa fa-search-plus"></i>放大</a>
+      <a class="btn btn-xs btn-primary" ng-click="zoom('reduction')"><i class="fa fa-undo"></i>还原</a>
+    </div>
+    <div id="processImg" style="width: 100%;height:100%;">流程图加载中，请稍候...</div>
+  </div>
+
+</div>

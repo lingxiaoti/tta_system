@@ -1,0 +1,136 @@
+<div ng-controller="ttaSaStdTplFieldCfgCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white p5">
+
+            <div class=" pull-right ml10" >
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" type="button" ng-click="ttaSaStdTplFieldCfgTable.getData()">
+                        <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                    </button>
+                    <button class="btn btn-default" ng-click="btnSave(ttaSaStdTplFieldCfgForm)" permission-btn="btnSave"></button>
+                    <button type="button" class="btn btn-default btn-xs" ng-click="btnNew()"><i class="fa fa-plus">增加</i></button>
+                </div>
+
+            </div>
+            <div class="btn-group btn-group-xs ">
+                <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                </button>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class="col-xs-12 col-md-12" style="margin-right: -1px; height: 100%; ">
+
+                    <form class="  m10" ng-submit="usersAuthorityTable.getData()">
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">字段中文名称：</span></label>
+                                <input  type="text" ng-model="ttaSaStdTplFieldCfgParams.filedName"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="row"></div>
+                    </form>
+                    <form id="ttaSaStdTplFieldCfgForm" name="ttaSaStdTplFieldCfgForm">
+                    <div style="">
+                        <div class="data-table" ng-nicescroll="" id="nicescroll_ttaSaStdTplFieldCfgParams" nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2'}"
+                        >
+                            <table saaf-table="ttaSaStdTplFieldCfgTable"
+                                   data-url="findTtaSaStdTplFieldCfgPagination"
+                                   data-params="ttaSaStdTplFieldCfgParams"
+                                   data-checked-type="radio"
+                                   data-auto-get-data="false"
+                                   data-page-rows="10"
+                                   class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th>序号</th>
+                                    <th>字段代号</th>
+                                    <th>字段中文名称</th>
+                                    <th>字段类型</th>
+                                    <th>数据字典定义</th>
+                                    <th>是否生效</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-show="ttaSaStdTplFieldCfgTable.data">
+                                <tr class="text-center" ng-repeat="row in ttaSaStdTplFieldCfgTable.data"
+                                    ng-class="{'active':ttaSaStdTplFieldCfgTable.data.selectRow==$index}"
+                                    ng-click="ttaSaStdTplFieldCfgTable.data.selectRow=$index;
+                                     ttaSaStdTplFieldCfgTable.data.selectRowData =row;"
+                                >
+                                    <td>
+                                        <div class="input-group input-group-xs">
+                                            {{ row.orderNum }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-group-xs">
+                                            {{ row.tplCode }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-group-xs" style="width: 100%;">
+                                            <input class="form-control radius3" ng-model="row.filedName"
+                                                   type="text" name = "{{ 'filedName' + $index }}" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-group-xs" style="width: 100%;">
+                                            <div lookup-code="TTA_FIELD_TYPE"   ng-required="true"  name="{{'filedType'+$index}}" ng-model="row.filedType"></div>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                        <div class="input-group input-group-xs" style="width: 100%;">
+                                            <input class="form-control radius3" ng-model="row.dicCode" name="{{'dicCode'+$index}}"
+                                                   readonly  type="text"/>
+                                            <span class="input-group-btn ng-scope">
+                                        <button class="btn btn-default"  ng-click="dicCodeCancel(row)"
+                                                type="button"><i class="fa fa-remove"></i></button>
+                                        <button class="btn btn-default" ng-click="getDicCode()" type="button">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-group-xs" style="width: 100%;">
+                                            <div lookup-code="YES_OR_NO" required  name="{{'isEnable'+$index}}" ng-model="row.isEnable"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div saaf-table-tfoot="ttaSaStdTplFieldCfgTable" ng-show="ttaSaStdTplFieldCfgTable.data.length>0"></div>
+
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div lov-list="selectDicCode" role="dialog" data-title="选择字典信息" id="selectDicCodeId" ng-model="current.em"
+         data-url="queryLookupLineDicPagination"
+         data-dynamic-params='{"systemCode": "BASE"}'
+         data-callback="selectDicCodeReturn"
+         data-pagination="{'pageIndex':'1','pageRows':'10'}"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'lookupValuesId','value':'lookupValuesId',hide:'true'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'快码类型','key':'lookupType'},{'name':'快码值','key':'lookupCode'},{'name':'快码名称','key':'meaning'}]"
+         data-search-key="[{'key':'lookupType','placeholder':'快码类型'},{'key':'lookupCode','placeholder':'快码值'}]"
+    >
+    </div>
+</div>

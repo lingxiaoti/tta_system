@@ -1,0 +1,1148 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="hilink.css">
+<title>softphone测试页面</title>  
+<script src="jquery-min.js" type="text/javascript"></script>	
+<script src="hilink_softphone.js" type="text/javascript"></script>	
+
+<script type="text/javascript">
+
+    var softphone;
+//window.onload=function()
+function loadsp()
+{  
+	var txt_AgentID = document.getElementById("txtAgentID").value;
+	softphone = new fCreateSoftPhone(txt_AgentID,"2");
+	softphone.f_initws();
+}
+
+function spcmdcallback(retvalue)
+{
+  //alert("spcmdcallback="+retvalue);
+}
+
+function initiate() 
+{ 
+  softphone.f_sp_SetCommandCallback("f_spinit",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_spuninit",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_direct_login",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_agentlogin",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_agentlogout",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_agentready",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_makecall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_agentnotready",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_hangupcall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_holdcall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_reconnectcall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_agentacw",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_spsetivrno",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_transfercall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_transfertoivr",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_consultcall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_conference",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_senddtmf",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_answercall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_spsetloginstate",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_startsubscribe",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_cancelsubscribe",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_getcustomercallinfo",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_setcustomercallinfo",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_queryrt",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_transfermessage",spcmdcallback);
+
+  softphone.f_sp_SetAgentStateEventCallback(pAgentStatusChangeCallBack);
+  softphone.f_sp_SetStationStateEventCallback(pStationStateChange);
+  softphone.f_sp_SetInboundCallEventCallback(pInboundCallCallBack);
+  softphone.f_sp_SetSubScribeEventCallback(pSubScribeEventCallback);
+  softphone.f_sp_SetTranferMessageEventCallback(ptranmsgevtCallBack);
+  softphone.f_sp_SetCallInfoChangeEventCallback(pCallInfoChangeEventCallback);
+  softphone.f_sp_SetCallTransferEventCallback(pCallTransferEventCallback);
+  softphone.f_sp_SetErrorEventCallback(pErrorEventCallback);
+  softphone.f_sp_SetButtonStateChangedEventCallback(pButtonStateChangedEventCallback);
+
+  softphone.f_spsetloginstate(1104); 	//1103：表示登录后自动变为未就绪状态；1104：表示登录后自动变成就绪状态；
+
+  
+  //alert(softphone.f_spinit());
+  softphone.f_spinit();
+  return;
+}    
+
+function pAutoLoginCallback(strRetValue)
+{
+  //alert("RetValue:"+strRetValue);
+}
+
+function btnyijian()
+{
+  softphone.f_sp_SetCommandCallback("f_spinit",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_spuninit",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_direct_login",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_agentlogin",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_agentlogout",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_agentready",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_makecall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_agentnotready",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_hangupcall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_holdcall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_reconnectcall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_agentacw",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_spsetivrno",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_transfercall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_transfertoivr",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_consultcall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_conference",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_senddtmf",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_answercall",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_spsetloginstate",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_startsubscribe",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_cancelsubscribe",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_getcustomercallinfo",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_setcustomercallinfo",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_queryrt",spcmdcallback);
+  softphone.f_sp_SetCommandCallback("f_sp_transfermessage",spcmdcallback);
+
+  softphone.f_sp_SetAgentStateEventCallback(pAgentStatusChangeCallBack);
+  softphone.f_sp_SetStationStateEventCallback(pStationStateChange);
+  softphone.f_sp_SetInboundCallEventCallback(pInboundCallCallBack); // 来电弹屏
+  softphone.f_sp_SetSubScribeEventCallback(pSubScribeEventCallback);
+  softphone.f_sp_SetTranferMessageEventCallback(ptranmsgevtCallBack);
+  softphone.f_sp_SetCallInfoChangeEventCallback(pCallInfoChangeEventCallback);
+  softphone.f_sp_SetCallTransferEventCallback(pCallTransferEventCallback);
+  softphone.f_sp_SetErrorEventCallback(pErrorEventCallback);
+  softphone.f_sp_SetButtonStateChangedEventCallback(pButtonStateChangedEventCallback);
+
+  softphone.f_sp_direct_login("1104","7701",pAutoLoginCallback);	//1103：表示登录后自动变为未就绪状态；1104：表示登录后自动变成就绪状态
+  return;
+}
+
+function f_SubScribeCallBack(strRetValue,strSubScribeID)
+{
+  //alert("RetValue:"+strRetValue+",SubScribeID="+strSubScribeID);
+}
+
+function agentinfocallback(strRet,strAgentID,strAgentName,strStationID)
+{
+  //alert(strRet +","+ strAgentID+","+ strAgentName);
+  document.getElementById("agentinfo").value = "工号 " + strAgentID + " 姓名 " + strAgentName + " 分机 " + strStationID;
+  document.getElementById("zgfenji_text").value = strStationID;
+}
+
+
+function regsend()
+{
+	softphone.f_sp_agentlogin();
+}
+
+function pGetCustomerDataCallback(strRetValue,strDataList)
+{
+	var yldata = strDataList;
+	var yldata_ar = yldata.split(';');
+	var yldata_ar1 = yldata_ar[0].split(',');
+	var yldata_ar2 = yldata_ar[1].split(',');
+	var yldata_ar3 = yldata_ar[2].split(',');
+	var yldata_ar4 = yldata_ar[3].split(',');
+	var yldata_ar5 = yldata_ar[4].split(',');
+	var yldata_ar6 = yldata_ar[5].split(',');
+    var yldata_ar7 = yldata_ar[6].split(',');
+	var yldata_ar8 = yldata_ar[7].split(',');
+	var yldata_ar9 = yldata_ar[8].split(',');
+	var yldata_ar10 = yldata_ar[9].split(',');
+	var yldata_ar11 = yldata_ar[10].split(',');
+	var yldata_ar12 = yldata_ar[11].split(',');
+	var yldata_ar13 = yldata_ar[12].split(',');
+  document.getElementById("txtgetcustomercallinfo").value = ("字段1: " + yldata_ar1[2] + " 字段2: " + yldata_ar2[2] + " 字段3: " + yldata_ar3[2] + " 字段4: " + yldata_ar4[2] + " 字段5: " + yldata_ar5[2] + " 字段6: " + yldata_ar6[2] + " 字段7: " + yldata_ar7[2] + " 字段8: " + yldata_ar8[2] + " 字段9: " + yldata_ar9[2] + " 字段10: " + yldata_ar10[2]);
+  document.getElementById("txt_Province").value = (" " + yldata_ar11[2]);
+  document.getElementById("txt_City").value = (" " + yldata_ar12[2]);
+  document.getElementById("txt_inTime").value = (" " + yldata_ar13[2]);
+  //alert("RetValue:"+strRetValue+",数据:"+strDataList);
+}
+
+
+function regout()
+{
+	softphone.f_sp_agentlogout();
+}
+
+function btnuninit()
+{
+	softphone.f_spuninit();
+	document.location.reload();
+}
+
+function readysend()
+{
+	softphone.f_sp_agentready();
+}
+
+function makesend()
+{
+ 	var Called = document.getElementById("Called").value;
+	var Caller= document.getElementById("Caller").value;
+	if(Called == null || Called == "")
+	{
+	  alert("必须填写被叫号码!");
+	  return;
+	}
+  
+	softphone.f_sp_makecall(Called,Caller);
+}
+
+function pButtonStateChangedEventCallback(strAgentID,strAgtStateButtonsFlag,strNotReadySubStateButtonsFlag,strStationButtonsFlag)
+{
+	var ag_bs = strAgtStateButtonsFlag;
+	var ag_w_bs = strNotReadySubStateButtonsFlag;
+	var st_bs = strStationButtonsFlag;
+	var ag_bs_ar = ag_bs.split('');
+	var ag_w_bs_ar = ag_w_bs.split('');
+	var st_bs_ar = st_bs.split('');
+	document.getElementById("bt_text_fa").value = ("座席状态：登录"+ ag_bs_ar[0] +",签退"+ ag_bs_ar[1] +",就绪"+ ag_bs_ar[2] +",未就绪"+ ag_bs_ar[3] +",事后处理"+ ag_bs_ar[4]);
+	document.getElementById("bt_text_fz").value = ("未就绪子状态：小休"+ ag_w_bs_ar[0] +",开会"+ ag_w_bs_ar[1] +",离开"+ ag_w_bs_ar[2]);
+	document.getElementById("bt_text_fs").value = ("分机状态：应答"+ st_bs_ar[0] +",呼出"+ st_bs_ar[1] +",咨询"+ st_bs_ar[2] +",转接"+ st_bs_ar[3] +",转IVR"+ st_bs_ar[4] +",会议"+ st_bs_ar[5] +",保持"+ st_bs_ar[6] +",接回"+ st_bs_ar[7] +",挂断"+ st_bs_ar[8] +",话路切换"+ st_bs_ar[9]);
+
+
+    	if(ag_bs_ar[0] == "0")
+	{
+    $("#btnDL").attr("disabled", true);
+    $("#1btnDL").attr("disabled", true);
+    $("#btnDL").attr("class","button gray tags");
+    $("#btnhtml").attr("disabled", true);
+    $("#btnhtml").attr("class","button gray tags");
+    $("#btnInit").attr("disabled", true);
+    $("#btnInit").attr("class","button gray tags");
+    $("#btnyijian").attr("disabled", true);
+    $("#btnyijian").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnDL").removeAttr("disabled");
+    $("#1btnDL").removeAttr("disabled");
+    $("#btnDL").attr("class","button red tags");
+    $("#btnhtml").removeAttr("disabled");
+    $("#btnhtml").attr("class","button gray tags");
+    $("#btnInit").attr("disabled", true);
+    $("#btnInit").attr("class","button gray tags");
+    $("#btnyijian").removeAttr("disabled");
+    $("#btnyijian").attr("class","button red tags");
+	}
+
+		if(ag_bs_ar[1] == "0")
+	{
+    $("#btnQT").attr("disabled", true);
+    $("#1btnQT").attr("disabled", true);
+    $("#btnQT").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnQT").removeAttr("disabled");
+    $("#1btnQT").removeAttr("disabled");
+    $("#btnQT").attr("class","button red tags");
+	}
+
+		if(ag_bs_ar[2] == "0")
+	{
+    $("#btnJX").attr("disabled");
+    $("#1btnJX").attr("disabled");
+    $("#btnJX").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnJX").removeAttr("disabled");
+    $("#1btnJX").removeAttr("disabled");
+    $("#btnJX").attr("class","button red tags");
+	}
+
+		if(ag_w_bs_ar[0] == "0")
+	{
+    $("#btnWJX0").attr("disabled", true);
+    $("#1btnWJX0").attr("disabled", true);
+    $("#btnWJX0").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnWJX0").removeAttr("disabled");
+    $("#1btnWJX0").removeAttr("disabled");
+    $("#btnWJX0").attr("class","button red tags");
+	}
+
+		if(ag_w_bs_ar[1] == "0")
+	{
+    $("#btnWJX1").attr("disabled", true);
+    $("#1btnWJX1").attr("disabled", true);
+    $("#btnWJX1").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnWJX1").removeAttr("disabled");
+    $("#1btnWJX1").removeAttr("disabled");
+    $("#btnWJX1").attr("class","button black tags");
+	}
+
+		if(ag_w_bs_ar[2] == "0")
+	{
+    $("#btnWJX2").attr("disabled", true);
+    $("1#btnWJX2").attr("disabled", true);
+    $("#btnWJX2").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnWJX2").removeAttr("disabled");
+    $("#1btnWJX2").removeAttr("disabled");
+    $("#btnWJX2").attr("class","button black tags");
+	}
+
+		if(ag_bs_ar[4] == "0")
+	{
+    $("#btnSHCL").attr("disabled", true);
+    $("#1btnSHCL").attr("disabled", true);
+    $("#btnSHCL").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnSHCL").removeAttr("disabled");
+    $("#1btnSHCL").removeAttr("disabled");
+    $("#btnSHCL").attr("class","button red tags");
+	}
+
+		if(st_bs_ar[0] == "0" || st_bs_ar[0] == ""|| st_bs_ar[0] == undefined || st_bs_ar[0] == null)
+	{
+    $("#btnanswer").attr("disabled", true);
+    $("#1btnanswer").attr("disabled", true);
+	$("#btnanswer").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnanswer").removeAttr("disabled");
+    $("#1btnanswer").removeAttr("disabled");
+	$("#btnanswer").attr("class","button blue tags");
+	}
+
+		if(st_bs_ar[1] == "0")
+	{
+    $("#btnSend3").attr("disabled", true);
+    $("#1btnSend3").attr("disabled", true);
+    $("#btnSend3").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnSend3").removeAttr("disabled");
+    $("#1btnSend3").removeAttr("disabled");
+    $("#btnSend3").attr("class","button blue tags");
+	}
+
+		if(st_bs_ar[2] == "0" || st_bs_ar[2] == ""|| st_bs_ar[2] == undefined || st_bs_ar[2] == null)
+	{
+    $("#btnzixun").attr("disabled", true);
+    $("#1btnzixun").attr("disabled", true);
+    $("#btnzixun").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnzixun").removeAttr("disabled");
+    $("#1btnzixun").removeAttr("disabled");
+    $("#btnzixun").attr("class","button blue tags");
+	}
+
+		if(st_bs_ar[3] == "0" || st_bs_ar[3] == ""|| st_bs_ar[3] == undefined || st_bs_ar[3] == null)
+	{
+    $("#btnSingleStepTransfer").attr("disabled", true);
+    $("#1btnSingleStepTransfer").attr("disabled", true);
+    $("#btnSingleStepTransfer").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnSingleStepTransfer").removeAttr("disabled");
+    $("#1btnSingleStepTransfer").removeAttr("disabled");
+    $("#btnSingleStepTransfer").attr("class","button blue tags");
+	}
+
+		if(st_bs_ar[4] == "0" || st_bs_ar[4] == ""|| st_bs_ar[4] == undefined || st_bs_ar[4] == null)
+	{
+    $("#btnTran2IVR").attr("disabled", true);
+    $("#1btnTran2IVR").attr("disabled", true);
+    $("#btnTran2IVR").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnTran2IVR").removeAttr("disabled");
+    $("#1btnTran2IVR").removeAttr("disabled");
+    $("#btnTran2IVR").attr("class","button blue tags");
+	}
+
+		if(st_bs_ar[5] == "0" || st_bs_ar[5] == ""|| st_bs_ar[5] == undefined || st_bs_ar[5] == null)
+	{
+    $("#btnHuiyi").attr("disabled", true);
+    $("#1btnHuiyi").attr("disabled", true);
+    $("#btnHuiyi").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnHuiyi").removeAttr("disabled");
+    $("#1btnHuiyi").removeAttr("disabled");
+    $("#btnHuiyi").attr("class","button blue tags");
+	}
+
+		if(st_bs_ar[6] == "0" || st_bs_ar[6] == ""|| st_bs_ar[6] == undefined || st_bs_ar[6] == null)
+	{
+    $("#btnBaochi").attr("disabled", true);
+    $("#1btnBaochi").attr("disabled", true);
+    $("#btnBaochi").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnBaochi").removeAttr("disabled");
+    $("#1btnBaochi").removeAttr("disabled");
+    $("#btnBaochi").attr("class","button blue tags");
+	}
+
+		if(st_bs_ar[7] == "0" || st_bs_ar[7] == ""|| st_bs_ar[7] == undefined || st_bs_ar[7] == null)
+	{
+    $("#btnJiehui").attr("disabled", true);
+    $("#1btnJiehui").attr("disabled", true);
+    $("#btnJiehui").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnJiehui").removeAttr("disabled");
+    $("#1btnJiehui").removeAttr("disabled");
+    $("#btnJiehui").attr("class","button blue tags");
+	}
+
+		if(st_bs_ar[8] == "0" || st_bs_ar[8] == ""|| st_bs_ar[8] == undefined || st_bs_ar[8] == null)
+	{
+    $("#btnHangup").attr("disabled", true);
+    $("#1btnHangup").attr("disabled", true);
+    $("#btnHangup").attr("class","button gray tags");
+	}
+	else
+	{
+    $("#btnHangup").removeAttr("disabled");
+    $("#1btnHangup").removeAttr("disabled");
+    $("#btnHangup").attr("class","button blue tags");
+	}
+
+}
+
+
+function pAgentStatusChangeCallBack(strAgentID,strStateID,strStateName,strSubStateID,strSubStateName,strOldStateID,strOldStateName,strOldSubStateID,strOldSubStatename)
+{
+	//alert("AgentStatus:"+strStateName);
+	document.getElementById("Zuoxizt").value = "工号:"+strAgentID +" 之前:"+strOldStateName +" 当前:"+strStateName;
+}
+
+function pStationStateChange(strOtherParty,strStateID,strStateName,strOldStateID,strOldStateName,strUUI)
+{
+	//alert("StationStatus:"+strStateName);
+	document.getElementById("Fenjizt").value = "之前:"+strOldStateName + " 当前:"+strStateName + " UUI:"+strUUI;
+	document.getElementById("Dianhuainfo").value = strOtherParty;
+}
+
+function pInboundCallCallBack(strAgentID,strCustomerCallID,strCallID,strCusomterNo,strServiceNo,strQueue,strTrunkNo)
+{
+	//alert("InboundCall:11");
+    //alert("InboundCall:"+strCusomterNo);
+
+	var CCID = strCustomerCallID;
+
+	document.getElementById("txtCustomerCallID").value = strCustomerCallID; // 来电id
+ 	document.getElementById("txtCustomerNo").value = strCusomterNo; // 来电号码
+ 	document.getElementById("txtcurrqueue").value = strQueue; // 分配-业务队列
+ 	document.getElementById("txtserviceno").value = strServiceNo; // 服务号码
+ 	document.getElementById("txttrunkno").value = strTrunkNo; // 中继通道
+	//softphone.f_sp_setcustomercallinfo(CCID,"Cust_Add_Field7,1,Test7测试;Cust_Add_Field9,1,CallIn9测试下;Cust_Add_Field10,1,Over10好了");
+	softphone.f_sp_getcustomercallinfo(CCID,"Cust_Add_Field1,1;Cust_Add_Field2,1;Cust_Add_Field3,1;Cust_Add_Field4,1;Cust_Add_Field5,1;Cust_Add_Field6,1;Cust_Add_Field7,1;Cust_Add_Field8,1;Cust_Add_Field9,1;Cust_Add_Field10,1;Province,1;City,1;Cust_Start_Time,3",pGetCustomerDataCallback);
+
+
+}
+
+function pSubScribeEventCallback(strSubScribeID,strDataList)
+{
+  //alert("SubScribeID="+strSubScribeID+",Data=" + strDataList);  
+  document.getElementById("dingyuetext").value = "订阅ID="+strSubScribeID+" 数据=" + strDataList;
+}
+
+function ptranmsgevtCallBack(strMessageData)
+{
+  //alert("strMessageData="+strMessageData);  
+  document.getElementById("text_zhuanfa").value = "收到消息="+strMessageData;
+}
+
+function pCallInfoChangeEventCallback(strAgentID,strCustomerCallID,strCallID,strCusomterNo,strServiceNo)
+{
+  //alert("工号=" + strAgentID + "CCID=" + strCustomerCallID + "CallID=" + strCallID + "客户号码=" + strCusomterNo + "服务号码=" + strServiceNo); 
+  document.getElementById("callinfotext").value = "工号=" + strAgentID + " CCID=" + strCustomerCallID + " CallID=" + strCallID + " 客户号码=" + strCusomterNo + " 服务号码=" + strServiceNo;
+}
+
+function pCallTransferEventCallback(strAgentID,strCustomerCallID,strCallID,strCusomterNo,strServiceNo,strOtherParty,strThirdParty,strCalledParty)
+{
+  document.getElementById("calltranstext").value = "工号=" + strAgentID + " CCID=" + strCustomerCallID + " CallID=" + strCallID + " 客户号码=" + strCusomterNo + " 服务号码=" + strServiceNo + " 对端=" + strOtherParty + " 转接方=" + strThirdParty + " 被转接方=" + strCalledParty;
+  softphone.f_sp_getcustomercallinfo(strCustomerCallID,"Cust_Add_Field1,1;Cust_Add_Field2,1;Cust_Add_Field3,1;Cust_Add_Field4,1;Cust_Add_Field5,1;Cust_Add_Field6,1;Cust_Add_Field7,1;Cust_Add_Field8,1;Cust_Add_Field9,1;Cust_Add_Field10,1;Province,1;City,1;Cust_Start_Time,3",pGetCustomerDataCallback);
+}
+
+function pErrorEventCallback(strAgentID,strErrorCode)
+{
+  document.getElementById("callerrtext").value = "工号=" + strAgentID + " 错误码=" + strErrorCode;
+}
+
+function pQueryCallBack(strRetValue,strQueryDataList)
+{
+  //alert("RetValue:"+strRetValue+",QueryDataList=" + strQueryDataList);
+  document.getElementById("chaxuntext").value = "查询ID="+strRetValue+" 数据=" + strQueryDataList;
+}
+
+function pQueryCallBack_1(strRetValue,strQueryDataList)
+{
+  	var cxdata = strQueryDataList;
+	var cxdata_ar = cxdata.split(',');
+  document.getElementById("zxfenji_text").value = cxdata_ar[0];
+  document.getElementById("zhuanjie").value = cxdata_ar[0];
+  document.getElementById("zhuanjie").value = cxdata_ar[0];
+  document.getElementById("zxZhuangtai_text").value = "姓名："+cxdata_ar[1]+" 工号："+cxdata_ar[4]+" 分机："+cxdata_ar[0]+" 状态："+cxdata_ar[3]+" "+cxdata_ar[2];
+  //alert("RetValue:"+strRetValue+",QueryDataList=" + strQueryDataList);
+  //document.getElementById("chaxuntext").value = "查询ID="+strRetValue+" 数据=" + strQueryDataList;
+
+}
+
+function notreadysend()
+{
+	softphone.f_sp_agentnotready(0);
+}
+
+function notreadysend1()
+{
+	softphone.f_sp_agentnotready(1);
+}
+
+function notreadysend2()
+{
+	softphone.f_sp_agentnotready(2);
+}
+
+function hangupsend()
+{
+  softphone.f_sp_hangupcall();
+}
+
+function tran2ivrsend()
+{
+	softphone.f_sp_transfertoivr();
+}
+
+function setivrno()
+{
+ 	var IVRNO = document.getElementById("IVRNO").value;
+	if(IVRNO == null || IVRNO == "")
+	{
+	  alert("必须填写IVR号码!");
+	  return;
+	}
+	softphone.f_spsetivrno (IVRNO);
+}
+
+function cx()
+{
+	var zxGonghao = document.getElementById("zxGonghao_text").value;
+	var cxms = "Agent_ID,1,"+zxGonghao;
+	softphone.f_sp_queryrt("RtStatusData_AgentState","Station_No,1;Agent_Name,1;Agt_State_ID,0;Agt_Sub_State_Str,1;Agent_ID,1",cxms,pQueryCallBack_1);
+}
+
+function zixun()
+{
+    var CCID1 = document.getElementById("txtCustomerCallID").value;
+ 	var zhuanjie1 = document.getElementById("zhuanjie").value;
+	var txt_zAgentID1 = document.getElementById("txtAgentID").value;
+ 	var zxGonghao1 = document.getElementById("zxGonghao_text").value;
+
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + date.getHours() + seperator2 + date.getMinutes()
+            + seperator2 + date.getSeconds();
+
+    var ziduan5 = "Cust_Add_Field5,1,"+currentdate+" "+txt_zAgentID1+"咨询"+zxGonghao1+"分机"+zhuanjie1;
+	var ziduan5_ar = ziduan5.split(','); 
+	var ziduan5_arm = ziduan5_ar[2];
+	if(zhuanjie1 == null || zhuanjie1 == "")
+	{
+	  alert("必须填写转接号码!");
+	  return;
+	}
+    softphone.f_sp_transfermessage(zxGonghao1,ziduan5_arm,pCallBackTS);
+    softphone.f_sp_setcustomercallinfo(CCID1,ziduan5);
+	softphone.f_sp_consultcall(zhuanjie1);
+}
+
+function singletranrsend()
+{
+    var CCID2 = document.getElementById("txtCustomerCallID").value;
+	var zhuanjie2 = document.getElementById("zhuanjie").value;
+	var txt_zAgentID2 = document.getElementById("txtAgentID").value;
+	var zxGonghao2 = document.getElementById("zxGonghao_text").value;
+
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + date.getHours() + seperator2 + date.getMinutes()
+            + seperator2 + date.getSeconds();
+
+    var ziduan6 = "Cust_Add_Field6,1,"+currentdate+" "+txt_zAgentID2+"转接"+zxGonghao2+"分机"+zhuanjie2;
+	var ziduan6_ar = ziduan6.split(','); 
+	var ziduan6_arm = ziduan6_ar[2];
+    softphone.f_sp_transfermessage(zxGonghao2,ziduan6_arm,pCallBackTS);
+    softphone.f_sp_setcustomercallinfo(CCID2,ziduan6);
+	softphone.f_sp_transfercall();
+}
+
+function huiyi()
+{
+    var CCID3 = document.getElementById("txtCustomerCallID").value;
+	var zhuanjie3 = document.getElementById("zhuanjie").value;
+	var txt_zAgentID3 = document.getElementById("txtAgentID").value;
+ 	var zxGonghao3 = document.getElementById("zxGonghao_text").value;
+
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + date.getHours() + seperator2 + date.getMinutes()
+            + seperator2 + date.getSeconds();
+
+    var ziduan6 = "Cust_Add_Field6,1,"+currentdate+" "+txt_zAgentID3+"会议"+zxGonghao3+"分机"+zhuanjie3;
+	var ziduan6_ar = ziduan6.split(','); 
+	var ziduan6_arm = ziduan6_ar[2];
+    softphone.f_sp_transfermessage(zxGonghao3,ziduan6_arm,pCallBackTS);
+    softphone.f_sp_setcustomercallinfo(CCID3,ziduan6);
+	softphone.f_sp_conference();
+}
+
+function DTMFsend()
+{
+ 	var txtDTMF = document.getElementById("txtDTMF").value;
+	if(txtDTMF == null || txtDTMF == "")
+	{
+	  alert("必须填写DTMF数字!");
+	  return;
+	}
+  
+	softphone.f_sp_senddtmf(txtDTMF);
+}
+
+function holdsend()
+{ 
+  softphone.f_sp_holdcall();
+}
+
+function unholdsend()
+{
+  softphone.f_sp_reconnectcall();
+}
+
+function answer()
+{
+  softphone.f_sp_answercall();
+}
+
+function acwsend()
+{
+  softphone.f_sp_agentacw();
+}
+
+function Dingyue()
+{ 
+  softphone.f_sp_startsubscribe("RtStatusSt_AgentGroup","A00001","0","0","Login_Cnt,0;Ready_Cnt,0",f_SubScribeCallBack);
+  //softphone.f_sp_startsubscribe("RtStatusData_AgentState","1001","0","0","Agent_ID,1;Station_No,1;Station_IP,1",f_SubScribeCallBack);
+  //softphone.f_sp_startsubscribe("RtStatusSt_AgentGroup","A00001","0","0","Login_Cnt,0;Ready_Cnt,0",f_SubScribeCallBack);
+  //softphone.f_sp_startsubscribe("RtStatusData_AgentState","1001","0","0","Agent_ID,1;Station_No,1;Agt_Sub_State_Str,1;Station_State,0",f_SubScribeCallBack);
+  //softphone.f_sp_startsubscribe("RtStatusData_Business","BU0001","0","0","Business_ID,1;Business_Name,1",f_SubScribeCallBack);
+}
+
+function QXDingyue()
+{ 
+  var dingyueid = document.getElementById("dingyueid").value;
+  softphone.f_sp_cancelsubscribe(dingyueid);
+}
+
+function Chaxun()
+{ 
+  softphone.f_sp_queryrt("RtStatusSt_AgentGroup","Login_Cnt,0;Ready_Cnt,0","Agent_Group_ID,1,A00001",pQueryCallBack);
+}
+
+function Cagentinfo()
+{ 
+  softphone.f_sp_getagentinfo(agentinfocallback);
+}
+  
+function pCallBackTS(strRetValue)
+{
+  //alert("RetValue:"+strRetValue);
+}
+
+function Jianting()
+{ 
+  var zxGonghao = document.getElementById("zxGonghao_text").value;
+  var zxFenji = document.getElementById("zxfenji_text").value;
+  var zgFenji = document.getElementById("zgfenji_text").value;
+  var MessageData = "SilenceMonitor,"+zxFenji+","+zgFenji;
+  softphone.f_sp_transfermessage(zxFenji,MessageData,pCallBackTS);
+}
+
+function Qiangcha()
+{ 
+  var zxGonghao = document.getElementById("zxGonghao_text").value;
+  var zxFenji = document.getElementById("zxfenji_text").value;
+  var zgFenji = document.getElementById("zgfenji_text").value;
+  var MessageData1 = "Bargein,"+zxFenji+","+zgFenji;
+  softphone.f_sp_transfermessage(zxFenji,MessageData1,pCallBackTS);
+}
+
+function Lanjie()
+{ 
+  var zxGonghao = document.getElementById("zxGonghao_text").value;
+  var zxFenji = document.getElementById("zxfenji_text").value;
+  var zgFenji = document.getElementById("zgfenji_text").value;
+  var MessageData2 = "HeadOff,"+zxFenji+","+zgFenji;
+  softphone.f_sp_transfermessage(zxFenji,MessageData2,pCallBackTS);
+}
+
+function Qiangchai()
+{ 
+  var zxGonghao = document.getElementById("zxGonghao_text").value;
+  var zxFenji = document.getElementById("zxfenji_text").value;
+  var zgFenji = document.getElementById("zgfenji_text").value;
+  var MessageData3 = "Disconnect,"+zxFenji+",";
+  softphone.f_sp_transfermessage(zxFenji,MessageData3,pCallBackTS);
+}
+
+function Qiangtui()
+{ 
+  var zxGonghao = document.getElementById("zxGonghao_text").value;
+  var zxFenji = document.getElementById("zxfenji_text").value;
+  var zgFenji = document.getElementById("zgfenji_text").value;
+  var MessageData4 = "AgentModeChange,"+zxFenji+",1102;";
+  softphone.f_sp_transfermessage(zxFenji,MessageData4,pCallBackTS);
+}
+
+function Qiangjiuxu()
+{ 
+  var zxGonghao = document.getElementById("zxGonghao_text").value;
+  var zxFenji = document.getElementById("zxfenji_text").value;
+  var zgFenji = document.getElementById("zgfenji_text").value;
+  var MessageData5 = "AgentModeChange,"+zxFenji+",1104;";
+  softphone.f_sp_transfermessage(zxFenji,MessageData5,pCallBackTS);
+}
+
+function Zhuanfaxx()
+{ 
+  var zxGonghao = document.getElementById("zxGonghao_text").value;
+  var zxFenji = document.getElementById("zxfenji_text").value;
+  var zgFenji = document.getElementById("zgfenji_text").value;
+  var zgMessage = document.getElementById("zgMessage_text").value;
+  var MessageData6 = zgMessage;
+  softphone.f_sp_transfermessage(zxGonghao,MessageData6,pCallBackTS);
+}
+
+</script>  
+</head>  
+<body>
+<table  width: 1240px; margin:0 auto 0;>
+<tr>
+<td width="150">
+   <div width: 142px; margin:0 auto 0;>
+	<button type="button" id="btnDL" class="button red tags" onclick="regsend();" >登录</button>
+	<button type="button" id="btnQT" class="button red tags" onclick="regout();" >签退</button>
+	<button type="button" id="btnJX" class="button red tags" onclick="readysend();" >就绪</button>
+	<button type="button" id="btnWJX0" class="button red tags" onclick="notreadysend();" >小休</button>
+	<button type="button" id="btnWJX1" class="button black tags" onclick="notreadysend1();"  >开会</button>
+	<button type="button" id="btnWJX2" class="button black tags" onclick="notreadysend2();" >离开</button>
+	<button type="button" id="btnSHCL" class="button red tags" onclick="acwsend();" >事后处理</button>
+	</div>
+</td>
+<td>
+<div class="hilink_con">
+<table width="906" style="border:#FF0000 1px dashed;"> 
+  <tr>
+   <td>
+	<table> 
+    <tr>
+	<td>
+	<label for="Device">输入工号：</label>
+	</td>
+    <td>
+    <input id="txtAgentID" style="width: 84px" type="text" value="8001" />  
+	</td>
+	</tr>
+	<tr>
+	<td>
+	<button type="button" id="btnsetivrno" onclick="setivrno();" >设置IVR号码</button>  
+    </td>
+    <td>
+	<input type="text" id="IVRNO" style="width: 84px"  value="7701" />
+	</td>
+	</tr>
+	</table>
+  </td>
+      <td>
+		<button type="button" id="btnhtml" class="button red tags" onclick="loadsp();">加载工号</button>
+	</td>
+  	<td>
+		<button type="button" id="btnyijian" class="button red tags" onclick="btnyijian();">一键登录</button>
+	</td>
+	<td>
+		<button type="button" id="btnInit" class="button red tags" onclick="initiate();">初始化</button>
+	</td>
+	<td>
+	    <button type="button" id="btnUnInit" class="button red tags" onclick="btnuninit();" >销毁</button>
+	</td>
+  </tr>
+</table> 
+
+<table>
+<tr>
+</tr>
+<tr>
+</tr>
+  <tr>
+   <td>
+	<input type="button" id="1btnDL" value="登录" onclick="regsend();" />
+   </td>
+   <td>
+	<input type="button" id="1btnQT" value="签退" onclick="regout();" />
+	</td>
+   <td>
+	<input type="button" id="1btnJX" value="就绪" onclick="readysend();" />  
+   </td>
+   <td>
+	<input type="button" id="1btnWJX0" value="小休" onclick="notreadysend();" />  
+   </td>
+   <td>
+	<input type="button" id="1btnWJX1" value="开会" onclick="notreadysend1();" />  
+   </td>
+   <td>
+	<input type="button" id="1btnWJX2" value="离开" onclick="notreadysend2();" />  
+   </td>
+   <td>
+	<input type="button" id="1btnSHCL" value="事后处理" onclick="acwsend();" />  
+   </td>
+   <td>
+	<br>  
+   </td>
+   <td>
+	<br>  
+   </td>
+   <td>
+	<br>  
+   </td>
+   <td>
+    <input id="1btnanswer" type="button" value="应答" onclick="answer();" />
+	</td>
+    <td>
+		<input type="button" id="1btnSend3" value="呼出" onclick="makesend();" />  
+	</td>
+		<td>
+	<input type="button" id="1btnzixun" value="咨询" onclick="zixun();" />  
+	</td>
+<td>
+	<input type="button" id="1btnSingleStepTransfer" value="转接" onclick="singletranrsend();" />  
+</td>
+	<td>
+	<input type="button" id="1btnTran2IVR" value="转IVR" onclick="tran2ivrsend();" />  
+	</td>
+<td>
+	<input type="button" id="1btnHuiyi" value="会议" onclick="huiyi();" />  
+</td>
+<td>
+	<input type="button" id="1btnBaochi" value="保持" onclick="holdsend();" />  
+</td>
+<td>
+	<input type="button" id="1btnJiehui" value="接回" onclick="unholdsend();" />  
+</td>
+	<td>
+	<input type="button" id="1btnHangup" value="挂机" onclick="hangupsend();" />  
+	</td>
+   <td>
+	<br>  
+   </td>
+   <td>
+	<br>  
+   </td>
+  </tr>
+ <tr>
+</tr>
+</table>
+
+<table>
+<tr>
+</tr>
+<tr>
+    <td>
+	<input id="btnAgentinfo" type="button" value="获取座席信息" onclick="Cagentinfo();" /></td>
+	<td><input type="text" style="width: 230px"  id="agentinfo" value="" />
+	</td>
+	<td><span style='font-size:12.0pt'>通话号码 </span></td>
+	<td><input type="text" style="width: 200px"  id="Dianhuainfo" value="" /></td>
+	<td><span style='font-size:12.0pt'>咨询号码 </span></td>
+	<td><input type="text" style="width: 200px"   id="zhuanjie" value="913581666052" /></td>
+</tr>
+ <tr>
+</tr>
+</table>
+<table>
+<tr>
+</tr>
+<tr>
+	<td>
+	<span style='font-size:12.0pt'>外呼被叫号码</span>	</td>
+	<td>
+	<input type="text" id="Called" value="988888888" />
+	</td>
+	<td>
+	<span style='font-size:12.0pt'>外呼主叫号码</span>	</td>
+	<td>
+	<input type="text" id="Caller" value="68148000"  />
+	</td>
+	<td>
+    <input id="btnDTMF" type="button" value="DTMF按键" onclick="DTMFsend();" />
+	</td>
+	<td>
+    <input id="txtDTMF" style="width: 120px" type="text" value="1234567890*#" />
+	</td>
+</tr>
+ <tr>
+</tr>
+<tr>
+</tr>
+</table>
+
+<table width="906" border="1" cellspacing="1" cellpadding="2"> 
+<tr>
+    <td>
+<table border="0" cellspacing="2" cellpadding="3"> 
+<tr>
+    <td>
+	<span style='font-size:12.0pt'>来电弹屏相关信息</span>
+    </td>
+    <td>
+	<span style='font-size:12.0pt'>来电号码：</span>
+    <input id="txtCustomerNo" style="width: 160px" type="text" value="" />  
+    </td>
+    <td>
+	<span style='font-size:12.0pt'>CustomerCallID：</span>
+    <input id="txtCustomerCallID" style="width: 160px" type="text" value="" />  
+    </td>
+</tr>
+<tr>
+    <td>
+	<span style='font-size:12.0pt'> 来电省份：</span>
+    <input id="txt_Province" style="width: 160px" type="text" value="" />  
+	</td>
+	<td>
+	<span style='font-size:12.0pt'>归属地：</span>
+    <input id="txt_City" style="width: 160px" type="text" value="" />  
+   </td>
+   <td>
+	<span style='font-size:12.0pt'>进线时间：</span>
+    <input id="txt_inTime" style="width: 160px" type="text" value="" />  
+	</td>
+</tr>
+<tr>
+    <td>
+	<span style='font-size:12.0pt'>中继通道：</span>
+    <input id="txttrunkno" style="width: 160px" type="text" value="" />  
+	</td>
+	<td>
+	<span style='font-size:12.0pt'>服务号码：</span>
+    <input id="txtserviceno" style="width: 160px" type="text" value="" />  
+   </td>
+   <td>
+	<span style='font-size:12.0pt'>分配 -- 业务队列：</span>
+    <input id="txtcurrqueue" style="width: 160px" type="text" value="" />  
+	</td>
+</tr>
+</table>
+<table>
+<tr>
+    <td>
+	<span style='font-size:12.0pt'>预留字段：</span>
+    </td>
+    <td>
+    <input id="txtgetcustomercallinfo" style="width: 800px" type="text" value="" />  
+    </td>
+</tr>
+<tr><td>
+	<label for="Device">转发消息：</label></td>
+<td><input type="text" style="width: 800px"  id="text_zhuanfa" value=""  />
+	</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+
+<table>
+<tr><td>
+	<label for="Device">座席状态变化</label></td>
+<td><input type="text" style="width: 800px"  id="Zuoxizt" value=""  />
+	</td></tr>
+<tr><td>
+	<label for="Device">分机状态变化</label></td>
+<td><input type="text" style="width: 800px"  id="Fenjizt" value=""  />
+	</td></tr>
+<tr><td>
+	<label for="Device">呼叫信息变化</label></td>
+<td><input type="text" style="width: 800px"  id="callinfotext" value=""  />
+	</td></tr>
+<tr><td>
+	<label for="Device">呼叫转接信息</label></td>
+<td><input type="text" style="width: 800px"  id="calltranstext" value=""  />
+	</td></tr>
+<tr><td>
+	<label for="Device">呼叫错误信息</label></td>
+<td><input type="text" style="width: 800px"  id="callerrtext" value=""  />
+	</td></tr>
+<tr><td>
+	<label for="Device">座席状态变化</label></td>
+<td><input type="text" style="width: 800px"  id="bt_text_fa" value=""  />
+	</td></tr>
+<tr><td>
+    <label for="Device">座席子状态变化</label></td>
+<td><input type="text" style="width: 800px"  id="bt_text_fz" value=""  />
+	</td></tr>
+<tr><td>
+	<label for="Device">分机状态变化</label></td>
+<td><input type="text" style="width: 800px"  id="bt_text_fs" value=""  />
+	</td></tr>
+</table> 
+
+<table border="0" cellspacing="1" cellpadding="2">
+<tr>
+</tr>
+<tr>
+<td>
+	<input type="button" id="btnDingyue" value="订阅待选座席组当前登录和就绪数量" onclick="Dingyue();" />  
+</td>
+<td>
+	<label for="Device">数据(登录,就绪)</label><input type="text" style="width: 200px"  id="dingyuetext" value=""  />
+	</td>
+<td>
+	<input type="button" id="btnQXDingyue" value="取消订阅" onclick="QXDingyue();" /><label for="Device">ID</label><input type="text" style="width: 20px"  id="dingyueid" value=""  />
+</td>
+</tr>
+<tr>
+	<td>
+	<input type="button" id="btnChaxun" value="查询待选座席组当前登录和就绪数量" onclick="Chaxun();" />  
+</td>
+<td>
+	<label for="Device">数据(登录,就绪)</label><input type="text" style="width: 200px"  id="chaxuntext" value=""  />
+</td>
+</tr>
+</table> 
+</div>	
+<div>
+<table width="906" border="1" cellspacing="1" cellpadding="2"> 
+<tr>
+    <td>
+<table border="0" cellspacing="2" cellpadding="3"> 
+<tr>
+<td>
+<table> 
+<tr>
+<td>
+	<label for="Device"> 座席工号 </label><input type="text" style="width: 100px"  id="zxGonghao_text" value=""  />
+</td>
+<td>
+	<label for="Device"> 座席分机 </label><input type="text" style="width: 100px"  id="zxfenji_text" value=""  />
+</td>
+<td>
+	<label for="Device"> 主管分机 </label><input type="text" style="width: 100px"  id="zgfenji_text" value=""  />
+</td>
+<td>
+	<label for="Device"> 座席状态 </label><input type="text" style="width: 500px"  id="zxZhuangtai_text" value=""  />
+</td>
+</tr>
+</table> 
+</td>
+</tr>
+<tr>
+<td>
+<table> 
+<tr>
+<td>
+	<input type="button" id="btnJianting" value="输入工号查询" onclick="cx();" />  
+</td>
+<td>
+	<input type="button" id="btnJianting" value="监听" onclick="Jianting();" />  
+</td>
+<td>
+	<input type="button" id="btnQiangcha" value="强插" onclick="Qiangcha();" />  
+</td>
+<td>
+	<input type="button" id="btnLanjie" value="拦截" onclick="Lanjie();" />  
+</td>
+<td>
+	<input type="button" id="btnQiangchai" value="强拆" onclick="Qiangchai();" />  
+</td>
+<td>
+	<input type="button" id="btnQiangtui" value="强退" onclick="Qiangtui();" />  
+</td>
+<td>
+	<input type="button" id="btnQiangjiuxu" value="强制就绪" onclick="Qiangjiuxu();" />  
+</td>
+<td>
+	<input type="button" id="btnZhuanfaxx" value="发消息" onclick="Zhuanfaxx();" />  
+</td>
+<td>
+	<label for="Device"> 消息 </label><input type="text" style="width: 260px"  id="zgMessage_text" value="Hello! Test! 你好！测试！"  />
+</td>
+</tr>
+</table> 
+</td>
+</tr>
+</table> 
+</table>
+</div>
+</td>
+<td width="150">
+   <div width: 142px; margin:0 auto 0;>
+    <button id="btnanswer" type="button" class="button blue tags" onclick="answer();" >应答</button>
+	<button type="button" id="btnSend3" class="button blue tags" onclick="makesend();" >呼出</button>
+	<button type="button" id="btnzixun" class="button blue tags" onclick="zixun();" >咨询</button>
+	<button type="button" id="btnSingleStepTransfer" class="button blue tags" onclick="singletranrsend();" >转接</button>  
+	<button type="button" id="btnTran2IVR" class="button blue tags" onclick="tran2ivrsend();" >转IVR</button>  
+	<button type="button" id="btnHuiyi" class="button blue tags" onclick="huiyi();" >会议</button>  
+	<button type="button" id="btnBaochi" class="button blue tags" onclick="holdsend();" >保持</button>
+	<button type="button" id="btnJiehui" class="button blue tags" onclick="unholdsend();" >接回</button>
+	<button type="button" id="btnHangup" class="button blue tags" onclick="hangupsend();" >挂机</button>
+    </div>
+</td>
+</tr>
+</table>
+</body>  
+</html>  

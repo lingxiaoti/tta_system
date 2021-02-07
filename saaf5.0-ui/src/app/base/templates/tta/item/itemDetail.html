@@ -1,0 +1,463 @@
+<div ng-controller="itemDetailCtrl" class="bigdata">
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+
+            <!--<div class="btn-group btn-group-xs">-->
+                <!--<button class="btn btn-default" permission-btn="btnSaveD"   ng-click="btnSave(itemForm.$invalid)" data-validate-form="itemForm"></button>-->
+
+            <!--</div>-->
+
+
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+            <!--------------------- 输入表单  --->
+
+            <div class=" mt10 pb5  oh"
+                 data-des="此节点必需－用于识别输入表单的指令">
+
+                <form id="itemForm" name="itemForm">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>物料信息</span>
+                    </header>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">物料编号</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.itemNbr">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>物料名称</span>
+                            </label>
+                            <input disabled required
+                                   type="text" class="form-control radius3"
+                                     required     ng-model="params.itemDescCn">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">物料英文名</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.itemDescEn">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">状态</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.status">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">retailGroup</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.retailGroup">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">unitCost</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.unitCost">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">packSize</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.packSize">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>商标(中文)</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   required   ng-model="params.brandCn">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">商标(英文)</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                      ng-model="params.brandEn">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>业务组</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   required   ng-model="params.groupDesc">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>部门编码：</span></label>
+                            <input type="text" class="form-control radius3"  disabled
+                                   required      ng-model="params.deptCode" />
+                            <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getDeptCode()" disabled type="button" >
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>部门名称：</span></label>
+                            <input data-required-msg="部门名称" type="text" ng-model="params.deptDesc"
+                                   disabled   required class="form-control radius3">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>供应商编码：</span></label>
+                            <input type="text" ng-model="params.vendorNbr"
+                                   disabled    class="form-control radius3">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>供应商名称：</span></label>
+                            <input  type="text" ng-model="params.vendorName"
+                                   disabled    class="form-control radius3">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">商品小类</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.classDesc">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">商品大类</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.subClassDesc">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">upc</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.upc">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">创建日期</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.createDate">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">orginalPlace</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.orginalPlace">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">specs</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.specs">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">unit</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.unit">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">uda4</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.uda4">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">uda6</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.uda6">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">uda8</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.uda8">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">uda29</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.uda29">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">uda41</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.uda41">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">uda49</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.uda49">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">uda62</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.uda62">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">uda63</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.uda63">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">uda666</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.uda666">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">uda13</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.uda13">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">uda64</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.uda64">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">uda50</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.uda50">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">uda51</span>
+                            </label>
+                            <input type="text" disabled class="form-control radius3"
+                                   ng-model="params.uda51">
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group col-xs-8 col-md-9">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">
+                                  备注
+                                </span>
+                            </label>
+                            <textarea class="form-control radius3" ng-model="params.remark"
+                                      disabled
+                                      style="height:60px;background-color:#fff;"></textarea>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                    <div class="row"></div>
+
+
+                </form>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+    <div lov-list="cityLov" role="dialog" data-title="选择部门信息" id="itemBrandDept" ng-model="current.em"
+         data-url="findDeptPagination"
+         data-dynamic-params='{"itemId": ""}'
+         data-callback="selectBrandDeptReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+         data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                          {'key':'departmentName','placeholder':'部门名称'}]"
+            >
+    </div>
+
+
+
+
+</div>

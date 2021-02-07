@@ -1,0 +1,93 @@
+<!--修改和新增-->
+<div class="modal fade" id="lovMultipleModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <!--add by luofu-->
+    <div class="modal-dialog" style="margin-top: 30px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title" >{{!options.titleName?'选择与搜索':options.titleName}}</h4>
+            </div>
+            <div class="modal-body" >
+                <!--------------------- ./  数据　　  --->
+                <form class="row form-item-box" ng-submit="dataTable.getData()" ng-show="options.searchColName1">
+                    <div class="form-group col-xs-5 col-md-5">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class=" w100">{{options.searchLabel1}}：</span></label>
+                            <input type="text" class="form-control radius3" name="searchColName1"
+                                   ng-model="params[options.searchColName1]">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-5 col-md-5" ng-show="options.searchColName2">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{options.searchLabel2}}：</span></label>
+                            <input type="text" class="form-control radius3"
+                                   name="searchColName2" ng-model="params[options.searchColName2]">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-2 col-md-2">
+                        <button type="submit" class="btn btn-xs btn-default pull-left">
+                            <i class="fa fa-search" aria-hidden="true"></i><span></span>
+                        </button>
+                    </div>
+
+                </form>
+                <div class="data-table">
+
+                    <table saaf-table="dataTable"
+
+                           data-params="params" data-page-rows="10"
+                           class="table  table-bordered table-hover table-condensed">
+                        <thead class="bg-gray-white">
+                        <tr class="text-center">
+                            <th class="w30"><input type="checkbox" ng-model="dataTable.seletAllFlag"
+                                                   ng-change="respSelectedAll(dataTable.seletAllFlag,dataTable.data);">
+                            </th>
+                            <th class="w50">序号</th>
+
+                            <th style="min-width:100px">{{options.label1}}</th>
+                            <th ng-show="options.label2" style="min-width: 100px">{{options.label2}}</th>
+                            <th ng-show="options.label3" style="min-width: 100px">{{options.label3}}</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-init="initLovData(row[options.rowId],row)" ng-click="respSelectedAction($event,row[options.rowId],row)" ng-repeat="row in dataTable.data">
+
+                        <td><input type="checkbox"
+                                       ng-checked="respIsSelected(row[options.rowId])"></td>
+                            <td ng-bind="(dataTable.curIndex-1)*dataTable.pageSize+$index+1">1</td>
+
+                            <td>{{row[options.colName1]}}</td>
+                            <td ng-show="options.label2">{{row[options.colName2]}}</td>
+                            <td  ng-show="options.label3">{{row[options.colName3]}}</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+
+
+                </div>
+                <div class="row">
+                    <div class="col-xs-9">
+                        <div saaf-table-tfoot="dataTable"></div>
+                    </div>
+                    <div class="col-xs-3">
+                        <button type="button" class="btn btn-default " ng-if="options.clearBtn" ng-click="clearAction()">清空
+                        </button>
+                        <button type="button" class="btn btn-default "  ng-if="!options.clearBtn" data-dismiss="modal">取消
+                        </button>
+                        <button type="button" class="btn btn-primary " ng-click="saveResp()">
+                            确定
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!--------------------- ./  数据　end　  --->
+        </div>
+    </div>
+</div>

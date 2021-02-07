@@ -1,0 +1,1048 @@
+<div ng-controller="ttaContractProcessCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+
+        <div class="col-xs-12 col-md-12 br p0">
+
+
+            <div class="tab-content" id="tabContentDiv" style="margin-left: -1%;">
+
+                <!----------------------------------------------------- proposalSummary 页面start ---------------------------------------------->
+                <div class=" col-md-12" id="proposalSummary">
+                    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令"  >
+                        <div class="bg-gray-white bt">
+                            <div class="bg-gray-white p5">
+                                <div class="pull-right ml10">
+                                    <div class="btn-group btn-group-xs ">
+                                        <button class="btn btn-default" type="button" ng-click="searchDataTable();proposalProcessTable.getData();dataTable.search(1)">
+                                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                                        </button>
+                                        <button class="btn btn-default" type="button" ng-click="summaryDataExport();dataExport()" name="fullWindow">
+                                            <i class="fa fa-upload" aria-hidden="true"></i>导出
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="btn-group btn-group-xs ">
+                                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                            <div class="nicescroll-height  bg-white "
+                                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                                <div class=" mt10 pb5 input-form  oh" input-form
+                                     data-des="此节点必需－用于识别输入表单的指令">
+                                    <!-- 搜索输入框组-->
+                                    <div search-form
+                                         data-legend="[
+                                             {key:'deptName',label:'合同附件单号'},
+                                             {key:'elecOrderNo',label:'电子签章单号'},
+                                           ]"
+                                         ng-model="params"
+                                    ></div>
+                                </div>
+
+                                <ul class="nav nav-tabs" id="tab">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#relSupplier" ng-click="queryProcess(0)"><i class="fa fa-list-alt"></i>
+                                            <label>业务合同书流程进度</label></a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#attId" ng-click="queryProcess(1)" ><i class="fa fa-list-alt" ></i>
+                                            <label>独家协议流程进度</label></a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#exclusiveItemId" ng-click="queryProcess(2)" ><i class="fa fa-list-alt" ></i>
+                                            <label>独家货品报表</label></a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#exclusiveItemHousekeepId" ng-click="queryProcess(3)" ><i class="fa fa-list-alt" ></i>
+                                            <label>独家产品housekeeping</label></a>
+                                    </li>
+                                </ul>
+
+                                <!--第一部分报表 start-->
+                                <div id="relSupplier" ng-if="tab.active == 0">
+                                    <div id ="proposalStatusParentId" style="" main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                                        <div id ="proposalStatusId" class="data-table" ng-nicescroll="" id="nicescroll_userGroupDeptBrand"
+                                             nice-option="{{niceOpction}}">
+                                            <table saaf-table="proposalProcessTable"
+                                                   data-url="findBusinessBookProces"
+                                                   data-params="params"
+                                                   data-checked-type="radio"
+                                                   data-auto-get-data="true"
+                                                   data-after-get-data="proposalStatusAfterGetData()"
+                                                   data-page-rows="10"
+                                                   id="dataTableId2"
+                                                   class=" nicescroll-height  table table-bordered table-hover table-condensed">
+
+                                                <thead class="bg-gray-white">
+                                                <tr class="text-center">
+                                                    <th colspan="12"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同基本信息
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;"></th>
+                                                    <th colspan="{{2 + processField.length * 2}}"
+                                                        style="vertical-align: middle;background-color: #2F75B5;">审批进度
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #5B9BD5;"></th>
+                                                    <th colspan="13" style="vertical-align: middle;background-color: #5B9BD5;">合同盖章情况</th>
+                                                </tr>
+                                                <tr class="text-center">
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同附件类型
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同附件单号
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        年度
+                                                    </th>
+
+                                                    <th style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        电子签章单号
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        主/从供应商
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        供应商编号
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        供应商名称
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        品牌_中文
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同主要负责部门
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        销售模式
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同版本
+                                                    </th>
+
+                                                    <th rowspan="2" style="vertical-align: middle;background-color: #2F75B5;">
+                                                        proposal单据号码+版本号
+                                                    </th>
+                                                    <th colspan="2" style="vertical-align: middle;background-color: #2F75B5;">
+                                                        提交人
+                                                    </th>
+
+                                                    <th colspan="2" style="vertical-align: middle;background-color: #2F75B5;"
+                                                        ng-repeat="value in processField">{{value.meaning}}
+                                                    </th>
+                                                    <th rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        合同输出日期
+                                                    </th>
+                                                    <th   rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        BIC登记日期
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        财务登记日期
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        法务登记日期
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        甲方签署时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        乙方签署时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        丙方签署时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        合同状态
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        合同年度
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        是否电子签章
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        是否需要GM审批
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        是否有合同审批特批申请
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        甲乙是否换签署位
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        合同盖章状态
+                                                    </th>
+                                                </tr>
+                                                <tr class="text-center">
+                                                    <th style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同编号
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">发起人</th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">日期</th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;"
+                                                        ng-repeat="value in processChildField">{{value.name}}
+                                                    </th>
+                                                </tr>
+                                                </thead>
+
+
+                                                <tbody ng-show="proposalProcessTable.data">
+                                                <tr class="text-center" ng-repeat="row in proposalProcessTable.data"
+                                                    ng-class="{'active':proposalProcessTable.data.selectRow==$index}"
+                                                >
+                                                    <td ng-repeat="rowChild in processChildFieldValue">{{row[rowChild]}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div saaf-table-tfoot="proposalProcessTable"
+                                             ng-show="proposalProcessTable.data.length>0"></div>
+                                    </div>
+                                </div>
+                                <!--第一部分报表 end-->
+
+
+                                <!--第二部分报表 start-->
+                                <div id="attId" ng-if="tab.active == 1">
+                                    <div id ="proposalStatusParentId20" style="" main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                                        <div id ="proposalStatusId20" class="data-table" ng-nicescroll="" id="nicescroll_userGroupDeptBrand20"
+                                             nice-option="{{niceOpction}}">
+                                            <table saaf-table="proposalProcessTable"
+                                                   data-url="findBusinessBookProces"
+                                                   data-params="exclusiveParams"
+                                                   data-checked-type="radio"
+                                                   data-auto-get-data="true"
+                                                   data-after-get-data="proposalStatusAfterGetData()"
+                                                   data-page-rows="10"
+                                                   id="dataTableId20"
+                                                   class=" nicescroll-height  table table-bordered table-hover table-condensed">
+
+                                                <thead class="bg-gray-white">
+                                                <tr class="text-center">
+                                                    <th colspan="8"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同基本信息
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #44546A;"></th><!--Proposal单据号码 + 版本号-->
+                                                    <th style="vertical-align: middle;background-color: #44546A;"></th><!--Proposal单据状态-->
+                                                    <th colspan="22" style="vertical-align: middle;background-color: #A9D08E;">独家协议合同情况</th>
+                                                    <th style="vertical-align: middle;background-color: #5B9BD5;"></th>
+                                                    <th colspan="3" style="vertical-align: middle;background-color: #5B9BD5;">独家协议合同盖章情况</th>
+                                                    <!--独家协议审批节点-->
+                                                    <th colspan="{{2 + exclusiveProcessField.length * 2}}"
+                                                        style="vertical-align: middle;background-color: #2F75B5;">独家协议审批进度
+                                                    </th>
+                                                    <!--电子签章的内容-->
+                                                    <th colspan="15" style="vertical-align: middle;background-color: #ffd556;">合同盖章情况</th>
+                                                    <!--电子签章审批节点-->
+                                                    <th colspan="{{2 + processField.length * 2}}"
+                                                        style="vertical-align: middle;background-color: #b0a7ff;">电子签章审批进度
+                                                    </th>
+                                                </tr>
+                                                <tr class="text-center">
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同类型
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        年度
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        主/从供应商
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        供应商编号
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        供应商名称
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        品牌_中文
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同主要负责部门
+                                                    </th>
+                                                    <th rowspan="2" style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        proposal单据号码+版本号
+                                                    </th>
+                                                    <th rowspan="2" style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        proposal 单据状态
+                                                    </th>
+                                                    <!--独家协议合同情况 start-->
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        合同情况
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家协议编号
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        单据状态
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家协议接收时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家销售起始时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家销售结束时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        系统实际起始时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        系统实际结束时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家产品类型
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家销售地域
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        新品是否直接成为独家
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否独家产品主要成分显著不同
+                                                    </th>
+                                                    <th rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否独家期限自动顺延
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家渠道类别
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否包含电商渠道
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否包含独家渠道例外情形
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家渠道例外情形具体描述
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否追回销售
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否签订转户协议
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家协议是否已结束
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否PEB
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        双方是否已盖章
+                                                    </th>
+                                                    <!--独家协议合同情况 end-->
+                                                    <th rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        合同输出日期
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        BIC登记日期
+                                                    </th>
+                                                    <th rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        财务登记日期
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        法务登记日期
+                                                    </th>
+
+                                                    <!--独家协议审批节点-->
+                                                    <th colspan="2" style="vertical-align: middle;background-color: #2F75B5;">
+                                                        提交人
+                                                    </th>
+                                                    <th colspan="2" style="vertical-align: middle;background-color: #2F75B5;"
+                                                        ng-repeat="value in exclusiveProcessField">{{value.description}}
+                                                    </th><!--{{value.meaning}}-->
+
+                                                    <!--电子签章的内容 start-->
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        电子签章单号
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        甲方签署时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        乙方签署时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        丙方签署时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        合同状态
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        合同年度
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        是否电子签章
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        是否需要GM审批
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        是否有合同审批特批申请
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        甲乙是否换签署位
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        合同盖章状态
+                                                    </th>
+                                                    <th rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        合同输出日期
+                                                    </th>
+                                                    <th   rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        BIC登记日期
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        财务登记日期
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #ffd556;">
+                                                        法务登记日期
+                                                    </th>
+                                                    <!--电子签章的内容 end-->
+                                                    <th colspan="2" style="vertical-align: middle;background-color: #b0a7ff;">
+                                                        提交人
+                                                    </th>
+                                                    <th colspan="2" style="vertical-align: middle;background-color: #b0a7ff;"
+                                                        ng-repeat="value in processField">{{value.meaning}}
+                                                    </th>
+
+                                                </tr>
+                                                <tr class="text-center">
+                                                    <th style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同编号
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">发起人</th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">日期</th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;"
+                                                        ng-repeat="value in exclusiveProcessChildField">{{value.name}}
+                                                    </th>
+
+                                                    <th style="vertical-align: middle;background-color: #b0a7ff;">发起人</th>
+                                                    <th style="vertical-align: middle;background-color: #b0a7ff;">日期</th>
+                                                    <th style="vertical-align: middle;background-color: #b0a7ff;"
+                                                        ng-repeat="value in processChildField">{{value.name}}
+                                                    </th>
+                                                </tr>
+                                                </thead>
+
+                                                <tbody ng-show="proposalProcessTable.data">
+                                                <tr class="text-center" ng-repeat="row in proposalProcessTable.data"
+                                                    ng-class="{'active':proposalProcessTable.data.selectRow==$index}"
+                                                >
+                                                    <td ng-repeat="rowChild in processChildFieldValue2">{{row[rowChild]}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div saaf-table-tfoot="proposalProcessTable"
+                                             ng-show="proposalProcessTable.data.length>0"></div>
+                                    </div>
+                                </div>
+
+                                <!--第二部分报表 end-->
+                                <!--如下暂时不使用,最初版本-->
+                                <!--第二部分报表 start-->
+                                <!--<div id="attId" ng-if="tab.active == 1">
+                                    <div id ="proposalStatusParentId20" style="" main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                                        <div id ="proposalStatusId20" class="data-table" ng-nicescroll="" id="nicescroll_userGroupDeptBrand20"
+                                             nice-option="{{niceOpction}}">
+                                            <table saaf-table="proposalProcessTable"
+                                                   data-url="findBusinessBookProces"
+                                                   data-params="exclusiveParams"
+                                                   data-checked-type="radio"
+                                                   data-auto-get-data="true"
+                                                   data-after-get-data="proposalStatusAfterGetData()"
+                                                   data-page-rows="10"
+                                                   id="dataTableId20"
+                                                   class=" nicescroll-height  table table-bordered table-hover table-condensed">
+
+                                                <thead class="bg-gray-white">
+                                                    <tr class="text-center">
+                                                        <th colspan="12"
+                                                            style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            合同基本信息
+                                                        </th>
+                                                        <th style="vertical-align: middle;background-color: #2F75B5;"></th>
+                                                        <th colspan="{{2 + processField.length * 2}}"
+                                                            style="vertical-align: middle;background-color: #2F75B5;">Proposal 审批进度
+                                                        </th>
+                                                        <th style="vertical-align: middle;background-color: #5B9BD5;"></th>
+                                                        <th colspan="13" style="vertical-align: middle;background-color: #5B9BD5;">合同盖章情况</th>
+                                                        <th colspan="20" style="vertical-align: middle;background-color: #A9D08E;">独家协议合同情况</th>
+                                                    </tr>
+                                                    <tr class="text-center">
+                                                        <th rowspan="2"
+                                                            style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            合同附件类型
+                                                        </th>
+                                                        <th rowspan="2"
+                                                            style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            合同附件单号
+                                                        </th>
+                                                        <th rowspan="2"
+                                                            style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            年度
+                                                        </th>
+
+                                                        <th style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            合同
+                                                        </th>
+                                                        <th rowspan="2"
+                                                            style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            电子签章单号
+                                                        </th>
+                                                        <th rowspan="2"
+                                                            style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            主/从供应商
+                                                        </th>
+                                                        <th rowspan="2"
+                                                            style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            供应商编号
+                                                        </th>
+                                                        <th rowspan="2"
+                                                            style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            供应商名称
+                                                        </th>
+                                                        <th rowspan="2"
+                                                            style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            品牌_中文
+                                                        </th>
+                                                        <th rowspan="2"
+                                                            style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            合同主要负责部门
+                                                        </th>
+                                                        <th rowspan="2"
+                                                            style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            销售模式
+                                                        </th>
+                                                        <th rowspan="2"
+                                                            style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            合同版本
+                                                        </th>
+
+                                                        <th rowspan="2" style="vertical-align: middle;background-color: #2F75B5;">
+                                                            proposal单据号码+版本号
+                                                        </th>
+                                                        <th colspan="2" style="vertical-align: middle;background-color: #2F75B5;">
+                                                            提交人
+                                                        </th>
+
+                                                        <th colspan="2" style="vertical-align: middle;background-color: #2F75B5;"
+                                                            ng-repeat="value in processField">{{value.meaning}}
+                                                        </th>
+                                                        <th rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            合同输出日期
+                                                        </th>
+                                                        <th   rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            BIC登记日期
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            财务登记日期
+                                                         </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            法务登记日期
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            甲方签署时间
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            乙方签署时间
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            丙方签署时间
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            合同状态
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            合同年度
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            是否电子签章
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            是否需要GM审批
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            是否有合同审批特批申请
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            甲乙是否换签署位
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                            合同盖章状态
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            合同情况
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            单据状态
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            独家协议接收时间
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            独家销售起始时间
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            独家销售结束时间
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            系统实际起始时间
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            系统实际结束时间
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            独家产品类型
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            独家销售地域
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            新品是否直接成为独家
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            是否独家产品主要成分显著不同
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            独家渠道类别
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            是否包含电商渠道
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            是否包含独家渠道例外情形
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            独家渠道例外情形具体描述
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            是否追回销售
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            是否签订转户协议
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            独家协议是否已结束
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            是否PEB
+                                                        </th>
+                                                        <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                            双方是否已盖章
+                                                        </th>
+
+                                                    </tr>
+                                                    <tr class="text-center">
+                                                        <th style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                            合同编号
+                                                        </th>
+                                                        <th style="vertical-align: middle;background-color: #2F75B5;">发起人</th>
+                                                        <th style="vertical-align: middle;background-color: #2F75B5;">日期</th>
+                                                        <th style="vertical-align: middle;background-color: #2F75B5;"
+                                                            ng-repeat="value in processChildField">{{value.name}}
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+
+
+                                                <tbody ng-show="proposalProcessTable.data">
+                                                <tr class="text-center" ng-repeat="row in proposalProcessTable.data"
+                                                    ng-class="{'active':proposalProcessTable.data.selectRow==$index}"
+                                                >
+                                                    <td ng-repeat="rowChild in processChildFieldValue2">{{row[rowChild]}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div saaf-table-tfoot="proposalProcessTable"
+                                             ng-show="proposalProcessTable.data.length>0"></div>
+                                    </div>
+                                </div>-->
+                                <!--第二部分报表 end-->
+
+                                <!--新增加的第二部分报表 start-->
+                                <!--<div id="attId" ng-if="tab.active == 1">
+                                    <div id ="proposalStatusParentId20" style="" main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                                        <div id ="proposalStatusId20" class="data-table" ng-nicescroll="" id="nicescroll_userGroupDeptBrand20"
+                                             nice-option="{{niceOpction}}">
+                                            <table saaf-table="proposalProcessTable"
+                                                   data-url="findExclusiveProces"
+                                                   data-params="exclusiveParams"
+                                                   data-checked-type="radio"
+                                                   data-auto-get-data="true"
+                                                   data-after-get-data="proposalStatusAfterGetData()"
+                                                   data-page-rows="10"
+                                                   id="dataTableId20"
+                                                   class=" nicescroll-height  table table-bordered table-hover table-condensed">
+
+                                                <thead class="bg-gray-white">
+                                                <tr class="text-center">
+                                                    <th colspan="8"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同基本信息
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;"></th>&lt;!&ndash;proposal单据号码+版本号&ndash;&gt;
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;"></th>&lt;!&ndash;Proposal 单据状态&ndash;&gt;
+                                                    <th colspan="{{2 + exclusiveProcessField.length * 2}}"
+                                                        style="vertical-align: middle;background-color: #2F75B5;">审批进度
+                                                    </th>&lt;!&ndash;流程节点信息&ndash;&gt;
+                                                    <th style="vertical-align: middle;background-color: #5B9BD5;"></th>
+                                                    <th colspan="3" style="vertical-align: middle;background-color: #5B9BD5;">合同盖章情况</th>
+                                                    <th colspan="22" style="vertical-align: middle;background-color: #A9D08E;">独家协议合同情况</th>
+                                                </tr>
+                                                <tr class="text-center">
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同类型
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        年度
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        主/从供应商
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        供应商编号
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        供应商名称
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        品牌_中文
+                                                    </th>
+                                                    <th rowspan="2"
+                                                        style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同主要负责部门
+                                                    </th>
+
+                                                    <th rowspan="2" style="vertical-align: middle;background-color: #2F75B5;">
+                                                        proposal单据号码+版本号
+                                                    </th>
+                                                    <th rowspan="2" style="vertical-align: middle;background-color: #2F75B5;">
+                                                        proposal 单据状态
+                                                    </th>
+
+                                                    <th colspan="2" style="vertical-align: middle;background-color: #2F75B5;">
+                                                        提交人
+                                                    </th>
+
+                                                    <th colspan="2" style="vertical-align: middle;background-color: #2F75B5;"
+                                                        ng-repeat="value in exclusiveProcessField">{{value.description}}
+                                                    </th>&lt;!&ndash;{{value.meaning}}&ndash;&gt;
+                                                    <th rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        合同输出日期
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        BIC登记日期
+                                                    </th>
+                                                    <th rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        财务登记日期
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #5B9BD5;">
+                                                        法务登记日期
+                                                    </th>
+                                                    &lt;!&ndash;独家协议合同情况&ndash;&gt;
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        合同情况
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家协议编号
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        单据状态
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家协议接收时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家销售起始时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家销售结束时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        系统实际起始时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        系统实际结束时间
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家产品类型
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家销售地域
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        新品是否直接成为独家
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否独家产品主要成分显著不同
+                                                    </th>
+                                                    <th rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否独家期限自动顺延
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家渠道类别
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否包含电商渠道
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否包含独家渠道例外情形
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家渠道例外情形具体描述
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否追回销售
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否签订转户协议
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        独家协议是否已结束
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        是否PEB
+                                                    </th>
+                                                    <th  rowspan="2" style="vertical-align: middle;background-color: #A9D08E;">
+                                                        双方是否已盖章
+                                                    </th>
+
+                                                </tr>
+                                                <tr class="text-center">
+                                                    <th style="vertical-align: middle;background-color: #44546A;color: white;">
+                                                        合同编号
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">发起人</th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">日期</th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;"
+                                                        ng-repeat="value in exclusiveProcessChildField">{{value.name}}
+                                                    </th>
+                                                </tr>
+                                                </thead>
+
+
+                                                <tbody ng-show="proposalProcessTable.data">
+                                                <tr class="text-center" ng-repeat="row in proposalProcessTable.data"
+                                                    ng-class="{'active':proposalProcessTable.data.selectRow==$index}"
+                                                >
+                                                    <td ng-repeat="rowChild in exclusiveProcessChildFieldValue">{{row[rowChild]}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div saaf-table-tfoot="proposalProcessTable"
+                                             ng-show="proposalProcessTable.data.length>0"></div>
+                                    </div>
+                                </div>-->
+                                <!--新增加的第二部分报表 end-->
+
+
+                                <!--第三部分报表 start-->
+                                <div id="exclusiveItemId" ng-if="tab.active == 2">
+                                    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                                        <div class="nicescroll-height  bg-white " ng-nicescroll
+                                             nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                                            <div class=" mt10 pb5 input-form bb oh" input-form
+                                                 data-des="此节点必需－用于识别输入表单的指令">
+                                                <div search-form
+                                                     data-legend="[
+                                                             {key:'vendorNbr',label:'VENDOR_NBR',type:'lov',target:'#supplierLov',css:'readonly-white'},
+                                                             {key:'vendorName',label:'VENDOR_NAME'},
+                                                             {key:'itemCode',label:'ITEM_NBR'},
+                                                             {key:'itemName',label:'ITEM_DESC_CN'},
+                                                        ]"
+                                                     ng-model="exclusiveItemParams"
+                                                ></div>
+
+                                            </div>
+
+                                            <div class="data-table">
+                                                <div base-data-table="dataTable"
+                                                     data-auto-request="true"
+                                                     ng-params="exclusiveItemParams"
+                                                     data-show-index="true"
+                                                     data-url="findExclusiveItemReport"
+                                                     data-legend="[
+                                                         {'value':'isRepeat','name':'货品是否重复'},
+                                                         {'value':'isEnd','name':'货品是否结束'},
+                                                         {'value':'soleAgrtCode','name':'独家协议编号'},
+                                                         {'value':'productTypeName','name':'独家产品类型'},
+                                                         {'value':'vendorNbr','name':'VENDOR_NBR'},
+                                                         {'value':'vendorName','name':'VENDOR_NAME'},
+                                                         {'value':'groupCode','name':'GROUP'},
+                                                         {'value':'groupName','name':'GROUP_DESC'},
+                                                         {'value':'deptCode','name':'DEPT'},
+                                                         {'value':'deptDesc','name':'DEPT_DESC'},
+                                                         {'value':'brandCn','name':'BRAND_CN'},
+                                                         {'value':'brandEn','name':'BRAND_EN'},
+                                                         {'value':'itemCode','name':'ITEM_NBR'},
+                                                         {'value':'itemName','name':'ITEM_DESC_CN'},
+                                                         {'value':'barCode','name':'UPC货品条码'},
+                                                         {'value':'saleStartDate','name':'独家销售起始时间'},
+                                                         {'value':'saleEndDate','name':'独家销售结束时间'},
+                                                         {'value':'isCovered','name':'双方是否已盖章'},
+                                                         {'value':'sysStartDate','name':'系统实际起始时间'},
+                                                         {'value':'sysEndDate','name':'系统实际结束时间'},
+                                                         {'value':'isTakeBackSell','name':'是否追回销售'},
+                                                         {'value':'remark','name':'备注'}
+                                                    ]"
+                                                ></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <!--第三部分报表 end-->
+
+                                <!--第四部分报表 start-->
+                                <div id="exclusiveItemHousekeepId" ng-if="tab.active == 3">
+                                    <div id ="proposalStatusParentId40" style="" main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                                        <div>
+                                            <p>item master数据管理与独家协议货品管理对接，检查UDA4项不为“Exclusive Brand /  独家品牌”和UDA8项不为“EB或PEB"的货品跑出报表</p>
+                                        </div>
+                                        <div id ="proposalStatusId40" class="data-table" ng-nicescroll="" id="nicescroll_userGroupDeptBrand40"
+                                             nice-option="{{niceOpction}}">
+                                            <table saaf-table="exclusiveItemHousekeepTable"
+                                                   data-url="findBusinessBookProces"
+                                                   data-params="exclusiveItemHousekeepParams"
+                                                   data-checked-type="radio"
+                                                   data-auto-get-data="true"
+                                                   data-after-get-data="proposalStatusAfterGetData()"
+                                                   data-page-rows="10"
+                                                   id="dataTableId4"
+                                                   class=" nicescroll-height  table table-bordered table-hover table-condensed">
+
+                                                <thead class="bg-gray-white">
+                                                <tr class="text-center">
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">
+                                                        ITEM_NBR
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">
+                                                        ITEM_NAME
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">
+                                                        dept
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">
+                                                        BRAND_CN
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">
+                                                        原UDA4
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">
+                                                        原UDA8
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">
+                                                        修改UDA4为
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">
+                                                        修改UDA8为
+                                                    </th>
+                                                    <th style="vertical-align: middle;background-color: #2F75B5;">
+                                                        不修改的原因
+                                                    </th>
+                                                </tr>
+                                                </thead>
+
+
+                                                <tbody ng-show="exclusiveItemHousekeepTable.data">
+                                                <tr class="text-center" ng-repeat="row in exclusiveItemHousekeepTable.data"
+                                                    ng-class="{'active':exclusiveItemHousekeepTable.data.selectRow==$index}"
+                                                >
+                                                    <td ng-repeat="rowChild in processChildFieldValue">{{row[rowChild]}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div saaf-table-tfoot="proposalProcessTable"
+                                             ng-show="proposalProcessTable.data.length>0"></div>
+                                    </div>
+                                </div>
+                                <!--第四部分报表 end-->
+
+
+                                <div lov-list="cityLov" role="dialog" data-title="选择供应商信息" id="supplierLov" ng-model="current.em"
+                                     data-url="supplierFindLov"
+                                     data-dynamic-params=''
+                                     data-callback="selectSupplierReturn"
+                                     data-auto-request="true"
+                                     data-return-type="key"
+                                     data-pagination="{'pageIndex':'1','pageRows':'5'}"
+                                     data-checked-type="radio"
+                                     data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+                                     data-show-index="false"
+                                     data-type="competitor"
+                                     data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+                                     data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                                          {'key':'supplierName','placeholder':'供应商名称'}]"
+                                >
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!----------------------------------------------------- proposalSummary 页面end ---------------------------------------------->
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>

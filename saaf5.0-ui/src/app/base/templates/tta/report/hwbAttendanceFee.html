@@ -1,0 +1,207 @@
+<div ng-controller="irTermsCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+
+                        <button class="btn btn-default" type="button" ng-click="btnModify()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>编辑
+                        </button>
+
+                        <button class="btn btn-default" type="button" ng-click="submitApproval()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>提交审批
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="changePerson()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>转交
+                        </button>
+                    </div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <!--{key:'description',label:'描述'},-->
+                    <!--{key:'isadmin',label:'是否管理员',type:'lookCode',lookCode:'YES_OR_NO'},-->
+                    <!--{key:'internalUser',label:'是否EBS用户',type:'lookCode',lookCode:'YES_OR_NO'},{key:'timesVersion',label:'批次号'},{key:'createdName',label:'创建人'-->
+                    <div ng-if="batchId == undefined">
+                    <div search-form
+                         data-legend="[
+                            {key:'startDate',label:'日期范围From', type:'time', 'date':'yyyy-mm',endDate:'endDate'},
+                            {key:'endDate',label:'日期范围To', type:'time', 'date':'yyyy-mm',startDate:'startDate'}
+
+                        ]"
+                         ng-model="params"
+                    ></div>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="true"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="attendanceFeeFind"
+                         data-legend="[
+                             {'value':'dept','name':'Dept'},
+                             {'value':'brandEnorcn','name':'Brand (EN/CN)'},
+                             {'value':'num','name':'数量'},
+                             {'value':'feeType','name':'Type'},
+                             {'value':'rateCard','name':'Rate card'},
+                             {'value':'feeGroup','name':'Gropp'},
+                             {'value':'category','name':'Category'},
+                             {'value':'content','name':'活动内容'},
+                             {'value':'vendorCode','name':'需采购确认供应商编号'},
+                             {'value':'vendorName','name':'需采购确认供应商名字'},
+                             {'value':'brand','name':'品牌'},
+                             {'value':'amount','name':'应收金额'},
+                             {'value':'confirmAmount','name':'采购确认收款金额'},
+                             {'value':'fg','name':'FG'},
+                             {'value':'different','name':'差异'},
+                             {'value':'active','name':'采购行动'},
+                             {'value':'projectType','name':'项目类型（TTA/OnTop)'},
+                             {'value':'remark','name':'备注(如“采购行动”选择“确认不收取”或者“折扣收取”请在备注详细说明原因)'},
+                             {'value':'changePersonName','name':'转交人'}
+
+                             ]"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+    <div lov-list="userLovList" id="userLov" role="dialog" data-title="选择用户" ng-model="code1"
+         data-url="attendanceFeeFindUser"
+         data-dynamic-params='{"userId": ""}'
+         data-callback="selecUserReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'userId','value':'userId','userFullName':'用户名'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'userFullName':'用户名','key':'userFullName'}]"
+         data-search-key="[{'key':'userId','placeholder':'用户ID'},
+                          {'key':'userFullName','placeholder':'用户名'}]"
+    >
+    </div>
+
+    <div class="modal fade" id="msgCfgModal" data-des="编辑" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        {{modalTitle}}
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm" ng-submit="btnSave()">
+                    <div class="modal-body">
+                        <div class="form-group col-xs-7 col-md-7">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">需采购确认供应商编码:</span></label>
+                                <input required type="text" class="form-control radius3" name="vendorCode"
+                                       maxlength="255" ng-model="addParams.vendorCode">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-7 col-md-7">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">需采购确认供应商名字:</span></label>
+                                <input required type="text" class="form-control radius3" name="vendorName"
+                                       maxlength="255" ng-model="addParams.vendorName">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-7 col-md-7">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">采购确认收款金额:</span></label>
+                                <input required type="text" class="form-control radius3" name="confirmAmount"
+                                       maxlength="255" ng-model="addParams.confirmAmount">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-7 col-md-7">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">FG:</span></label>
+                                <input required type="text" class="form-control radius3" name="fg"
+                                       maxlength="255" ng-model="addParams.fg">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-7 col-md-7">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">采购行动:</span></label>
+                                <input required type="text" class="form-control radius3" name="active"
+                                       maxlength="255" ng-model="addParams.active">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-7 col-md-7">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">项目类型:</span></label>
+                                <input required type="text" class="form-control radius3" name="projectType"
+                                       maxlength="255" ng-model="addParams.projectType">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">备注:</span></label>
+
+                                <textarea rows="5"  class="w400 radius3" name="remark"
+                                          maxlength="500" ng-model="addParams.remark">
+                                </textarea>
+                            </div>
+                        </div>
+
+
+
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button type="submit" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+</div>

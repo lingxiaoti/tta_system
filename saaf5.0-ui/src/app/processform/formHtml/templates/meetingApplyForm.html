@@ -1,0 +1,179 @@
+<div ng-controller="meetingApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOrUpdateMeetingApply"
+         data-api-get="findMeetingApplyDetailById" data-api-del="" data-api-update="updateMeetingApply">
+        <div class="col-md-12 pt15">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none" data-load-callback="respCallback"></div>
+            <div class="row">
+                <div search-list=""
+                     data-col="4"
+                     ng-model="formParams"
+                     data-legend="[
+                        {key:'deptName',label:'申请部门',readonly:true,required:true},
+                        {key:'personName',label:'申请人',readonly:true,required:true},
+                        {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                        {key:'billNo',label:'申请单号',readonly:true},
+                        {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                        {key:'statusStr',label:'状态',readonly:true},
+                        {key:'meetingName',label:'会议名称',required:true,maxlength:'200'},
+                        {key:'meetingType',label:'会议类型',required:true,type:'lookCode',lookCode:'OA_MEETING_TYPE'},
+                        {key:'meetingMode',label:'会议方式',required:true,type:'lookCode',lookCode:'OA_MEETING_MODE'},
+                        {key:'meetingRoomName',label:'会议室',required:true,disabled:true,type:'lov',target:'#findMeetingRoomInfo',css:'readonly-white'},
+                        {key:'meetingBeginTime',label:'会议开始时间',required:true,type:'time',date:'yyyy-mm-dd hh:ii',minuteStep:'30',endDate:'meetingEndTime'},
+                        {key:'meetingEndTime',label:'会议结束时间',required:true,type:'time',date:'yyyy-mm-dd hh:ii',minuteStep:'30',startDate:'meetingBeginTime'},
+                        {key:'personNames',label:'参会人员',type:'lov',target:'#mentingPersonInfo',readonly:true,'col':'12',css:'readonly-white'},
+                        {key:'meetingIssues',label:'会议议题',required:true,'col':'12',maxlength:'50',placeholder:' ',title:'字数限制50'},
+                ]" ></div>
+            </div>
+            <!--{key:'meetingAddressType',label:'会议召开地',required:true,type:'lookCode',lookCode:'OA_MEETING_ADDRESS_TYPE'},-->
+        </div>
+
+        <div class="col-md-12" >
+            <label><span class="fa fa-cog mr15"></span>设备信息<span class="red" ng-bind="inputErrors"></span>
+            </label>
+            <!--<button type="button" class="btn btn-default btn-xs pull-right"
+                    ng-click="table.addTableRows()"
+                    ng-show="childData.isEdit"
+            ><i class="fa fa-plus">增加</i></button>-->
+        </div>
+    
+        <div class="col-md-12" >
+            <table class="table table-bordered table-hover table-condensed">
+                <thead class="bg-gray-white">
+                <tr class="text-center">
+                    <th>序号</th>
+                    <th>设备名称</th>
+                    <th>设备编号</th>
+                    <th>设备类型</th>
+                    <th>数量</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="text-center" ng-repeat="row in formParams.items">
+                    <td>{{$index+1}}</td>
+                    <td>{{row.facilityName}}</td>
+                    <td>{{row.facilityNo}}</td>
+                    <td>{{row.facilityTypeStr}}</td>
+                    <td>{{row.facilityNum}}</td>
+                </tr>
+                </tbody>
+    
+            </table>
+           <!-- <div base-data-table-edit="table"
+                 data-delete-show="false"
+                 data-legend="[
+                        {value:'facilityName',name:'设备名称',type:'testString' },
+                        {value:'deName',name:'设备编号',type:'testString'},
+                        {value:'pSkuName',name:'设备类型',type:'testString'},
+                        {value:'facilityNum',name:'数量',type:'testString'},
+                    ]"
+                 ng-model="formParams"
+                 data-form-params-key="items"
+            ></div>
+            <div></div>-->
+    
+        </div>
+        <div class="col-md-12" ng-if="formParams.secItems.length">
+            <label><span class="fa fa-cog mr15"></span>签到<span class="red" ng-bind="inputErrors"></span>
+            </label>
+            <!--<button type="button" class="btn btn-default btn-xs pull-right"
+                    ng-click="table.addTableRows()"
+                    ng-show="childData.isEdit"
+            ><i class="fa fa-plus">增加</i></button>-->
+        </div>
+    
+        <div class="col-md-12" ng-if="formParams.secItems.length">
+            <table class="table table-bordered table-hover table-condensed">
+                <thead class="bg-gray-white">
+                <tr class="text-center">
+                    <th>序号</th>
+                    <th>部门名称</th>
+                    <th>签到人员名称</th>
+                    <th>签到时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="text-center" ng-repeat="row in formParams.secItems">
+                    <td>{{$index+1}}</td>
+                    <td>{{row.deptName}}</td>
+                    <td>{{row.personName}}</td>
+                    <td>{{row.signTime}}</td>
+                </tr>
+                </tbody>
+    
+            </table>
+           <!-- <div base-data-table-edit="table"
+                 data-delete-show="false"
+                 data-legend="[
+                        {value:'facilityName',name:'设备名称',type:'testString' },
+                        {value:'deName',name:'设备编号',type:'testString'},
+                        {value:'pSkuName',name:'设备类型',type:'testString'},
+                        {value:'facilityNum',name:'数量',type:'testString'},
+                    ]"
+                 ng-model="formParams"
+                 data-form-params-key="items"
+            ></div>
+            <div></div>-->
+    
+        </div>
+        <div class="col-md-12 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+    </div>
+    
+    <div lov-list="mentingPersonInfo" role="dialog" data-title="请选择人员" id="mentingPersonInfo" ng-model="code3"  class=""
+         data-url="findAllInfoOnlyOnePosition"
+         data-dynamic-params="{'orgId':formParams.orgId}"
+         data-auto-request="false"
+         data-checked-type="checkbox"
+         data-return-value="formParams.personNames"
+         data-return-key="formParams.personIds"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-keys="{'key':'personId','value':'personName',name:'人员名称',hide:'true'}"
+         data-other-column="[{'name':'工号','key':'employeeNumber'},{'name':'姓名','key':'personName'},{'name':'职位','key':'positionName'}]"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'keyword','placeholder':'请输入姓名或职位'}]"
+    >
+    </div>
+    <div lov-list="findMeetingRoomInfo" role="dialog" data-title="请选择会议室" id="findMeetingRoomInfo" ng-model="code3"  class=""
+         data-url="findMeetingRoomInfoPagination"
+         data-params="{'effectiveFlag':0,'orgId':'{{formParams.orgId}}'}"
+         data-auto-request="false"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-return-key="formParams.meetingRoomId"
+         data-callback="findMeetingRoomInfoCallback"
+         data-return-value="formParams.meetingRoomName"
+         data-keys="{'key':'meetingRoomId','value':'meetingRoomName',name:'会议室名称'}"
+         data-other-column="[
+            {'name':'会议室地址','key':'meetingRoomAddress'}
+         ]"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'personName','placeholder':'请输入会议名'}]"
+    >
+    </div>
+
+    <!--<div lov-list="findMeetingFacilityInfo" role="dialog" data-title="请选择会议设备" id="findMeetingFacilityInfo" ng-model="code3"  class=""
+         data-url="findMeetingFacilityInfoPagination"
+         data-auto-request="false"
+         data-checked-type="checkbox"
+         data-callback="mentingPersonInfoCallback"
+         data-return-value="formParams.abc"
+         data-cancel-callback="personInfoCancel"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'personId','value':'personName',name:'人员名称'}"
+         data-other-column="[{'name':'职位名称','key':'positionName'}]"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'personName','placeholder':'请输入姓名'}]"
+    >
+    </div>-->
+
+</div>

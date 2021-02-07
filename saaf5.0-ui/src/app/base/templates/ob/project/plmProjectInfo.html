@@ -1,0 +1,137 @@
+<div ng-controller="plmProjectInfoCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDiscard,btnExport,btnDel">
+                        <button class="btn btn-default" permission-btn="btnDiscard" ng-disabled="!dataTable.selectRow||dataTable.selectRow.billStatus=='ABANDONED'" ng-click="btnDiscard()" ></button>
+                        <button class="btn btn-default" permission-btn="btnDel" ng-disabled="!dataTable.selectRow||dataTable.selectRow.billStatus!=='TODO'" ng-click="btnDel()" ></button>
+
+                    </div>
+
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <div search-form
+                         data-legend="[
+                            {key:'projectRange_like',label:'Range'},
+                            {key:'projectName_like',label:'项目名称'},
+                            {key:'biddingCode_like',label:'招标编码'},
+                            {key:'billStatus',label:'单据状态',type:'lookCode',lookCode:'PLM_PROJECT_STATUS'},
+                            {key:'creatorName_like',label:'创建人'},
+                            {key:'creationDate_gte',label:'创建日期从',type:'time','date':'yyyy-mm-dd'},
+                            {key:'creationDate_lte',label:'至',type:'time','date':'yyyy-mm-dd'},
+                            {key:'supplierName_like',label:'供应商名称'},
+                            {key:'supplierType',label:'供应商类型',type:'lookCode',lookCode:'PLM_SUPPLIER_TYPE'},
+
+                        ]"
+                         ng-model="params"
+                    ></div>
+
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="true"
+                         ng-params="params"
+                         data-show-index="true"
+
+                         data-callback="[{'value':'projectNumber','callback':'btnDetail'}]"
+                         data-url="findPlmProjectInfoInfo"
+                         data-legend="[
+                                 {'value':'projectNumber','name':'新增单号', style:'text-align:center'},
+                                 {'value':'projectRange','name':'Range', style:'text-align:left'},
+                                 {'value':'projectName','name':'项目名称', style:'text-align:left'},
+                                 {'value':'productCount','name':'产品数量', style:'text-align:center'},
+
+                                 {'value':'biddingCode','name':'招标编码', style:'text-align:center'},
+
+                                 {'value':'supplierTypeName','name':'供应商类型', style:'text-align:center'},
+                                 {'value':'supplierName','name':'供应商名称', style:'text-align:left'},
+                                 {'value':'multiProducer','name':'生产商名称', style:'text-align:left'},
+
+                                 {'value':'billStatusName','name':'单据状态', style:'text-align:center'},
+                                 {'value':'creatorName','name':'创建人', style:'text-align:center'},
+                                 {'value':'creationDate','name':'创建时间',time:'YYYY-MM-DD', style:'text-align:center'},
+                                 {'value':'remarks','name':'备注', style:'text-align:center'},
+
+                         ]"
+                    ></div>
+                    <!--                    {'value':'phoneNumber','name':'手机号码'},-->
+                </div>
+
+                <div class="modal fade" id="discardModal" tabindex="-1"
+                     data-backdrop="static" role="dialog"
+                     aria-labelledby="accessoryModalLabel">
+                    <div class="modal-dialog " style="margin-top: 5%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                        ng-click="refindFile()"
+                                        aria-hidden="true">&times;
+                                </button>
+                                <h4 class="modal-title pull-left" id="disgardTitle">作废</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row"></div>
+
+                                <div class="form-group col-xs-12 col-md-12">
+                                    <div class="input-group input-group-xs">
+
+                                        <label class="input-group-addon bn">
+                                            <span class="w100">作废原因</span>
+                                        </label>
+
+                                        <input type="text" ng-disabled="false" class="form-control radius3"
+                                               ng-model="discardReason">
+                                    </div>
+                                </div>
+                                <div class="row"></div>
+
+                            </div>
+                            <div class="modal-footer ">
+                                <div style="text-align: center">
+                                    <button style="" type="button" class="btn btn-default"
+                                            ng-click="refindFile()"
+                                            data-dismiss="modal">取消
+                                    </button>
+                                    <button type="button" id="disgardButton"
+                                            ng-click="discardProject()" class="btn btn-primary mr10">作废
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+</div>

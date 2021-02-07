@@ -1,0 +1,181 @@
+<div ng-controller="userMaintenanceCtrl"  class="gridtable">
+
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <button class="btn btn-default" ng-click="dataTable.search(1)"><i class="fa fa-search"
+                                                                                      aria-hidden="true"></i>搜索
+                    </button>
+                    <button class="btn btn-default" ng-click="dataTable.restore()"><i class="fa fa-undo"
+                                                                                      aria-hidden="true"></i>重置
+                    </button>
+                    <button ng-if="saafPageButtons.add" class="btn btn-default" ui-sref="home.userMaintenanceDetail()">
+                        <i class="fa fa-plus"></i>新增
+                    </button>
+                    <button ng-if="saafPageButtons.modify" class="btn btn-default"
+                            ng-disabled="userTable.data.selectRow==null" ng-click="edit()"><i
+                            class="fa fa-pencil"></i>修改
+                    </button>
+                    <!--<a href="./js/export.html" class="btn btn-default ng-scope" target="_blank" ng-click="export()"><i-->
+                            <!--class="fa fa-download"></i>导出-->
+                    <!--</a>-->
+                    <button class="btn btn-default ng-scope" ng-click="userTable.xlsExport()"><i
+                            class="fa fa-download"></i>导出2
+                    </button>
+                    <a href="./js/export.html" class="btn btn-default ng-scope" target="_blank" ng-click="export()"><i
+                            class="fa fa-download"></i>导出3
+                    </a>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button class="btn  btn-warning" ng-click="moreInput($event)"><i
+                            class="fa fa-chevron-circle-up"></i>高级查询
+                    </button>
+                    <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+                <div class=" mt10 pb5  bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+                    <form ng-submit="userTable.getData()">
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">账户名称：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="params.varInputUserName" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">用户姓名：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="params.varUserFullName" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">应用平台：</span></label>
+
+                                <select class="form-control radius3" ng-model="params.var_equal_platformCode">
+                                    <option></option>
+                                    <option saaf-select-lookupcode="PLATFORM_CODE"></option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">员工编号：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="params.employeeNumber" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">员工姓名：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="params.employeeName" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">手机号码：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="params.mobilePhone" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">代理商名称：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="params.memberName" placeholder="">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!--------------------- ./  输入表单  --->
+
+
+                <!--------------------- ./  数据　　  --->
+                <div class="data-table">
+
+                    <div base-data-table="dataTable"
+                         ng-params="params"
+                         data-auto-request="false"
+                         data-show-index="true"
+                         data-url="personFind"
+                         data-legend="[
+                             {'value':'employeeNumber','name':'员工编号'},
+                             {'value':'personName','name':'员工姓名'},
+                             {'value':'personTypeDesc','name':'员工类型'},
+                              {'value':'creatiDate','name':'BU'},
+                              {'value':'creatnDate','name':'渠道'},
+                              {'value':'creionDate','name':'部门/省区'},
+                              {'value':'crationDate','name':'职位'},
+                              {'value':'telPhone','name':'电话号码'},
+                              {'value':'mobilePhone','name':'手机号码'},
+                              {'value':'cardNo','name':'身份证号码'},
+                              {'value':'desc','name':'备注'}
+                             ]"
+                    ></div>
+
+                    <table saaf-table="userTable"
+                           data-url="roleList"
+                           data-params="params"
+                           class="table table-bordered table-hover table-condensed">
+                        <thead class="bg-gray-white">
+                        <tr class="text-center">
+                            <th>序号</th>
+                            <th data-xls-export-name="userName">角色名称2</th>
+                            <th data-xls-export-name="row.userFullName">角色编号</th>
+                            <th>系统编码</th>
+                            <th>角色描述</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!userTable.data">
+                        <tr>
+                            <td style="height: 200px" colspan="100" class="active"></td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="userTable.data">
+                        <tr class="text-center" ng-repeat="row in userTable.data"
+                            ng-class="{'active':userTable.data.selectRow==$index}"
+                            ng-click="userTable.data.selectRow=$index">
+                            <td ng-bind="(userTable.curIndex-1)*userTable.pageSize+$index+1"
+                                style="width: 50px;text-align: center">1
+                            </td>
+                            <td>{{row.roleName}}</td>
+                            <td>{{row.roleCode}}</td>
+                            <td>{{row.systemCode}}</td>
+                            <td>{{row.roleDesc}}</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div saaf-table-tfoot="userTable"></div>
+                </div>
+                <!--------------------- ./  数据　　  --->
+
+            </div>
+
+        </div>
+
+    </form>
+</div>

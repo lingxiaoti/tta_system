@@ -1,0 +1,265 @@
+<div ng-controller="doResultCtrl">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <button class="btn btn-default" ng-click="addResult()" ng-show="actionStatus"><i class="fa fa-plus"
+                                                                                                     aria-hidden="true"></i>新增
+                    </button>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white h" main-scroll-style>
+            <div class="col-xs-6 col-md-2 br h p0" style="margin-right: -1px;z-index: 6">
+                <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                        <div class="data-table">
+                            <table saaf-table="businessTable" data-url="queryBusinessLine" data-params="businessParams"
+                                   data-page-rows="-1" class="table table-hover table-condensed"
+                                   style="border: 1px solid #ddd;">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th>业务类型</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-show="businessTable.data.length<1">
+                                <tr>
+                                    <td colspan="1">暂无数据</td>
+                                </tr>
+                                </tbody>
+                                <tbody ng-show="businessTable.data.length>0">
+                                <tr>
+                                    <td colspan="1">
+                                        <input class="form-control" placeholder="搜索业务线…"
+                                               ng-model="businessParams.var_like_ruleBusinessLineName">
+                                    </td>
+                                </tr>
+                                <tr class="text-center"
+                                    ng-repeat="item in businessTable.data | filter:{ruleBusinessLineName:businessParams.var_like_ruleBusinessLineName}"
+                                    ng-class="{'active':businessTable.data.selectRow==item.ruleBusinessLineId}">
+                                    <td class="text-left"
+                                        ng-click="businessTable.data.selectRow=item.ruleBusinessLineId;
+                                            selectBusiness(item)">
+                                        <span for="radio{{item.ruleBusinessLineId}}" style="text-align: left">{{item.ruleBusinessLineName}}</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!--<div saaf-table-tfoot="businessTable" ng-show="businessTable.data.length>0"></div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6 col-md-2 br h p0" style="margin-right: -1px; z-index: 5"
+                 ng-show="expressionListStatus">
+                <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                        <div class="data-table">
+                            <table saaf-table="expressionTable" data-url="ruleExpressionService"
+                                   data-params="expressionParams" data-page-rows="-1"
+                                   class="table table-hover table-condensed"
+                                   style="border: 1px solid #ddd">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th>表达式列表</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-show="expressionTable.data.length<1">
+                                <tr>
+                                    <td colspan="1">暂无数据</td>
+                                </tr>
+                                </tbody>
+                                <tbody ng-show="expressionTable.data.length>0">
+                                <tr>
+                                    <td colspan="1">
+                                        <input class="form-control" placeholder="搜索表达式…"
+                                               ng-model="expressionParams.var_like_ruleExpName">
+                                    </td>
+                                </tr>
+                                <tr class="text-center"
+                                    ng-repeat="item in expressionTable.data | filter:{ruleExpName:expressionParams.var_like_ruleExpName}"
+                                    ng-class="{'active':expressionTable.data.selectRow==$index}"
+                                    ng-click="expressionTable.data.selectRow=$index;changeResult(item)">
+                                    <td class="text-left"><span style="text-align: left">{{item.ruleExpName}}</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!--<div saaf-table-tfoot="expressionTable" ng-show="expressionTable.data.length>0"></div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-8 br h p0" style="margin-right: -1px;z-index: 4" ng-show="resultTableStatus">
+                <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                        <div class="data-table">
+                            <table saaf-table="resultTable"
+                                   data-url="queryRuleMappingBusinessService"
+                                   data-params="resultParams"
+                                   class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th>序号</th>
+                                    <th>影响维度编码</th>
+                                    <th>影响维度名称</th>
+                                    <th>操作符</th>
+                                    <th>影响维度值</th>
+                                    <th>影响类型</th>
+                                    <th>影响维度目标</th>
+                                    <!--<th>权重</th>-->
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-show="!resultTable.data">
+                                <tr>
+                                    <td style="height: 200px" colspan="9"></td>
+                                </tr>
+                                </tbody>
+                                <tbody ng-show="resultTable.data">
+                                <tr class="text-center" ng-repeat="item in resultTable.data"
+                                    ng-class="{'active':resultTable.data.selectRow==$index}"
+                                    ng-click="resultTable.data.selectRow=$index">
+                                    <td ng-bind="(resultTable.curIndex-1)*resultTable.pageSize+$index+1">1</td>
+                                    <td>{{item.ruleBusDim}}</td>
+                                    <td>{{item.ruleDimName}}</td>
+                                    <td>{{item.ruleBusDimOperator}}</td>
+                                    <td>{{item.ruleBusDimValue}}</td>
+                                    <td>{{item.ruleBusTargetType}}</td>
+                                    <td>{{item.ruleBusTargetSource}}</td>
+                                    <!--<td>{{item.ruleBusLevel}}</td>-->
+                                    <td>
+                                        <div class="pos">
+                                            <button style="border:0;background: none;" ng-click="update(item)"><i
+                                                    style="left: 0;color: #3498db;" class="fa fa-pencil"></i></button>
+                                            <button style="border:0;background: none;" ng-click="remove(item)"><i
+                                                    style="left: 32px;" class="fa fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div saaf-table-tfoot="resultTable" ng-show="resultTable.data.length>0"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+         data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content modal-md">
+                <form name="resultTemplateForm" ng-submit="confirmResultl(resultTemplateForm.$invalid)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            {{resultModalTitle}}
+                        </h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div>
+                                    <div class="form-group col-xs-11 col-md-6">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span
+                                                    class="w100"><i class="red">*</i>影响类型：</span></label>
+
+                                            <select type="text" class="form-control radius3" required
+                                                    ng-change="changeTargetType(result.ruleBusTargetType)"
+                                                    ng-model="result.ruleBusTargetType"
+                                                    ng-options="busType.code as busType.name for busType in ruleBusTargetTypeData">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-xs-11 col-md-6">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span
+                                                    class="w100"><i class="red">*</i>影响维度名称：</span></label>
+
+                                            <select type="text" class="form-control radius3" required
+                                                    ng-model="result.ruleObj"
+                                                    ng-options="ruleObj as ruleObj.ruleDimName for ruleObj in ruleData">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-xs-11 col-md-6" ng-if="targetTypeStatusIsConfirmed">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span
+                                                    class="w100"><i class="red">*</i>运算符：</span></label>
+
+                                            <select type="text" class="form-control radius3" required
+                                                    ng-model="result.ruleBusDimOperator"
+                                                    ng-options="calcObj.code as calcObj.name for calcObj in calcData">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-xs-11 col-md-6" ng-if="targetTypeStatusIsConfirmed">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span
+                                                    class="w100"><i class="red">*</i>影响维度值：</span></label>
+                                            <input type="text" name="ruleBusDimValue" class="form-control radius3"
+                                                   required
+                                                   ng-model="result.ruleBusDimValue">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-xs-11 col-md-6" ng-if="!targetTypeStatusIsConfirmed">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span
+                                                    class="w100">影响维度目标：</span></label>
+                                            <!--<input type="text" name="ruleBusTargetSource" class="form-control radius3"-->
+                                            <!--ng-model="result.ruleBusTargetSource">-->
+                                            <select type="text" class="form-control radius3" required
+                                                    ng-model="result.ruleBusTargetSource"
+                                                    ng-options="targetSourceObj.webserviceCode as targetSourceObj.webserviceName for targetSourceObj in targetSourceArr">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!--<div class="form-group col-xs-11 col-md-6">-->
+                                    <!--<div class="input-group input-group-xs">-->
+                                    <!--<label class="input-group-addon bn"><span-->
+                                    <!--class="w100"><i class="red">*</i>权重：</span></label>-->
+                                    <!--<input type="text" name="ruleBusLevel" class="form-control radius3" required-->
+                                    <!--ng-model="result.ruleBusLevel">-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true">取消
+                            </button>
+                            <button type="submit" id="saveButton" class="btn btn-primary mr10">保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div><!-- /.modal -->
+</div>

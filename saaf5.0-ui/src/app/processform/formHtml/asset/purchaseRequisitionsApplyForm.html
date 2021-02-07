@@ -1,0 +1,56 @@
+<div ng-controller="purchaseRequisitionsApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOrUpdateAssetApply"
+         data-api-get="findAssetApplyDetailById" data-api-del="deleteAssetApplyItem"
+         data-api-update="updateAssetApply">
+        <div class="col-md-12 pt15 oh">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'deptName',label:'申请部门',readonly:true,required:true},
+                        {key:'personName',label:'申请人',readonly:true,required:true},
+                        {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                        {key:'billNo',label:'申请单号',readonly:true},
+                        {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                        {key:'statusStr',label:'状态',readonly:true},
+                      ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+        </div>
+
+        <div class="col-md-12" >
+            <h5 class="fontwB">
+                <span class="fa fa-cog mr15"></span>采购信息
+                <button type="button" class="btn btn-default btn-xs pull-right"
+                        ng-show="childData.isEdit"
+                        ng-click="tableEndit.addTableRows()"><i class="fa fa-plus">增加</i></button>
+            </h5>
+        </div>
+        <div class="col-md-12">
+            <div base-data-table-edit="tableEndit"
+                 data-legend="[
+                    {value:'assetType',name:'资产类别',required:true,type:'lookCode',lookCode:'OA_ASSET_TYPE','className':'w100'},
+                    {value:'assetName',name:'资产名称',required:true,maxlength:'200',placeholder:' '},
+                    {value:'assetModel',name:'规格/型号',required:true,maxlength:'200',placeholder:' '},
+                    {value:'assetPrice',name:'单价(元)',required:true,validFormat:'number=8'},
+                    {value:'assetQuantity',name:'数量',required:true,validFormat:'number=2',maxlength:'11',placeholder:' '},
+                    {value:'reasonType',name:'购置原因',required:true,type:'lookCode',lookCode:'OA_REASON_TYPE'},
+                    {value:'buyReason',name:'备注',maxlength:'500',placeholder:' '}
+                ]"
+                 data-form-params-key="items"
+                 data-callback="tableEndit.addTableRows()"
+                 ng-model="formParams"></div>
+        </div>
+        <div class="col-md-12 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+    </div>
+
+</div>

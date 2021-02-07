@@ -1,0 +1,202 @@
+<div ng-controller="supplierReportFormCtrl" class="gridtable">
+    <div>
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <div class="btn-group btn-group-xs ml10">
+                        <button class="btn btn-default" type="button" ng-click="search()">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div main-scroll-style data-des="{{$l('此节点必需－用户计算滚动区域高度')}}">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="{{$l('此节点必需-滚动内容及指令')}}">
+
+            <!--------------------- 输入表单  --->
+
+            <form name="addForm" class=" mt10 pb5 bb oh"
+                  data-des="{{$l('此节点必需－用于识别输入表单的指令')}}">
+                <form>
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>{{$l('查询条件')}}</span>
+                    </header>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">{{$l('供应商状态')}}</span></label>
+                            <select type="text" class="form-control radius3"
+                                    name="isEnabled"
+                                    ng-model="params.supplierStatus">
+                                <option></option>
+                                <option saaf-select-lookupcode="EQU_SUPPLIER_STATUS"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('品类')}}</span></label>
+                            <input type="text" class="form-control radius3" name="categoryGroup"
+                                   ng-model="params.categoryGroup">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">{{$l('国家')}}</span></label>
+                            <select type="text" class="form-control radius3"
+                                    name="isEnabled"
+                                    ng-model="params.country">
+                                <option></option>
+                                <option saaf-select-lookupcode="EQU_SUPPLIER_COUNTRY"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">{{$l('信用审核')}}</span></label>
+                            <select type="text" class="form-control radius3"
+                                    name="creditAuditSelect"
+                                    ng-model="params.auditSelect">
+                                <option></option>
+                                <option  ng-hide="data.description=='quality'" saaf-select-lookupcode="EQU_AUDIT_SELECT"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">{{$l('工厂审核')}}</span></label>
+                            <select type="text" class="form-control radius3"
+                                    name="qualityAuditSelect"
+                                    ng-model="params.qualitySelect">
+                                <option></option>
+                                <option saaf-select-lookupcode="EQU_AUDIT_SELECT"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">{{$l('CSR审核')}}</span></label>
+                            <select type="text" class="form-control radius3"
+                                    name="csrAuditSelect"
+                                    ng-model="params.csrAuditSelect">
+                                <option></option>
+                                <option  ng-hide="data.description=='quality'" saaf-select-lookupcode="EQU_AUDIT_SELECT"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">{{$l('年度评分')}}</span></label>
+                            <select type="text" class="form-control radius3"
+                                    name="isEnabled"
+                                    ng-model="params.score">
+                                <option></option>
+                                <option saaf-select-lookupcode="EQU_PON_SCORE_RESULT"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div>
+                            <label style="margin-left: 10px"><i class="fa fa-list-alt"></i>{{$l('查询结果')}}</label>
+                        </div>
+                        <div class="data-table" ng-nicescroll="" id="nicescroll_userGroupDeptBrand"
+                             nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2'}"
+                        >
+                            <table saaf-table="dataTable"
+                                   data-url="findSupplierReportForm"
+                                   data-params="params"
+                                   data-checked-type="radio"
+                                   data-auto-get-data="true"
+                                   data-page-rows="10"
+                                   class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th>{{$l('序号')}}</th>
+                                    <th>{{$l('供应商编号')}}</th>
+                                    <th>{{$l('供应商名称')}}</th>
+                                    <th>{{$l('供应商负责人')}}</th>
+                                    <th>{{$l('供应商状态')}}</th>
+                                    <th>{{$l('供应商类型')}}</th>
+                                    <th>{{$l('国家')}}</th>
+                                    <th>{{$l('关联供应商')}}</th>
+                                    <th>{{$l('品类')}}</th>
+                                    <th>{{$l('准入日期')}}</th>
+                                    <th>{{$l('信用审核结果')}}</th>
+                                    <th>{{$l('工厂审核结果')}}</th>
+                                    <th>{{$l('工厂审核日期')}}</th>
+                                    <th>{{$l('最新信用审核结果')}}</th>
+                                    <th>{{$l('最新信用审核有效期')}}</th>
+                                    <th>{{$l('最新工厂审核结果')}}</th>
+                                    <th>{{$l('最新工厂审核日期')}}</th>
+                                    <th>{{$l('工厂审核报告有效期')}}</th>
+                                    <th>{{$l('最新CSR审核结果')}}</th>
+                                    <th>{{$l('最新CSR审核报告有效期')}}</th>
+                                    <th>{{$l('年度评分')}}</th>
+                                    <th>{{$l('是否已签订业务合同和贸易条款')}}</th>
+                                    <th>{{$l('备注')}}</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-show="dataTable.data">
+                                <tr class="text-center" ng-repeat="row in dataTable.data"
+                                    style="width:125px;height:30px"
+                                    ng-class="{'active':dataTable.data.selectRow==$index}"
+                                    ng-click="dataTable.data.selectRow=$index;
+                                     dataTable.data.selectRowData =row;">
+                                    <!--序号-->
+                                    <td ng-bind="$index+1" class="w50">1</td>
+                                    <td>{{row.supplierNumber}}</td>
+                                    <td>{{row.supplierName}}</td>
+                                    <td>{{row.userFullName}}</td>
+                                    <td>{{row.supplierStatus}}</td>
+                                    <td>{{row.supplierType}}</td>
+                                    <td>{{row.countryMeaning}}</td>
+                                    <td>{{row.associatedSupplierName}}</td>
+                                    <td>{{row.categoryGroup}}</td>
+                                    <td>{{row.aceptDate}}</td>
+                                    <td>{{row.creditAuditResult}}</td>
+                                    <td>{{row.qualityAuditResult}}</td>
+                                    <td>{{row.qualityAuditDate}}</td>
+                                    <td>{{row.creditCheckResult}}</td>
+                                    <td>{{row.creditCheckEffectDate}}</td>
+                                    <td>{{row.auditResult}}</td>
+                                    <td>{{row.qualityCheckDate}}</td>
+                                    <td>{{row.qualityEffectDate}}</td>
+                                    <td>{{row.csrCreditResult}}</td>
+                                    <td>{{row.csrEffectDate}}</td>
+                                    <td>{{row.score}}</td>
+                                    <td>{{row.whetherSign}}</td>
+                                    <td>{{row.remark}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div saaf-table-tfoot="dataTable" ng-show="dataTable.data.length>0"></div>
+                        </div>
+                    </div>
+                </form>
+            </form>
+        </div>
+    </div>
+</div>

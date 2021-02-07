@@ -1,0 +1,61 @@
+<div ng-controller="loginCtrl">
+	<div class="loginBg">
+		<div class="login-main" ng-show="!isPortalLogin">
+			<div class="login-contain" ng-style="styleBack" >
+				<div class="login-logo">
+					<img ng-src="{{ logoImg }}" alt="">
+				</div>
+				<form class="login-form" name="loginForm" autocomplete="off" ng-submit="loginSubmit(loginForm.$invalid)" >
+					<div class="p15">
+						<h4 class="pt10 pb10">请登录</h4>
+						<div class="mb20"><input type="text" class="form-control" placeholder="请输入用户名'"
+												 ng-model="params.userName" required></div>
+						<div class="mb10"><input type="password" class="form-control" placeholder="请输入密码"
+												 ng-model="params.password" required></div>
+						<div class="box   mb20">
+							<label class="autoLogin"><input type="checkbox" ng-model="loginStatus.autoLogin" ><span>自动登录</span>,<span class="red">公共场所慎用</span></label>
+							</span></label>&nbsp&nbsp&nbsp<label ng-click="changePassWord();">忘记密码</label>
+						</div>
+						<div class="tc">
+							<button  ng-disabled="loginFlag ||  errnumber <0" class="btn  btn-primary btn-block">
+								<span>登录</span></button>
+							<span ng-show="errnumber <0" class="red">登录失败次数过多，请稍候重试</span>
+						</div>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="plugin/crypto-js-develop/src/core.js"></script>
+<script src="plugin/crypto-js-develop/src/x64-core.js"></script>
+
+
+
+<script src="plugin/crypto-js-develop/src/md5.js"></script>
+<script src="plugin/crypto-js-develop/src/evpkdf.js"></script>
+<script src="plugin/crypto-js-develop/src/enc-base64.js"></script>
+<script src="plugin/crypto-js-develop/src/cipher-core.js"></script>
+<script src="plugin/crypto-js-develop/src/aes.js"></script>
+<script src="plugin/crypto-js-develop/src/hmac.js"></script>
+<script src="plugin/crypto-js-develop/src/sha1.js"></script>
+<script src="plugin/crypto-js-develop/src/sha256.js"></script>
+
+<script src="plugin/crypto-js-develop/src/lib-typedarrays.js"></script>
+
+
+
+<script src="plugin/crypto-js-develop/src/enc-utf16.js"></script>
+<script src="plugin/crypto-js-develop/src/format-hex.js"></script>
+
+<script src="plugin/crypto-js-develop/src/mode-cfb.js"></script>
+<script src="plugin/crypto-js-develop/src/mode-ctr.js"></script>
+<script src="plugin/crypto-js-develop/src/mode-ctr-gladman.js"></script>
+<script src="plugin/crypto-js-develop/src/mode-ecb.js"></script>
+<script src="plugin/crypto-js-develop/src/mode-ofb.js"></script>
+
+
+
+

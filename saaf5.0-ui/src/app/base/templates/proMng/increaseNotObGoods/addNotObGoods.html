@@ -1,0 +1,556 @@
+<div class="bigdata" ng-controller="addNotObGoodsCtrl">
+  <div data-des="此节点必需－用户计算滚动区域高度" main-scroll-style>
+    <div class="nicescroll-height  bg-white" data-des="此节点必需-滚动内容及指令" ng-nicescroll
+          nice-option="{cursorcolor: '#1e90c2',cursorwidth:10,zindex:10,autohidemode:false}">
+
+      <!-- 页头按钮 -->
+      <div class="bg-gray-white bt">
+        <div class="bg-gray-white p5">
+
+          <div class="pull-right mr20">
+            <div class="btn-group btn-group-xs">
+              <button class="btn btn-default" permission-btn="btnSave">
+                  <i class="fa fa-plus">保存</i>
+              </button>
+              <button class="btn btn-default" data-validate-form="baseProcurementForm" permission-btn="btnSubmit">
+                  <i class="fa fa-plus">提交</i>
+              </button>
+              <button class="btn btn-default"  permission-btn="btnDiscard">
+                  <i class="fa fa-plus">作废</i>
+              </button>
+            </div>
+          </div>
+
+          <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)">
+                <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+            </button>
+          </div>
+
+        </div>
+    </div>
+
+    <!-- 页面内容 -->
+    <div class=" mt10 pb5  oh" data-des="此节点必需－用于识别输入表单的指令">
+      <form id="baseProcurementForm" name="baseProcurementForm">
+        <!-- <p >商品基本信息</p> -->
+        <header class="col-xs-12 mb10">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+            <span>商品基本信息</span>
+        </header>
+
+        <div> 
+
+          <div class="form-group col-xs-4 col-md-3">
+            <div class="input-group input-group-xs">
+              <label class="input-group-addon bn">
+                  <span class="w100"> PLM编码:</span>
+              </label>
+              <input class="form-control radius3" name="plmCode" disabled
+                      ng-model="params.plmCode" type="text" >
+            </div>
+          </div>
+
+          <div class="form-group col-xs-4 col-md-3" ng-if="isOB">
+            <div class="input-group input-group-xs">
+              <label class="input-group-addon bn">
+                  <span class="w100">OB ID:</span>
+              </label>
+              <input class="form-control radius3" name="obId"
+                      ng-model="params.obId" type="text" disabled>
+            </div>
+          </div>
+
+          
+          <div class="form-group col-xs-4 col-md-3">
+            <div class="input-group input-group-xs">
+              <label class="input-group-addon bn">
+                <span class="w100"> <p style="color: red;display: inline;">*</p>部门编码:</span>
+              </label>
+                <input class="form-control radius3" required id="deptCodeId" ng-model="params.department" ng-change="departmentOnchange()" name ="department" type="text"/>
+                <span class="input-group-btn ng-scope">
+                  <button class="btn btn-default" ng-click="showdeptNameMol()" type="button">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </span>
+              <!-- <div lookup-code="PLM_PRODUCT_DEPT" name="department" required ng-model="params.department" data-callback="deptChange"></div> -->
+            </div>
+          </div>
+          
+          <div class="form-group col-xs-4 col-md-3">
+            <div class="input-group input-group-xs">
+              <label class="input-group-addon bn">
+                <span class="w100">部门描述:</span>
+              </label>
+              <input class="form-control radius3" name="departmentDescript" readonly
+              ng-model="params.departmentDescript" type="text">
+            </div>
+          </div>
+          
+          <div class="form-group col-xs-4 col-md-3">
+            <div class="input-group input-group-xs">
+              <label class="input-group-addon bn">
+                  <span class="w100"> 采购类型:</span>
+              </label>
+              <div  lookup-code="PLM_PRODUCT_PURCHASE" name="purchaseType" disabled ng-model="params.purchaseType"></div>
+            </div>
+          </div>
+
+            <div class="form-group col-xs-4 col-md-3">
+              <div class="input-group input-group-xs">
+                <label class="input-group-addon bn">
+                    <span class="w100"><p style="color: red;display: inline;">*</p>销售渠道:</span>
+                </label>
+                <div  lookup-code="PLM_PRODUCT_SALES_CHANNAL" name="markerChannel" ng-model="params.markerChannel" required></div>
+              </div>
+            </div>
+
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100"> <p style="color: red;display: inline;">*</p>分类:</span>
+                  </label>
+                    <input class="form-control radius3" required ng-model="params.classes" name ="classes" type="text"/>
+                    <span class="input-group-btn ng-scope">
+                      <button class="btn btn-default" ng-click="showdeptClassMol()" type="button">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                </div>
+              </div>
+
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100">分类描述:</span>
+                  </label>
+                  <input class="form-control radius3" name="classDesc" readonly
+                          ng-model="params.classDesc" type="text">
+                </div>
+              </div>
+
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100"><p style="color: red;display: inline;">*</p>子分类:</span>
+                  </label>
+                    <input class="form-control radius3" required ng-model="params.subClass" name ="subClass" type="text"/>
+                    <span class="input-group-btn ng-scope">
+                      <button class="btn btn-default" ng-click="showdeptSubClassMol()" type="button">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                </div>
+              </div>
+
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100">子分类描述:</span>
+                  </label>
+                  <input class="form-control radius3" name="subclassDesc" readonly
+                          ng-model="params.subclassDesc" type="text">
+                </div>
+              </div>
+
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100"> <p style="color: red;display: inline;">*</p>货品名(中文):</span>
+                  </label>
+                  <input class="form-control radius3" name="productName" required
+                          ng-model="params.productName" type="text">
+                </div>
+              </div>
+
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100"><p style="color: red;display: inline;">*</p>货品名(英文):</span>
+                  </label>
+                  <input class="form-control radius3" name="productEname" required
+                          ng-model="params.productEname" type="text">
+                </div>
+              </div>
+
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100"><p style="color: red;display: inline;">*</p>品牌名(中文):</span>
+                  </label>
+                  <!-- <input class="form-control radius3" name="brandCn"
+                          ng-model="params.brandCn" type="text"> -->
+                    <input class="form-control radius3" required ng-model="params.brandnameCn" disabled name ="brandCn" type="text"/>
+                    <span class="input-group-btn ng-scope">
+                      <button class="btn btn-default" ng-click="showBrandMol()" type="button">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                </div>
+              </div>
+            
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100"><p style="color: red;display: inline;">*</p>品牌名(英文):</span>
+                  </label>
+                  <!-- <input class="form-control radius3" name="brandEn"
+                          ng-model="params.brandEn" type="text"> -->
+                    <input class="form-control radius3" required ng-model="params.brandnameEn" disabled name ="brandEn" type="text"/>
+                    <!-- <span class="input-group-btn ng-scope">
+                      <button class="btn btn-default" ng-click="showBrandMol()" type="button">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span> -->
+                </div>
+              </div>
+
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100"><p style="color: red;display: inline;">*</p>商品类型:</span>
+                  </label>
+                  <div ng-if="isOB" lookup-code="PLM_PRODUCT_OBTYPE" name="productType" ng-model="params.productType" required></div>
+                  <div ng-if="!isOB" lookup-code="PLM_PRODUCT_NONOBTYPE" name="productType" ng-model="params.productType" required></div>
+                </div>
+              </div>
+
+              <!-- <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100">Group Brand:</span>
+                  </label>
+                  <div  lookup-code="PLM_PRODUCT_TYPE" name="groupBrand" ng-model="params.groupBrand"></div>
+                </div>
+              </div> -->
+<!-- 
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100"><p style="color: red;display: inline;">*</p>计价单位(Unit):</span>
+                  </label>
+                  <div  lookup-code="PLM_PRODUCT_UNITPRICE" required name="countUnit" ng-model="params.countUnit"></div>
+                </div>
+              </div> -->
+
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100"><p style="color: red;display: inline;">*</p>特殊商品类型:</span>
+                  </label>
+                  <div  lookup-code="PLM_PRODUCT_ORTHERINFO" name="otherInfo" ng-model="params.otherInfo" required ng-init="params.otherInfo = '0'"></div>
+                </div>
+              </div>
+
+              <!-- <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100">货品形态:</span>
+                  </label>
+                  <div  lookup-code="PLM_PRODUCT_FORM" name="productShape" ng-model="params.productShape"></div>
+                </div>
+              </div> -->
+
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100">商品状态:</span>
+                  </label>
+                  <div  lookup-code="PLM_PRODUCT_STATUS" name="orderStatus" ng-model="params.orderStatus" ng-init="params.orderStatus= '1'" disabled></div>
+                </div>
+              </div>
+
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100">采购创建人:</span>
+                  </label>
+                  <input class="form-control radius3" name="createdBy" disabled
+                          ng-model="params.createdBy" type="text">
+                </div>
+              </div>
+
+              <div class="form-group col-xs-4 col-md-3">
+                <div class="input-group input-group-xs">
+                  <label class="input-group-addon bn">
+                      <span class="w100">创建时间:</span>
+                  </label>
+                  <input class="form-control radius3" name="creationDate" disabled
+                          ng-model="params.creationDate" type="text">
+                </div>
+              </div>
+
+            </div>
+            <hr>
+      
+
+
+      <div class="row"></div>
+      <div class="" style="padding: 15px">
+        <ul class="nav nav-tabs" id="GoodsInfoTab">
+          <li class="active" ng-click="">
+            <a data-toggle="tab" ng-href="#supplierInfoTable"><i class="fa fa-list-alt"></i>
+            <label>供应商信息</label></a>
+          </li>
+          <li ng-click="">
+            <a data-toggle="tab" href="#BarCodeTable"><i class="fa fa-list-alt"></i>
+            <label>条形码</label></a>
+          </li>
+
+        </ul>
+        <div class="tab-content " id="GoodsInfoTabContent">
+          <div class="tab-pane fade active in col-md-12" id="supplierInfoTable" style="min-height: 300px;">
+              <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)" id="supplierInfoForm">
+                  <div class="data-table">
+                    <table class="table table-bordered" style="margin-top: 15px">
+                      <thead class="bg-gray-white">
+                        <tr>
+                          <th>序号</th>
+                          <th style="width: 200px;">供应商ID</th>
+                          <th style="width: 350px;"><p style="color: red;display: inline;">*</p>供应商名称</th>
+                          <th style="width: 150px;"><p style="color: red;display: inline;">*</p>优先供应商</th>
+                          <th>代销类型</th>
+                          <th>代销比率</th>
+                          <th style="width: 150px;">开始日期</th>
+                          <th style="width: 150px;">结束日期</th>
+                          <!-- <th><p style="color: red;display: inline;">*</p>供应商可退货属性</th>
+                          <th>{{item.productReturn}}退货条件</th> -->
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <tr ng-repeat="(index, item) in supplierlist">
+                          <td>{{index + 1}}</td>
+                          <td>
+                            {{item.supplierId}}
+                          </td>
+                          <td>
+                            <div class="form-group">
+                              <div class="input-group input-group-xs">
+                                <input class="form-control radius3" ng-model="item.supplierName" name ="supplierName" required type="text"/>
+                                <span class="input-group-btn ng-scope">
+                                  <button class="btn btn-default" ng-click="showSupplierNameMol(index)" type="button">
+                                    <i class="fa fa-search"></i>
+                                  </button>
+                                </span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <input class="radius3" name="isMainsupplier" ng-false-value="'N'"
+                            ng-model="item.isMainsupplier" ng-true-value="'Y'"
+                            type="checkbox" ng-click="supplierSelectcheckbox(index)">
+                          </td>
+                          <td>
+                            <div class="input-group input-group-xs" style="width: 150px;">
+                                <div  lookup-code="PLM_PRODUCT_OSALETYPE" name="substituteType" ng-disabled="params.purchaseType =='1'" ng-model="item.substituteType"></div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="input-group input-group-xs" style="width: 150px;">
+                                <input class="form-control radius3" name="substitutePropetion" ng-disabled="params.purchaseType =='1'"
+                                      ng-model="item.substitutePropetion" type="text" >
+                            </div>
+                          </td>
+                          <td>
+                            <div class="input-group input-group-xs">
+                                <input class="form-control" name="startDate"
+                                date-time-picker="" data-date-format="yyyy-mm-dd" ng-disabled="params.purchaseType =='1'"
+                                maxlength="20" data-min-view="2" 
+                                ng-model="item.startDate" >
+                            </div>
+                          </td>
+                          <td>
+                              <div class="input-group input-group-xs">
+                                  <input class="form-control" name="endDate"
+                                  date-time-picker="" data-date-format="yyyy-mm-dd" ng-disabled="params.purchaseType =='1'"
+                                  maxlength="20" data-min-view="2" 
+                                  ng-model="item.endDate" >
+                              </div>
+                            </td>
+                          <!-- <td>
+                              <div style="display: flex; justify-content: center;">
+                                <div class="input-group input-group-xs">
+                                  <div  lookup-code="PLM_PRODUCT_RETURNPRO" name="productReturn" ng-model="item.productReturn"></div>
+                                </div>
+                              </div>
+                          </td>
+                          <td>
+                            <div style="display: flex; justify-content: center;">
+                              <div class="input-group input-group-xs">
+                                <div  lookup-code="PLM_PRODUCT_RETURNCONDITION" name="condition" ng-model="item.condition" ng-if="item.productReturn !== '1'"></div>
+                                <div  lookup-code="PLM_PRODUCT_RETURNCONDITION" required name="condition" ng-model="item.condition" ng-if="item.productReturn == '1'"></div>
+                              </div>
+                            </div>
+                          </td> -->
+                          <td>
+                            <div  class="btn-group btn-group-xst">
+                              <button type="button" class="btn btn-default btn-xs" ng-click="del(index, 'supplierlist')">
+                                <i class="fa fa-trash-o">删除</i>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td ng-click="addSupplierInfo()" style="font-size: 14px"><i class="fa fa-plus-square-o" ></i></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </form>
+          </div>
+
+          <div class="tab-pane fade in col-md-12" id="BarCodeTable" style="min-height: 300px;">
+            <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+
+              <div class="data-table">
+                <table class="table table-bordered" style="margin-top: 15px">
+                  <thead class="bg-gray-white">
+                    <tr>
+                      <th>序号</th>
+                      <th ng-if="isOB">OB ID</th>
+                      <th><p style="color: red;display: inline;">*</p>条码</th>
+                      <th style="width: 500px;"><p style="color: red;display: inline;">*</p>主条码</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr ng-repeat="(index,item) in barcodelist">
+                      <td>{{index+1}}</td>
+                      <td ng-if="isOB">{{params.obId}}</td>
+                      <td>
+                        <div class="input-group input-group-xs" style="width: 100%">
+                          <input class="form-control radius3" name="barcode"
+                          ng-model="item.barcode" type="text">
+                        </div>
+                      </td>
+                      <td>
+                          <input class="radius3" name="isMain" ng-false-value="'N'"
+                          ng-model="item.isMain" ng-true-value="'Y'"
+                          type="checkbox" ng-click="selectcheckbox(index)">
+                      </td>
+                      <td >
+                        <div ng-if="!isOB" class="btn-group btn-group-xst">
+                          <button type="button" class="btn btn-default btn-xs" ng-click="del(index, 'barcodelist')">
+                            <i class="fa fa-trash-o">删除</i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr ng-if="(isOB&&barcodelist.length === 0)||!isOB">
+                      <td ng-click="addBarcodeInfo()" style="font-size: 14px"><i class="fa fa-plus-square-o" ></i></td>
+                    </tr>
+                  </tbody>
+
+                </table>
+
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </form>
+
+      
+    </div>
+
+    <!--供应商名称选择-->
+    <div data-auto-request="true" data-callback="SupplierNameReturn" data-checked-type="radio"
+         data-dynamic-params='' data-keys="{'key':'userName','value':'userName','name':'供应商名称'}"
+         data-params="{userType:'60'}"
+         data-other-column="[{'name':'供应商ID','key':'userId' },]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'userName','placeholder':'供应商名称'}]"
+         data-show-index="false"
+         data-title="选择供应商名称"
+         data-type="competitor"
+         data-url="userFind"
+         id="supplierNameMol"
+         lov-list="supplierNamePlnDeptLov"
+         ng-model="current.userName"
+         role="dialog"
+    ></div>
+
+    <!--部门编码-->
+    <div data-auto-request="true" data-callback="deptCodeReturn" data-checked-type="radio"
+         data-dynamic-params='' data-keys="{'key':'plmDeptCode','value':'plmDeptCode','name':'部门编码'}"
+         data-params="{}"  
+         data-other-column="[{'name':'部门描述','key':'plmDeptName' },]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'plmDeptCode_like','placeholder':'部门编码'}]"
+         data-show-index="false"
+         data-title="选择部门编码"
+         data-type="competitor"
+         data-url="findPlmDeptListInfo"
+         id="deptNameMol"
+         lov-list="deptNamePlnDeptLov"
+         ng-model="current.plmDeptCode"
+         role="dialog"
+    ></div>
+
+    <!--部门分类-->
+    <div data-auto-request="true" data-callback="deptClassCodeReturn" data-checked-type="radio"
+         data-dynamic-params='{plmDeptCode:params.department}' data-keys="{'key':'plmClassCode','value':'plmClassCode','name':'分类'}"
+         data-params="{plmDeptCode:params.department}"  
+         data-other-column="[{'name':'分类描述','key':'plmClassName' },]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'plmClassCode_like','placeholder':'分类'}]"
+         data-show-index="false"
+         data-title="选择分类"
+         data-type="competitor"
+         data-url="findPlmDeptClassInfo"
+         id="deptClassMol"
+         lov-list="deptClassPlnDeptLov"
+         ng-model="current.plmClassCode"
+         role="dialog"
+    ></div>
+
+    <!--部门子分类-->
+    <div data-auto-request="true" data-callback="deptSubClassCodeReturn" data-checked-type="radio"
+         data-dynamic-params='{plmDeptCode:params.department,plmClassCode:params.classes}' data-keys="{'key':'plmSubclassCode','value':'plmSubclassCode','name':'子分类'}"
+         data-params="{plmDeptCode:params.department,plmClassCode:params.classes}"  
+         data-other-column="[{'name':'子分类描述','key':'plmSubclassName' },]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'plmSubclassCode_like','placeholder':'子分类'}]"
+         data-show-index="false"
+         data-title="选择子分类"
+         data-type="competitor"
+         data-url="findPlmDeptSubclassInfo"
+         id="deptSubClassMol"
+         lov-list="deptSubClassPlnDeptLov"
+         ng-model="current.plmSubclassCode"
+         role="dialog"
+    ></div>
+
+    <!--品牌-->
+    <div data-auto-request="true" data-callback="brandReturn" data-checked-type="radio"
+         data-dynamic-params='' data-keys="{'key':'plmBrandCn','value':'plmBrandCn','name':'品牌中文名'}"
+         data-params="{}"  
+         data-other-column="[{'name':'品牌英文名','key':'plmBrandEn' },]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'plmBrandCn_like','placeholder':'品牌中文名'}]"
+         data-show-index="false"
+         data-title="选择品牌中文名"
+         data-type="competitor"
+         data-url="findPlmBrandInfoInfo"
+         id="brandMol"
+         lov-list="brandLov"
+         ng-model="current.plmBrandCn"
+         role="dialog"
+    ></div>
+  </div>
+</div>
+
+<style>
+tr>th{
+  text-align: center;
+}
+</style>

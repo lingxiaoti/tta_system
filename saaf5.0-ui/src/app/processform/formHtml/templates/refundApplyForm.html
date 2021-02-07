@@ -1,0 +1,144 @@
+<div ng-controller="refundApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOrUpdateApRefund"
+         data-api-get="findApRefundDetailById" data-api-del="" data-api-update="updateApRefund">
+        <div class="col-md-12 pt15">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="row">
+                <div search-form
+                     data-col="4"
+                     data-legend="[
+                     {key:'deptName',label:'申请部门',readonly:true,required:true},
+                     {key:'personName',label:'退款申请人',readonly:true,required:true},
+                     {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                    {key:'billNo',label:'申请单号',readonly:true},
+                    {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                    {key:'statusStr',label:'状态',readonly:true},
+                  ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div search-list=""
+                         data-col="4"
+                         ng-model="formParams"
+                         data-legend="[
+                         {key:'refundType',label:'费用类型',type:'lookCode',lookCode:'OA_REFUND_TYPE',required:true},
+                         {key:'delarCode',label:'经销商编码',type:'lov',target:'#delarCodeModle',readonly:true,css:'readonly-white'},
+                         {key:'delarName',label:'经销商名称',readonly:true}
+                     ]
+                "></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>币种</span></label>
+                        <div lookup-code="MONEY_TYPE" ng-model="formParams.currency"  name="currency" required=""></div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-8" >
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>金额</span></label>
+                        <!--data-integer="10"-->
+                        <input class="form-control" type="text" ng-model="formParams.refundM" number="8"  ng-blur="borrowMoneyStr()"  name="refundM" required/>
+                        <div class="input-group-addon">
+                            <div class="w300 oh ellipsis">
+                                {{formParams.borrowMoneyZh}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--{key:'delarCode',label:'经销商编码',type:'lov',target:'#delarCodeModle',disabled:true},-->
+            <!--{key:'delarName',label:'经销商名称',disable:true,disabled:true},-->
+            <div class="row" ng-if="automaticFlag">
+                <div search-list=""
+                     data-col="4"
+                     ng-model="formParams"
+                     data-legend="[
+                         {key:'accountName',label:'收款人',type:'lov',target:'#debitCusBankPaginatioLov',readonly:true,required:true,css:'readonly-white'},
+                         {key:'accountBank',label:'开户银行',readonly:true},
+                         {key:'accountNum',label:'银行账号',readonly:true},
+                     ]
+                "></div>
+            </div>
+            <div class="row" ng-if="!automaticFlag">
+                <div search-list=""
+                     data-col="4"
+                     ng-model="formParams"
+                     data-legend="[
+                         {key:'accountName',label:'收款人',required:true,maxlength:100,placeholder:' '},
+                         {key:'accountBank',label:'开户银行',required:true,maxlength:100,placeholder:' '},
+                         {key:'accountNum',label:'银行账号',required:true,validFormat:'number=2',maxlength:50,placeholder:' '}
+                     ]
+                "></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>申请原因</span></label>
+                        <!-- <input class="form-control" ng-model="formParams.rReson" name="rReson" required/> -->
+                        <textarea class="form-control" rows="1" auto-textarea="" ng-model="formParams.rReson" required name="rReson" max-length="500" placeholder="字数限制500" title="字数限制500" style="height: auto"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-12 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+    </div>
+
+    <!--<div lov-list="department" role="dialog" data-title="请选择退款申请人" id="personChoose" ng-model="code3"  class="  "
+         data-url="findPaginationPersonInfo"
+         data-callback="getCostUser"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'personId','value':'personName',name:'人员名称',hide:'true'}"
+         data-other-column="[{'name':'人员名称','key':'personName'},{'name':'部门','key':'departmentName'},{'name':'渠道','key':'channelName'},{'name':'职位','key':'positionName'},{'name':'职务','key':'jobName'}]"
+         data-show-index="false"
+         data-search-key="[{'key':'personName','placeholder':'请输入姓名'}]"
+    >
+    </div>-->
+    <div lov-list="delarCodeModle" role="dialog" data-title="请选择" id="delarCodeModle" ng-model="code3"
+         data-url="findAccessCustomerPagination"
+         data-dynamic-params="delarCodeParams"
+         data-auto-request = 'false'
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-return-value="formParams.delarName"
+         data-return-key="formParams.delarCode"
+         data-keys="{'key':'customerNumber','value':'customerName',name:'经销商名称'}"
+         data-show-index="false"
+         data-other-column="[
+          {'name':'经销商编码','key':'customerNumber'},
+         ]"
+         data-search-key="[{'key':'customerNumber','placeholder':'经销商编码'},{'key':'customerName','placeholder':'经销商名称'}]"
+         data-callback="setRowInput"
+         data-cancel-callback="dealersCodeCallback"
+    >
+    </div>
+    <div lov-list="debitCusBankPaginatioLov"
+         id="debitCusBankPaginatioLov"
+         ng-model="code4"
+         data-url="findPersonCusBankPagination"
+         data-callback="personCusBankCallback"
+         data-cancel-callback="personCusBankCancelCallback"
+         data-dynamic-params="personCusBankPaginatioParams"
+         data-auto-request = 'false'
+         data-title="请选择"
+         data-checked-type="radio"
+         data-return-value="formParams.accountName"
+         data-return-key="formParams.accountNum"
+         data-search-key="[{'key':'primaryAcctOwnerName_like','placeholder':'收款人'},{'key':'bankAccountNumElectronic_like','placeholder':'银行帐号'}]"
+         data-keys="{'key':'bankAccountNumElectronic','value':'primaryAcctOwnerName','name':'收款人'}"
+         data-other-column="[{'name':'开户银行','key':'bankName'},{'name':'银行帐号',key:'bankAccountNumElectronic'}]"
+    ></div>
+</div>

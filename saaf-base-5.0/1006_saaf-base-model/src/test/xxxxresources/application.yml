@@ -1,0 +1,24 @@
+server:
+  port: 8090
+  tomcat:
+      max-threads: 2000
+      accept-count: 200
+      max-connections: 2000
+spring:
+  application:
+    name: 1006_saaf-base-server
+#  zipkin:
+#    base-url: http://admin:admin@192.168.21.125:8761
+  http:
+  #文件上传配置
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 10MB
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://admin:admin@${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    port: 8760

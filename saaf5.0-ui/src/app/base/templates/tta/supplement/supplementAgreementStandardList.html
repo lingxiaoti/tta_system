@@ -1,0 +1,101 @@
+<div ng-controller="supplementAgreementStandardListCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10" >
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                        <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify" >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button  type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <div class="col-xs-12 mb10" style="margin: 10px">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>条件信息</span>
+                    </div>
+                    <div search-form
+                         data-legend="[
+                            {key:'saStdCode',label:'单据编号'},
+                            {key:'vendorCode',label:'供应商编号',type:'lov',target:'#supplierLov',readonly:true,css:'readonly-white'},
+                            {key:'vendorName',label:'供应商名称','disabled':'true'},
+                            {key:'status',label:'单据状态',type:'lookCode',lookCode:'TTA_SUP_AGM_ST_STATUS'},
+                            {key:'creationDate',label:'制单日期起',type:'time','date':'yyyy-mm-dd hh:ii:ss' ,endDate:'creationDateEnd'},
+                            {key:'creationDateEnd',label:'制单日期至',type:'time','date':'yyyy-mm-dd hh:ii:ss',startDate:'creationDate'}
+                        ]"
+                         ng-model="params"
+                    ></div>
+                    <!-- {key:'startDate',label:'制单日期起',type:'time','date':'yyyy-mm-dd hh:ii:ss' ,endDate:'endDate',isToday:true},
+                            {key:'endDate',label:'制单日期至',type:'time','date':'yyyy-mm-dd hh:ii:ss',startDate:'startDate'}-->
+                </div>
+                <div class="col-xs-12 mb10" style="margin: 10px">
+                    <i class="fa fa-cog" aria-hidden="true"></i>
+                    <span>补充协议标准列表</span>
+                </div>
+
+                <div id="part2">
+                    <div  class="col-md-12 tab">
+                        <div class="tab-content">
+                            <div class="data-table">
+                                <div base-data-table="dataTable"
+                                     data-auto-request="true"
+                                     ng-params="params"
+                                     data-show-index="true"
+                                     data-url="findSaStdHeaderList"
+                                     data-legend="[
+                                  {'value':'saStdCode','name':'单据编号'},
+                                  {'value':'saStdVersion','name':'版本号'},
+                                  {'value':'creationDate','name':'制单日期'},
+                                  {'value':'vendorCode','name':'供应商编号'},
+                                  {'value':'vendorName','name':'供应商名称'},
+                                  {'value':'createByUser','name':'制单人'},
+                                  {'value':'statusName','name':'单据状态'},
+                                  {'value':'effectiveStartTime','name':'生效范围起'},
+                                  {'value':'effectiveEndTime','name':'生效范围至'}
+                             ]"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div lov-list="cityLov" role="dialog" data-title="选择供应商信息" id="supplierLov" ng-model="current.em"
+         data-url="supplierFindLov"
+         data-dynamic-params=''
+         data-callback="selectSupplierReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+         data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                          {'key':'supplierName','placeholder':'供应商名称'}]"
+    >
+    </div>
+</div>

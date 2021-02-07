@@ -1,0 +1,9 @@
+<label class="input-group-addon bn"><span>{{ labelName }}：</span></label>
+<label  ng-if="type==='radio' || type==='checkbox'" ng-class="{'radio-inline':type==='radio','checkbox-inline':type==='checkbox'}" ng-repeat="item in itemList">
+	<input ng-if="type==='checkbox'" type="checkbox"  ng-checked="isChecked(item[value])" ng-disabled="!url" ng-click="changeChecked($event,item[value])" >
+	<input ng-if="type==='radio'" type="radio" ng-click="itemClick()"  ng-model="current.checked"  name="{{ name }}" ng-value="item[value]" ng-disabled="!url">{{ item[text] }}
+</label>
+
+<select ng-change="itemClick()" class="form-control radius3"   ng-disabled="!url" ng-if="type==='select'" ng-model="current.checked"  >
+	<option value="{{ item[value] }}" ng-repeat="item in itemList" >{{ item[text] }}</option>
+</select>

@@ -1,0 +1,564 @@
+<div ng-controller="saafQuestionnaireDetailCtrl" class="gridtable">
+
+    <style>
+        .lineListInfo {
+            padding: 10px;  
+            margin-bottom: 5px;          
+        }
+
+        .qnDetail .lineListInfo:active {
+            border: 1px solid #00a0e9;
+        }
+        
+        .qnDetail .active{
+            border: 1px solid #00a0e9;
+        }
+    </style>
+
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <div>
+            <!--------------------- 按钮--->
+            <div class="bg-gray-white bt">
+                <div class="bg-gray-white p5">
+                    <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                        <!--ng-if="allowUpdate"-->
+
+                        <button type="button" class="btn btn-default" ng-click="add()"><i class="fa fa-plus"></i>新增
+                        </button>
+                        <button type="button" class="btn btn-default" ng-disabled="selectRow==null" ng-click="edit()"><i
+                                class="fa fa-pencil"></i>修改
+                        </button>
+                        <button type="button" class="btn btn-default" ng-disabled="selectRow==null" ng-click="delete()"><i
+                                class="fa fa-close"></i>删除
+                        </button>
+                    </div>
+
+                    <div class="btn-group btn-group-xs ">
+                        <button type="button" class="btn btn-primary" ng-click="fullWindow($event)"><i
+                                class="fa fa-square-o"></i>数据全屏
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!---------------------  / .按钮  --->
+            <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                <div class="nicescroll-height  bg-white " ng-nicescroll
+                     nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                    <div style="padding:20px 30px;">
+                        <div ng-if="allowUpdate" class="qnDetail" style="padding:20px;border: 1px dashed #ddd;">
+                            <p class="text-center">
+                                <strong style="font-size: 24px;">问卷调查题库</strong>
+                            </p>
+                            <div  class="lineListInfo" ng-repeat="item in lineList"
+                                 ng-class="{'active':selectRow==$index}"
+                                 ng-click="getSelectRow($index)">
+                                <div>
+                                    <p><span style="color:red;" ng-show="item.requireFlag=='Y'">*</span>
+                                        Q{{$index+1}}：{{item.projectTitle}}</p>
+                                    <!--不同题型不同的状态-->
+                                    <p ng-show="item.projectType=='text'" ng-repeat="subItem in item.qnChoiceData">
+                                        <!--输入框使用-->  
+                                        <input type="text" style="max-width: 500px;" class="form-control radius3"
+                                               ng-model="subItem.qnChoiceContent">
+                                    </p>
+                                    <p ng-show="item.projectType=='textarea'" ng-repeat="subItem in item.qnChoiceData">
+                                        <textarea style="height:100%;max-width: 500px;" rows="5" class="form-control radius3"
+                                                  ng-model="subItem.qnChoiceContent"></textarea>
+                                    </p>
+                                    <p ng-show="item.projectType=='single_selection'" ng-repeat="subItem in item.qnChoiceData">
+                                        <!--单选框使用-->
+                                        <input type="radio" name="{{item.qnLineId}}">
+                                        {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                    </p>
+                                    <p ng-show="item.projectType=='multi_selection'" ng-repeat="subItem in item.qnChoiceData">
+                                        <!--复选框使用-->
+                                        <input type="checkbox" name="{{item.qnLineId}}">
+                                        {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                    </p>
+                                    <p ng-show="item.projectType=='drop_down_list'">
+                                        <!--下拉框使用-->
+                                        <select class="form-control radius3" style="width: 500px;">
+                                            <option ng-repeat="subItem in item.qnChoiceData" value="{{subItem.qnChoiceContent}}">
+                                                {{subItem.qnChoiceContent}}
+                                            </option>
+                                        </select>  
+                                    </p>
+
+                                    <p ng-show="item.projectType=='rule_model'" ng-repeat="subItem in item.qnChoiceData">
+                                        <!--输入框使用,只读-->
+                                        <input type="text" readonly style="max-width: 500px;" class="form-control radius3"
+                                               ng-model="subItem.qnChoiceContent">
+                                    </p>
+
+
+                                    <p ng-show="item.projectType=='single_selection_skip'" ng-repeat="subItem in item.qnChoiceData">
+                                        <!--跳转使用-->
+                                        <input type="radio" name="{{item.qnLineId}}">
+                                        {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                    </p>
+                                    <p ng-show="item.projectType=='single_selection_show'" ng-repeat="subItem in item.qnChoiceData">
+                                        <!--显示使用-->
+                                        <input type="radio" name="{{item.qnLineId}}">
+                                        {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                    </p>
+                                </div>  
+                            </div>
+                        </div>
+                        <div ng-if="!allowUpdate" style="padding:20px;border: 1px dashed #ddd;">
+                            <p class="text-center">
+                                <strong style="font-size: 24px;">问卷调查题库</strong>
+                            </p>
+
+                            <div class="lineListInfo" ng-repeat="(itemIndex,item) in lineList"
+                                  ng-class="{'active':selectRow==$index}"
+                                  ng-click="getSelectRow($index)">
+                                <div ng-show="item.showFlag">
+                                    <p><span style="color:red;" ng-show="item.requireFlag=='Y'">*</span>
+                                        Q{{$index+1}}：{{item.projectTitle}}</p>
+                                    <!--不同题型不同的状态-->
+                                    <p ng-show="item.projectType=='text'" ng-repeat="subItem in item.qnChoiceData">
+                                        <!--输入框使用-->
+                                        <input type="text" style="max-width: 500px;" class="form-control radius3" ng-change="changeText(itemIndex,item)"
+                                               ng-model="subItem.qnChoiceContent">
+                                    </p>
+                                    <p ng-show="item.projectType=='textarea'" ng-repeat="subItem in item.qnChoiceData">
+                                        <textarea style="height:100%;max-width: 500px;" rows="5" class="form-control radius3"
+                                                  ng-model="subItem.qnChoiceContent"></textarea>
+                                    </p>
+                                    <p ng-show="item.projectType=='single_selection'" ng-repeat="subItem in item.qnChoiceData" >
+                                        <!--单选框使用-->
+                                        <input type="radio" name="{{item.qnLineId}}">
+                                        {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                    </p>
+                                    <p ng-show="item.projectType=='multi_selection'" ng-repeat="subItem in item.qnChoiceData">
+                                        <!--复选框使用-->
+                                        <input type="checkbox" name="{{item.qnLineId}}">
+                                        {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                    </p>
+                                    <p ng-show="item.projectType=='drop_down_list'">
+                                        <!--下拉框使用-->
+                                        <select class="form-control radius3" style="width: 500px;">
+                                            <option ng-repeat="subItem in item.qnChoiceData" value="{{subItem.qnChoiceContent}}">
+                                                {{subItem.qnChoiceContent}}
+                                            </option>
+                                        </select>
+                                    </p>
+                                    <p ng-show="item.projectType=='single_selection_skip'" ng-repeat="subItem in item.qnChoiceData">
+                                        <!--跳转使用-->
+                                        <input type="radio" name="{{item.qnLineId}}"  ng-click="changeRadioSkip(itemIndex,subItem)">
+                                        {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                    </p>
+                                    <p ng-show="item.projectType=='single_selection_show'" ng-repeat="subItem in item.qnChoiceData">
+                                        <!--显示使用-->
+                                        <input type="radio" name="{{item.qnLineId}}" ng-click="changeRadioShow(itemIndex,subItem)">
+                                        {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <!--add by luofu-->
+        <form ng-submit="save()">
+            <div class="modal-dialog" style="margin-top: 40px; width: 1000px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title">题目编辑</h4>
+                    </div>
+                    <div class="modal-body " style="overflow: auto;height:500px;">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col-xs-11 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i> 题目：</span></label>
+                                        <textarea rows="3" style="height: 100%;" class="form-control radius3" required
+                                                  ng-model="current.projectTitle" ng-readonly="!allowUpdate"
+                                                  maxlength="500"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">题目英文名：</span></label>
+                                        <textarea rows="3" style="height: 100%;" class="form-control radius3"
+                                                  ng-model="current.projectTitleAlt" ng-readonly="!allowUpdate"
+                                                  maxlength="500"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i> 题目序号：</span></label>
+                                        <input type="number" class="form-control radius3"
+                                               ng-model="current.serialNumber" ng-readonly="!allowUpdate" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i> 题目类型：</span></label>
+                                        <select class="form-control radius3" ng-model="current.projectType" required
+                                                ng-disabled="!allowUpdate" ng-change="changeProjectType()">
+                                            <option value="">请选择</option>
+                                            <option value="single_selection">单选</option>
+                                            <option value="multi_selection">多选</option>
+                                            <option value="text">文本</option>
+                                            <option value="textarea">多行文本</option>
+                                            <option value="drop_down_list">下拉选项</option>
+                                            <option value="rule_model">自动计算</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <!--<div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        &lt;!&ndash;<label class="input-group-addon bn"><span class="w100">是否显示：</span></label>&ndash;&gt;
+                                        <label class="input-group-addon bn"><span class="w100">是否是一级题目：</span></label>
+                                        <input type="checkbox" ng-false-value="'N'" ng-true-value="'Y'"
+                                               ng-model="current.displayFlag" ng-readonly="!allowUpdate">
+                                    </div>
+                                </div>-->
+
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i> 题目类别：</span></label>
+                                        <select class="form-control radius3" ng-model="current.projectCategory" required ng-change="selectProCategory()"
+                                                ng-disabled="current.qnLineId">
+                                            <option value="">请选择</option>
+                                            <option value="1">一级题目</option>
+                                            <option value="2">二级题目</option>
+                                            <!--<option value="3">规则题型</option>-->
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>计算规则：</span></label>
+                                        <input type="text" class="form-control radius3"  name="calcRuleName"
+                                               ng-model="current.calcRuleName" disabled
+                                               data-required-msg="请选择题目规则" ng-required="true">
+                                        <span class="input-group-btn">
+                                             <button type="button" class="btn btn-default btn-xs" ng-disabled="current.projectType != 'rule_model'"
+                                                     ng-click="showChannelRule()">
+                                                 <i class="fa fa-search"></i>
+                                             </button>
+                                         </span>
+                                    </div>
+                                </div>
+
+                         <!--       <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">是否固定题目：</span></label>
+                                        &nbsp;&nbsp;<input type="checkbox" ng-false-value="'N'" ng-true-value="'Y'"
+                                               ng-model="current.requireFlag" ng-readonly="!allowUpdate">
+                                    </div>
+                                </div>-->
+
+
+                            <!--  <div class="form-group col-xs-11 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100">描述：</span></label>
+                                        <textarea rows="3" class="form-control radius3" style="height:100%;"
+                                                  ng-model="current.description" ng-readonly="!allowUpdate"
+                                                  maxlength="500"></textarea>
+                                    </div>
+                                </div>-->
+
+                                <div class="form-group col-xs-11 col-md-12">
+                                    <div style="margin-top:10px;">
+                                        <label><i class="fa fa-list-alt"></i> 题目选项列表</label>
+                                        <button style="margin-right: 5px;" type="button"
+                                                class="btn btn-info btn-sm pull-right"
+                                                ng-click="addChoice()" ng-disabled="!allowUpdate || !choiceFlag">
+                                            <i class="fa fa-plus">新增选项</i></button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-11 col-md-12">
+                                    <div>
+                                        <table class="table table-bordered table-hover table-condensed">
+                                            <thead class="bg-gray-white">
+                                            <tr class="text-center">
+                                                <th>序号</th>
+                                                <th>选项中文内容</th>
+                                                <th>选项英文内容</th>
+                                                <!--<th>是否题目答案</th>-->
+                                                <th>选择下级题目</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+
+                                            <tr ng-repeat="item in qnChoiceData" ng-class="{'active':qnChoiceData.selectRow==$index}"
+                                                ng-click="qnChoiceData.selectRow=$index">
+
+                                                <td>
+                                                    <div style="margin-top: 16px;">{{$index+1}}</div>
+                                                </td>
+                                                <td style="width:200px;"><textarea class="form-control radius3" rows="2"
+                                                                           style="height:100%;width: 250px"
+                                                                           ng-model="item.qnChoiceContent"
+                                                                           ng-readonly="!allowUpdate || !choiceFlag"></textarea>
+                                                </td>
+                                                <td style="width:200px;"><textarea class="form-control radius3" rows="2"
+                                                                                   style="height:100%;width: 250px"
+                                                                                   ng-model="item.qnChoiceContentAlt"
+                                                                                   ng-readonly="!allowUpdate || !choiceFlag"></textarea>
+                                                </td>
+                                               <!-- <td><input style="margin-top: 20px;" type="checkbox"
+                                                           ng-false-value="'N'" ng-true-value="'Y'"
+                                                           ng-model="item.qnAnswer"
+                                                           ng-disabled="!allowUpdate || !choiceFlag"></td>-->
+                                                <td>
+                                                    <div class="input-group input-group-xs" style="margin-top: 13px;padding:2px 10px;">
+                                                        <input type="text" class="form-control radius3"  name="childProjectTitle" id="childProjectTitle"
+                                                               ng-model="item.childProjectTitle" disabled
+                                                               data-required-msg="请选择二级题目">
+                                                        <span class="input-group-btn">
+                                                                 <button type="button" class="btn btn-default btn-xs"
+                                                                         ng-click="showChannel($index)" ng-disabled="current.displayFlag == 'N' || !choiceFlag">
+                                                                     <i class="fa fa-search"></i>
+                                                                 </button>
+                                                             </span>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <button style="margin-top: 13px;padding:2px 10px;" type="button"
+                                                                     class="btn btn-small btn-default"
+                                                                     ng-click="deleteChoice($index)"
+                                                                     ng-disabled="!allowUpdate || !choiceFlag">删除Del
+                                                    </button>
+                                                </td>
+
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    ng-show="allowUpdate">取消
+                            </button>
+                            <button type="submit" id="saveButton" class="btn btn-primary mr10" ng-show="allowUpdate">
+                                保存
+                            </button>
+                            <button type="button" class="btn btn-primary mr10" data-dismiss="modal"
+                                    ng-show="!allowUpdate">返回
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </form>
+    </div>
+
+    <div class="modal fade" id="singleSelectProject" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <!--add by luofu-->
+        <div>
+            <div class="modal-dialog" style="margin-top: 40px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title">选择跳转</h4>
+                    </div>
+                    <div class="modal-body " style="overflow: auto;height:500px;">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col-xs-11 col-md-12">
+                                    <div>
+                                        <table class="table table-bordered table-hover table-condensed">
+                                            <thead class="bg-gray-white">
+                                            <tr class="text-center">
+                                                <th></th>
+                                                <th>序号</th>
+                                                <th>题目</th>
+                                                <th>题目排序</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="item in singleProjectData">
+                                                <td>
+                                                    <input type="radio" name="singleSelectName" ng-value="item.qnLineId" ng-checked="item.checkFlag">
+                                                </td>
+                                                <td>{{$index+1}}</td>
+                                                <td class="w500" title="{{item.projectTitle}}"><div class="w500 ellipsis">{{item.projectTitle}}</div></td>
+                                                <td>{{item.serialNumber}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"
+                                    ng-show="allowUpdate">取消
+                            </button>
+                            <button type="button"  class="btn btn-primary mr10" ng-show="allowUpdate" ng-click="confirmSingleProject()">
+                                确认
+                            </button>
+                            <button type="button" class="btn btn-primary mr10" data-dismiss="modal"
+                                    ng-show="!allowUpdate">返回
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+    </div>
+
+    <div class="modal fade" id="multiSelectProject" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div>
+            <div class="modal-dialog" style="margin-top: 40px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title">选择显示的题目</h4>
+                    </div>
+                    <div class="modal-body" style="overflow: auto;height:500px;">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col-xs-11 col-md-12">
+                                    <div>
+                                        <table class="table table-bordered table-hover table-condensed">
+                                            <thead class="bg-gray-white">
+                                            <tr class="text-center">
+                                                <th></th>
+                                                <th>序号</th>
+                                                <th>题目</th>
+                                                <th>题目排序</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="item in multiProjectData">
+                                                <td>
+                                                    <input name="multiSelectName" type="checkbox" ng-model="item.checkFlag" ng-false-value="'N'" ng-true-value="'Y'">
+                                                </td>
+                                                <td>{{$index+1}}</td>
+                                                <td class="w500" title="{{item.projectTitle}}"><div class="w500 ellipsis">{{item.projectTitle}}</div></td>
+                                                <td>{{item.serialNumber}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"
+                                    ng-show="allowUpdate">取消
+                            </button>
+                            <button type="button"  class="btn btn-primary mr10" ng-show="allowUpdate" ng-click="confirmMultiProject()">
+                                确认
+                            </button>
+                            <button type="button" class="btn btn-primary mr10" data-dismiss="modal"
+                                    ng-show="!allowUpdate">返回
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+    </div>
+
+
+   <!-- <div lov-list="findRuleSave" role="dialog" data-title="请选择对应的二级级题目" id="findRuleSave" ng-model="code3" class=""
+         data-callback="selectReturn"
+         data-url="findSecQuestionnairePagination"
+         data-auto-request="false"
+         data-params="{'projectTitle': '{{selctCurrent.value}}'}"
+         data-return-key="selctCurrent.qnLineId"
+         data-return-value="selctCurrent.projectTitle"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'qnLineId','value':'projectTitle',name:'题目名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'projectTitle','placeholder':'题目名称'}]"
+    >
+    </div>-->
+
+
+    <div lov-list="findSubject" role="dialog" data-title="选择题目信息" id="findSubject" ng-model="code3"
+         data-url="findSecQuestionnairePagination"
+         data-dynamic-params=''
+         data-callback="selectReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'qnLineId','value':'projectTitle','name':'题目名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'projectTitle','placeholder':'题目名称'}]"
+    >
+    </div>
+
+
+    <!--选择规则
+    <div lov-list="findRuleSave" role="dialog" data-title="请选择规则信息" id="findRuleSave" ng-model="code3" class=""
+         data-url="findSecQuestionnairePagination"
+         data-auto-request="false"
+         data-params="{'projectTitle': null}"
+         data-return-key="current.calcRule"
+         data-return-value="current.calcRuleName"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'qnLineId','value':'projectTitle',name:'规则名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'projectTitle','placeholder':'规则名称'}]"
+    >
+    </div>
+    -->
+
+    <div lov-list="findRuleSave" role="dialog" data-title="请选择规则信息" id="findRuleSave" ng-model="code3" class=""
+         data-url="findQueryRulePag"
+         data-auto-request="false"
+         data-params="{'ruleName':null}"
+         data-return-key="current.calcRule"
+         data-return-value="current.calcRuleName"
+         data-pagination="{'pageIndex':1,'pageRows':999}"
+         data-checked-type="radio"
+         data-keys="{'key':'ruleId','value':'ruleName',name:'规则名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'projectTitle','placeholder':'规则名称'}]"
+    ></div>
+
+
+
+
+</div>

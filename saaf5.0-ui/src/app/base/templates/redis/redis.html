@@ -1,0 +1,164 @@
+<div ng-controller="redisCtrl" class="gridtable">
+
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <div>
+            <!--------------------- 按钮--->
+            <div class="bg-gray-white bt">
+                <div class="bg-gray-white p5">
+                    <div class=" pull-right ml10"  >
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                                <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                            </button>
+                            <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                                <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                            </button>
+                        </div>
+
+                        <div class="btn-group btn-group-xs" permission-buttons="btnNew,btnModify,btnDel">
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn  btn-warning" ng-click="moreInput($event)">
+                            <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                        </button>
+                        <button class="btn btn-primary" ng-click="fullWindow($event)">
+                            <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!---------------------  / .按钮  --->
+            <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                <div class="nicescroll-height  bg-white " ng-nicescroll
+                     nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                    <!--------------------- 输入表单  --->
+                    <form id="formArea" class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令"
+                          ng-submit="dataTable.search(1)">
+
+
+                     <!--   <div search-form
+                             data-legend="[
+                        {key:'redisType',label:'缓存类型',lookCode:'GLOBAL_REDIS_CACHE',type:'lookCode'},
+
+                        ]"
+                             ng-model="params"
+                        ></div>-->
+                        <div resp-change="" class="col-xs-6 col-md-4 col-lg-3"></div>
+                        <div class="form-group col-xs-6 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">*</i>缓存类型</span></label>
+                                <div lookup-code="REDIS_CACHE_TYPE" ng-model="params.redisType"  ></div>
+                            </div>
+                        </div>
+
+                    </form>
+                    <div class="data-table">
+                        <div base-data-table="dataTable"
+
+                             ng-params="params"
+                             data-show-index="true"
+                             data-url="redisFind"
+
+                             data-legend="[
+                         {'value':'redisKey','name':'缓存键'},
+                         {'value':'redisTypeName','name':'缓存类型'},
+                         {'value':'redisValue','name':'缓存值'},
+
+						 ]"
+
+                        ></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!--  <div lov-form=""
+         data-id="redis"
+         data-legend="[
+                    {label:'缓存键',key:'redisKey' ,isRequire:'true'},
+                    {label:'缓存值',key:'redisValue' ,isRequire:'true' },
+                    {label:'缓存类型',key:'redisType',type:'lookCode',lookCode:'REDIS_CACHE_TYPE' ,isRequire:'true'}
+                    ]"
+         data-title="redis"
+         ng-model="current"
+         data-callback="save">
+
+    </div>
+-->
+
+    <div class="modal fade" id="redis" data-des="redis" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <form name="addModalForm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close"
+                                data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            redis
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>缓存键</span></label>
+                                <input ng-model="current.redisKey" class="form-control radius3" id="redisKey" name="redisKey"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>缓存值</span></label>
+                                <input ng-model="current.redisValue" class="form-control radius3"  id="redisValue" name="redisValue"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>缓存类型</span></label>
+                                <div lookup-code="REDIS_CACHE_TYPE" ng-model="current.redisType" required="" id="redisType"
+                                     name="redisType"></div>
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button   type="button" validate-form-btn="addModalForm"  ng-click="save()"
+                                  class="btn btn-warning btn-sm">
+                            <span class="fa fa-plus"> 确定新增</span></button>
+                        <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal"
+                                aria-label="Close"><span class="fa ">取消</span>
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </form>
+        </div><!-- /.modal -->
+    </div>
+    <!--<div lov-form=""-->
+    <!--data-id="business2"-->
+    <!--data-legend="[-->
+    <!--{label:'xxx',key:'xxx',isRequire:'true'},-->
+    <!--{label:'xxx',key:'xxx',type:'time' },-->
+    <!--{label:'xxx',key:'xxx',type:'lov'},-->
+    <!--]"-->
+    <!--data-title="业务信息2"-->
+    <!--ng-model="current"-->
+    <!--data-callback="save">-->
+
+    <!--</div>-->
+
+</div>

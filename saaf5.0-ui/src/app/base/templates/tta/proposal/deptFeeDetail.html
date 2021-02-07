@@ -1,0 +1,470 @@
+<div ng-controller="deptFeeDetailCtrl" class="bigdata">
+
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+
+            <div class="btn-group btn-group-xs">
+                <button type="button" ng-click="btnSaveA(deptFeeHAForm.$invalid)" ng-show="true"
+                        data-validate-form="deptFeeHAForm"    class="btn btn-default btn-xs" id="btnSaveA"
+                        >
+                    <i class="fa fa-save">保存</i>
+                </button>
+
+                <button type="button" ng-click="confirmDeptFeeH()" ng-show="true"
+                        class="btn btn-default btn-xs" id="confirmDeptFeeH"
+                        >
+                    <i class="fa fa-check">确认</i>
+                </button>
+                <button type="button" ng-click="CancelConfirmDeptFeeH()" ng-show="true"
+                        class="btn btn-default btn-xs" id="CancelConfirmDeptFeeH"
+                        >
+                    <i class="fa fa-arrows-h">取消确认</i>
+                </button>
+                <button type="button" ng-click="CountDeptFeeH()" ng-show="true"
+                        class="btn btn-default btn-xs" id="CountDeptFeeH"
+                        >
+                    <i class="fa fa-exchange">计算</i>
+                </button>
+            </div>
+
+
+
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+
+
+
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+
+            <div class="col-xs-12 col-md-12 br p0">
+
+
+
+
+
+
+
+
+                        <!--------------------- 输入表单  --->
+
+                        <div class=" mt10 pb5  oh"
+                             data-des="此节点必需－用于识别输入表单的指令">
+
+
+
+
+
+
+                            <form id="deptFeeHAForm" name="deptFeeHAForm">
+                                <header class="col-xs-12 mb10">
+                                    <i class="fa fa-cog" aria-hidden="true"></i>
+                                    <span>部门协定收费标准</span>
+                                </header>
+
+
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"><i class="red">* </i>年度</span>
+                                        </label>
+
+                                        <input type="text" class="form-control radius3"
+                                               required date-time-picker="" data-date-format="yyyy"
+                                               disabled data-start-view="2" data-min-view="2" data-max-view="2"
+                                               ng-model="paramsA.proposalYear ">
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"><i class="red">* </i>部门1：</span></label>
+                                        <input type="text" ng-model="paramsA.deptDesc1"  required
+                                               class="form-control radius3">
+
+                            <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getDeptCodeA('1')" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100">部门2：</span></label>
+                                        <input type="text" ng-model="paramsA.deptDesc2"
+                                               class="form-control radius3">
+
+                            <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getDeptCodeA('2')" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100">部门3：</span></label>
+                                        <input type="text" ng-model="paramsA.deptDesc3"
+                                               class="form-control radius3">
+
+                            <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getDeptCodeA('3')" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                                    </div>
+                                </div>
+
+
+
+
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100">是否确认</span>
+                                        </label>
+                                        <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" class=" radius3"
+                                               disabled
+                                               ng-model="paramsA.isDepartConfirm">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100">是否跨部门</span>
+                                        </label>
+                                        <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" class=" radius3"
+                                               disabled
+                                               ng-model="paramsA.isTransdepart">
+                                    </div>
+                                </div>
+
+
+
+                                <div class="row"></div>
+
+
+
+
+
+
+                            </form>
+                        </div>
+                        <!--表单结束-->
+
+                        <div class="col-md-12">
+
+
+                            <h5><span class="fa fa-cog mr15"></span>Display Rental 促销陈列费（见以下不同陈列位置收费标准）
+
+                            </h5>
+
+                            <div class="data-table">
+
+                                <div style="">
+                                    <div class="" ng-nicescroll="" id="nicescroll_rpTableDeptFeeLA" nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2'}"
+                                            >
+                                        <table
+                                                class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                            <thead class="bg-gray-white">
+
+                                            <tr class="text-center">
+                                                <th>ITEM 项目</th>
+                                                <th>公司标准</th>
+                                                <th>协定标准1
+                                                    <br>{{paramsA.deptDesc1}}
+                                                </th>
+                                                <th>收取单位</th>
+
+                                                <th>协定标准2
+                                                    <br>{{paramsA.deptDesc2}}
+                                                </th>
+                                                <th>收取单位</th>
+
+                                                <th>协定标准3
+                                                    <br>{{paramsA.deptDesc3}}
+                                                </th>
+                                                <th>收取单位</th>
+
+
+
+
+
+
+                                            </tr>
+                                            </thead>
+                                            <tbody  ng-style="tableStyle" ng-nicescroll="" >
+
+                                            <tr class="text-center" ng-repeat="row in deptFeeLADataTable"
+                                                ng-class="{'active':deptFeeLADataTable.selectRow==$index}"
+                                                ng-click="deptFeeLADataTable.selectRow=$index">
+
+                                                <td>{{row.itemDetail}}</td>
+                                                <td>
+                                                    <div class="input-group input-group-xs">  <div lookup-code="UNIT" data-required="true"
+                                                                                                   ng-model="row.unit"
+                                                                                                   disabled
+                                                                                                   required></div>
+                                                    </div>
+                                                </td>
+
+
+                                                <td>
+                                                    <div class="input-group input-group-xs"><input type="text"
+                                                                                                   class="form-control radius3"
+                                                                                                   required
+                                                                                                   ng-model="row.standardValue1"
+                                                            />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="input-group input-group-xs">  <div lookup-code="UNIT" data-required="true"
+                                                                                                   ng-model="row.unit1"
+                                                            ></div>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="input-group input-group-xs"><input type="text"
+                                                                                                   class="form-control radius3"
+                                                                                                   required
+                                                                                                   ng-model="row.standardValue2"
+                                                            />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="input-group input-group-xs">  <div lookup-code="UNIT" data-required="true"
+                                                                                                   ng-model="row.unit2"
+                                                            ></div>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="input-group input-group-xs"><input type="text"
+                                                                                                   class="form-control radius3"
+                                                                                                   required
+                                                                                                   ng-model="row.standardValue3"
+                                                            />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="input-group input-group-xs">  <div lookup-code="UNIT" data-required="true"
+                                                                                                   ng-model="row.unit3"
+                                                            ></div>
+                                                    </div>
+                                                </td>
+
+
+
+
+
+
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+
+                            <h5><span class="fa fa-cog mr15"></span>Promotional Leaflet(DM&Flyer)宣传推广服务费（快递及传单）
+
+                            </h5>
+
+                            <div class="data-table">
+
+                                <div style="">
+                                    <div class="" ng-nicescroll="" id="nicescroll_rpTableBrandPlnL" nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2'}"
+                                            >
+                                        <table
+                                                class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                            <thead class="bg-gray-white">
+
+                                            <tr class="text-center">
+                                                <th>ITEM 项目</th>
+                                                <th>公司标准</th>
+                                                <th>协定标准1
+                                                    <br>{{paramsA.deptDesc1}}
+                                                </th>
+                                                <th>收取单位</th>
+
+                                                <th>协定标准2
+                                                    <br>{{paramsA.deptDesc2}}
+                                                </th>
+                                                <th>收取单位</th>
+
+                                                <th>协定标准3
+                                                    <br>{{paramsA.deptDesc3}}
+                                                </th>
+                                                <th>收取单位</th>
+
+
+
+
+
+
+
+
+                                            </tr>
+                                            </thead>
+                                            <tbody  ng-style="tableStyle" ng-nicescroll="" >
+
+                                            <tr class="text-center" ng-repeat="row in deptFeeLBDataTable"
+                                                ng-class="{'active':deptFeeLBDataTable.selectRow==$index}"
+                                                ng-click="deptFeeLBDataTable.selectRow=$index">
+
+                                                <td>{{row.itemDetail}}</td>
+                                                <td>
+                                                    <div class="input-group input-group-xs">  <div lookup-code="UNIT" data-required="true"
+                                                                                                   ng-model="row.unit"
+                                                                                                   disabled
+                                                                                                   required></div>
+                                                    </div>
+                                                </td>
+
+
+                                                <td>
+                                                    <div class="input-group input-group-xs"><input type="text"
+                                                                                                   class="form-control radius3"
+                                                                                                   required
+                                                                                                   ng-model="row.standardValue1"
+                                                            />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="input-group input-group-xs">  <div lookup-code="UNIT" data-required="true"
+                                                                                                   ng-model="row.unit1"
+                                                            ></div>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="input-group input-group-xs"><input type="text"
+                                                                                                   class="form-control radius3"
+                                                                                                   required
+                                                                                                   ng-model="row.standardValue2"
+                                                            />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="input-group input-group-xs">  <div lookup-code="UNIT" data-required="true"
+                                                                                                   ng-model="row.unit2"
+                                                            ></div>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="input-group input-group-xs"><input type="text"
+                                                                                                   class="form-control radius3"
+                                                                                                   required
+                                                                                                   ng-model="row.standardValue3"
+                                                            />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="input-group input-group-xs">  <div lookup-code="UNIT" data-required="true"
+                                                                                                   ng-model="row.unit3"
+                                                            ></div>
+                                                    </div>
+                                                </td>
+
+
+
+
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <div lov-list="brandPlnDeptLov" role="dialog" data-title="选择部门信息" id="deptFeeALov" ng-model="current.em"
+         data-url="findDeptPagination"
+         data-dynamic-params=''
+         data-callback="selectDeptFeeAReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+         data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                          {'key':'departmentName','placeholder':'部门名称'}]"
+            >
+    </div>
+
+    <div lov-list="brandPlnDeptLov" role="dialog" data-title="选择部门信息" id="deptFeeBLov" ng-model="current.em"
+         data-url="findDeptPagination"
+         data-dynamic-params=''
+         data-callback="selectDeptFeeBReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+         data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                          {'key':'departmentName','placeholder':'部门名称'}]"
+            >
+    </div>
+
+
+
+
+</div>

@@ -1,0 +1,342 @@
+<div ng-controller="requestContentCtrl" ng-init="init()" class="gridtable">
+    <div class="form bg-white"
+         inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <button  validate-form-btn="formArea"  ng-click="saveConcurrentRequest(formArea.$invalid)" class="btn btn-default" ng-disabled="disabledSave">
+                        <i class="fa fa-save" aria-hidden="true"></i>保存并执行
+                    </button>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>数据全屏
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+
+                <form name="formArea" class=" mt10 pb5  "
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <label>请求信息</label>
+                    </header>
+                    <div class="form-group col-xs-6 col-md-4 none" resp-change="">  </div>
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i
+                                    class="red">*</i>请求名称</span></label>
+                            <input type="text" class="form-control radius3" required name="requestJobName"
+                                   ng-model="request.jobName" placeholder="" readonly>
+                                <span class="input-group-btn" ng-if="isShow">
+                                    <a href class="btn btn-default" data-toggle="modal" data-target="#lov-job"><i
+                                            class="fa fa-search"></i></a>
+                                </span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i
+                                    class="red">*</i>运行计划</span></label>
+                          <!--  <select class="form-control radius3" required  ng-disabled="disabledSave" name="requestScheduleType"
+                                    ng-change="changeScheduleType(request.scheduleType)"
+                                    ng-model="request.scheduleType">
+                                <option></option>
+                                <option saaf-select-lookupcode="SAAF_SCHE_TYPE"></option>
+                            </select>-->
+                            <!--<div required  ng-disabled="disabledSave" lookup-code="SAAF_SCHE_TYPE" ng-model="request.scheduleType" name="requestScheduleType"></div>-->
+                            <div lookup-code="SAAF_SCHE_TYPE" ng-model="request.scheduleType" data-callback="changeScheduleType"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">阶段</span></label>
+                            <input type="text" class="form-control radius3" ng-model="request.phaseCodeMeaning"
+                                   disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">失败尝试次数</span></label>
+                            <input type="number" class="form-control radius3" ng-model="request.failAttemptFrequency"  ng-disabled="disabledSave"
+                                   placeholder="整数">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">超时时长</span></label>
+                            <input type="number" class="form-control radius3" ng-model="request.timeout"  ng-disabled="disabledSave"
+                                   placeholder="整数（单位秒）">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">状态</span></label>
+                            <input type="text" class="form-control radius3" ng-model="request.statusCodeMeaning"
+                                   disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">
+                                    <a href="javascript:" ng-click="addParams()"  ng-show="!disabledSave">参数</a>
+                                    <span ng-show="disabledSave">参数</span>
+                                </span>
+                            </label>
+                            <textarea class="form-control radius3" ng-model="request.argumentsText"
+                                      ng-click="addParams()" readonly  ng-disabled="disabledSave"
+                                      style="height:60px;background-color:#fff;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12" ng-if="request.scheduleType=='PLAN'">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">
+                                    <i class="red">*</i><a href="javascript:" ng-click="setCron()" ng-show="!disabledSave">cron表达式</a>
+                                    <span ng-show="disabledSave">cron表达式</span>
+
+                                </span>
+                            </label>
+                            <textarea class="form-control radius3" id="cornexpress" ng-click="setCron()"
+                                      ng-model="request.cornexpress" required ng-disabled="disabledSave" ng-readonly="disabledSave"
+                                      style="height:60px;background-color: #fff;"></textarea>
+                            <p class="red">执行间隔 必须 >= 1分钟</p>
+                        </div>
+                    </div>
+
+                 <!--   <div class="form-group col-xs-6 col-md-4" ng-if="request.scheduleType=='PLAN'">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i
+                                    class="red">*</i>运行间隔</span></label>
+                            <select class="form-control radius3"
+                                    ng-model="request.scheduleInterval">
+                                <option></option>
+                                <option saaf-select-lookupcode="SAAF_SCHE_INTERVAL"></option>
+                            </select>
+                        </div>
+                    </div>-->
+
+                    <div class="form-group col-xs-6 col-md-4" ng-if="request.scheduleType!='IMMEDIATE'">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i
+                                    class="red">*</i>计划开始时间</span></label>
+                            <input type="text" date-time-picker required
+                                   data-date-format="yyyy-mm-dd hh:ii:ss"
+                                   class="form-control radius3" ng-disabled="disabledSave"
+                                   data-enddate="{{request.scheduleExpectEndDate}}"
+                                   ng-model="request.scheduleExpectStartDate ">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4" ng-if="request.scheduleType!='IMMEDIATE'">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">实际开始时间</span></label>
+                            <input type="text" class="form-control radius3" ng-model="request.actualStartDate" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4" ng-if="request.scheduleType=='PLAN'">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">计划结束时间</span></label>
+                            <input type="text" date-time-picker
+                                   data-date-format="yyyy-mm-dd hh:ii:ss"
+                                   class="form-control radius3"
+                                   data-stratdate="{{request.scheduleExpectStartDate}}" ng-disabled="disabledSave"
+                                   ng-model="request.scheduleExpectEndDate">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4" ng-if="request.scheduleType=='PLAN'">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">实际结束时间</span></label>
+                            <input type="text" class="form-control radius3" ng-model="request.actualCompletionDate"
+                                   disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">申请人</span></label>
+                            <input type="text" class="form-control radius3"
+                                   ng-model="request.userName" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">上次执行时间</span></label>
+                            <input type="text" class="form-control radius3" ng-model="request.previousFireTime" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">下次执行时间</span></label>
+                            <input type="text" class="form-control radius3" ng-model="request.nextFireTime" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">已执行次数</span></label>
+                            <input type="number" class="form-control radius3"
+                                   ng-model="request.wasExecutedTotalCount" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">执行成功次数</span></label>
+                            <input type="number" class="form-control radius3" ng-model="request.wasExecutedSuccessCount"
+                                   disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">执行失败次数</span></label>
+                            <input type="number" class="form-control radius3" ng-model="request.wasExecutedFailCount"
+                                   disabled>
+                        </div>
+                    </div>
+                </form>
+                <!--------------------- ./  输入表单  --->
+            </div>
+        </div>
+    </div>
+
+    <form class="ngValid" name="addParamsForm" ng-submit="confirmAddParams(addParamsForm.$invalid)">
+        <div class="modal fade" id="addParamsModal" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            请求运行时参数
+                        </h4>
+                    </div>
+
+                    <div class="modal-body ">
+                        <div class="data-table">
+                            <table class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th class="w10p"><input type="checkbox" ng-model="changeArr"
+                                                            ng-click="changeArrRow(changeArr,requestParamsTable)"></th>
+                                    <th class="w10p">序号</th>
+                                    <th class="w30p">参数名称</th>
+                                    <th class="w10p">数据类型</th>
+                                    <th class="w40p">参数值</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-if="!requestParamsTable.length>0">
+                                <tr>
+                                    <td style="height: 100px" colspan="5">
+                                        没数据
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tbody ng-if="requestParamsTable.length>0">
+                                <tr class="text-center" ng-repeat="row in requestParamsTable"
+                                    ng-class="{'active':requestParamsTable.selectRow==$index}"
+                                     >
+                                    <td class="w10p" ng-click="rowClick(row,$index)">
+                                        <input type="checkbox" ng-checked="row.checked"
+                                               ng-disabled="row.isRequired=='true'"
+                                               ng-required="row.isRequired=='true'">
+                                    </td>
+                                    <td class="w10p" ng-bind="$index+1"
+                                        ng-click="rowClick(row, $index)"
+                                        style="width: 50px; text-align: center">1
+                                    </td>
+                                    <td class="w30p" ng-click="rowClick(row, $index)">
+                                        {{row.paramName}}
+                                    </td>
+                                    <td class="w10p" ng-click="rowClick(row, $index)">
+                                        {{row.paramTypeMeaning}}
+                                    </td>
+                                    <td class="w40p">
+                                        <div class="input-group-xs">
+                                            <input type="text" ng-if="row.paramType=='DATE'"
+                                                   date-time-picker
+                                                   data-date-format="yyyy-mm-dd"
+                                                   class="form-control radius3"
+                                                   ng-model="row.defaultValue"
+                                                   data-min-View="2"
+                                                   data-min-View="0"
+                                                   ng-required="row.isRequired=='true'"
+                                                   placeholder="请输入对应的数据类型">
+
+                                            <input class="form-control radius3"
+                                                   type="text" ng-if="!(row.paramType=='DATE')"
+                                                   ng-model="row.defaultValue" ng-required="row.isRequired=='true'"
+                                                   placeholder="请输入对应的数据类型">
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true">取消
+                            </button>
+                            <button type="submit" class="btn btn-primary mr10">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+    </form>
+
+    <div lov-list="lov-job" id="lov-job" data-keys="{'key':'jobId','value':'jobName'}"
+         data-url="jobFind"
+         data-return-value="request.jobName"
+         data-return-key="request.jobId"
+         data-other-column="[
+         {'name':'系统平台','key':'systemMeaning'},
+         {'name':'业务模块','key':'moduleMeaning'}
+         ]"
+         data-search-key="{'key':'jobName','placeholder':'请输入JOB名称'}"
+
+         ng-model="currnet.job"
+         data-show-index="true"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+
+    ></div>
+
+    <!--<span class="input-group-btn" saaf-lov=""
+                                     data-return-value1="request.jobId"
+                                     data-return-value2="request.jobName"
+                                     saaf-lov-option="{dataUrl:'jobFind',params:{},
+                                       searchLabel1:'Job名称',
+                                       searchColName1:'jobName',
+                                       label1:'JobID',label2:'Job名称',label3:'系统平台',label4:'业务模块',
+                                       colName1:'jobId',colName2:'jobName',colName3:'systemMeaning',colName4:'moduleMeaning',
+                                       returnColName1:'jobId',returnColName2:'jobName',returnColName3:'systemMeaning', returnColName4:'moduleMeaning'}">
+                               </span>-->
+</div>

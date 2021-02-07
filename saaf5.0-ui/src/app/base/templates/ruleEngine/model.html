@@ -1,0 +1,267 @@
+<div ng-controller="modelCtrl" ng-init="init()">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <form name="editModel" ng-submit="confirmEditModal(editModel.$invalid)">
+            <div class="bg-gray-white bt">
+                <div class="bg-gray-white p5">
+                    <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                        <button class="btn btn-default" type="submit" ng-show="modelContext"><i class="fa fa-save" aria-hidden="true"></i>保存</button>
+                    </div>
+
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white h" main-scroll-style>
+                <div class="col-xs-6 col-md-3 br h p0" style="margin-right: -1px;">
+                    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                        <div class="nicescroll-height  bg-white " ng-nicescroll
+                             nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                            <div class="">
+                                <!--第一层-->
+                                <ul class="pl15">
+                                    <li ng-repeat="business in businessLineData" class="engine-item" style="list-style: none">
+
+                                        <div class="box mt10 mr10 mb10" ng-style="" ng-click="selectBusiness(business,$index)">
+                                            <i class="fa m5" ng-class="{true:'fa-caret-down',false:'fa-caret-right'}[currentBusinessIndex==$index]"></i>{{business.ruleBusinessLineName}}
+                                            <a href="javascript:"><i class="fa fa-plus pull-right m5" ng-click="addModelArr($event,business)" ng-show="currentBusinessIndex==$index"></i></a>
+                                        </div>
+                                        <!--第二层-->
+                                        <ul class="pl15" ng-show="currentBusinessIndex==$index&&modelArrData.length>0">
+                                            <li ng-repeat="modelArr in modelArrData" class="" style="list-style: none">
+                                                <div class="box mt10 mr10 mb10" ng-click="selectModelArr(modelArr,$index);setModelArr(modelArr)">
+                                                    <i class="fa m5" ng-class="{true:'fa-caret-down',false:'fa-caret-right'}[currentModelArrIndex==$index]"></i>{{modelArr.modelName}}
+                                                    <a href="javascript:"><i class="fa fa-plus pull-right m5" ng-click="addModel($event,modelArr,1);setModelArr(modelArr)" ng-show="currentModelArrIndex==$index"></i></a>
+                                                </div>
+                                                <!--第三层-->
+                                                <ul class="pl15" ng-show="currentModelArrIndex==$index&&modelData_one.length>0">
+                                                    <li ng-repeat="model_one in modelData_one" class="" style="list-style: none">
+                                                        <div class="box mt10 mr10 mb10" ng-click="selectModel_one(model_one,$index)">
+                                                            <i class="fa m5" ng-class="{true:'fa-caret-down',false:'fa-caret-right'}[currentModelIndex_one==$index]"></i>{{model_one.groupNameCn}}
+                                                            <a href="javascript:"><i class="fa fa-plus pull-right m5" ng-click="addModel($event,model_one,2)" ng-show="currentModelIndex_one==$index"></i></a>
+                                                        </div>
+                                                        <!--第四层-->
+                                                        <ul class="pl15" ng-show="currentModelIndex_one==$index&&modelData_two.length>0">
+                                                            <li ng-repeat="model_two in modelData_two" class="" style="list-style: none">
+                                                                <div class="box mt10 mr10 mb10" ng-click="selectModel_two(model_two,$index)">
+                                                                    <i class="fa m5" ng-class="{true:'fa-caret-down',false:'fa-caret-right'}[currentModelIndex_three==$index]"></i>{{model_two.groupNameCn}}
+                                                                    <a href="javascript:"><i class="fa fa-plus pull-right m5" ng-click="addModel($event,model_two,3)" ng-show="currentModelIndex_three==$index"></i></a>
+                                                                </div>
+                                                                <!--第五层-->
+                                                                <ul class="pl15" ng-show="currentModelIndex_three==$index&&modelData_three.length>0">
+                                                                    <li ng-repeat="model_three in modelData_three" class="" style="list-style: none">
+                                                                        <div class="box ml15 mt10 mr10 mb10" ng-click="selectModel_four(model_three,$index)">{{model_three.groupNameCn}}</div>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-9 br h p0" style="margin-right: -1px;" ng-show="modelContext">
+                    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                        <div class="nicescroll-height  bg-white " ng-nicescroll
+                             nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                            <div class="data-table">
+                                <div class=" mt10 pb5  " data-des="此节点必需－用于识别输入表单的指令">
+                                    <header class="col-xs-12 mb10">
+                                        <i class="fa fa-cog" aria-hidden="true"></i>
+                                        <label>模板维度维护</label>
+                                    </header>
+                                    <div class="col-xs-12 xol-ms-12">
+                                        <div class="form-group col-xs-12 col-md-6">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn"><span class="w100"><i
+                                                        class="red">*</i> 维度名称：</span></label>
+                                                <select type="text" class="form-control radius3" required
+                                                        ng-model="model.groupDetDimCode" ng-options="ruleObj.ruleDimCode as ruleObj.ruleDimName for ruleObj in ruleArr">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-12 col-md-6">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn"><span class="w100"><i
+                                                        class="red">*</i> 模板组维度中文名：</span></label>
+                                                <input type="text" required class="form-control radius3" ng-model="model.groupDetDimNameCn">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-12 col-md-6">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn"><span class="w100"> 模板组英文名：</span></label>
+                                                <input type="text" required class="form-control radius3" ng-model="model.groupDetDimNameEn">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-12 col-md-6">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn"><span class="w100"><i
+                                                        class="red">*</i> 展示类型：</span></label>
+                                                <select type="text" class="form-control radius3" required
+                                                        ng-model="model.displayTypeObj" ng-options="displayTypeObj as displayTypeObj.meaning for displayTypeObj in displayTypeArr">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-12 col-md-6">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn"><span class="w100"><i
+                                                        class="red">*</i> 逻辑运算符：</span></label>
+                                                <select type="text" class="form-control radius3" required
+                                                        ng-model="model.operatorObj" ng-options="operatorObj as operatorObj.operatorName for operatorObj in operatorArr">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-12 col-md-6">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn"><span class="w100"><i
+                                                        class="red">*</i> 数据类型：</span></label>
+                                                <select type="text" class="form-control radius3" required
+                                                        ng-model="model.groupDetDimType" ng-options="dataType.ruleDimDataCode as dataType.ruleDimDataType for dataType in dataTypeArr">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="modelListModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+         data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content modal-lg">
+                <form name="modelListTemplateForm" ng-submit="confirmModelList(modelListTemplateForm.$invalid)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            新增模板组
+                        </h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div>
+                                    <div class="form-group col-xs-11 col-md-6">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span
+                                                    class="w100"><i class="red">*</i>业务线名称：</span></label>
+                                            <select type="text" class="form-control radius3" required disabled
+                                                    ng-model="newModelList.businessObj" ng-options="businessObj as businessObj.ruleBusinessLineName for businessObj in businessLineData">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-11 col-md-6">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span
+                                                    class="w100"><i class="red">*</i>模板名称：</span></label>
+
+                                            <input type="text" name="ruleBusDimValue" class="form-control radius3" required
+                                                   ng-model="newModelList.modelName">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-11 col-md-12">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span
+                                                    class="w100">模板描述：</span></label>
+
+                                            <!--<input type="text" name="ruleBusDimValue" class="form-control radius3"-->
+                                                   <!--ng-model="newModelList.webserviceName">-->
+                                            <textarea style="height: 50px;" class="form-control" ng-model="newModelList.modelDesc"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">取消</button>
+                            <button type="submit" id="saveButton" class="btn btn-primary mr10">保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="modelModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+         data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content modal-lg">
+                <form name="modelTemplateForm" ng-submit="confirmModel(modelTemplateForm.$invalid)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            新增模板
+                        </h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div>
+                                    <div class="form-group col-xs-12 col-md-6">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span class="w100"><i
+                                                    class="red">*</i> 模板组中文名：</span></label>
+                                            <input type="text" class="form-control radius3" required ng-model="newModel.groupNameCn">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-md-6">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span class="w100"> 模板组英文名：</span></label>
+                                            <input type="text" class="form-control radius3" ng-model="newModel.groupNameEn">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-md-6">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span class="w100"><i
+                                                    class="red">*</i> 模板组类别：</span></label>
+                                            <select type="text" class="form-control radius3" required
+                                                    ng-model="newModel.groupNameViewType" ng-options="typeObj.lookupCode as typeObj.meaning for typeObj in groupNameViewTypeData">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-md-6">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span class="w100"> 模板组排序：</span></label>
+                                            <input type="text" class="form-control radius3" ng-model="newModel.groupOrder">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-md-6">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span class="w100"> 组名是否可见：</span></label>
+                                            <input type="checkbox" ng-model="newModel.groupNameViewFlag">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">取消</button>
+                            <button type="submit" class="btn btn-primary mr10">保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div><!-- /.modal -->
+</div>

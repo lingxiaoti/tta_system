@@ -1,0 +1,31 @@
+<div class="input-group input-group-xs ">
+    <label class="input-group-addon bn ">
+        <span class="w100">{{ label }}</span>
+    </label>
+    <input class="form-control radius3" ng-model="returnValue" name="{{ id }}" ng-readonly="readonly" ng-disabled="disabled" ng-required="required">
+    <span class="input-group-btn">
+        <button class="btn btn-default" data-toggle="modal" data-target="#lov{{ id }}">
+            <i   class="fa fa-search"></i></button>
+    </span>
+</div>
+<div style="position: static;">
+    <div lov-list="lov{{ id }}" role="dialog" data-title="选择经销商" id="lov{{ id }}" ng-model="ngModel"
+         data-url="getDealerAccount"
+         data-params='{}'
+         data-return-key="returnKey"
+         data-return-value="returnValue"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'accountNumber','value':'accountName',name:'经销商名称', hide: true}"
+         data-show-index="false"
+         data-other-column="[
+              {'name':'渠道','key':'channelTypeDesc'},
+              {'name':'部门','key':'departmentName'},
+              {'name':'经销商编号','key':'accountNumber'},
+              {'name':'经销商名称','key':'accountName'},
+              {'name':'子库编码','key':'secInvName'}
+         ]"
+         data-search-key="[{'key':'accountNumber_like','placeholder':'经销商编码'},{'key':'accountName_like','placeholder':'经销商名称'},{'key':'secInvName','placeholder':'子库编码'}]"
+    >
+    </div>
+</div>

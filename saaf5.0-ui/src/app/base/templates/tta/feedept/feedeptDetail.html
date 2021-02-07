@@ -1,0 +1,475 @@
+<div class="bigdata" ng-controller="feedeptDetailCtrl" >
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10" >
+
+            <div class="btn-group btn-group-xs" id="btnId">
+                <button  class="btn btn-default" data-validate-form="feedeptForm" ng-click="btnSave(feedeptForm.$invalid)"
+                        permission-btn="btnSave"></button>
+
+                <button class="btn btn-default" data-validate-form="feedeptForm" ng-click="btnSubmit(feedeptForm.$invalid)"
+                        permission-btn="btnSubmit"></button>
+            </div>
+            <div  id="btnOtherId" class="btn-group btn-group-xs " permission-buttons="btnChange,btnCopy">
+
+            </div>
+
+
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div data-des="此节点必需－用户计算滚动区域高度" main-scroll-style>
+        <div class="nicescroll-height  bg-white " data-des="此节点必需-滚动内容及指令"
+             ng-nicescroll
+             nice-option="{{niceOpction}}">
+
+            <!--------------------- 输入表单  --->
+
+            <div class=" mt10 pb5  oh"
+                 data-des="此节点必需－用于识别输入表单的指令">
+
+                <form id="feedeptForm" name="feedeptForm">
+                    <header class="col-xs-12 mb10">
+                        <i aria-hidden="true" class="fa fa-cog"></i>
+                        <span>部门协定收费标准设置</span>
+                    </header>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>年度</span>
+                            </label>
+
+                            <input class="form-control radius3" data-date-format="yyyy"
+                                   data-max-view="4" data-min-view="4" data-start-view="4" date-time-picker=""
+                                   ng-model="params.yearCode "  required number
+                                   type="text">
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"> <i class="red">*</i>单据状态</span>
+                            </label>
+
+                            <div data-required="true" disabled lookup-code="FEEDEPT_STATUS" ng-model="params.status"
+                                 required></div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"> <i class="red">*</i>协定标准类型</span>
+                            </label>
+
+                            <div data-required="true" id="accordType" lookup-code="ACCORD_TYPE"
+                                 name="accordType" ng-model="params.accordType" required ng-disabled="params.feedeptId"></div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">是否变更</span>
+                            </label>
+                            <input class=" radius3" disabled ng-false-value="'N'" ng-model="params.isAlert" ng-true-value="'Y'"
+                                   type="checkbox">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>版本号</span>
+                            </label>
+                            <input class="form-control radius3" disabled ng-model="params.versionCode"
+                                   required type="text">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">创建人</span>
+                            </label>
+                            <input class="form-control radius3" disabled ng-model="params.createdName"
+                                   type="text">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">创建时间</span>
+                            </label>
+                            <input class="form-control radius3" disabled ng-model="params.creationDate"
+                                   type="text">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">审批时间</span>
+                            </label>
+                            <input class="form-control radius3" disabled ng-model="params.approveDate"
+                                   type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>部门编码</span></label>
+                            <input class="form-control radius3" ng-model="params.deptCode" name="deptCode"
+                                   readonly required type="text"/>
+                            <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getFellDeptDCode()" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>部门名称</span></label>
+                            <input class="form-control radius3" data-required-msg="部门名称" ng-model="params.deptDesc"
+                                   readonly type="text">
+                        </div>
+                    </div>
+
+                    <div class="row"></div>
+
+                </form>
+            </div>
+
+
+            <div class="col-md-12" id ="lineFormId">
+                <label style="margin-left: 10px"><i class="fa fa-list-alt"></i> 明细信息</label>
+                <div class=" pull-right ml10">
+
+                    <div class="btn-group btn-group-xs" style="line-height: 30px">
+
+                        <button class="btn btn-default" data-validate-form="lineForm"
+                                ng-click="btnSaveL(lineForm.$invalid)"><i class="fa fa-save"></i>保存
+                        </button>
+
+                        <button class="btn btn-default btn-xs pull-right" ng-click="btnDelL()" type="button"><i
+                                class="fa fa-trash-o fa-lg"></i>删除
+                        </button>
+                        <button class="btn btn-default btn-xs pull-right" ng-click="btnNewL()" type="button"
+                        ><i class="fa fa-plus">增加</i></button>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <!---------------------  / .按钮  --->
+            <!------------------ 树状模式 --------------->
+
+            <div class="col-xs-3 br" data-des="此节点必需－用户计算滚动区域高度" main-scroll-style style="margin-right: -1px;">
+                <div class="" data-des="此节点必需-滚动内容及指令" ng-nicescroll
+                     nice-option="" style="height:100%">
+                    <ul class="ztree pt10 pb10" data-callback-beforedrop="updateLevel" data-edit="true" data-expand-node="true"
+                        data-keys='{"name":"lineDesc"}'
+                        data-node-click="treeClick"
+                        data-page-rows="10000"
+                        data-params="{{ treeParams }}"
+                        data-simpledata='{"enable":"true","idKey":"feedeptLineId","pIdKey":"parentLineId","rootPId":{{rootParentId}} }'
+                        data-url="feedeptLFind"
+                        id="feedeptLTree"
+                        sie-ztree="feedeptLTree"
+                        style="margin-bottom: 10px;"
+                    >
+                    </ul>
+                </div>
+            </div>
+
+            <div class="nicescroll-height bg-white col col-md-9 col-xs-9 bl h" data-des="此节点必需-滚动内容及指令"
+                 ng-nicescroll nice-option="{{niceOpction}}">
+
+
+                <form class=" " id="lineForm" name="lineForm">
+
+                    <header class="col-xs-12 mb10">
+                        <i aria-hidden="true" class="fa fa-cog"></i>
+                        <span>协定标准明细（行）</span>
+                    </header>
+
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="pl10"><i class="red">*</i>编号</span></label>
+                            <input class="form-control radius3" ng-model="lineInfo.lineCode"
+                                   required type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="pl10"><i
+                                    class="red">*</i>ITEM英文名称</span></label>
+                            <input class="form-control radius3" ng-model="lineInfo.itemDescEn"
+                                   required type="text">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="pl10">ITEM中文名称</span></label>
+                            <input class="form-control radius3" ng-model="lineInfo.itemDescCn"
+                                   type="text">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="pl10">是否生效</span></label>
+                            <input class=" radius3" disabled ng-false-value="'N'" ng-model="lineInfo.ifEffect"
+                                   ng-true-value="'Y'" type="checkbox">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-4">
+
+                        <div data-append-node='{"lineCode":"－－－顶层条款编号－－－","feedeptLineId":"0"}'
+                             data-input-readonly="true"
+                             data-keys='{"name":"lineCode"}'
+                             data-label="上层条款编号"
+                             data-page-rows="10000"
+                             data-required="true"
+                             data-simpledata='{"enable":"true","idKey":"feedeptLineId","pIdKey":"parentLineId"}'
+                             name="addNewTree"
+                             ng-key="lineInfo.parentLineId"
+                             ng-tree-data="zTreeData.treeData"
+                             ng-value="lineInfo.parentLineCode"
+                             z-tree-select="addNewTree"
+                        ></div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-4" ng-if="params.accordType == 'B'">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"> <i class="red">*</i>宣传单类型</span>
+                            </label>
+
+                            <div  id="dmFlyer" lookup-code="DM_FLYER_TYPE"
+                                 name="dmFlyer" ng-model="lineInfo.dmFlyer" ng-required="params.accordType == 'B'"></div>
+                        </div>
+                    </div>
+
+
+                    <div class="col col-md-12 mt10" id="">
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+
+                            <div class="btn-group btn-group-xs pull-right" ng-if="true">
+                                <div class="btn-group btn-group-xs" ng-if="true">
+                                    <button class="btn btn-default btn-xs" id="addRelSupplierButton" ng-click="addFeedeptD()"
+                                            type="button">
+                                        <i class="fa fa-plus">新增</i>
+                                    </button>
+                                    <button class="btn btn-default btn-xs" id="editRelSupplierButton" ng-click="editFeedeptD()" ng-disabled="!feedeptDTable.selectRow"
+                                            type="button"
+                                    >
+                                        <i class="fa fa-pencil">修改</i>
+                                    </button>
+                                    <button class="btn btn-default btn-xs" id="delRelSupplierButton" ng-click="delFeedeptD()"
+                                            type="button">
+                                        <i class="fa fa-trash">删除</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- data-sort-all-result="true" 这个属性代表表格点击排序的时候,是排序全部数据-->
+                        <div base-data-table="feedeptDTable"
+                             data-auto-request='false'
+                             data-desc="单位（明细）"
+                             data-sort-all-result="true"
+                             data-checked-type="checkbox"
+                             data-keys="{'key':'feedeptDetailId','value':'feedeptDetailId'}"
+                             data-legend="[
+                         { 'value':'deptCode','name':'部门编码'},
+						 {'value':'deptDesc','name':'部门名称'},
+						 {'value':'unitName','name':'单位'},
+						 {'value':'standardValue','name':'标准值'}
+						 ]"
+                             data-page-size="6"
+                             data-show-index="true"
+                             data-url="feedeptDFind"
+                             ng-params="feedeptDTableParams">
+                        </div>
+
+                    </div>
+
+
+                </form>
+
+
+                　
+            </div>
+
+            <!------------------ 树状模式end --------------->
+
+
+        </div>
+    </div>
+
+
+    <div data-auto-request="true" data-callback="selectItemLovReturn" data-checked-type="radio"  data-keys="{'key':'itemNbr','value':'itemNbr','name':'物料编码'}"
+         data-other-column="[{'name':'ITEM英文','key':'itemDescEn'},{'name':'ITEM中文','key':'itemDescCn'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'itemNbr','placeholder':'物料编码'},
+                          {'key':'itemDescEn','placeholder':'ITEM英文'},
+                          {'key':'itemDescCn','placeholder':'ITEM中文'}]"
+         data-show-index="false"
+         data-title="选择TIME信息"
+         data-type="competitor"
+         data-url="itemFindLov"
+         id="itemLov"
+         lov-list="cityLov"
+         ng-model="current.em"
+         role="dialog"
+    >
+    </div>
+
+    <div lov-list="selectDept" role="dialog" data-title="选择部门信息" id="selectDeptId" ng-model="current.em"
+         data-url="findDeptPagination"
+         data-dynamic-params='{"flag": "findDept","departmentType":"30","parentDepartmentId":params.deptId}'
+         data-callback="selectDeptReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+         data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                          {'key':'departmentName','placeholder':'部门名称'}]"
+    >
+    </div>
+
+    <!-- 单位（明细） -->
+    <div  style="    z-index: 1043;" class="modal fade" data-backdrop="static" data-des="单位（明细）" id="feeDeptDLov" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" class="close"
+                            data-dismiss="modal" type="button">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="supplierDeptModalLabel">
+                        单位（明细）
+                    </h4>
+                </div>
+                <form class="ngValid" name="feeDeptDForm">
+                    <div class="modal-body">
+
+
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>单位：</span></label>
+
+                                <div data-required="true" lookup-code="UNIT" ng-model="feeDeptDInfo.unit"
+                                     required></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>标准值：</span></label>
+                                <input class="form-control radius3" data-required-msg="" ng-model="feeDeptDInfo.standardValue"
+                                       required type="text">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>部门名称：</span></label>
+                                <input class="form-control radius3" data-required-msg="" ng-model="feeDeptDInfo.deptDesc" name="deptDesc"
+                                       required type="text">
+                                <span class="input-group-btn ng-scope">
+                                    <button class="btn btn-default" ng-click="getDeptCode()" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>部门编码：</span></label>
+                                <input class="form-control radius3" data-required-msg="" ng-model="feeDeptDInfo.deptCode"
+                                       required readonly type="text">
+                            </div>
+                        </div>
+
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button class="btn btn-default" data-dismiss="modal" style="" type="button">取消
+                            </button>
+                            <button class="btn btn-primary mr10" data-validate-form="feeDeptDForm"
+                                    id="saveFeeDeptDBtn" ng-click="saveFeeDeptD(feeDeptDForm.$invalid)" validate-form-btn="">
+                                保存
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+
+
+    <div data-auto-request="true" data-callback="selectFellDeptDCodeReturn" data-checked-type="radio"  data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+         data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                          {'key':'departmentName','placeholder':'部门名称'}]"
+         data-show-index="false"
+         data-title="选择部门信息"
+         data-type="competitor"
+         data-url="findDeptPagination"
+         data-dynamic-params='{"flag": "findDept","departmentType":"20"}'
+         id="prandFeeDeptD"
+         lov-list="cityLov"
+         ng-model="current.em"
+         role="dialog"
+    >
+    </div>
+
+
+</div>

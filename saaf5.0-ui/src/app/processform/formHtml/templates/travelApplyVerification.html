@@ -1,0 +1,241 @@
+<div ng-controller="travelApplyVerificationCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="travelSaveOrUpdateApTrv"
+         data-api-get="findApTrvDetailById" data-api-del="" data-api-update="updateApTrv">
+        <div class="col-md-12 pt15 pb10 oh">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-3" style="display: none" data-load-callback="respCallback"></div>
+            <div class="row">
+                <!--{key:'priod',label:'报账年月',readonly:true,type:'lov',target:'#expensePeriodLov',required:true,css:'readonly-white'},-->
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'deptName',label:'申请部门',readonly:true,required:true},
+                        {key:'personName',label:'申请人',readonly:true,required:true},
+                        {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                        {key:'billNo',label:'申请单号',readonly:true},
+                        {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                        {key:'statusStr',label:'状态',readonly:true},
+                    ]"
+                     ng-model="formParams"
+                ></div>
+                <div class="form-group col-xs-6 col-md-4 ng-scope">
+                    <div class="input-group input-group-xs  expensePeriod_3">
+                        <label class="input-group-addon bn ng-scope">
+                            <span class="w100 ng-binding"><i class="red ng-scope">* </i>费用期间</span>
+                        </label>
+                        <select class="form-control input-xs" ng-model="formParams.priod">
+                            <option value="">请选择</option>
+                            <option ng-value="expensePeriod.expensePeriod" ng-repeat="expensePeriod in expensePeriodList">{{expensePeriod.expensePeriod}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'mAddress',label:'驻地',readonly:true,type:'lov',callback:'selectMcity',required:true,css:'readonly-white'},
+                    ]"
+                     ng-model="formParams"
+                ></div>
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100">出差单号</span></label>
+
+                        <input type="text" class="form-control radius3"
+                               ng-model="formParams.travelId" >
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                       {key:'brwBname',label:'收款人',readonly:true,required:true,type:'lov',target:'#personCusBankPaginatioLov',css:'readonly-white'},
+                       {key:'pActBank',label:'开户银行',readonly:true,required:true},
+                       {key:'pActNum',label:'银行账号',readonly:true,required:true},
+                   ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>申请原因</span></label>
+                        <textarea class="form-control" rows="3" ng-model="formParams.requestReason" max-length="500"
+                                  title="字数限制500" placeholder="字数限制500" required name="requestReason"
+                                  style="height: auto"></textarea>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="col-md-12">
+            <h5 class="fontwB">
+                <span class="fa fa-cog mr15"></span>报销明细<span class="red" ng-bind="inputErrors"></span>
+                <button type="button" class="btn btn-default btn-xs pull-right"
+                        ng-click="tableEndit.addTableRows()"
+                        ng-show="childData.isEdit"
+                ><i class="fa fa-plus">增加</i></button>
+            </h5>
+
+        </div>
+        <div class="col-md-12">
+            <div base-data-table-edit="tableEndit"
+                 data-legend="[
+                {value:'apStartTime',name:'开始时间',type:'time',endDate:'apEndTime',required:true},
+                {value:'apEndTime',name:'结束时间',type:'time',startDate:'apStartTime',required:true},
+                {value:'startAddress',name:'行程起点',required:true,type:'lov',target:'#sss',callback:'scheduleForCtyCallback',disabled:true},
+                {value:'finAddress',name:'行程终点',required:true,type:'lov',target:'#ss',callback:'scheduleToCtyCallback',disabled:true},
+                {value:'carM',name:'交通费用',required:true,validFormat:'number=9',placeholder:' '},
+                {value:'sleepM',name:'住宿费用',required:true,validFormat:'number=9',placeholder:' '},
+                {value:'otherM',name:'补助金额',required:true,validFormat:'number=9',placeholder:' '},
+                {value:'totalM',name:'合计金额',disabled:true,operationStr:'+',operationKey:['carM','sleepM','otherM'],type:'operation'},
+                {value:'voiceNum',name:'自驾行程公里',validFormat:'number=-2',placeholder:' '},
+                {value:'trvMemo',name:'备注',placeholder:' '}
+            ]"
+                 data-form-params-key="items"
+                 data-show-total="true"
+                 data-count-key="['carM','sleepM','otherM','totalM','voiceNum']"
+                 ng-model="formParams">
+            </div>
+        </div>
+        <div class="col-md-12 hook-normal">
+            <h5 class="fontwB">
+                <span class="fa fa-cog mr15"></span>核销明细
+                <button type="button" class="btn btn-default btn-xs pull-right"
+                        ng-click="tableEnditAudit.addTableRows()"
+                ><i class="fa fa-plus">增加</i></button>
+            </h5>
+        </div>
+        <div class="col-md-12 hook-normal">
+            <div base-data-table-edit="tableEnditAudit"
+                 data-legend="[
+               {value:'carM',name:'交通费用',required:true,validFormat:'number=9',placeholder:' '},
+               {value:'sleepM',name:'住宿费用',required:true,validFormat:'number=9',placeholder:' '},
+               {value:'otherM',name:'补助金额',required:true,validFormat:'number=9',placeholder:' '},
+               {value:'totalM',name:'合计金额',disabled:true,operationStr:'+',operationKey:['carM','sleepM','otherM'],type:'operation'},
+            ]"
+                 data-form-params-key="secItems"
+                 data-show-total="true"
+                 data-count-key="['carM','sleepM','otherM','totalM','voiceNum']"
+                 ng-model="formParams">
+            </div>
+        </div>
+        <!--<div class="col-md-12" ng-if="action == 'approval'">
+            <div base-data-table-edit="tableEndit2"
+                 data-legend="[
+                {value:'carM',name:'交通费用',required:true,validFormat:'number=9',placeholder:' '},
+                {value:'sleepM',name:'住宿费用',required:true,validFormat:'number=9',placeholder:' '},
+                {value:'otherM',name:'补助金额',required:true,validFormat:'number=9',placeholder:' '},
+                {value:'totalM',name:'合计金额',disabled:true,operationStr:'+',operationKey:['carM','sleepM','otherM'],type:'operation'}
+            ]"
+                 data-form-params-key="secItems"
+                 data-show-total="false"
+                 data-count-key="['carM','sleepM','otherM','totalM','voiceNum']"
+                 ng-model="formParams">
+            </div>
+        </div>-->
+        <div class="col-md-12 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="mycitysModal" data-des="请选择城市" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        请选择城市
+                    </h4>
+                </div>
+                <form name="mycitysFrom" id="mycitysFrom">
+                    <div class="modal-body oh">
+                        <div city-area="mybusinessCity" ng-model="mycitys" class="col-xs-12" data-select-level="3"
+                             data-required="true"></div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button type="button" ng-click="mycitysSave('m')" class="btn btn-primary mr10"
+                                    validate-form-btn="mycitysFrom">确定
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal fade" id="citysModal" data-des="请选择城市" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        请选择城市
+                    </h4>
+                </div>
+                <form name="selectCitys" id="selectCitys">
+                    <div class="modal-body oh">
+                        <div city-area="businessCity" ng-model="citys" class="col-xs-12" data-select-level="3"
+                             data-required="true"></div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button type="button" ng-click="citySave()" class="btn btn-primary mr10"
+                                    validate-form-btn="selectCitys">确定
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div lov-list="expensePeriodLov"
+         id="expensePeriodLov"
+         ng-model="code3"
+         data-url="expensePeriodList"
+         data-dynamic-params="expensePeriodLovParams"
+         data-title="请选择报帐年月"
+         data-auto-request='false'
+         data-checked-type="radio"
+         data-return-value="formParams.priod"
+         data-search-key="[{'key':'expensePeriod','placeholder':'报帐年月'}]"
+         data-keys="{'key':'RN','value':'expensePeriod','name':'报帐年月'}"
+    ></div>
+
+    <div lov-list="personCusBankPaginatioLov"
+         id="personCusBankPaginatioLov"
+         ng-model="code4"
+         data-url="findPersonCusBankPagination"
+         data-callback="personCusBankCallback"
+         data-cancel-callback="personCusBankCancelCallback"
+         data-dynamic-params="personCusBankPaginatioParams"
+         data-auto-request='false'
+         data-title="请选择"
+         data-checked-type="radio"
+         data-return-value="formParams.brwBname"
+         data-return-key="formParams.pActNum"
+         data-search-key="[{'key':'primaryAcctOwnerName_like','placeholder':'收款人'},{'key':'bankAccountNumElectronic_like','placeholder':'银行帐号'}]"
+         data-keys="{'key':'bankAccountNumElectronic','value':'primaryAcctOwnerName','name':'收款人'}"
+         data-other-column="[{'name':'开户银行','key':'bankName'},{'name':'银行帐号',key:'bankAccountNumElectronic'}]"
+    ></div>
+
+</div>

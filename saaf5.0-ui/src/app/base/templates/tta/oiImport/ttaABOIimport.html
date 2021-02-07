@@ -1,0 +1,380 @@
+<div ng-controller="ttaAboiBillLineCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDel,PLSC">
+
+                    </div>
+                    <!-- 导入、下载模板start -->
+                    <div class="btn-group btn-group-xs" permission-btn-group="btnImport" ng-style="myStyle" id="isSq">
+                        <button  class="btn btn-default  a-black "  onclick="window.location.href='app/base/templates/tta/exampleFlie/ttaABOIBillLine.xlsx'" ><i class="fa fa-file-excel-o"></i>下载模板</button>
+                        <button  class="btn btn-default  a-black "   ng-click="daoru()" ><i class="fa fa-upload"></i>导入</button>
+
+                    </div>
+                    <!-- 导入、下载模板end -->
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+
+
+                <!--------------------- 输入表单  --->
+
+                <div class=" mt10 pb5  oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form id="contractForm" name="contractForm">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>单据头信息</span>
+
+
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110">月份：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       date-time-picker="" data-date-format="yyyy-mm"
+                                       data-start-view="3" data-min-view="3" data-max-view="3"
+                                       ng-model="params.accountMonth" >
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">供应商编号：</span></label>
+                                <input  type="text" ng-model="params.rmsCode"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">供应商名称:</span></label>
+                                <input  type="text" ng-model="params.venderName"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="row"></div>
+
+
+                    </form>
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="false"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="findABOIPagination"
+                         data-legend="[
+                            {'value':'accountMonth','name':'导入月份'},
+                        {'value':'rmsCode','name':'供应商编号'},
+                        {'value':'venderName','name':'供应商名称'},
+                        {'value':'bookInJv','name':'JV'},
+                        {'value':'bookInJv1','name':'供应商编号+JV'},
+                        {'value':'buyer','name':'Buyer'},
+                        {'value':'tc','name':'TC采购总监'},
+                        {'value':'department','name':'部门'},
+                        {'value':'brand','name':'品牌'},
+                        {'value':'venderab','name':'供应商属性'},
+                        {'value':'userContractId','name':'合同编号'},
+                        {'value':'cooperateStatus','name':'合作状态'},
+                        {'value':'venderType','name':'供应商类型'},
+                        {'value':'familyPlaningFlag','name':'计生供应商'},
+                        {'value':'validBeginDate','name':'合同开始日期'},
+                        {'value':'validEndDate','name':'合同结束日期'},
+                        {'value':'pickUpRate','name':'购货折扣比例'},
+                        {'value':'venderContainTax','name':'购货折扣比例是否含税'},
+                        {'value':'monthNetPur','name':'monthlyNetPurchase(本月净采购额)折扣前'},
+                        {'value':'monthNetPurOrigin','name':'monthlyNetPurchase(本月净采购额)折扣后'},
+                        {'value':'lastYearNetPur','name':'以前年度的净采购额'},
+                        {'value':'monthPur','name':'本月采购额计算'},
+                        {'value':'monthCount','name':'本月计算'},
+                        {'value':'monthAbi','name':'本月计算-ABI(TTA)'},
+                        {'value':'monthAbiOntop','name':'本月计算-ABI(Ontop)'},
+                        {'value':'yearAbi','name':'以前年度计算-ABI(TTA)'},
+                        {'value':'yearAbiOntop','name':'以前年度计算-ABI(Ontop)'},
+                        {'value':'contractAdj','name':'本月合同调整'},
+                        {'value':'billAdj','name':'本月对帐调整'},
+                        {'value':'yearContractAdj','name':'以前年度合同调整'},
+                        {'value':'yearBillAdj','name':'以前年度对帐调整'},
+                        {'value':'yearPurchaseCount','name':'以前年度采购额计算/PRG补收/自查补收'},
+                        {'value':'apOiTotalTax','name':'APOITotal(含税)'},
+                        {'value':'apOiTotalNotax','name':'APOITotal(不含税-VAT)'},
+                        {'value':'tax6','name':'税金（6%VAT)'},
+                        {'value':'dsf001','name':'条款-数据分享费'},
+                        {'value':'dsf001CurrentMonthTta','name':'本月计算(TTA)-数据分享费'},
+                        {'value':'dsf001CurrentMonthOntop','name':'本月计算(ONTOP)-数据分享费'},
+                        {'value':'dsf001PyyearTta','name':'以前年度计算(TTA)-数据分享费'},
+                        {'value':'dsf001PyyearOntop','name':'以前年度计算(ONTOP)-数据分享费'},
+                        {'value':'dsf001MonthContractAdj','name':'本月合同调整-数据分享费'},
+                        {'value':'dsf001MonthReconAdj','name':'本月对帐调整-数据分享费'},
+                        {'value':'dsf001PyContractAdj','name':'以前年度合同调整-数据分享费'},
+                        {'value':'dsf001PyReconAdj','name':'以前年度对帐调整-数据分享费'},
+                        {'value':'dsf001PyAuditAdj','name':'以前年度PRG调整/自查调整-数据分享费'},
+                        {'value':'dsf001Memo','name':'备注-数据分享费'},
+                        {'value':'dsf001Total','name':'数据分享费Total'},
+                        {'value':'dro001','name':'条款-促销陈列服务费'},
+                        {'value':'dro001CurrentMonthTta','name':'本月计算(TTA)-促销陈列服务费'},
+                        {'value':'dro001CurrentMonthOntop','name':'本月计算(ONTOP)-促销陈列服务费'},
+                        {'value':'dro001PyyearTta','name':'以前年度计算(TTA)-促销陈列服务费'},
+                        {'value':'dro001PyyearOntop','name':'以前年度计算(ONTOP)-促销陈列服务费'},
+                        {'value':'dro001MonthContractAdj','name':'本月合同调整-促销陈列服务费'},
+                        {'value':'dro001MonthReconAdj','name':'本月对帐调整-促销陈列服务费'},
+                        {'value':'dro001PyContractAdj','name':'以前年度合同调整-促销陈列服务费'},
+                        {'value':'dro001PyReconAdj','name':'以前年度对帐调整-促销陈列服务费'},
+                        {'value':'dro001PyAuditAdj','name':'以前年度PRG调整/自查调整-促销陈列服务费'},
+                        {'value':'dro001Memo','name':'备注-促销陈列服务费'},
+                        {'value':'dro001Total','name':'促销陈列服务费Total'},
+                        {'value':'ntp001','name':'条款-促销陈列服务费-NewTrialProjects'},
+                        {'value':'ntp001CurrentMonthTta','name':'本月计算(TTA)-促销陈列服务费-NewTrialProjects'},
+                        {'value':'ntp001CurrentMonthOntop','name':'本月计算(ONTOP)-促销陈列服务费-NewTrialProjects'},
+                        {'value':'ntp001PyyearTta','name':'以前年度计算(TTA)-促销陈列服务费-NewTrialProjects'},
+                        {'value':'ntp001PyyearOntop','name':'以前年度计算(ONTOP)-促销陈列服务费-NewTrialProjects'},
+                        {'value':'ntp001MonthContractAdj','name':'本月合同调整-促销陈列服务费-NewTrialProjects'},
+                        {'value':'ntp001MonthReconAdj','name':'本月对帐调整-促销陈列服务费-NewTrialProjects'},
+                        {'value':'ntp001PyContractAdj','name':'以前年度合同调整-促销陈列服务费-NewTrialProjects'},
+                        {'value':'ntp001PyReconAdj','name':'以前年度对帐调整-促销陈列服务费-NewTrialProjects'},
+                        {'value':'ntp001PyAuditAdj','name':'以前年度PRG调整/自查调整-促销陈列服务费-NewTrialProjects'},
+                        {'value':'ntp001Memo','name':'备注-促销陈列服务费-NewTrialProjects'},
+                        {'value':'ntp001Total','name':'促销陈列服务费-NewTrialProjectsTotal'},
+                        {'value':'cri001','name':'条款-专柜促销陈列服务费'},
+                        {'value':'cri001CurrentMonthTta','name':'本月计算(TTA)-专柜促销陈列服务费'},
+                        {'value':'cri001CurrentMonthOntop','name':'本月计算(ONTOP)-专柜促销陈列服务费'},
+                        {'value':'cri001PyyearTta','name':'以前年度计算(TTA)-专柜促销陈列服务费'},
+                        {'value':'cri001PyyearOntop','name':'以前年度计算(ONTOP)-专柜促销陈列服务费'},
+                        {'value':'cri001MonthContractAdj','name':'本月合同调整-专柜促销陈列服务费'},
+                        {'value':'cri001MonthReconAdj','name':'本月对帐调整-专柜促销陈列服务费'},
+                        {'value':'cri001PyContractAdj','name':'以前年度合同调整-专柜促销陈列服务费'},
+                        {'value':'cri001PyReconAdj','name':'以前年度对帐调整-专柜促销陈列服务费'},
+                        {'value':'cri001PyAuditAdj','name':'以前年度PRG调整/自查调整-专柜促销陈列服务费'},
+                        {'value':'cri001Memo','name':'备注-专柜促销陈列服务费'},
+                        {'value':'cri001Total','name':'专柜促销陈列服务费Total'},
+                        {'value':'dmi001','name':'条款-宣传单张、宣传牌及促销用品推广服务费'},
+                        {'value':'dmi001CurrentMonthTta','name':'本月计算(TTA)-宣传单张、宣传牌及促销用品推广服务费'},
+                        {'value':'dmi001CurrentMonthOntop','name':'本月计算(ONTOP)-宣传单张、宣传牌及促销用品推广服务费'},
+                        {'value':'dmi001PyyearTta','name':'以前年度计算(TTA)-宣传单张、宣传牌及促销用品推广服务费'},
+                        {'value':'dmi001PyyearOntop','name':'以前年度计算(ONTOP)-宣传单张、宣传牌及促销用品推广服务费'},
+                        {'value':'dmi001MonthContractAdj','name':'本月合同调整-宣传单张、宣传牌及促销用品推广服务费'},
+                        {'value':'dmi001MonthReconAdj','name':'本月对帐调整-宣传单张、宣传牌及促销用品推广服务费'},
+                        {'value':'dmi001PyContractAdj','name':'以前年度合同调整-宣传单张、宣传牌及促销用品推广服务费'},
+                        {'value':'dmi001PyReconAdj','name':'以前年度对帐调整-宣传单张、宣传牌及促销用品推广服务费'},
+                        {'value':'dmi001PyAuditAdj','name':'以前年度PRG调整/自查调整-宣传单张、宣传牌及促销用品推广服务费'},
+                        {'value':'dmi001Memo','name':'备注-宣传单张、宣传牌及促销用品推广服务费'},
+                        {'value':'dmi001Total','name':'宣传单张、宣传牌及促销用品推广服务费Total'},
+                        {'value':'npd001','name':'条款-新品种宣传推广服务费'},
+                        {'value':'npd001CurrentMonthTta','name':'本月计算(TTA)-新品种宣传推广服务费'},
+                        {'value':'npd001CurrentMonthOntop','name':'本月计算(ONTOP)-新品种宣传推广服务费'},
+                        {'value':'npd001PyyearTta','name':'以前年度计算(TTA)-新品种宣传推广服务费'},
+                        {'value':'npd001PyyearOntop','name':'以前年度计算(ONTOP)-新品种宣传推广服务费'},
+                        {'value':'npd001MonthContractAdj','name':'本月合同调整-新品种宣传推广服务费'},
+                        {'value':'npd001MonthReconAdj','name':'本月对帐调整--新品种宣传推广服务费'},
+                        {'value':'npd001PyContractAdj','name':'以前年度合同调整--新品种宣传推广服务费'},
+                        {'value':'npd001PyReconAdj','name':'以前年度对帐调整--新品种宣传推广服务费'},
+                        {'value':'npd001PyAuditAdj','name':'以前年度PRG调整/自查调整--新品种宣传推广服务费'},
+                        {'value':'npd001Memo','name':'备注-新品种宣传推广服务费'},
+                        {'value':'npd001Total','name':'新品种宣传推广服务费Total'},
+                        {'value':'bdf001','name':'条款-商业发展服务费'},
+                        {'value':'bdf001CurrentMonthTta','name':'本月计算(TTA)BDF商业发展服务费'},
+                        {'value':'bdf001CurrentMonthOntop','name':'本月计算(ONTOP)BDF商业发展服务费'},
+                        {'value':'bdf001PyyearTta','name':'以前年度计算(TTA)BDF商业发展服务费'},
+                        {'value':'bdf001PyyearOntop','name':'以前年度计算(ONTOP)BDF商业发展服务费'},
+                        {'value':'bdf001MonthContractAdj','name':'本月合同调整BDF商业发展服务费'},
+                        {'value':'bdf001MonthReconAdj','name':'本月对帐调整BDF商业发展服务费'},
+                        {'value':'bdf001PyContractAdj','name':'以前年度合同调整BDF商业发展服务费'},
+                        {'value':'bdf001PyReconAdj','name':'以前年度对帐调整BDF商业发展服务费'},
+                        {'value':'bdf001PyAuditAdj','name':'以前年度PRG调整/自查调整BDF商业发展服务费'},
+                        {'value':'bdf001Memo','name':'备注-商业发展服务费'},
+                        {'value':'bdf001Total','name':'商业发展服务费Total'},
+                        {'value':'hbi001','name':'条款-H&BAward健与美'},
+                        {'value':'hbi001CurrentMonthTta','name':'本月计算(TTA)-H&BAward健与美'},
+                        {'value':'hbi001CurrentMonthOntop','name':'本月计算(ONTOP)-H&BAward健与美'},
+                        {'value':'hbi001PyyearTta','name':'以前年度计算(TTA)-H&BAward健与美'},
+                        {'value':'hbi001PyyearOntop','name':'以前年度计算(ONTOP)-H&BAward健与美'},
+                        {'value':'hbi001MonthContractAdj','name':'本月合同调整-H&BAward健与美'},
+                        {'value':'hbi001MonthReconAdj','name':'本月对帐调整-H&BAward健与美'},
+                        {'value':'hbi001PyContractAdj','name':'以前年度合同调整-H&BAward健与美'},
+                        {'value':'hbi001PyReconAdj','name':'以前年度对帐调整-H&BAward健与美'},
+                        {'value':'hbi001PyAuditAdj','name':'以前年度PRG调整/自查调整-H&BAward健与美'},
+                        {'value':'hbi001Memo','name':'备注-H&BAward健与美'},
+                        {'value':'hbi001Total','name':'H&BAward健与美Total'},
+                        {'value':'oth001','name':'条款-其他'},
+                        {'value':'oth001CurrentMonthTta','name':'本月计算(TTA)-其他'},
+                        {'value':'oth001CurrentMonthOntop','name':'本月计算(ONTOP)-其他'},
+                        {'value':'oth001PyyearTta','name':'以前年度计算(TTA)-其他'},
+                        {'value':'oth001PyyearOntop','name':'以前年度计算(ONTOP)-其他'},
+                        {'value':'oth001Other_gl','name':'本月计算(GL)-其他'},
+                        {'value':'oth001OtherPurchase','name':'本月采购额计算-其他P*EM'},
+                        {'value':'oth001MonthContractAdj','name':'本月合同调整-其他'},
+                        {'value':'oth001MonthReconAdj','name':'本月对帐调整--其他'},
+                        {'value':'oth001PyContractAdj','name':'以前年度合同调整--其他'},
+                        {'value':'oth001PyReconAdj','name':'以前年度对帐调整--其他'},
+                        {'value':'oth001PyAuditAdj','name':'以前年度PRG调整/自查调整-其他'},
+                        {'value':'oth001Memo','name':'备注-其他'},
+                        {'value':'oth001Total','name':'其他Total'},
+                        {'value':'mkt001','name':'条款-市场推广服务费'},
+                        {'value':'mkt001CurrentMonthTta','name':'本月计算(TTA)-市场推广服务费'},
+                        {'value':'mkt001CurrentMonthOntop','name':'本月计算(ONTOP)-市场推广服务费'},
+                        {'value':'mkt001PyyearTta','name':'以前年度计算(TTA)-市场推广服务费'},
+                        {'value':'mkt001PyyearOntop','name':'以前年度计算(ONTOP)-市场推广服务费'},
+                        {'value':'mkt001MonthContractAdj','name':'本月合同调整-市场推广服务费'},
+                        {'value':'mkt001MonthReconAdj','name':'本月对帐调整-市场推广服务费'},
+                        {'value':'mkt001PyContractAdj','name':'以前年度合同调整-市场推广服务费'},
+                        {'value':'mkt001PyReconAdj','name':'以前年度对帐调整-市场推广服务费'},
+                        {'value':'mkt001PyAuditAdj','name':'以前年度PRG调整/自查调整-市场推广服务费'},
+                        {'value':'mkt001Memo','name':'备注-市场推广服务费'},
+                        {'value':'mkt001Total','name':'市场推广服务费Total'},
+                        {'value':'nti001','name':'条款-非贸易收入'},
+                        {'value':'nti001CurrentMonthTta','name':'本月计算(TTA)-非贸易收入'},
+                        {'value':'nti001CurrentMonthOntop','name':'本月计算(ONTOP)-非贸易收入'},
+                        {'value':'nti001PyyearTta','name':'以前年度计算(TTA)-非贸易收入'},
+                        {'value':'nti001PyyearOntop','name':'以前年度计算(ONTOP)-非贸易收入'},
+                        {'value':'nti001MonthContractAdj','name':'本月合同调整-非贸易收入'},
+                        {'value':'nti001MonthReconAdj','name':'本月对帐调整-非贸易收入'},
+                        {'value':'nti001PyContractAdj','name':'以前年度合同调整-非贸易收入'},
+                        {'value':'nti001PyReconAdj','name':'以前年度对帐调整-非贸易收入'},
+                        {'value':'nti001PyAuditAdj','name':'以前年度PRG调整/自查调整-非贸易收入'},
+                        {'value':'nti001Memo','name':'备注-非贸易收入'},
+                        {'value':'nti001Total','name':'非贸易收入Total'},
+                        {'value':'bac001','name':'条款-促销服务费'},
+                        {'value':'bac001CurrentMonthTta','name':'本月计算(TTA)-促销服务费'},
+                        {'value':'bac001CurrentMonthOntop','name':'本月计算(ONTOP)-促销服务费'},
+                        {'value':'bac001PyyearTta','name':'以前年度计算(TTA)-促销服务费'},
+                        {'value':'bac001PyyearOntop','name':'以前年度计算(ONTOP)-促销服务费'},
+                        {'value':'bac001MonthContractAdj','name':'本月合同调整-促销服务费'},
+                        {'value':'bac001MonthReconAdj','name':'本月对帐调整-促销服务费'},
+                        {'value':'bac001PyContractAdj','name':'以前年度合同调整-促销服务费'},
+                        {'value':'bac001PyReconAdj','name':'以前年度对帐调整-促销服务费'},
+                        {'value':'bac001PyAuditAdj','name':'以前年度PRG调整/自查调整-促销服务费'},
+                        {'value':'bac001Memo','name':'备注-促销服务费'},
+                        {'value':'bac001Total','name':'促销服务费Total'},
+                        {'value':'opsf01','name':'条款-其他促销服务费'},
+                        {'value':'opsf01CurrentMonthTta','name':'本月计算(TTA)-其他促销服务费'},
+                        {'value':'opsf01CurrentMonthOntop','name':'本月计算(ONTOP)-其他促销服务费'},
+                        {'value':'opsf01PyyearTta','name':'以前年度计算(TTA)-其他促销服务费'},
+                        {'value':'opsf01PyyearOntop','name':'以前年度计算(ONTOP)-其他促销服务费'},
+                        {'value':'opsf01MonthContractAdj','name':'本月合同调整-其他促销服务费'},
+                        {'value':'opsf01MonthReconAdj','name':'本月对帐调整-其他促销服务费'},
+                        {'value':'opsf01PyContractAdj','name':'以前年度合同调整-其他促销服务费'},
+                        {'value':'opsf01PyReconAdj','name':'以前年度对帐调整-其他促销服务费'},
+                        {'value':'opsf01PyAuditAdj','name':'以前年度PRG调整/自查调整-其他促销服务费'},
+                        {'value':'opsf01Memo','name':'备注-其他促销服务费'},
+                        {'value':'opsf01Total','name':'其他促销服务费Total'}
+
+
+                             ]"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <div class="modal fade" id="excelTtaAboiBillLine" data-des="excelTtaAboiBillLine" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        导入
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">选择文件</span></label>
+                                <input type="file" required accept="*.xlsx"  id="fileUpLoad">
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="save(funcMenuForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="PLDeleteTtaAboiBillLine" data-des="批量删除" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog " style="width: 300px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        选择月份
+                    </h4>
+                </div>
+                <form class="ngValid" name="TtaTermsAcCountForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">月份</span></label>
+                                <input type="text" class="form-control radius3" required
+                                       date-time-picker="" data-date-format="yyyy-mm"
+                                       data-start-view="3" data-min-view="3" data-max-view="3"
+                                       ng-model="paramsPL.month" >
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="saveWindow(TtaTermsAcCountForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+</div>

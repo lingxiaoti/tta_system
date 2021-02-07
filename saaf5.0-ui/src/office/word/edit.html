@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title> 选项卡</title>
+    <link rel="stylesheet" href="../../css/app_saaf.css">
+    <script type="text/javascript" src="../../plugin/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="../../plugin/angular1.4.7.min.js"></script>
+</head>
+<body >
+<script type="text/javascript">
+    //window.location.port ="8089";
+    var jsonParamValue = {};
+    var params = {};
+    // $(function () {
+    //     var paramValue = window.external.UserParams;
+    //     jsonParamValue = JSON.parse(paramValue);
+    //     params = {
+    //         "params": "{fileId:\"" + jsonParamValue.fileId + "\"}"
+    //
+    //     };
+    //     start();
+    // });
+    function Save() {
+        document.getElementById("PageOfficeCtrl1").JsFunction_AfterDocumentSaved = "saveTip()";
+        document.getElementById("PageOfficeCtrl1").WebSave();
+    }
+    function func ($scope) {
+        $scope.loadFlag = false ;
+        var paramValue = window.external.UserParams;
+        jsonParamValue = JSON.parse(paramValue);
+        params = {
+            "params": "{fileId:\"" + jsonParamValue.fileId + "\"}"
+
+        };
+        start();
+
+        function start() {
+            $.ajax({
+                url: jsonParamValue.url,
+                type: 'post',
+                data: params,
+                timeout: 60000 * 5,
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+                    "Certificate": jsonParamValue.Certificate,
+                },
+                dataType: 'html',
+                success: function (res) {
+                    var res = JSON.parse(res);
+                    if (res.status === 'S') {
+                        $scope.loadFlag = true;
+                        $("#docEditor").append(res.data);
+                    } else {
+                        alert(res.msg);
+                    }
+
+                },
+                error: function (e) {
+                    alert(e);
+                }
+            });
+        };
+    };
+    function openLocal() {
+        document.getElementById("PageOfficeCtrl1").ShowDialog(1);
+    }
+
+    function Close() {
+        window.external.close();
+    }
+
+    function IsFullScreen() {
+        document.getElementById("PageOfficeCtrl1").FullScreen = !document.getElementById("PageOfficeCtrl1").FullScreen;
+    }
+
+    function saveTip() {
+        alert('文件已保存');
+    }
+
+    function genDoc(id) {
+        $('#docEditor').css("display", "none");
+        $('#lovOrderModal').css("display", "block");
+        var obj = {};
+        obj.templateId = id;
+        $.ajax({
+            url: "",
+            method: "POST",
+            dataType: "json",
+            headers: {
+                "TokenCode": ""
+            },
+            data: {},
+            success: function (res) {
+                $('#lovOrderModal').css("display", "none");
+                $('#docEditor').css("display", "block");
+                alert(res.msg);
+            }
+        });
+    }
+
+    function insertQRCode(id) {
+        var docObj = document.getElementById("PageOfficeCtrl1").Document;
+        // debugger;
+        docObj.Application.ActiveWindow.View.ShowFieldCodes = false; //不要以域代码的形式显示超链接
+        //    docObj.Application.Selection.InsertBefore('abcderffff');
+        //      docObj.Application.Selection.InlineShapes.AddPicture('http://192.168.28.166:8080/saafbase/img/product02.jpg');
+        document.getElementById("PageOfficeCtrl1").InsertWebImage("/saafbase/restServer/srmOkcContractsService/contractqrcode/", false, 4);
+    }
+
+    //文档关闭前先提示用户是否保存
+    function BeforeBrowserClosed() {
+        if (document.getElementById("PageOfficeCtrl1").IsDirty) {
+            if (confirm("提示：文档已被修改，是否继续关闭放弃保存 ？")) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+
+
+
+
+
+    var app = angular.module("app",[]);
+    app.controller('con',func);
+
+
+</script>
+<div ng-controller="con">
+</div>
+<div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+    <button class="btn btn-default" onclick="Save()"><i class="fa fa-save" aria-hidden="true"></i>保存</button>
+</div>
+<div id="docEditor" style="width: 950px;height: 800px;">
+    <!-- <%=request.getAttribute("editor")%> -->
+</div>
+
+<div class="modal fade in" id="lovOrderModal" tabindex="-1" role="dialog" aria-labelledby="lovOrderModal"
+     aria-hidden="true">
+    <div class="modal-dialog " style="margin-top: 10px;margin-bottom: 200px;width:700px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title ng-binding" id="myModalLabel">
+                    信息
+                </h4>
+            </div>
+            <div class="modal-body">
+                <span>合同转换中，请耐心等待</span>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div>
+</div>
+</body>
+</html>

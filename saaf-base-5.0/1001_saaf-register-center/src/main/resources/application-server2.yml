@@ -1,0 +1,10 @@
+server:
+  port: 8760
+eureka:
+  instance:
+    hostname: siedevserver-center2.novalocal
+  client:
+    serviceUrl:
+      defaultZone: http://admin:admin@siedevserver-center3.novalocal:8760/eureka/,http://admin:admin@siedevserver-center1.novalocal:8760/eureka/
+  server:
+    renewal-percent-threshold: 0.5

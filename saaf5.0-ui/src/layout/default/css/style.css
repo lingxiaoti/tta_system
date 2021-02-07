@@ -1,0 +1,66 @@
+@charset "utf-8";
+.box{
+    display:-moz-box;
+    display:-webkit-box;
+    display:box;
+}
+.box1{
+    -moz-box-flex:1;
+    -webkit-box-flex:1;
+    box-flex:1;
+    /*等宽兼容*/
+    width:0%;
+}
+.box2{
+    -moz-box-flex:2;
+    -webkit-box-flex:2;
+    box-flex:2;
+    width:0%;
+}
+.box3{
+    -moz-box-flex:3;
+    -webkit-box-flex:3;
+    box-flex:3;
+    width:0%;
+}
+.box4{
+    -moz-box-flex:4;
+    -webkit-box-flex:4;
+    box-flex:4;
+    width:0%;
+}
+.box5{
+    -moz-box-flex:5;
+    -webkit-box-flex:5;
+    box-flex:5;
+    width:0%;
+}
+.tc{
+    text-align: center;
+}
+.loginBg{
+    position: fixed;
+    width:100%;
+    height:100%;
+    background: url('../img/loginBg1.jpg') no-repeat center;
+}
+.loginWrap{
+    width:350px;
+    margin:50px auto;
+}
+.btn-sale{
+    background:#5cadff;
+    color: #fff;
+    height:42px;
+    font-size:16px;
+}
+
+.loginWrap .form-control{
+    height:42px;
+}
+.fs12{
+    font-size: 12px!important;
+}
+.btn-sale:hover{
+    color: #fff;
+}

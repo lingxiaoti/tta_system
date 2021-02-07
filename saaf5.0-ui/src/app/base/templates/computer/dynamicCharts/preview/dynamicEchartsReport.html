@@ -1,0 +1,161 @@
+
+	<div ng-controller="dynamicEchartsReportCtrl" class="gridtable">
+		<form class="form bg-white" ng-submit="getFields()" inner-frame data-des="此节点必需－内框页面的指令">
+			<!--------------------- 按钮------------------->
+			<div class="bg-gray-white bt">
+				<div class="bg-gray-white p5">
+					<div class="btn-group btn-group-xs pull-right ml10"
+						 id="outputButton">
+						<button class="btn btn-default" type="submit"><i class="fa fa-search" aria-hidden="true"></i>搜索
+						</button>
+						<button class="btn btn-default" type="button" ng-click="initQuery()"><i class="fa fa-undo"
+																								aria-hidden="true"></i>重置
+						</button>
+						<!--<button class="btn btn-default" type="button" ng-click="exportExcel()"><i class="fa fa-download" aria-hidden="true">导出</i></button>-->
+					</div>
+
+					<div class="btn-group btn-group-xs ">
+						<button class="btn  btn-warning" ng-click="moreInput($event)">
+							<i class="fa fa-chevron-circle-down"></i>高级查询
+						</button>
+						<button class="btn btn-primary" ng-click="fullWindow($event)">
+							<i class="fa fa-square-o"></i>数据全屏
+						</button>
+					</div>
+				</div>
+			</div>
+			<!--------------------- 按钮  -------------------->
+			<div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+				<div class="nicescroll-height  bg-white " ng-nicescroll
+					 nice-option="{{niceOpction}}"
+					 data-des="此节点必需-滚动内容及指令">
+					<!--------------------- 输入表单  ---------------------->
+					<div class=" mt10 bb oh" style="min-height:30px;" input-form data-des="此节点必需－用于识别输入表单的指令">
+						<div ng-repeat="item in paramColumnData">
+							<div class="form-group col-xs-4 col-md-3">
+								<div class="input-group input-group-xs">
+									<label class="input-group-addon bn">
+									<span class="w100">
+										<i class="red"  ng-if="item.paramRequiredFlag=='Y'">*</i>
+										{{item.columnName}}{{item.rangeFlag=='Y'?'从':''}}：</span></label>
+
+									<!-- 普通输入框 -->
+									<input ng-if="(item.paramDisplayType=='STRING' || item.paramDisplayType=='NUMBER') && !item.paramDataFromType"
+										   type="text" class="form-control radius3"
+										   ng-model="queryParams[item.columnCode]"
+										   ng-required="item.paramRequiredFlag=='Y'">
+
+									<!-- 日期输入框 -->
+									<input ng-if="item.paramDisplayType=='DATE' && !item.paramDataFromType" type="text"
+										   data-enddate="{{item.rangeFlag=='Y'?item[item.columnCodeTo]:''}}"
+										   class="form-control radius3" data-min-View="2"
+										   ng-model="queryParams[item.columnCode]"
+										   ng-required="item.paramRequiredFlag=='Y'"
+										   data-date-format="yyyy-mm-dd" date-time-picker>
+
+									<!-- 日期时间输入框 -->
+									<input ng-if="item.paramDisplayType=='DATETIME' && !item.paramDataFromType"
+										   type="text"
+										   data-enddate="{{item.rangeFlag=='Y'?item[item.columnCodeTo]:''}}"
+										   class="form-control radius3" ng-model="queryParams[item.columnCode]"
+										   ng-required="item.paramRequiredFlag=='Y'"
+										   data-date-format="yyyy-mm-dd hh:ii:ss" date-time-picker>
+
+									<!-- 快码下拉列表 -->
+									<div lookup-code="{{item.paramDataFromTypeCode}}" id="" ng-if="item.paramDataFromType==='LOOKUP'"  ng-model="queryParams[item.columnCode]"></div>
+
+									<!-- LOV -->
+									<input ng-if="item.listFlag=='Y'" type="text" class="form-control radius3"
+										   ng-model="queryParams[item.columnCode]"
+										   ng-required="item.paramRequiredFlag=='Y'">
+									<span ng-if="item.listFlag=='Y'" class="input-group-btn" saaf-lov
+										  data-return-value1="item.columnCodeTo"
+										  saaf-lov-option="{
+	                            dataUrl:'queryDynamicReportLov',
+	                            params:{'querySetLineId':'{{item.querySetLineId}}','listDataSource':'{{item.listDataSource}}','listValue':'{{item.listValue}}','listDisplay':'{{item.listDisplay}}'},
+	                            searchLabel1:'{{item.listValueName}}',
+	                            searchLabel2:'{{item.listDisplayName}}',
+	                            searchColName1:'{{item.listValue}}',
+	                            searchColName2:'{{item.listDisplay}}',
+	                            label1:'{{item.listValueName}}',
+	                            label2:'{{item.listDisplayName}}',
+	                            colName1:'column1',
+	                            colName2:'column2',
+	                            returnColName1:'column1'}"></span>
+								</div>
+							</div>
+							<div class="form-group col-xs-4 col-md-3" ng-if="item.rangeFlag=='Y'">
+								<div class="input-group input-group-xs">
+									<label class="input-group-addon bn"><span class="w100"><i class="red"
+																							  ng-if="item.paramRequiredFlag=='Y'">*</i>{{item.columnName}}至： </span></label>
+									<!-- 普通输入框 -->
+									<input ng-if="item.lookupFlag!='Y'&&(item.paramDisplayType=='STRING' || item.paramDisplayType=='NUMBER')"
+										   type="text"
+										   class="form-control radius3" ng-model="queryParams[item.columnCodeTo]"
+										   ng-required="item.paramRequiredFlag=='Y'">
+
+									<!-- 日期输入框 -->
+									<input ng-if="item.lookupFlag!='Y'&&item.paramDisplayType=='DATE'" type="text"
+										   class="form-control radius3" data-min-View="2"
+										   data-stratdate="{{item.rangeFlag=='Y'?item.columnCodeTo:''}}"
+										   ng-model="queryParams[item.columnCodeTo]"
+										   ng-required="item.paramRequiredFlag=='Y'"
+										   data-date-format="yyyy-mm-dd" date-time-picker>
+
+									<!-- 日期时间输入框 -->
+									<input ng-if="item.lookupFlag!='Y'&&item.paramDisplayType=='DATETIME'"
+										   type="text"
+										   class="form-control radius3"
+										   data-stratdate="{{item.rangeFlag=='Y'?item.columnCodeTo:''}}"
+										   ng-model="queryParams[item.columnCodeTo]"
+										   ng-required="item.paramRequiredFlag=='Y'"
+										   data-date-format="yyyy-mm-dd hh:ii:ss" date-time-picker>
+
+									<!-- 快码下拉列表 -->
+									<select ng-if="item.lookupFlag=='Y'" class="form-control radius3"
+											ng-model="queryParams[item.columnCodeTo]"
+											ng-required="item.paramRequiredFlag=='Y'">
+										<option></option>
+										<option saaf-select-lookupcode="{{item.lookupType}}"></option>
+									</select>
+
+									<!-- LOV -->
+									<input ng-if="item.listFlag=='Y'" type="text" class="form-control radius3"
+										   ng-model="queryParams[item.columnCodeTo]"
+										   ng-required="item.paramRequiredFlag=='Y'">
+									<span ng-if="item.listFlag=='Y'" class="input-group-btn" saaf-lov
+										  data-return-value1="item[item.columnCodeTo]"
+										  saaf-lov-option="{
+	                            dataUrl:'queryDynamicReportLov',
+	                            params:{'querySetLineId':'{{item.querySetLineId}}'},
+	                            searchLabel1:'{{item.listValueName}}',
+	                            searchLabel2:'{{item.listDisplayName}}',
+	                            searchColName1:'{{item.listValue}}',
+	                            searchColName2:'{{item.listDisplay}}',
+	                            label1:'{{item.listValueName}}',
+	                            label2:'{{item.listDisplayName}}',
+	                            colName1:'column1',
+	                            colName2:'column2',
+	                            returnColName1:'column1'}"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--------------------- 输入表单      -------------------------->
+
+					<!--------------------- 查询结果　   -------------------------->
+
+					<!--<div base-data-table="dynamicReportTablePreview"  id="dynamicReportTablePreview"
+						 ng-params="queryParam"
+						 data-url="dynamicReportTablePreview"
+						 data-auto-request="false"
+						 data-legend="{{legend}}"></div>-->
+
+					<div id="container" style="height: 90%"></div>
+
+
+					<!--------------------- 查询结果　  ------------------------------>
+				</div>
+			</div>
+		</form>
+	</div>

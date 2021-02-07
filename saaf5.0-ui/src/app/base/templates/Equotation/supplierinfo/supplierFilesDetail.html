@@ -1,0 +1,1472 @@
+<div ng-controller="supplierFilesDetailCtrl" class="bigdata">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+                <hr width="100%">
+
+                <form name="formArea" class=" mt10 pb5  "
+                      data-des="此节点必需－用于识别输入表单的指令">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <label>{{$l('供应商档案查看')}}</label>
+                        <div class="pull-right ml10" ng-if="program.deptCode =='0E'">
+                            <div class="btn-group btn-group-xs ">
+                                <button class="btn btn-default" type="button"
+                                        ng-click="saveForSupplierFilesDetail()">
+                                    <i class="fa fa-save" aria-hidden="true"></i>{{ $l('保存')}}
+                                </button>
+                            </div>
+                        </div>
+                    </header>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('供应商名称')}}：</span></label>
+                            {{paramsInit.supplierName}}
+                        </div>
+                    </div>
+                </form>
+
+                <div class="col-xs-12 col-md-12 br h p0" style="margin-right: -1px;">
+                    <ul id="tab" class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#baseInfo" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                <label>{{$l('基础信息')}}</label></a>
+                        </li>
+                        <li ng-if="program.deptCode =='0E' && supplierProgram.supplierType=='20'">
+                            <a href="#copCategory" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                <label>{{$l('可合作品类')}}</label></a>
+                        </li>
+                        <li ng-if="program.deptCode == 'IT'">
+                            <a href="#serviceScope" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                <label>{{$l('服务范围')}}</label></a>
+                        </li>
+                        <li>
+                            <a href="#contacter" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                <label>{{$l('联系人目录')}}</label></a>
+                        </li>
+                        <li>
+                            <a href="#qualificationsInfo" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                <label>{{$l('资质信息')}}</label></a>
+                        </li>
+                        <li ng-if="program.deptCode =='0E' && supplierProgram.supplierType=='20'">
+                            <a href="#productQualificationsInfo" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                <label>{{$l('生产资质信息')}}</label></a>
+                        </li>
+                        <li ng-if="program.deptCode =='IT' || (program.deptCode =='0E' && supplierProgram.supplierType!='20')">
+                            <a href="#qualificationsFile" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                <label>{{$l('资质文件')}}</label></a>
+                        </li>
+                        <li>
+                            <a href="#bankAccountInfo" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                <label>{{$l('银行信息')}}</label></a>
+                        </li>
+                        <li ng-if="program.deptCode =='0E'">
+                            <a href="#capacityInfo" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                <label>{{$l('产能信息')}}</label></a>
+                        </li>
+                        <li ng-if="program.deptCode =='IT'">
+                            <a href="#operationalInfo" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                <label>{{$l('具体经营状况及现场照片')}}</label></a>
+                        </li>
+                        <li>
+                            <a href="#scoreInfo" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                <label>{{$l('综合表现')}}</label></a>
+                        </li>
+                    </ul>
+                    <div id="tabContent" class="tab-content">
+                        <!--基础信息-->
+                        <div class=" tab-pane fade in  active" id="baseInfo">
+                            <div class="form-group col-xs-12 col-md-12">
+                                <div class="data-table">
+                                    <table class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white">
+                                        <tr class="text-center">
+                                            <th class="form-group col-xs-4 col-md-4"><span class="w100">{{$l('属性')}}</span></th>
+                                            <th class="form-group col-xs-8 col-md-8"><span class="w100">{{$l('内容')}}</span></th>
+                                        </tr>
+                                        <tbody>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('供应商名称')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierProgram.supplierName}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('供应商状态')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierProgram.supplierStatusMeaning}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('国家')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierProgram.countryMeaning}}
+                                            </td>
+                                        </tr>
+                                        <!--<tr>-->
+                                            <!--<td class="text-center"><label class="input-group-addon bn"><span-->
+                                                    <!--class="w110">登录账号</span></label>-->
+                                            <!--</td>-->
+                                            <!--<td class="text-left">{{supplierProgram.loginAccount}}</td>-->
+                                        <!--</tr>-->
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('供应商简称')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierProgram.supplierShortName}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('供应商类型')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                <div class="input-group input-group-xs">
+                                                    {{supplierProgram.supplierTypeMeaning}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <span class="text-right">
+                                                            <button type="button"
+                                                                    class="btn btn-primary btn-xs"
+                                                                    ng-if="program.deptCode =='0E' && supplierProgram.supplierType=='10'">
+                                                           <i class="fa">{{$l('关联供应商')}}</i>
+                                                    </button>
+                                                    <button type="button"
+                                                            class="btn btn-primary btn-xs"
+                                                            ng-if="program.deptCode =='0E' && supplierProgram.supplierType=='20'">
+                                                           <i class="fa">{{$l('关联供应商')}}</i>
+                                                    </button>
+                                                            <label class="input-group-addon bn"
+                                                                   ng-if="program.deptCode =='0E' && supplierProgram.supplierType=='80'"><span
+                                                                    class="w100">{{$l('代理商等级')}}：</span></label>
+                                                            {{supplierProgram.agentLevel}}
+                                                </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center" ng-repeat="row in relatedFactoryDataTable"
+                                            ng-class="{'active':relatedFactoryDataTable.selectRow==$index}"
+                                            ng-click="relatedFactoryDataTable.selectRow=$index">
+                                            <td class="text-right">
+
+                                            </td>
+                                            <td class="text-right">
+                                                <a ng-click="viewSupplierDetail(row)">{{row.supplierName}}</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('主要客户')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierProgram.majorCustomer}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('公司简介')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                   href="{{supplierProgram.filePath}}"
+                                                   target="_blank">{{supplierProgram.fileName}}
+                                                </a>&nbsp;&nbsp;
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('公司简介')}}</span></label>
+                                            </td>
+                                            <td class="text-left"><textarea class="form-control radius3" rows="5"
+                                                                            style="height: auto"
+                                                                            name="companyDescription"
+                                                                            readonly
+                                                                            ng-model="supplierProgram.companyDescription"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('已合作项目')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierProgram.cooperativeProject}}
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="program.deptCode =='0E'">
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('是否已签订业务合同和贸易条款')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                                       ng-model="supplierProgram.whetherSign">
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="program.deptCode =='0E'">
+                                            <td class="text-center">
+                                                <label class="input-group-addon bn"><span class="w110">{{$l('备注')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                <input type="text" class="form-control radius3" name="remark"
+                                                       ng-model="supplierProgram.remark">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!--可合作品类-->
+                        <div class="tab-pane fade in" id="copCategory">
+                            <div class="data-table">
+                                <table
+                                        class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <th>{{$l('序号')}}</th>
+                                        <th>{{$l('品类名称')}}</th>
+                                        <th>{{$l('品类状态')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="text-center" ng-repeat="row in supplierCopCategoryDataTable"
+                                        ng-class="{'active':supplierCopCategoryDataTable.selectRow==$index}"
+                                        ng-click="supplierCopCategoryDataTable.selectRow=$index">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{row.categoryName}}
+                                        </td>
+                                        <td>{{row.statusMeaning}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!--服务范围-->
+                        <div class="tab-pane fade in" id="serviceScope">
+                            <div class="data-table">
+                                <table
+                                        class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <th>{{$l('序号')}}</th>
+                                        <th>{{$l('品类名称')}}</th>
+                                        <th>{{$l('品类状态')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="text-center" ng-repeat="row in supplierServiceScopeDataTable"
+                                        ng-class="{'active':supplierServiceScopeDataTable.selectRow==$index}"
+                                        ng-click="supplierServiceScopeDataTable.selectRow=$index">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{row.categoryName}}
+                                        </td>
+                                        <td>{{row.statusMeaning}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!--联系人目录-->
+                        <div class="tab-pane fade in" id="contacter">
+                            <div class="data-table">
+                                <table
+                                        class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <th>{{$l('序号')}}</th>
+                                        <th>{{$l('姓名')}}</th>
+                                        <th>{{$l('联系电话')}}</th>
+                                        <th>{{$l('邮箱')}}</th>
+                                        <th>{{$l('办公电话')}}</th>
+                                        <th>{{$l('职务')}}</th>
+                                        <th>{{$l('负责品类')}}</th>
+                                        <th>{{$l('备注')}}</th>
+                                        <th>{{$l('发送邮件')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="text-center" ng-repeat="row in supplierContactDataTable"
+                                        ng-class="{'active':supplierContactDataTable.selectRow==$index}"
+                                        ng-click="supplierContactDataTable.selectRow=$index">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{row.contactName}}
+                                        </td>
+                                        <td>{{row.mobilePhone}}
+                                        </td>
+                                        <td>{{row.emailAddress}}
+                                        </td>
+                                        <td>{{row.fixedPhone}}
+                                        </td>
+                                        <td>{{row.positionName}}
+                                        </td>
+                                        <td>{{row.respCategory}}
+                                        </td>
+                                        <td>{{row.remark}}
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="radius3" ng-true-value="'Y'"
+                                                   ng-false-value="'N'" name="sendEmailFlag" disabled
+                                                   ng-model="row.sendEmailFlag">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!--资质信息-->
+                        <div class=" tab-pane fade in " id="qualificationsInfo">
+                            <div class="form-group col-xs-12 col-md-12">
+                                <div class="data-table">
+                                    <table class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white">
+                                        <tr class="text-center">
+                                            <th class="form-group col-xs-4 col-md-4"><span class="w100">{{$l('')}}属性</span></th>
+                                            <th class="form-group col-xs-8 col-md-8"><span class="w100">{{$l('')}}内容</span></th>
+                                        </tr>
+                                        <tbody>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('营业执照号')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierCredentialsProgram.licenseNum}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('营业期限')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                {{supplierCredentialsProgram.licenseIndate}}
+                                                <span>
+                                                    {{$l('长期')}}：
+                                                    <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                                           class=" radius3" disabled
+                                                           ng-model="supplierCredentialsProgram.longBusinessIndate">
+                                                </span>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('营业执照复印件(附件)')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                   href="{{supplierCredentialsProgram.licenseFilePath}}"
+                                                   target="_blank">{{supplierCredentialsProgram.licenseFileName}}
+                                                </a>&nbsp;&nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('是否三证合一')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                                       class=" radius3" disabled
+                                                       ng-model="supplierCredentialsProgram.isThreeInOne">
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="supplierCredentialsProgram.isThreeInOne != 'Y'">
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('组织机构代码号')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierCredentialsProgram.tissueCode}}
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="supplierCredentialsProgram.isThreeInOne != 'Y'">
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('组织机构代码到期日')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                {{supplierCredentialsProgram.tissueIndate}}
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="supplierCredentialsProgram.isThreeInOne != 'Y'">
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('组织机构代码证(附件)')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                   href="{{supplierCredentialsProgram.tissueFilePath}}"
+                                                   target="_blank">{{supplierCredentialsProgram.tissueFileName}}
+                                                </a>&nbsp;&nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="supplierCredentialsProgram.isThreeInOne != 'Y'">
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('税务登记证号')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierCredentialsProgram.taxCode}}
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="supplierCredentialsProgram.isThreeInOne != 'Y'">
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('税务登记证(附件)')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                   href="{{supplierCredentialsProgram.taxFilePath}}"
+                                                   target="_blank">{{supplierCredentialsProgram.taxFileName}}
+                                                </a>&nbsp;&nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('银行开户许可证号')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierCredentialsProgram.bankPermitNumber}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('银行开户许可证(附件)')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                   href="{{supplierCredentialsProgram.bankFilePath}}"
+                                                   target="_blank">{{supplierCredentialsProgram.bankFileName}}
+                                                </a>&nbsp;&nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('一般纳税人证明(附件)')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                   href="{{supplierCredentialsProgram.taxpayerFilePath}}"
+                                                   target="_blank">{{supplierCredentialsProgram.taxpayerFileName}}
+                                                </a>&nbsp;&nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('法人姓名')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierCredentialsProgram.representativeName}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('经营范围')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierCredentialsProgram.businessScope}}
+                                            </td>
+                                        </tr>
+                                        <!--<tr>-->
+                                            <!--<td class="text-center"><label class="input-group-addon bn"><span-->
+                                                    <!--class="w110">成立日期</span></label>-->
+                                            <!--</td>-->
+                                            <!--<td class="text-left">-->
+                                                <!--{{supplierCredentialsProgram.establishmentDate}}-->
+                                            <!--</td>-->
+                                        <!--</tr>-->
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('成立日期')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierCredentialsProgram.businessYears}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('注册资本')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierCredentialsProgram.enrollCapital}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('股东信息')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierCredentialsProgram.shareholderInfo}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('关联方信息')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierCredentialsProgram.relatedParty}}
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="program.deptCode == 'IT'">
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('行业内类似项目经验')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierCredentialsProgram.projectExperience}}
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="program.deptCode == 'IT'">
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('行业内类似项目附件')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                   href="{{supplierCredentialsProgram.projectExperienceFilePath}}"
+                                                   target="_blank">{{supplierCredentialsProgram.projectExperienceFileName}}
+                                                </a>&nbsp;&nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="program.deptCode == 'IT'">
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('以往有合作意向的屈臣氏项目')}}</span></label>
+                                            </td>
+                                            <td class="text-left">{{supplierCredentialsProgram.intentionWatsonsProject}}
+                                            </td>
+                                        </tr>
+
+                                        <tr ng-if="program.deptCode == 'IT'">
+                                            <td class="text-center"><label class="input-group-addon bn"><span
+                                                    class="w110">{{$l('相关附件(附件)')}}</span></label>
+                                            </td>
+                                            <td class="text-left">
+                                                <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                   href="{{supplierCredentialsProgram.relatedFilePath}}"
+                                                   target="_blank">{{supplierCredentialsProgram.relatedFileName}}
+                                                </a>&nbsp;&nbsp;
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!--生产资质信息-->
+                        <div class="tab-pane fade in" id="productQualificationsInfo">
+                            <div class="data-table">
+                                <table
+                                        class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <!--<th>序号</th>-->
+                                        <th>{{$l('文件名称')}}</th>
+                                        <th>{{$l('说明')}}</th>
+                                        <th>{{$l('有效期')}}</th>
+                                        <th>{{$l('附件')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!--生产许可证-->
+                                    <tr class="text-center">
+                                        <!--<td>1</td>-->
+                                        <td>
+                                            <SPAN>{{productQualificationTable1.attachmentName}}</SPAN>
+                                        </td>
+                                        <td><SPAN>{{productQualificationTable1.description}}</SPAN>
+                                        </td>
+                                        <td><SPAN>{{productQualificationTable1.invalidDate}}</SPAN>
+                                        </td>
+                                        <td class="text-left">
+                                            <span class="input-group-addon bn"
+                                                  ng-if="productQualificationTable1.fileId!=null && productQualificationTable1.fileId!=''"
+                                                  style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{productQualificationTable1.filePath}}"
+                                       target="_blank">{{productQualificationTable1.fileName}}
+                                    </a>&nbsp;&nbsp;
+                            </span>
+
+                                        </td>
+
+                                    </tr>
+                                    <!--生产许可证-新增行-->
+                                    <tr class="text-left" ng-repeat="row in productionPermitDataTable"
+                                        ng-class="{'active':productionPermitDataTable.selectRow==$index}"
+                                        ng-click="productionPermitDataTable.selectRow=$index">
+                                        <!--<td></td>-->
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-center">
+                                            <div class="btn-group btn-group-xs" style="">
+                                                <span class="input-group-addon bn"
+                                                      ng-if="row.fileId!=null && row.fileId!=''"
+                                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{row.filePath}}"
+                                       target="_blank">{{row.fileName}}
+                                    </a>&nbsp;&nbsp;
+                                            </span></div>
+                                        </td>
+
+                                    </tr>
+                                    <!--质量安全管理体系认证证明-->
+                                    <tr class="text-center">
+                                        <!--<td>2</td>-->
+                                        <td>
+                                            <SPAN>{{productQualificationTable2.attachmentName}}</SPAN>
+                                        </td>
+                                        <td><SPAN>{{productQualificationTable2.description}}</SPAN>
+                                        </td>
+                                        <td><SPAN>{{productQualificationTable2.invalidDate}}</SPAN>
+                                        </td>
+                                        <td class="text-left">
+                                            <span class="input-group-addon bn"
+                                                  ng-if="productQualificationTable2.fileId!=null && productQualificationTable2.fileId!=''"
+                                                  style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{productQualificationTable2.filePath}}"
+                                       target="_blank">{{productQualificationTable2.fileName}}
+                                    </a>&nbsp;&nbsp;
+                                    </span>
+                                        </td>
+                                    </tr>
+                                    <!--质量安全管理体系认证证明-新增行-->
+                                    <tr class="text-left" ng-repeat="row in qualitySafetyDataTable"
+                                        ng-class="{'active':qualitySafetyDataTable.selectRow==$index}"
+                                        ng-click="qualitySafetyDataTable.selectRow=$index">
+                                        <!--<td></td>-->
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-center">
+                                            <div class="btn-group btn-group-xs" style="">
+                                                <span class="input-group-addon bn"
+                                                      ng-if="row.fileId!=null && row.fileId!=''"
+                                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{row.filePath}}"
+                                       target="_blank">{{row.fileName}}
+                                    </a>&nbsp;&nbsp;
+                                            </span></div>
+                                        </td>
+                                    </tr>
+                                    <!--CSR报告-->
+                                    <tr class="text-center">
+                                        <!--<td>3</td>-->
+                                        <td>
+                                            <SPAN>{{productQualificationTable3.attachmentName}}</SPAN>
+                                        </td>
+                                        <td><SPAN>{{productQualificationTable3.description}}</SPAN>
+                                        </td>
+                                        <td><SPAN>{{productQualificationTable3.invalidDate}}</SPAN>
+                                        </td>
+                                        <td class="text-left">
+                                            <span class="input-group-addon bn"
+                                                  ng-if="productQualificationTable3.fileId!=null && productQualificationTable3.fileId!=''"
+                                                  style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{productQualificationTable3.filePath}}"
+                                       target="_blank">{{productQualificationTable3.fileName}}
+                                    </a>&nbsp;&nbsp;
+                            </span>
+                                        </td>
+                                    </tr>
+                                    <!--CSR报告-新增行-->
+                                    <tr class="text-left" ng-repeat="row in csrReportDataTable"
+                                        ng-class="{'active':csrReportDataTable.selectRow==$index}"
+                                        ng-click="csrReportDataTable.selectRow=$index">
+                                        <!--<td></td>-->
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-center">
+                                            <div class="btn-group btn-group-xs" style="">
+                                                <span class="input-group-addon bn"
+                                                      ng-if="row.fileId!=null && row.fileId!=''"
+                                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{row.filePath}}"
+                                       target="_blank">{{row.fileName}}
+                                    </a>&nbsp;&nbsp;
+                                            </span></div>
+                                        </td>
+
+                                    </tr>
+                                    <!--消防验收证明-->
+                                    <tr class="text-center">
+                                        <td>
+                                            <SPAN>{{productQualificationTable4.attachmentName}}</SPAN>
+                                        </td>
+                                        <td><SPAN>{{productQualificationTable4.description}}</SPAN>
+                                        </td>
+                                        <td><SPAN>{{productQualificationTable4.invalidDate}}</SPAN>
+                                        </td>
+                                        <td class="text-left">
+                                            <span class="input-group-addon bn"
+                                                  ng-if="productQualificationTable4.fileId!=null && productQualificationTable4.fileId!=''"
+                                                  style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{productQualificationTable4.filePath}}"
+                                       target="_blank">{{productQualificationTable4.fileName}}
+                                    </a>&nbsp;&nbsp;
+                            </span>
+                                        </td>
+                                    </tr>
+                                    <!--消防验收证明-新增行-->
+                                    <tr class="text-center" ng-repeat="row in fireAcceptanceDataTable"
+                                        ng-class="{'active':fireAcceptanceDataTable.selectRow==$index}"
+                                        ng-click="fireAcceptanceDataTable.selectRow=$index">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-left">
+                                            <div class="btn-group btn-group-xs" style="">
+                                                <span class="input-group-addon bn"
+                                                      ng-if="row.fileId!=null && row.fileId!=''"
+                                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{row.filePath}}"
+                                       target="_blank">{{row.fileName}}
+                                    </a>&nbsp;&nbsp;
+                                            </span></div>
+                                        </td>
+                                    </tr>
+                                    <!--建筑工程竣工验收报告-->
+                                    <tr class="text-center">
+                                        <td>
+                                            <SPAN>{{productQualificationTable5.attachmentName}}</SPAN>
+                                        </td>
+                                        <td><SPAN>{{productQualificationTable5.description}}</SPAN>
+                                        </td>
+                                        <td><SPAN>{{productQualificationTable5.invalidDate}}</SPAN>
+                                        </td>
+                                        <td class="text-left">
+                                            <span class="input-group-addon bn"
+                                                  ng-if="productQualificationTable5.fileId!=null && productQualificationTable5.fileId!=''"
+                                                  style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{productQualificationTable5.filePath}}"
+                                       target="_blank">{{productQualificationTable5.fileName}}
+                                    </a>&nbsp;&nbsp;
+                            </span>
+                                        </td>
+                                    </tr>
+                                    <!--建筑工程竣工验收报告-新增行-->
+                                    <tr class="text-center" ng-repeat="row in projectAcceptanceDataTable"
+                                        ng-class="{'active':projectAcceptanceDataTable.selectRow==$index}"
+                                        ng-click="projectAcceptanceDataTable.selectRow=$index">
+                                        <!--<td></td>-->
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-left">
+                                            <div class="btn-group btn-group-xs" style="">
+                                                <span class="input-group-addon bn"
+                                                      ng-if="row.fileId!=null && row.fileId!=''"
+                                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{row.filePath}}"
+                                       target="_blank">{{row.fileName}}
+                                    </a>&nbsp;&nbsp;
+                                            </span></div>
+                                        </td>
+                                    </tr>
+                                    <!--新增其他附件-->
+                                    <tr class="text-center" ng-repeat="row in otherDataTable"
+                                        ng-class="{'active':otherDataTable.selectRow==$index}"
+                                        ng-click="otherDataTable.selectRow=$index">
+                                        <!--<td class="text-center">{{$index+1}}</td>-->
+                                        <td>{{row.attachmentName}}
+                                        </td>
+                                        <td>{{row.description}}
+                                        </td>
+                                        <td>{{row.invalidDate}}
+                                        </td>
+                                        <td class="text-left">
+                                            <div class="btn-group btn-group-xs" style="">
+                                                <span class="input-group-addon bn"
+                                                      ng-if="row.fileId!=null && row.fileId!=''"
+                                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{row.filePath}}"
+                                       target="_blank">{{row.fileName}}
+                                    </a>&nbsp;&nbsp;
+                                            </span></div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!--资质文件-->
+                        <div class="tab-pane fade in" id="qualificationsFile">
+                            <div class="data-table">
+                                <table
+                                        class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <th>{{$l('序号')}}</th>
+                                        <th>{{$l('文件名称')}}</th>
+                                        <th>{{$l('说明')}}</th>
+                                        <th>{{$l('有效期')}}</th>
+                                        <th>{{$l('附件')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="text-center" ng-repeat="row in qualificationsFileDataTable"
+                                        ng-class="{'active':qualificationsFileDataTable.selectRow==$index}"
+                                        ng-click="qualificationsFileDataTable.selectRow=$index">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{row.attachmentName}}
+                                        </td>
+                                        <td>{{row.description}}
+                                        </td>
+                                        <td>{{row.invalidDate}}
+                                        </td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{row.filePath}}"
+                                               target="_blank">{{row.fileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!--银行信息-->
+                        <div class="tab-pane fade in" id="bankAccountInfo">
+                            <div class="data-table">
+                                <table
+                                        class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <th>{{$l('序号')}}</th>
+                                        <th>{{$l('账户名称')}}</th>
+                                        <th>{{$l('银行账号')}}</th>
+                                        <th>{{$l('开户行名称')}}</th>
+                                        <th>{{$l('交易币种')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="text-center" ng-repeat="row in supplierBankInfoDataTable"
+                                        ng-class="{'active':supplierBankInfoDataTable.selectRow==$index}"
+                                        ng-click="supplierBankInfoDataTable.selectRow=$index">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{row.bankUserName}}
+                                        </td>
+                                        <td>{{row.bankAccountNumber}}
+                                        </td>
+                                        <td>{{row.bankName}}
+                                        </td>
+                                        <td>{{row.bankCurrencyMeaning}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!--产能信息-->
+                        <div class="tab-pane fade in" id="capacityInfo">
+                            <div class="data-table">
+                                <table
+                                        class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <th>{{$l('序号')}}</th>
+                                        <th>{{$l('地址名称')}}</th>
+                                        <th>{{$l('国家')}}</th>
+                                        <th>{{$l('省(州)')}}</th>
+                                        <th>{{$l('城市')}}</th>
+                                        <th>{{$l('县区')}}</th>
+                                        <th>{{$l('详细地址')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="text-center" ng-repeat="row in oemAddressInfoDataTable"
+                                        ng-class="{'active':oemAddressInfoDataTable.selectRow==$index}"
+                                        ng-click="oemAddressInfoDataTable.selectRow=$index;loadLinesData(row,$index)">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{row.addressName}}
+                                        </td>
+                                        <td>{{row.country}}
+                                        </td>
+                                        <td>{{row.province}}
+                                        </td>
+                                        <td>{{row.city}}
+                                        </td>
+                                        <td>{{row.county}}
+                                        </td>
+                                        <td>{{row.detailAddress}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <header class="col-xs-12 mb10"
+                                    ng-if="program.deptCode =='0E' && supplierProgram.supplierType=='20'">
+                                <i class="fa" aria-hidden="true"></i>
+                                <label>{{$l('生产信息')}}</label>
+                            </header>
+
+                            <!--<div class="form-group col-xs-12 col-md-12">-->
+                            <div class="data-table"
+                                 ng-if="program.deptCode =='0E' && supplierProgram.supplierType=='20'">
+                                <table class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white">
+                                    <tr class="text-center">
+                                        <th class="form-group col-xs-2 col-md-2"><span class="w100">{{$l('属性')}}</span></th>
+                                        <th class="form-group col-xs-4 col-md-4"><span class="w100">{{$l('内容')}}</span></th>
+                                        <th class="form-group col-xs-2 col-md-2"><span class="w100">{{$l('属性')}}</span></th>
+                                        <th class="form-group col-xs-4 col-md-4"><span class="w100">{{$l('内容')}}</span></th>
+                                    </tr>
+                                    <tbody>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('工厂开始生产时间')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.productionStartDate}}</td>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('员工数量')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.employeesAmount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('工厂面积')}}(㎡)</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.factoryArea}}</td>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('质量人员')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.qualityPersonnelAmount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('生产区域面积')}}(㎡)</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.productionArea}}</td>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('销售人员')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.salesmanAmount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('成品仓库面积')}}(㎡)</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.finishedProductArea}}</td>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('生产人员')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.producersAmount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('原料仓库面积')}}(㎡)</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.rawMaterialArea}}</td>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('设计与开发')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.designerAmount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('包装材料仓库面积')}}(㎡)</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.packagingArea}}</td>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('行政人员')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.administrativeStaffAmount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('实验室面积')}}(㎡)</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.laboratoryArea}}</td>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('其它')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.other}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('办公区占地面积')}}(㎡)</span></label>
+                                        </td>
+                                        <td class="text-left">{{oemProductionInfoParams.officeArea}}</td>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110"></span></label>
+                                        </td>
+                                        <td class="text-left"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--</div>-->
+                            <header class="col-xs-12 mb10"
+                                    ng-if="program.deptCode =='0E' && supplierProgram.supplierType=='20'">
+                                <i class="fa" aria-hidden="true"></i>
+                                <label>{{$l('产能信息')}}</label>
+                            </header>
+                            <div class="data-table"
+                                 ng-if="program.deptCode =='0E' && supplierProgram.supplierType=='20'">
+                                <table
+                                        class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <th>{{$l('序号')}}</th>
+                                        <th>{{$l('产品范围')}}</th>
+                                        <th>{{$l('主要原料')}}</th>
+                                        <th>{{$l('生产设备情况')}}</th>
+                                        <th>{{$l('生产能力(文字描述)')}}</th>
+                                        <th>{{$l('生产能力(附件)')}}</th>
+                                        <th>{{$l('备注')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="text-center" ng-repeat="row in oemCapacityInfoDataTable"
+                                        ng-class="{'active':oemCapacityInfoDataTable.selectRow==$index}"
+                                        ng-click="oemCapacityInfoDataTable.selectRow=$index">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{row.productScope}}
+                                        </td>
+                                        <td>{{row.mainRawMaterials}}
+                                        </td>
+                                        <td>{{row.productionEquipment}}
+                                        </td>
+                                        <td>{{row.productionCapacity}}
+                                        </td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{row.productionCapacityFilePath}}"
+                                               target="_blank">{{row.productionCapacityFileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                        <td>{{row.remark}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </div>
+                        <!--具体经营状况及现场照片-->
+                        <div class="tab-pane fade in" id="operationalInfo">
+                            <div class="data-table">
+                                <table
+                                        class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <th>{{$l('序号')}}</th>
+                                        <th>{{$l('地址名称')}}</th>
+                                        <th>{{$l('国家')}}</th>
+                                        <th>{{$l('省(州)')}}</th>
+                                        <th>{{$l('城市')}}</th>
+                                        <th>{{$l('县区')}}</th>
+                                        <th>{{$l('详细地址')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="text-center" ng-repeat="row in itAddressInfoDataTable"
+                                        ng-class="{'active':itAddressInfoDataTable.selectRow==$index}"
+                                        ng-click="itAddressInfoDataTable.selectRow=$index;loadITLinesData(row,$index)">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{row.addressName}}
+                                        </td>
+                                        <td>{{row.country}}
+                                        </td>
+                                        <td>{{row.province}}
+                                        </td>
+                                        <td>{{row.city}}
+                                        </td>
+                                        <td>{{row.county}}
+                                        </td>
+                                        <td>{{row.detailAddress}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <header class="col-xs-12 mb10">
+                                <i class="fa" aria-hidden="true"></i>
+                                <label>{{$l('经营状况')}}</label>
+                            </header>
+
+                            <!--<div class="form-group col-xs-12 col-md-12">-->
+                            <div class="data-table">
+                                <table class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white">
+                                    <tr class="text-center">
+                                        <th class="form-group col-xs-2 col-md-2"><span class="w100">{{$l('属性')}}</span></th>
+                                        <th class="form-group col-xs-4 col-md-4"><span class="w100">{{$l('内容')}}</span></th>
+                                        <th class="form-group col-xs-6 col-md-6"><span class="w100">{{$l('附件')}}</span></th>
+                                    </tr>
+                                    <tbody>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('周边环境')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{itOperationalInfoParams.surroundingEnvironment}}
+                                        </td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{itOperationalInfoParams.surEnvironmentFilePath}}"
+                                               target="_blank">{{itOperationalInfoParams.surEnvironmentFileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr class="text-left" ng-repeat="row in surEnvironmentDataTable"
+                                        ng-class="{'active':surEnvironmentDataTable.selectRow==$index}"
+                                        ng-click="surEnvironmentDataTable.selectRow=$index">
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{row.filePath}}"
+                                               target="_blank">{{row.fileName}}
+                                            </a>&nbsp;&nbsp;
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('大门门牌')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{itOperationalInfoParams.doorPlate}}</td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{itOperationalInfoParams.doorPlateFilePath}}"
+                                               target="_blank">{{itOperationalInfoParams.doorPlateFileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr class="text-left" ng-repeat="row in doorPlateDataTable"
+                                        ng-class="{'active':doorPlateDataTable.selectRow==$index}"
+                                        ng-click="doorPlateDataTable.selectRow=$index">
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{row.filePath}}"
+                                               target="_blank">{{row.fileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('前台')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{itOperationalInfoParams.reception}}</td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{itOperationalInfoParams.receptionFilePath}}"
+                                               target="_blank">{{itOperationalInfoParams.receptionFileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr class="text-left" ng-repeat="row in receptionDataTable"
+                                        ng-class="{'active':receptionDataTable.selectRow==$index}"
+                                        ng-click="receptionDataTable.selectRow=$index">
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{row.filePath}}"
+                                               target="_blank">{{row.fileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('公司面积')}}*(㎡)</span></label>
+                                        </td>
+                                        <td class="text-left">{{itOperationalInfoParams.companyArea}}
+                                        </td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{itOperationalInfoParams.companyAreaFilePath}}"
+                                               target="_blank">{{itOperationalInfoParams.companyAreaFileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr class="text-left" ng-repeat="row in companyAreaDataTable"
+                                        ng-class="{'active':companyAreaDataTable.selectRow==$index}"
+                                        ng-click="companyAreaDataTable.selectRow=$index">
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{row.filePath}}"
+                                               target="_blank">{{row.fileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('办公场所')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{itOperationalInfoParams.officeSpace}}
+                                        </td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{itOperationalInfoParams.officeSpaceFilePath}}"
+                                               target="_blank">{{itOperationalInfoParams.officeSpaceFileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr class="text-left" ng-repeat="row in officeSpaceDataTable"
+                                        ng-class="{'active':officeSpaceDataTable.selectRow==$index}"
+                                        ng-click="officeSpaceDataTable.selectRow=$index">
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{row.filePath}}"
+                                               target="_blank">{{row.fileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('员工概况')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{itOperationalInfoParams.employeeProfile}}
+                                        </td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{itOperationalInfoParams.employeeProfileFilePath}}"
+                                               target="_blank">{{itOperationalInfoParams.employeeProfileFileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr class="text-left" ng-repeat="row in employeeProfileDataTable"
+                                        ng-class="{'active':employeeProfileDataTable.selectRow==$index}"
+                                        ng-click="employeeProfileDataTable.selectRow=$index">
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{row.filePath}}"
+                                               target="_blank">{{row.fileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('主要客户')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{itOperationalInfoParams.majorCustomers}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"><label class="input-group-addon bn"><span
+                                                class="w110">{{$l('销售渠道')}}</span></label>
+                                        </td>
+                                        <td class="text-left">{{itOperationalInfoParams.saleChannel}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--</div>-->
+                            <!--ng-if="program.deptCode =='IT' && supplierProgram.supplierType=='20'"-->
+                            <header class="col-xs-12 mb10">
+                                <i class="fa" aria-hidden="true"></i>
+                                <label>{{$l('产能信息')}}</label>
+                            </header>
+                            <div class="data-table">
+                                <table
+                                        class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <th>{{$l('序号')}}</th>
+                                        <th>{{$l('产品范围')}}</th>
+                                        <th>{{$l('主要原料')}}</th>
+                                        <th>{{$l('生产设备情况')}}</th>
+                                        <th>{{$l('生产能力(文字描述)')}}</th>
+                                        <th>{{$l('生产能力(附件)')}}</th>
+                                        <th>{{$l('备注')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="text-center" ng-repeat="row in itCapacityInfoDataTable"
+                                        ng-class="{'active':itCapacityInfoDataTable.selectRow==$index}"
+                                        ng-click="itCapacityInfoDataTable.selectRow=$index">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{row.productScope}}
+                                        </td>
+                                        <td>{{row.mainRawMaterials}}
+                                        </td>
+                                        <td>{{row.productionEquipment}}
+                                        </td>
+                                        <td>{{row.productionCapacity}}
+                                        </td>
+                                        <td class="text-left">
+                                            <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                               href="{{row.productionCapacityFilePath}}"
+                                               target="_blank">{{row.productionCapacityFileName}}
+                                            </a>&nbsp;&nbsp;
+                                        </td>
+                                        <td>{{row.remark}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <!--综合表现-->
+                        <div class="tab-pane fade in" id="scoreInfo">
+                            <div class="data-table">
+                                <table
+                                        class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <th>{{$l('属性')}}</th>
+                                        <th>{{$l('产品类别')}}</th>
+                                        <th>{{$l('分数')}}</th>
+                                        <th>{{$l('结果')}}</th>
+                                        <th>{{$l('有效期限')}}</th>
+                                        <th>{{$l('附件')}}</th>
+                                        <th>{{$l('操作')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="text-center" ng-repeat="row in supplierScoreDataTable"
+                                        ng-class="{'active':supplierContactDataTable.selectRow==$index}"
+                                        ng-click="supplierContactDataTable.selectRow=$index">
+                                        <!--属性-->
+                                        <td>{{row.atType}}
+                                        </td>
+                                        <!--产品类别-->
+                                        <td>{{row.sceneType}}
+                                        </td>
+                                        <!--分数-->
+                                        <td>{{row.supplierScore}}
+                                        </td>
+                                        <!--结果-->
+                                        <td>{{row.supplierResule}}
+                                        </td>
+                                        <!--有效期限-->
+                                        <td>{{row.validityPeriodDate}}
+                                        </td>
+                                        <!--附件-->
+                                        <td class="text-left">
+                                            <div class="btn-group btn-group-xs" style="">
+                                                <span class="input-group-addon bn"
+                                                      ng-if="row.fileId!=null && row.fileId!=''"
+                                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                       href="{{row.filePath}}"
+                                                       target="_blank">{{row.fileName}}
+                                                    </a>&nbsp;&nbsp;
+                                                </span>
+                                            </div>
+                                        </td>
+                                        </td>
+                                        <!--操作-->
+                                        <td><a ng-click="showMore(row)">{{$l('更多信息')}}</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div lov-list="selectCategoryLov" role="dialog" data-title="选择品类" id="selectCategoryLov" ng-model="current.em"
+         data-url="findSupplierCategoryPagination"
+         data-dynamic-params='selectCategoryParams'
+         data-callback="selectCatetoryReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'categoryName','value':'categoryName','name':'类别名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'categoryLevelFirst','placeholder':'一级分类'},
+                          {'key':'categoryLevelSecond','placeholder':'二级分类'},
+                          {'key':'categoryLevelThird','placeholder':'三级分类'}]"
+    >
+    </div>
+
+    <div lov-list="selectServiceScopeLov" role="dialog" data-title="选择品类" id="selectServiceScopeLov"
+         ng-model="current.em"
+         data-url="findSupplierCategoryPagination"
+         data-dynamic-params='selectServiceScopeParams'
+         data-callback="selectServiceScopeReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'categoryName','value':'categoryName','name':'类别名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'categoryLevelFirst','placeholder':'一级分类'},
+                          {'key':'categoryLevelSecond','placeholder':'二级分类'},
+                          {'key':'categoryLevelThird','placeholder':'三级分类'}]"
+    >
+    </div>
+
+    <div lov-list="selectSupplierLov" role="dialog" data-title="选择供应商" id="selectSupplierLov" ng-model="current.em"
+         data-url="findSupplierInfoLov"
+         data-params=''
+         data-callback="selectSupplierReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'supplierNumber','value':'supplierNumber','name':'供应商档案号'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+         data-search-key="[{'key':'supplierName','placeholder':'供应商名称'},
+                          {'key':'supplierNumber','placeholder':'供应商档案号'}]"
+    >
+    </div>
+
+    <div lov-list="selectFactoryLov" role="dialog" data-title="选择供应商" id="selectFactoryLov" ng-model="current.em"
+         data-url="findSupplierInfoLov"
+         data-params=''
+         data-callback="selectFactoryReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'supplierNumber','value':'supplierNumber','name':'供应商档案号'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+         data-search-key="[{'key':'supplierName','placeholder':'供应商名称'},
+                          {'key':'supplierNumber','placeholder':'供应商档案号'}]"
+    >
+    </div>
+
+    <div lov-list="selectTraderLov" role="dialog" data-title="选择供应商" id="selectTraderLov" ng-model="current.em"
+         data-url="findSupplierInfoLov"
+         data-params=''
+         data-callback="selectTraderReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'supplierNumber','value':'supplierNumber','name':'供应商档案号'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+         data-search-key="[{'key':'supplierName','placeholder':'供应商名称'},
+                          {'key':'supplierNumber','placeholder':'供应商档案号'}]"
+    >
+    </div>
+</div>

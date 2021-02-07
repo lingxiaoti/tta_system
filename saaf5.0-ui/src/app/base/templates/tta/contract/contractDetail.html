@@ -1,0 +1,611 @@
+<div ng-controller="contractDetailCtrl" class="bigdata">
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" permission-btn="btnSave"  ng-disabled="status=='C'||status=='D'"   ng-click="btnSave(contractForm.$invalid)" data-validate-form="contractForm"></button>
+                <button type="button" ng-click="CountContractH()" ng-disabled="status=='C'||status=='D'"
+                        class="btn btn-default btn-xs" id="CountContractH"
+                        >
+                    <i class="fa fa-exchange">计算</i>
+                </button>
+
+                <button class="btn btn-default" permission-btn="btnSubmit"  ng-disabled="status=='C'||status=='D'"   ng-click="btnSubmit()" ></button>
+
+                <button class="btn btn-default" permission-btn="btnDiscard"  ng-disabled="status=='A'||status=='D'"   ng-click="btnDiscard()" ></button>
+
+
+            </div>
+
+
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+            <!--------------------- 输入表单  --->
+
+            <div class=" mt10 pb5  oh"
+                 data-des="此节点必需－用于识别输入表单的指令">
+
+                <form id="contractForm" name="contractForm">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>合同输出拆分与编辑界面</span>
+                    </header>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">单据编号：</span></label>
+                            <input data-required-msg="单据编号" type="text" ng-model="params.contractCode"
+                                   disabled     class="form-control radius3">
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>供应商编号</span>
+                            </label>
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   required     ng-model="params.vendorNbr">
+                            <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getVendorNbr()" type="button" >
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>供应商名称</span>
+                            </label>
+                            <input disabled required data-required-msg="请填写供应商名称"
+                                   type="text" class="form-control radius3"
+                                   ng-model="params.vendorName">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"> <i class="red">*</i>单据状态</span>
+                            </label>
+
+                            <div lookup-code="BILL_STATUS" data-required="true" ng-model="params.billStatus"
+                                 disabled  ></div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>Proposal合同编号：</span></label>
+                            <input type="text" class="form-control radius3"
+                                   disabled  required      ng-model="params.proposalCode" />
+                            <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getProposalCode()" type="button" >
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>Proposal年度：</span></label>
+                            <input data-required-msg="Proposal年度" type="text" ng-model="params.proposalYear"
+                                   disabled   required class="form-control radius3">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>Proposal版本号：</span></label>
+                            <input data-required-msg="Proposal版本号" type="text" ng-model="params.proposalVersion"
+                                   disabled   required class="form-control radius3">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">制单人：</span></label>
+                            <input data-required-msg="制单人" type="text" ng-model="params.createdName"
+                                   disabled    class="form-control radius3">
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">是否拆分</span>
+                            </label>
+                            <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" class=" radius3"   disabled
+                                   ng-model="params.isSplit">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">是否指定多个供应商</span>
+                            </label>
+                            <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" class=" radius3"   disabled
+                                   ng-model="params.isMultipleVendor">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">制单日期：</span></label>
+                            <input data-required-msg="制单日期" type="text" ng-model="params.creationDate"
+                                   disabled    class="form-control radius3">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">确认日期：</span></label>
+                            <input data-required-msg="确认日期" type="text" ng-model="params.confirmDate"
+                                   disabled    class="form-control radius3">
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <div class="row"></div>
+
+
+                </form>
+            </div>
+
+
+            <div class="col-md-12">
+
+
+                <h5><span class="fa fa-cog mr15"></span>Proposal信息
+
+                </h5>
+
+                <div class="data-table">
+
+                    <div style="">
+                        <div class="" ng-nicescroll="" id="nicescroll_contractLineDataTable" nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2'}"
+                                >
+                            <table
+                                    class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+
+                                <tr class="text-center">
+                                    <th>供应商编号</th>
+                                    <th>供应商名称</th>
+                                    <th>部门
+                                    </th>
+                                    <th>商标</th>
+
+                                    <th>Purchase
+                                    </th>
+                                    <th>Sales</th>
+
+                                    <th>销售区域
+                                    </th>
+                                    <th>配送仓库</th>
+                                    <th>BEOI</th>
+                                    <th>BEOI</th>
+                                    <th>BEOI</th>
+                                    <th>BEOI</th>
+                                    <th>BEOI</th>
+
+                                    <th>BEOI</th>
+                                    <th>BEOI</th>
+                                    <th>BEOI</th>
+                                    <th>BEOI</th>
+                                    <th>BEOI</th>
+
+                                    <th>BEOI</th>
+                                    <th>BEOI</th>
+                                    <th>……</th>
+
+
+
+
+
+                                </tr>
+
+                                <tr class="text-center">
+                                    <th></th>
+                                    <th></th>
+                                    <th>
+                                    </th>
+                                    <th></th>
+
+                                    <th>
+                                    </th>
+                                    <th></th>
+
+                                    <th>
+                                    </th>
+                                    <th></th>
+                                    <th>一般购货折扣</th>
+                                    <th>一般购货折扣</th>
+                                    <th>一般购货折扣</th>
+                                    <th>一般购货折扣</th>
+                                    <th>一般购货折扣</th>
+
+                                    <th>一般购货折扣</th>
+                                    <th>(提前付款)购货折扣</th>
+                                    <th>(提前付款)购货折扣</th>
+                                    <th>(提前付款)购货折扣</th>
+                                    <th>(提前付款)购货折扣</th>
+
+                                    <th>(提前付款)购货折扣</th>
+                                    <th>(提前付款)购货折扣</th>
+                                    <th>……</th>
+
+                                </tr>
+
+                                <tr class="text-center">
+                                    <th></th>
+                                    <th></th>
+                                    <th>
+                                    </th>
+                                    <th></th>
+
+                                    <th>
+                                    </th>
+                                    <th></th>
+
+                                    <th>
+                                    </th>
+                                    <th></th>
+                                    <th>收取方式</th>
+                                    <th>TTA值</th>
+                                    <th>单位</th>
+                                    <th>条款</th>
+                                    <th>费用预估（不含税）</th>
+                                    <th>费用预估（含税）</th>
+
+                                    <th>收取方式</th>
+                                    <th>TTA值</th>
+                                    <th>单位</th>
+                                    <th>条款</th>
+                                    <th>费用预估（不含税）</th>
+                                    <th>费用预估（含税）</th>
+                                    <th>……</th>
+
+                                </tr>
+
+
+
+                                </thead>
+                                <tbody  ng-style="tableStyle" ng-nicescroll="" >
+
+
+
+
+
+
+
+
+                                <tr class="text-center" ng-repeat="row in contractLineDataTable"
+                                    ng-class="{'active':contractLineDataTable.selectRow==$index}"
+                                    ng-click="contractLineDataTable.selectRow=$index">
+
+                                    <td>{{row.vendorNbr}}</td>
+                                    <td>{{row.vendorName}}</td>
+                                    <td>{{row.deptDesc}}</td>
+                                    <td>{{row.brandCn}}</td>
+                                    <td>{{row.purchase}}</td>
+                                    <td>{{row.sales}}</td>
+                                    <td>{{row.salesArea}}</td>
+                                    <td>{{row.deliveryGranary}}</td>
+
+                                    <td>{{row.collectionMethod}}</td>
+                                    <td>{{row.ttaValue}}</td>
+                                    <td>{{row.unit}}</td>
+                                    <td>{{row.terms}}</td>
+                                    <td>{{row.feeIntas}}</td>
+                                    <td>{{row.feeNotax}}</td>
+
+
+
+
+
+
+
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+
+
+
+                    <div>
+                        <h5><span class="fa fa-cog mr15"></span>拆分后明细展示
+
+                        </h5>
+
+                        <div class="btn-group btn-group-xs pull-right" ng-if="true">
+                            <div class="btn-group btn-group-xs" ng-if="true">
+                                <button type="button" ng-click="appointSupplier()" class="btn btn-default btn-xs"
+                                        id="appointSupplier">
+                                    <i class="fa fa-plus">指定供应商</i>
+                                </button>
+                                <button type="button" ng-click="splitSupplier()" class="btn btn-default btn-xs"
+                                        id="splitSupplier"
+                                        >
+                                    <i class="fa fa-pencil">拆分</i>
+                                </button>
+                                <button type="button" ng-click="delSupplier()" class="btn btn-default btn-xs"
+                                        id="delSupplier">
+                                    <i class="fa fa-trash">删除</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                <div class="data-table">
+
+                    <div style="">
+                        <div class="" ng-nicescroll="" id="nicescroll_contractDetailDataTable" nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2'}"
+                                >
+                            <table
+                                    class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+
+                                <tr class="text-center">
+                                    <th>供应商编号</th>
+                                    <th>供应商名称</th>
+                                    <th>部门
+                                    </th>
+                                    <th>商标</th>
+
+                                    <th>Purchase
+                                    </th>
+                                    <th>Sales</th>
+
+                                    <th>销售区域
+                                    </th>
+                                    <th>配送仓库</th>
+                                    <th>BEOI</th>
+                                    <th>BEOI</th>
+                                    <th>BEOI</th>
+                                    <th>BEOI</th>
+                                    <th>BEOI</th>
+
+                                    <th>BEOI</th>
+
+                                    <th>……</th>
+
+
+
+
+
+                                </tr>
+
+                                <tr class="text-center">
+                                    <th></th>
+                                    <th></th>
+                                    <th>
+                                    </th>
+                                    <th></th>
+
+                                    <th>
+                                    </th>
+                                    <th></th>
+
+                                    <th>
+                                    </th>
+                                    <th></th>
+                                    <th>一般购货折扣</th>
+                                    <th>一般购货折扣</th>
+                                    <th>一般购货折扣</th>
+                                    <th>一般购货折扣</th>
+                                    <th>一般购货折扣</th>
+
+                                    <th>一般购货折扣</th>
+                                    <th>……</th>
+
+                                </tr>
+
+                                <tr class="text-center">
+                                    <th></th>
+                                    <th></th>
+                                    <th>
+                                    </th>
+                                    <th></th>
+
+                                    <th>
+                                    </th>
+                                    <th></th>
+
+                                    <th>
+                                    </th>
+                                    <th></th>
+                                    <th>收取方式</th>
+                                    <th>TTA值</th>
+                                    <th>单位</th>
+                                    <th>条款</th>
+                                    <th>费用预估（不含税）</th>
+                                    <th>费用预估（含税）</th>
+                                    
+                                    <th>……</th>
+
+                                </tr>
+                                </thead>
+                                <tbody  ng-style="tableStyle" ng-nicescroll="" >
+
+                                <tr class="text-center" ng-repeat="row in contractDetailDataTable"
+                                    ng-class="{'active':contractDetailDataTable.selectRow==$index}"
+                                    ng-click="contractDetailDataTable.selectRow=$index">
+
+                                    <td>{{row.itemDetail}}</td>
+                                    <td>
+                                        <div class="input-group input-group-xs">  <div lookup-code="UNIT" data-required="true"
+                                                                                       ng-model="row.unit"
+                                                                                       disabled
+                                                                                       required></div>
+                                        </div>
+                                    </td>
+
+
+                                    <td>
+                                        <div class="input-group input-group-xs"><input type="text"
+                                                                                       class="form-control radius3"
+                                                                                       required
+                                                                                       ng-model="row.standardValue1"
+                                                />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-group-xs">  <div lookup-code="UNIT" data-required="true"
+                                                                                       ng-model="row.unit1"
+                                                ></div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="input-group input-group-xs"><input type="text"
+                                                                                       class="form-control radius3"
+                                                                                       required
+                                                                                       ng-model="row.standardValue2"
+                                                />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-group-xs">  <div lookup-code="UNIT" data-required="true"
+                                                                                       ng-model="row.unit2"
+                                                ></div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="input-group input-group-xs"><input type="text"
+                                                                                       class="form-control radius3"
+                                                                                       required
+                                                                                       ng-model="row.standardValue3"
+                                                />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-group-xs">  <div lookup-code="UNIT" data-required="true"
+                                                                                       ng-model="row.unit3"
+                                                ></div>
+                                        </div>
+                                    </td>
+
+                                    <td>{{row.parentLineCode}}</td>
+
+
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <div lov-list="cityLov" role="dialog" data-title="选择供应商信息" id="prandcontractCode" ng-model="current.em"
+         data-url="supplierFindLov"
+         data-dynamic-params='{"contractCode": ""}'
+         data-callback="selectcontractCodeReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+         data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                          {'key':'supplierName','placeholder':'供应商名称'}]"
+            >
+    </div>
+
+
+    <div lov-list="cityLov" role="dialog" data-title="Proposal信息" id="latentcontractCode" ng-model="current.em"
+         data-url="proposalFindLov"
+         data-dynamic-params='{"status": "C"}'
+         data-callback="selectLatentcontractReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'orderNbr','value':'orderNbr','name':'Proposal单号'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'Proposal年度','key':'proposalYear'},{'name':'Proposal版本号','key':'versionCode'}]"
+         data-search-key="[{'key':'proposalYear','placeholder':'Proposal年度'},
+                          {'key':'orderNbr','placeholder':'Proposal单号'}]"
+            >
+    </div>
+
+
+
+
+
+
+
+</div>

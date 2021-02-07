@@ -1,0 +1,516 @@
+<div ng-controller="bargainQuotationInfoCtrl" class="bigdata">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <!--permission-btn="btnSave"-->
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <button type="button" ng-click="btnSave('save',formArea.$invalid)" data-validate-form="formArea"
+                            class="btn btn-default">
+                        <i class="fa fa-square-o"></i>{{$l('保存')}}
+                    </button>
+                    <!--permission-btn="btnSubmit"-->
+                    <button type="button" ng-click="btnSave('commit',formArea.$invalid)"
+                            data-validate-form="formArea"
+                            class="btn btn-default">
+                        <i class="fa fa-square-o"></i>{{$l('提交')}}
+                    </button>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+
+                <form class=" mt10 pb5  "
+                      data-des="此节点必需－用于识别输入表单的指令">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <label>{{$l('报价详情')}}</label>
+                    </header>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('项目名称')}}：</span></label>
+                            <input type="text" class="form-control radius3" name="projectName"
+                                   ng-model="editParams.projectName" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('报价编号')}}：</span></label>
+                            <input type="text" class="form-control radius3" name="quotationNumber"
+                                   ng-model="editParams.quotationNumber" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i
+                                    class="red">*</i>{{$l('报价类型')}}：</span></label>
+                            <input type="text" class="form-control radius3" name="orderType"
+                                   ng-model="editParams.orderTypeMeaning" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('状态')}}：</span></label>
+                            <input type="text" class="form-control radius3" name="docStatusMeaning"
+                                   ng-model="editParams.docStatusMeaning" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('立项单号')}}：</span></label>
+                            <input type="text" class="form-control radius3" name="projectNumber"
+                                   ng-model="editParams.projectNumber" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('版本号')}}：</span></label>
+                            <input type="text" class="form-control radius3" name="projectVersion" id="projectVersion"
+                                   ng-model="editParams.projectVersion" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('部门')}}：</span></label>
+                            <input type="text" class="form-control radius3" name="deptName"
+                                   ng-model="editParams.deptName" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('项目品类')}}：</span></label>
+                            <input type="text" class="form-control radius3" name="relevantCatetoryMeaning"
+                                   ng-model="editParams.relevantCatetoryMeaning" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i
+                                    class="red">*</i>{{$l('项目类型')}}：</span></label>
+                            <input type="text" class="form-control radius3" name="projectCategoryMeaning"
+                                   ng-model="editParams.projectCategoryMeaning" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('系列名称')}}：</span></label>
+                            <input type="text" class="form-control radius3" name="seriesName"
+                                   ng-model="editParams.seriesName" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">{{$l('预计上市时间')}}：</span></label>
+                            <input type="text" class="form-control radius3 input-xs"
+                                   date-time-picker data-is-today="false" name="projectCycleFrom"
+                                   data-date-format="yyyy-mm-dd"
+                                   data-min-View="2" ng-model="editParams.projectCycleFrom" autocomplete="off" disabled>
+                        </div>
+                    </div>
+                    <!--<div class="form-group col-xs-4 col-md-3">-->
+                        <!--<div class="input-group input-group-xs">-->
+                            <!--<label class="input-group-addon bn"><span-->
+                                    <!--class="w100">{{$l('报价截止时间')}}：</span></label>-->
+                            <!--<input type="text" class="form-control radius3 input-xs"-->
+                                   <!--date-time-picker data-is-today="false" name="quotationDeadline"-->
+                                   <!--data-date-format="yyyy-mm-dd"-->
+                                   <!--data-min-View="2" ng-model="editParams.quotationDeadline" autocomplete="off"-->
+                                   <!--disabled>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">{{$l('二次报价截止时间')}}：</span></label>
+                            <input type="text" class="form-control radius3 input-xs"
+                                   date-time-picker data-is-today="false" name="secondQuotationDeadline"
+                                   data-date-format="yyyy-mm-dd"
+                                   data-min-View="2" ng-model="editParams.secondQuotationDeadline" autocomplete="off"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('项目负责人')}}：</span></label>
+                            <input type="text" class="form-control radius3" name="projectLeaderMeaning"
+                                   ng-model="editParams.projectLeaderMeaning" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('创建时间')}}：</span></label>
+                            <input type="text" class="form-control radius3" name="creationDate"
+                                   ng-model="editParams.creationDate" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-9">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('备注说明')}}：</span></label>
+                            <textarea class="form-control radius3" rows="3"
+                                      style="height: auto"
+                                      name="projectRemark"
+                                      ng-model="editParams.projectRemark" readonly/>
+                        </div>
+                    </div>
+                </form>
+                <!--------------------- ./  输入表单  --->
+                <hr width="100%">
+                <div class="col-xs-12 col-md-12 br h p0" style="margin-right: -1px;">
+                    <ul id="tab" class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#nonPriceFile" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                <label>{{$l('非价格文件')}}</label></a>
+                        </li>
+                        <li>
+                            <a href="#priceFile" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                <label>{{$l('价格文件')}}</label></a>
+                        </li>
+                    </ul>
+
+                    <form name="formArea" class=" mt10 pb5  "
+                          data-des="此节点必需－用于识别输入表单的指令">
+
+                        <div id="tabContent" class="tab-content">
+                            <!--非价格文件-->
+                            <div class="tab-pane fade in active" id="nonPriceFile">
+                                <div class="data-table">
+                                    <table class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>{{$l('文件名称')}}</th>
+                                            <th>{{$l('说明')}}</th>
+                                            <th>{{$l('附件')}}</th>
+                                            <th><i class="red">*</i>{{$l('报价附件上传')}}</th>
+                                            <th>{{$l('修改后上传')}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center" ng-repeat="row in nonPriceSelectFileDataTable"
+                                            ng-class="{'active':nonPriceSelectFileDataTable.selectRow==$index}"
+                                            ng-click="nonPriceSelectFileDataTable.selectRow=$index">
+                                            <td>{{row.attachmentName}}
+                                            </td>
+                                            <td>
+                                                {{row.description}}
+                                            </td>
+                                            <td class="text-left">
+                                            <span class="input-group-addon bn"
+                                                  ng-if="row.projectFileId!=null && row.projectFileId!=''"
+                                                  style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                                <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                   href="{{row.projectFilePath}}"
+                                                   target="_blank">{{row.projectFileName}}
+                                                </a>&nbsp;&nbsp;
+                                            </span>
+                                            </td>
+                                            <td class="text-left">
+                                                <input type="file" name="file"
+                                                       ng-if="row.nopriceSelectFileId==null  || row.nopriceSelectFileId == ''"
+                                                       id="nonPriceSelectFile{{$index}}"
+                                                       emms-file-upload="myFile"
+                                                       onchange="angular.element(this).scope().uploadNonPriceSelectFile()"
+                                                       ng-disabled="!editFlag" required>
+                                                <span class="input-group-addon bn"
+                                                      ng-if="row.nopriceSelectFileId!=null && row.nopriceSelectFileId!=''"
+                                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                       href="{{row.nopriceSelectFilePath}}"
+                                                       target="_blank">{{row.nopriceSelectFileName}}
+                                                    </a>&nbsp;&nbsp;
+                                            </span>
+                                                <button type="button" ng-click="changeFileForNopriceSelect(row)"
+                                                        class="btn btn-primary btn-xs"
+                                                        ng-if="row.nopriceSelectFileId != null && row.nopriceSelectFileId != '' && editFlag == true">
+                                                    <i class="fa fa-plus">{{$l('重新上传')}}</i>
+                                                </button>
+                                            </td>
+                                            <td class="text-left">
+                                                <input type="file" name="file"
+                                                       ng-if="row.updateNopriceSelectFileId==null  || row.updateNopriceSelectFileId == ''"
+                                                       id="nonPriceSelectUpdateFile{{$index}}"
+                                                       emms-file-upload="myFile"
+                                                       onchange="angular.element(this).scope().uploadNonPriceSelectUpdateFile()"
+                                                       ng-disabled="!updateFlag">
+                                                <span class="input-group-addon bn"
+                                                      ng-if="row.updateNopriceSelectFileId!=null && row.updateNopriceSelectFileId!=''"
+                                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                       href="{{row.updateNopriceSelectFilePath}}"
+                                                       target="_blank">{{row.updateNopriceSelectFileName}}
+                                                    </a>&nbsp;&nbsp;
+                                            </span>
+                                                <button type="button" ng-click="changeFileForUpdateNopriceSelect(row)"
+                                                        class="btn btn-primary btn-xs"
+                                                        ng-if="row.updateNopriceSelectFileId!=null && row.updateNopriceSelectFileId != ''  && updateFlag == true">
+                                                    <i class="fa fa-plus">{{$l('重新上传')}}</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="data-table">
+                                    <table class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>{{$l('文件名称')}}</th>
+                                            <th>{{$l('说明')}}</th>
+                                            <th>{{$l('附件')}}</th>
+                                            <th><i class="red">*</i>{{$l('附件上传')}}</th>
+                                            <th>{{$l('修改后上传')}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center" ng-repeat="row in nonPriceFileDataTable"
+                                            ng-class="{'active':nonPriceFileDataTable.selectRow==$index}"
+                                            ng-click="nonPriceFileDataTable.selectRow=$index">
+                                            <td>
+                                                {{row.attachmentName}}
+                                            </td>
+                                            <td>
+                                                {{row.description}}
+                                            </td>
+                                            <td class="text-left">
+                                            <span class="input-group-addon bn"
+                                                  ng-if="row.projectFileId!=null && row.projectFileId!=''"
+                                                  style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                                <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                   href="{{row.projectFilePath}}"
+                                                   target="_blank">{{row.projectFileName}}
+                                                </a>&nbsp;&nbsp;
+                                            </span>
+                                            </td>
+                                            <td class="text-left">
+                                                <input type="file" name="file"
+                                                       ng-if="row.nopriceFileId==null  || row.nopriceFileId == ''"
+                                                       id="nonPriceFile{{$index}}"
+                                                       emms-file-upload="myFile"
+                                                       onchange="angular.element(this).scope().uploadNonPriceFile()"
+                                                       ng-disabled="!editFlag" required>
+                                                <span class="input-group-addon bn"
+                                                      ng-if="row.nopriceFileId!=null && row.nopriceFileId!='' && editFlag == true"
+                                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                       href="{{row.nopriceFilePath}}"
+                                                       target="_blank">{{row.nopriceFileName}}
+                                                    </a>&nbsp;&nbsp;
+                                            </span>
+                                                <button type="button" ng-click="changeFileForNoprice(row)"
+                                                        class="btn btn-primary btn-xs"
+                                                        ng-if="row.nopriceFileId != null && row.nopriceFileId != '' && editFlag == true">
+                                                    <i class="fa fa-plus">{{$l('重新上传')}}</i>
+                                                </button>
+                                            </td>
+                                            <td class="text-left">
+                                                <input type="file" name="file"
+                                                       ng-if="row.updateNopriceFileId==null  || row.updateNopriceFileId == ''"
+                                                       id="nonPriceUpdateFile{{$index}}"
+                                                       emms-file-upload="myFile"
+                                                       onchange="angular.element(this).scope().uploadNonPriceUpdateFile()"
+                                                       ng-disabled="!updateFlag">
+                                                <span class="input-group-addon bn"
+                                                      ng-if="row.updateNopriceFileId!=null && row.updateNopriceFileId!=''"
+                                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                       href="{{row.updateNopriceFilePath}}"
+                                                       target="_blank">{{row.updateNopriceFileName}}
+                                                    </a>&nbsp;&nbsp;
+                                            </span>
+                                                <button type="button" ng-click="changeFileForUpdateNoprice(row)"
+                                                        class="btn btn-primary btn-xs"
+                                                        ng-if="row.updateNopriceFileId!=null && row.updateNopriceFileId != '' && updateFlag == true">
+                                                    <i class="fa fa-plus">{{$l('重新上传')}}</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <!--价格文件-->
+                            <div class="tab-pane" id="priceFile">
+                                <div class="data-table">
+                                    <table class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>{{$l('文件名称')}}</th>
+                                            <th>{{$l('说明')}}</th>
+                                            <th>{{$l('附件')}}</th>
+                                            <th><a class="red">*</a>{{$l('报价附件上传')}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center" ng-repeat="row in priceFileDataTable"
+                                            ng-class="{'active':priceFileDataTable.selectRow==$index}"
+                                            ng-click="priceFileDataTable.selectRow=$index">
+                                            <td>
+                                                <div class="form-control input-xs"
+                                                     lookup-code="EQU_PROJECT_PRICE_FILE_NAME"
+                                                     ng-model="row.attachmentName"
+                                                     name="attachmentName" disabled
+                                                ></div>
+                                            </td>
+                                            <td>
+                                                {{row.description}}
+                                            </td>
+                                            <td class="text-left">
+                                            <span class="input-group-addon bn"
+                                                  ng-if="row.projectFileId!=null && row.projectFileId!=''"
+                                                  style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                                <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                   href="{{row.projectFilePath}}"
+                                                   target="_blank">{{row.projectFileName}}
+                                                </a>&nbsp;&nbsp;
+                                            </span>
+                                            </td>
+                                            <td class="text-left">
+                                                <input type="file" name="file"
+                                                       ng-if="row.priceFileId==null  || row.priceFileId == ''"
+                                                       id="priceFile{{$index}}"
+                                                       emms-file-upload="myFile"
+                                                       onchange="angular.element(this).scope().uploadPriceFile()">
+
+                                                <span class="input-group-addon bn"
+                                                      ng-if="row.priceFileId!=null && row.priceFileId!=''"
+                                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                                       href="{{row.priceFilePath}}"
+                                                       target="_blank">{{row.priceFileName}}
+                                                    </a>&nbsp;&nbsp;
+                                            </span>
+                                                <button type="button" ng-click="changeFileForPrice(row)"
+                                                        class="btn btn-primary btn-xs"
+                                                        ng-if="row.priceFileId != null && row.priceFileId != ''">
+                                                    <i class="fa fa-plus">{{$l('重新上传')}}</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="form-group col-xs-12 col-md-12">
+                                    <label style="margin-left: 10px"></label>
+
+                                    <div class="btn-group btn-group-xs ml5 pull-right" permission-btn-group="btnImport"
+                                         ng-style="myStyle"
+                                         id="isSq">
+                                        <button type="button" class="btn btn-default  a-black "
+                                                ng-click="productTemplateExport()">
+                                            <i class="fa fa-file-excel-o"></i>{{$l('导入模板下载')}}
+                                        </button>
+                                        <button type="button" class="btn btn-default" saaf-xls-import-component
+                                                data-list-options="{
+                                                            productName:{headName:'*产品'},
+                                                            firstProductPrice:{headName:'*承载产品的包装价格(如软管、玻璃瓶等),但不含合同费用及不含税:Net Net Cost(元)'},
+                                                            twoProductPrice:{headName:'*承载产品的包装价格(如软管、玻璃瓶等),含OI%免费货,但不含税:Net Net Cost(1-OI%)(元)'},
+                                                            bargainFirstPrice:{headName:'*承载产品的包装价格(如软管、玻璃瓶等),但不含合同费用及不含税:Net Net Cost(元)---二次议价报价'},
+                                                            bargainTwoPrice:{headName:'*承载产品的包装价格(如软管、玻璃瓶等),含OI%免费货,但不含税:Net Net Cost(1-OI%)(元)---二次议价报价'}
+                                        }" data-url="saveImportForQuotationProduct"
+                                                data-info="{quotationId:'{{editParams.quotationId}}',projectNumber:'{{editParams.projectNumber}}',projectId:'{{editParams.projectId}}',supplierId:'{{editParams.supplierId}}',sourceId:'{{editParams.sourceId}}'}"
+                                                data-after-action="returnFlash()"
+                                                data-message="承载产品的包装价格(如软管、玻璃瓶等),但不含合同费用及不含税:Net Net Cost(元)---二次议价报价和承载产品的包装价格(如软管、玻璃瓶等),含OI%免费货,但不含税:Net Net Cost(1-OI%)(元)---二次议价报价均不能为空">
+                                            <i class="fa fa-upload"></i>{{$l('导入')}}
+                                        </button>
+                                    </div>
+                                    <!--<div class="btn-group btn-group-xs ml5 pull-right">-->
+                                    <!--<button type="button" class="btn btn-default btn-xs" ng-click="productAdd()"><i-->
+                                    <!--class="fa fa-plus">新增</i></button>-->
+                                    <!--</div>-->
+                                    <div class="data-table">
+                                        <table class="table table-bordered table-hover table-condensed">
+                                            <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                            <tr class="text-center">
+                                                <th><a class="red">*</a>{{$l('产品')}}</th>
+                                                <th><a class="red">*</a>{{$l('承载产品的包装价格(如软管、玻璃瓶等)')}},<br>{{$l('但不含合同费用及不含税:Net Net Cost(元)')}}
+                                                </th>
+                                                <th><a class="red">*</a>{{$l('承载产品的包装价格(如软管、玻璃瓶等)')}},<br>{{$l('含OI%免费货,但不含税:Net Net Cost(1-OI%)(元)')}}
+                                                </th>
+                                                <th ng-if="bargainFlag"><a class="red">*</a>{{$l('承载产品的包装价格(如软管、玻璃瓶等)')}},<br>{{$l('但不含合同费用及不含税:Net Net Cost(元)---二次议价报价')}}
+                                                </th>
+                                                <th ng-if="bargainFlag"><a class="red">*</a>{{$l('承载产品的包装价格(如软管、玻璃瓶等)')}},<br>{{$l('含OI%免费货,但不含税:Net Net Cost(1-OI%)(元)---二次议价报价')}}
+                                                </th>
+                                                <th>{{$l('操作')}}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody ng-show="productDataTable">
+                                            <tr class="text-center" ng-repeat="row in productDataTable"
+                                                ng-class="{'active':productDataTable.selectRow==$index}"
+                                                ng-click="productDataTable.selectRow=$index;
+                                        productDataTable.selectRowData =row;">
+                                                <td><input class="form-control input-xs" ng-model="row.productName"
+                                                           style="width: auto" disabled>
+                                                </td>
+                                                <td><input class="form-control input-xs" type="number" step="1" min="0"
+                                                           οnkeyup="this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"
+                                                           ng-model="row.firstProductPrice"
+                                                           disabled></td>
+                                                <td><input class="form-control input-xs" ng-model="row.twoProductPrice"
+                                                           type="number" step="1" min="0"
+                                                           οnkeyup="this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"
+                                                           disabled>
+                                                </td>
+                                                <td ng-if="bargainFlag"><input class="form-control input-xs"
+                                                                               ng-model="row.bargainFirstPrice"
+                                                                               type="number" step="1" min="0"
+                                                                               οnkeyup="this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"
+                                                ></td>
+                                                <td ng-if="bargainFlag"><input class="form-control input-xs"
+                                                                               ng-model="row.bargainTwoPrice"
+                                                                               type="number" step="1" min="0"
+                                                                               οnkeyup="this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"
+                                                ></td>
+                                                <td>
+                                                    <button class="btn btn-success btn-xs" type="button"
+                                                            ng-click="deleteData(row,$index)"
+                                                            ng-disabled="!bargainFlag"
+                                                    ><i class="fa fa-trash fa-lg"></i></button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <span>
+                                        <span class="ml150 ng-binding"><a class="red">*</a>{{$l('备注:含')}}</span>
+                                            <input type="number" step="1" min="0"
+                                                   οnkeyup="this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"
+                                                   ng-model="editParams.firstPercent"
+                                                   style="display: inline;width: 50px;height: 23px"
+                                                   class="ng-pristine ng-untouched ng-valid ng-empty" disabled>
+                                                    <span class="ng-binding">%{{$l('免费货但不含税计算逻辑为:净价')}}/(1-</span>
+                                            <input type="number" step="1" min="0"
+                                                   οnkeyup="this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"
+                                                   ng-model="editParams.secondPercent"
+                                                   style="display: inline;width: 50px;height: 23px"
+                                                   class="ng-pristine ng-untouched ng-valid ng-empty" disabled>
+                                        <span class="ng-binding">%)</span>
+                                    </span>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

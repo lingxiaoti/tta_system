@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+	<title>下载页面</title>
+	<script src="../plugin/jquery-3.3.1.min.js" type="text/javascript"></script>
+	<style>
+		body, html {
+			height: 100%;
+			padding: 0;
+			margin: 0;
+		}
+
+		a.close {
+			color: #666;
+			font-size: 14px;
+			position: absolute;
+			right: 20px;
+			bottom: 20px;
+			text-decoration: none;
+		}
+
+		.loading {
+			background: url("../img/loading1.gif") center;
+			height: 5px;
+			width: 60%;
+			margin: 0 auto;
+		}
+
+		#box {
+			position: absolute;
+			top: 50%;
+			height: 186px;
+			width: 100%;
+
+		}
+
+		#container {
+			position: relative;
+			text-align: center;
+			border: 1px solid #ddd;
+			box-shadow: #ccc 0 0 20px;
+			padding: 20px;
+			margin: -93px 15% 0 15%;
+
+		}
+	</style>
+</head>
+<body>
+<div id="box">
+	<div id="container">
+		<h3>《 <span id="name"></span> 》</h3>
+
+		<div id="result">
+			<p> 报表数据正在生成请耐心等候!</p>
+			<div class="loading"></div>
+		</div>
+		<p>已用时间 <span id="timer" style="color:#ff0000;">00</span></p>
+		<a href="javascript:self.close()" class="close">[关闭]</a>
+	</div>
+</div>
+</body>
+<script>
+	$(function () {
+		if (!sessionStorage.downloadParams) {
+			$('#container').html('参数错误')
+			return;
+		}
+		var json = JSON.parse(sessionStorage.downloadParams);
+
+		var successLoginInfo = eval('(' + sessionStorage[json.appName + '_successLoginInfo'] + ')');
+		console.log(successLoginInfo)
+		console.log(json)
+		var tokenCode = null;
+		if (( successLoginInfo != null && typeof(successLoginInfo) != "undefined") && typeof(successLoginInfo.TokenCode) != "undefined") {
+			tokenCode = successLoginInfo.TokenCode;
+		} else {
+			tokenCode = "INDEX_TOKEN_CODE";
+		}
+		$('#name').html(json.emailSubject);
+
+		var p = json;
+		p.labelName = JSON.stringify(json.labelName);
+		p.attributeNames= JSON.stringify(json.attributeNames);
+		p.requestParam=JSON.stringify(json.requestParam);
+
+		var _time = {
+			m: 0,
+			s: 0
+		};
+		var timer = setInterval(function () {
+			_time.s++;
+			if (_time.s === 60) {
+				_time.m++;
+				_time.s = 0;
+			}
+			var str = _time.m > 0 ? _time.m + '分' + (_time.s < 10 ? '0' + _time.s + '秒' : _time.s + '秒') : (_time.s < 10 ? '0' + _time.s + '秒' : _time.s + '秒');
+
+			$('#timer').text(str)
+		}, 1000);
+
+//		exportFile();
+		/*		$.ajax({
+		 url: json.downLoadCount,
+		 type: 'post',
+		 data: p,
+		 timeout: 60000 * 5,
+		 headers: {
+		 "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+		 },
+		 dataType: 'html',
+		 success: function (res) {
+
+
+		 if(parseInt(res) > 200000) {
+		 $('#result').html('<h3 style="color:#FF0000;">数据量超过20万，请筛选条件后再导出</h3>');
+		 clearInterval(timer);
+
+		 setTimeout(function(){
+		 self.close();
+		 },5000)
+
+		 }else{
+		 exportFile();// 开始下载了
+		 }
+
+
+		 },
+		 error: function (e) {
+
+		 }
+		 });*/
+		function getCookie(name) {
+			var cookie_start = document.cookie.indexOf(name);
+			var cookie_end = document.cookie.indexOf(";", cookie_start);
+			return cookie_start == -1 ? '' : unescape(document.cookie.substring(cookie_start + name.length + 1, (cookie_end > cookie_start ? cookie_end : document.cookie.length)));
+		}
+
+		function exportFile() {
+			$.ajax({
+				url: json.exportURL,
+				type: 'post',
+				data: p,
+				timeout: 60000 * 20,
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+					"Certificate": getCookie(json.appName + '_certificate') || sessionStorage[json.appName + '_certificate'] || 'nothing',
+					"TokenCode": tokenCode
+				},
+				dataType: 'html',
+				success: function (res) {
+					var res = JSON.parse(res);
+
+					if (res.status == 'S') {
+						window.location.href = res.data.accessPath;
+						clearInterval(timer);
+						$('#result').html('<h3 style="color:green;">导出完成</h3>');
+						sessionStorage.removeItem('downloadParams');// 清除下载参数
+					} else {
+						clearInterval(timer);
+						$('#result').html("<h3 style='color:#FF0000;'>" + res.msg + "</h3>")
+					}
+
+				},
+				error: function (e) {
+					clearInterval(timer);
+					$('#result').html('<h3 style="color:#FF0000;">导出失败</h3>')
+				}
+			});
+		}
+
+		window.console.log(getCookie(json.appName + '_certificate') || sessionStorage[json.appName + '_certificate'] || 'nothing');
+
+		var exportTimer;
+		// 执行导出
+		function runExport() {
+			$.ajax({
+				url: json.exportApi,
+				type: 'post',
+				data: p,
+				timeout: 60000 * 5,
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+					"Certificate": getCookie(json.appName + '_certificate') || sessionStorage[json.appName + '_certificate'] || 'nothing',
+					"TokenCode": tokenCode
+				},
+				dataType: 'html',
+				success: function (res) {
+					var res = JSON.parse(res);
+
+					if (res.status === 'S') {
+						// 查询状态
+						exportTimer = setInterval(function () {
+							exportStatus(res.data.exportId);
+						}, 5000);
+					}else {
+						clearInterval(timer);
+						$('#result').html("<h3 style='color:#FF0000;'>" + res.msg + "</h3>")
+					}
+
+				},
+				error: function (e) {
+					clearInterval(timer);
+					$('#result').html('<h3 style="color:#FF0000;">导出失败</h3>')
+				}
+			});
+		}
+
+		// 查询导出结果
+		function exportStatus(id) {
+			var p = {
+				exportId: id
+			};
+			$.ajax({
+				url: json.exportStatusApi,
+				type: 'post',
+				data: p,
+				timeout: 60000 * 5,
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+					"Certificate": getCookie(json.appName + '_certificate') || sessionStorage[json.appName + '_certificate'] || 'nothing',
+					"TokenCode": tokenCode
+				},
+				dataType: 'html',
+				success: function (res) {
+					var res = JSON.parse(res);
+
+					if (res.status === 'S') {
+
+						clearInterval(timer);
+						clearInterval(exportTimer);
+						$('#result').html('<h3 style="color:green;">导出完成</h3>');
+//                        sessionStorage.removeItem('downloadParams');// 清除下载参数
+						window.location.href = res.data.accessPath;
+					} else  if (res.status === 'E' || res.status === 'M') {
+						clearInterval(timer);
+						clearInterval(exportTimer);
+						$('#result').html("<h3 style='color:#FF0000;'>" + res.msg + "</h3>")
+					}
+
+				},
+				error: function (e) {
+					clearInterval(timer);
+					clearInterval(exportTimer);
+					$('#result').html('<h3 style="color:#FF0000;">导出失败</h3>')
+				}
+			});
+		}
+
+
+		runExport();
+
+	})
+</script>
+</html>

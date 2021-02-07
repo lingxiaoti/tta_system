@@ -1,0 +1,315 @@
+<div ng-controller="mainCtrl" app-frame="" class="lang-{{  language }}">
+    <div id="aside-left">
+        <div class="bg-brand-black oh" id="user-info">
+            <div class="logo" style="background-color: #fff;line-height: 44px;">
+                <!--<img src="./img/hkc-white.png" id="aoyu"/>-->
+                <img src="./img/logo-white.png" id="logo" style="width: 80%; height: 80%"/>
+            </div>
+        </div>
+        <!--菜单部分 /.-->
+        <div id="aside-menu" class="tab-group" sie-tab-group="">
+            <div class="tab-body">
+                <div class="tab-panel active">
+                    <h4><span class="fa fa-list mr10"></span><span ng-bind=" $l('我的菜单')"></span></h4>
+                    <div menu-scroll-style="" id="main-scroll">
+                        <div class="nicescroll-height" ng-nicescroll="" id="menuscop"
+                             nice-option="{cursorcolor: '#ccc',touchbehavior:false,autohidemode:'scroll'}"
+                             data-auto-refresh="true">
+                            <ul id="main-menu" main-menu="">
+                                <li ng-repeat="item in MenuTreeRoot" data-menuid="{{item.menuId}}"
+                                    data-menutype="{{item.menuType}}"><i class="fa fa-angle-down pull-right"></i>
+                                    <a href="javascript:"><i class="{{item.imageLink}} w20 text-center"></i>
+                                        <span class="text" ng-bind="$l(item.menuName)"></span></a>
+                                </li>
+                            </ul>
+                            <!--导航菜单部分-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ./ 菜单部分-->
+    </div>
+    <div id="aside-right">
+        <!--系统名称 /.-->
+        <div id="app-title" class="text-right bg-brand-black h50 ">
+            <a class="fl text-white ml10" href="javascript:" title="{{ $l('收缩菜单')}}" shrinkage-btn=""><span
+                    class="fa fa-outdent "></span></a>
+            <a class="app-tiltle-chiren " data-toggle="modal" ng-click="changLanguage('CH')"
+               href=""><i class="fa   mr5"></i><span ng-bind="$l('中文')"></span></a>
+            <a class="app-tiltle-chiren " data-toggle="modal" ng-click="changLanguage('EN')"
+               href=""><i class="fa   mr5"></i><span ng-bind="$l('English')"></span></a>
+            <a class="app-tiltle-chiren " data-toggle="modal" data-target="#changePassword" ng-click="passwordForm={}"
+               href=""><i class="fa fa-lock mr5"></i><span ng-bind="$l('密码')"></span></a>
+            <span class="dropdown">
+                <a class="app-tiltle-chiren" href="javascript:" id="dropdownMenu1" data-toggle="dropdown">
+                    <i class="fa fa-user" aria-hidden="true"></i>&nbsp; <span ng-bind="$l('职责')"></span>：
+                    <span ng-bind="$l(currentResp.responsibilityName)"></span>
+                    <span class=" pl10 fa fa-angle-down"></span></a>
+
+                  <ul style="margin:15px 20px 0 20px;" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                      <li role="presentation" ng-repeat="row in userRespList" ng-click="saafChangeUserRespon(row)">
+                          <a role="menuitem" tabindex="-1" href="javascript:">{{row.responsibilityName}}
+                              <span class="fa fa-check-circle fr text-brand-primary"
+                                    ng-show="currentResp.responsibilityId===row.responsibilityId"></span>
+                          </a>
+
+                      </li>
+                  </ul>
+	        </span>
+            <a class="app-tiltle-chiren" href="javascript:" ng-click="logout()" id="btnLogout"> {{userName}}
+                <i class="fa fa-sign-out"></i>&nbsp;<span ng-bind="$l('退出')"></span></a>
+        </div>
+        <!-- ./ 系统名称-->
+        <div id="main-container" class="tab-group">
+            <div class="dropdown closeTab">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:">
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu f12">
+                    <li>
+                        <a href="javascript:" ng-click="closeTab('all')">关闭所有标签</a></li>
+                    <li>
+                        <a href="javascript:" ng-click="closeTab('other')">关闭其它标签</a></li>
+
+                </ul>
+            </div>
+            <div ng-nicescroll="" style="margin-right: 29px;" id="mainTabListNicescroll"
+                 nice-option="{cursorcolor: '#1e90c2',autohidemode:'cursor',cursorwidth:0}" class="pr">
+
+                <ul class="tab" id="mainTabList" header-tab ng-style="style">
+                    <li ng-class="{'true':'active'}[mainPageShow()]" ng-click="showMain()"><a href="javascript:void(0)"><span
+                            ng-bind="$l('我的主页')"></span></a></li>
+                    <li title="{{row.name}}" ng-class="{'active':row.active}" class="contextify"
+                        ng-right-click="rightClick(row,$index,$event)"
+                        ng-repeat="row in saafHeadTab track by $index" ng-dblclick="deleteTabs(row,$index)">
+                        <i class="iconfont icon-cuowu" ng-click="deleteTabs(row,$index)"></i> <a href="javascript:"
+                                                                                                 ng-click="cutTabs(row)">
+                        <span ng-bind="$l(row.name)"></span></a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="tab-body ">
+                <div ui-view="" class="w100p" style="position: relative">
+                    <iframe ng-show="row.active" ng-repeat="row in saafHeadTab track by row.version"
+                            ng-style="{height:saafWindowHeight-heightForIframe}"
+                            id="iframe_{{ row.id }}_{{ $index }}"
+                            name="iframe_{{ row.id }}_{{ $index }}"
+                            style="padding: 5px 5px 1px 5px; width: 100%; height: 100%; border: 0"
+                            ng-src="{{ '?t='+timer+'#/'+appName.toLowerCase() +'/' + row.url + (row.url.indexOf('?')>-1?'&':'?') +'id='+ row.id  }}"></iframe>
+                    <!--为了ie兼容性，判断是否添加 index.html-->
+                    <div ng-show="mainPageShow()" class="w100p  ">
+                        <div ng-include="'layout/default/main/mainPage.html'"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="changePassword" data-des="修改密码" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog " style="width: 300px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><span ng-bind="$l('修改密码')"></span></h4>
+                </div>
+                <form ng-submit="changePassword()" method="post" autocomplete="off">
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"> <span><i class="red">*</i><span
+                                        ng-bind="$l('旧密码')"></span>：</span></label>
+                                <input type="text" class="form-control radius3 " required="" ng-minlength="2"
+                                       name="buttonName" ng-model="passwordForm.oldPassword" placeholder="" maxlength="30"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"> <span><i class="red">*</i><span
+                                        ng-bind="$l('新密码')"></span>：</span></label>
+                                <input type="password" class="form-control radius3" required=""
+                                       ng-model="passwordForm.newPassword" placeholder="" maxlength="30"autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"> <span><i class="red">*</i><span
+                                        ng-bind="$l('确认密码')"></span> ：</span></label>
+                                <input type="password" class="form-control radius3" required=""
+                                       ng-model="passwordForm.newPassword2" placeholder="" maxlength="30"autocomplete="off"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+                    <div class="modal-footer ">
+                        <div style="text-align: center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"><span
+                                    ng-bind="$l('取消')"></span></button>
+                            <button type="submit" class="btn btn-primary mr10"><span ng-bind="$l('保存')"></span></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+
+    <!-- 电话外呼-->
+    <div class="modal fade" id="telDial" data-des="拨打电话" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog " style="width: 300px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" >
+                        拨打电话
+                    </h4>
+                </div>
+                <form class="ngValid" method="post" name="funcMenuForm" ng-submit="telDial(tel.extensionDst)">
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span><i class="red">*</i>外呼被叫号码：</span></label>
+                                <input type="text" class="form-control radius3 " required ng-minlength="2"
+                                       name="buttonName"
+                                       ng-model="tel.extensionDst" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="cb"></div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="submit"  class="btn btn-primary mr10">拨打</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <!-- 电话转移-->
+    <div class="modal fade" id="telTransfer" data-des="电话转移" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog " style="width: 300px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" >
+                        电话转移
+                    </h4>
+                </div>
+                <form class="ngValid" method="post" name="funcMenuForm" ng-submit="telTransfer(tel.telTransfer)">
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span><i class="red">*</i>分机/电话号码：</span></label>
+                                <input type="text" class="form-control radius3 " required ng-minlength="2"
+                                       name="buttonName"
+                                       ng-model="tel.telTransfer" placeholder="">
+                                <span class="input-group-btn" saaf-lov="" data-return-value1="tel.telTransfer"
+                                      saaf-lov-option="{ autoGetData:'true' ,
+                                                        dataUrl:'findCustomerExtension',params:{},
+                                                    searchLabel1:'员工名称',
+                                                    searchLabel2:'分机号码',
+                                                    searchColName1:'employeeName',
+                                                    searchColName2:'extension',
+                                                    label1:'员工名称',
+                                                    label2:'分机号码',
+                                                    colName1:'employeeName',
+                                                    colName2:'extension',
+                                                    returnColName1:'extension'}">
+
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="submit"  class="btn btn-primary mr10">转移</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <!-- 加载工号 -->
+    <div class="modal fade" id="telLogin" data-des="加载工号" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog " style="width: 300px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" >
+                        加载工号
+                    </h4>
+                </div>
+                <form class="ngValid" method="post" name="funcMenuForm" ng-submit="telLogin()">
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span><i class="red">*</i>工号号码：</span></label>
+                                <input type="text" class="form-control radius3 " required ng-minlength="2"
+                                       name="buttonName"
+                                       ng-model="telData.newExtension" placeholder="">
+                                <!--<div lookup-code="WORKER_NUMBER" required ng-model="program.telData.extension"-->
+                                <!--name="telData.extension"></div>-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="submit"  class="btn btn-primary mr10">登入</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" data-des="消息" id="showInfo" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center pt10 pb10">{{info}}</div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="plugin/crypto-js-develop/src/core.js"></script>
+<script src="plugin/crypto-js-develop/src/x64-core.js"></script>
+<script src="plugin/crypto-js-develop/src/md5.js"></script>
+<script src="plugin/crypto-js-develop/src/evpkdf.js"></script>
+<script src="plugin/crypto-js-develop/src/enc-base64.js"></script>
+<script src="plugin/crypto-js-develop/src/cipher-core.js"></script>
+<script src="plugin/crypto-js-develop/src/aes.js"></script>
+<script src="plugin/crypto-js-develop/src/hmac.js"></script>
+<script src="plugin/crypto-js-develop/src/sha1.js"></script>
+<script src="plugin/crypto-js-develop/src/sha256.js"></script>
+<script src="plugin/crypto-js-develop/src/lib-typedarrays.js"></script>
+<script src="plugin/crypto-js-develop/src/enc-utf16.js"></script>
+<script src="plugin/crypto-js-develop/src/format-hex.js"></script>
+<script src="plugin/crypto-js-develop/src/mode-cfb.js"></script>
+<script src="plugin/crypto-js-develop/src/mode-ctr.js"></script>
+<script src="plugin/crypto-js-develop/src/mode-ctr-gladman.js"></script>
+<script src="plugin/crypto-js-develop/src/mode-ecb.js"></script>
+<script src="plugin/crypto-js-develop/src/mode-ofb.js"></script>

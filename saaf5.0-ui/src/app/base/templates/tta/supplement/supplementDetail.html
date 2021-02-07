@@ -1,0 +1,339 @@
+<style>
+    .longHr {
+        width: 97%;
+        border: 1px solid #3e89c0
+    }
+</style>
+<div ng-controller="supplementDetailCtrl" class="bigdata">
+    <div id="processForm"
+         data-api-post="saveTtaSideAgrtHeader"
+         data-api-get="findSideAgrtHeaderList"
+         data-api-update="saveTtaSideAgrtHeader"
+        >
+    </div>
+    <div class="form bg-white">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button data-validate-form="addModalForm" ng-click="btnSave()" class="btn btn-default">
+                            <i class="fa fa-floppy-o" aria-hidden="true"></i>保存
+                        </button>
+                        <!--<button class="btn btn-default" type="button" ng-click="btnSubmit()">
+                            <i class="fa fa-file-excel-o" aria-hidden="true"></i>{{$l('提交')}}
+                        </button>-->
+                        <button type="button" ng-click="submitApproval()" ng-show="true"
+                                permission-btn="submitApproval"
+                                class="btn btn-default" data-validate-form="mainForm" id="submitApproval">
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="btnDiscard()" ng-disabled="project.billStatus == 'E'">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('作废')}}
+                        </button>
+                    </div>
+                </div>
+                <div class="btn-group btn-group-xs ">
+                <!--<button class="btn  btn-default" ng-click="moreInput($event)">
+                    <i class="fa fa-chevron-circle-down"></i> <span ng-bind="$l('更多条件')"></span>
+                </button>-->
+                <button  type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                    <i class="fa fa-square-o"></i><span ng-bind="$l('全屏')"></span>
+                </button>
+            </div>
+            </div>
+        </div>
+
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+                <ul ng-if="!urlParams.businessKey" class="nav nav-tabs mt10">
+                    <li role="presentation" class="active" ng-click="tabChange('supplementDetailBusiness')">
+                        <a href="#supplementDetailBusiness" aria-controls="supplementDetailBusiness" role="tab"
+                           data-toggle="tab">业务表单</a>
+                    </li>
+                    <li role="presentation" ng-click="tabChange('opinion')">
+                        <a href="#opinion" aria-controls="opinion" role="tab" data-toggle="tab">流程图</a>
+                    </li>
+                    <li ng-show="tabAction=='opinion'">
+                        <ul>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #cc0033;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">未接收</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #ff6600;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">办理中</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #339933;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">已办结</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #666666;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">预设步骤</span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+
+                <!-----------输入表单--------->
+                <div ng-show="tabAction== 'supplementDetailBusiness'" role="tabpanel" class="tab-pane active"
+                     id="supplementDetailBusiness"
+                     style="border: 0;width:100%;height: 100%;overflow-y: auto;">
+                    <div class=" mt10 pb5  "
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <form id="mainForm" name="mainForm">
+                        <div>
+                            <div class="form-group col-xs-6 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100"><i class="red">*</i>单据编号:</span></label>
+                                    <!--ng-disabled="project.sideAgrtHId"-->
+                                    <input type="text" class="form-control radius3" required disabled
+                                           data-required-msg="单据编号" name="projectSideAgrtCode"
+                                           ng-model="project.sideAgrtCode">
+                                    <input type="hidden" class="form-control radius3" ng-model="project.sideAgrtHId">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-6 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100"><i class="red">*</i>版本号:</span></label>
+                                    <input type="text" class="form-control radius3" required name="projectSideAgrtVersion"
+                                           ng-model="project.sideAgrtVersion">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-6 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">合同生效起:</span></label>
+                                    <input type="text" required class="form-control radius3 input-xs"
+                                           date-time-picker data-is-today="false" name="projectStartDate"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-min-View="2" ng-model="project.startDate"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-6 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">合同生效至:</span></label>
+                                    <input type="text" required class="form-control radius3 input-xs"
+                                           date-time-picker data-is-today="false" name="projectEndDate"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-stratdate="{{project.startDate}}"
+                                           data-min-View="2" ng-model="project.endDate"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-6 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100 "><i class="red">*</i>单据状态：</span></label>
+                                    <div lookup-code="SUPPLEMEN_STATUS" ng-model="project.billStatus" ng-disabled="true"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div>
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <label>{{$l('匹配Proposal')}}</label>
+                            <div class="pull-right ml10">
+                                <div class="btn-group btn-group-xs ">
+                                    <button class="btn btn-default" type="button" data-toggle="modal"  ng-disabled="false"
+                                            data-target="#proposalSupplierLov">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>{{$l('选择Proposal')}}
+                                    </button>
+
+                                    <button class="btn btn-default" type="button" ng-click="btnDelProposalSupplier()" data-toggle="modal"
+                                            ng-disabled="!dataTable.selectRow" >
+                                        <i class="fa fa-search" aria-hidden="true"></i>{{$l('删除')}}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div lov-list="proposalSupplierList" role="dialog" data-title="Proposal供应商" id="proposalSupplierLov"
+                                 ng-model="current.proposal"
+                                 data-url="proposalSupplierList"
+                                 data-params='{}'
+                                 data-checked-type="checkbox"
+                                 data-callback="setProposalSupplierList"
+                                 data-keys="{'key':'poposalId','value':'poposalCode',name:'poposal合同号'}"
+                                 data-show-index="true"
+                                 data-other-column="[{'name':'供应商编号','key':'supplierCode'},{'name':'供应商名称','key':'supplierName'}]"
+                                 data-search-key="{'key':'poposalCode','placeholder':'请输入poposal合同号'}"
+                                 data-pagination="{'pageIndex':'1','pageRows':'5'}"
+                            >
+                            </div>
+
+                        </header>
+                        <hr class="longHr">
+                        <div class="data-table" style="margin: auto; width: 97%">
+                            <div base-data-table="dataTable"
+                                 ng-params="params"
+                                 data-url="findTtaProposalToSideAgrtLine"
+                                 data-checked-type="checkbox"
+                                 data-auto-request="false"
+                                 data-keys="{'key':'poposalId'}"
+                                 data-legend="[
+                                 {'value':'proposalContractCode','name':'Proposal合同号'},
+                             {'value':'vendorCode','name':'供应商编号'},
+                             {'value':'vendorName','name':'供应商名称'}
+                             ]"
+                            ></div>
+                        </div>
+                        <div style="height: 20px"></div>
+                    </div>
+<!--                    <div>
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true">
+                                <label>{{$l('补充协议上传记录')}}</label>
+                            </i>
+                            <i class="fa fa-cog" aria-hidden="true">
+                                <label>{{$l('下载信息')}}</label>
+                            </i>
+                        </header>
+                        <hr class="longHr">
+                        <div class="data-table" style="margin: auto; width: 97%">
+                            <div base-data-table="dataTables"
+                                 ng-params="params"
+                                 data-url="findBaseAttachmentEntity"
+                                 data-checked-type="checkbox"
+                                 data-delete-url="deleteProblemInfos"
+                                 data-keys="{'key':'problemId'}"
+                                 data-legend="[
+                                 {'value':'sourceFileName','name':'上传附件名称'},
+                             {'value':'filePath','name':'上传附件地址'},
+                             {'value':'creationDate','name':'上传时间'},
+                             {'value':'createdByUser','name':'上传人'},
+                             ]"
+                                 data-func-column="[{'icon':'fa fa-eye blue','callback':'funcProblem'},{'icon':'fa fa-edit green','callback':'problemrbtnNew'},{'icon':'fa fa-trash red','callback':'problemrbtnDel'}]"
+                            ></div>
+                        </div>
+                    </div>-->
+
+                    <div class="col-xs-12 col-md-12 br p0">
+                        <ul id="tab" class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#supplementUploadId" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>补充协议上传记录</label></a>
+                            </li>
+
+                            <li>
+                                <a href="#supplementDownLoadId" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>下载信息</label></a>
+                            </li>
+
+                        </ul>
+                        <div id="tabContent" class="tab-content">
+
+                            <!-- 补充协议上传记录 -->
+                            <div class="tab-pane fade in active col-md-12" id="supplementUploadId">
+                                <div>
+                                    <label style="margin-left: 10px">&nbsp;</label>
+
+                                    <div class="btn-group btn-group-xs pull-right"  ng-if="true">
+                                        <div class="btn-group btn-group-xs" style="">
+                                            <!--<input id="fileUpload" nv-file-select  uploader="uploader" type="file" ng-click="clearItems()"/>-->
+                                            <input  type="file" name="file" id="file" emms-file-upload="myFile">
+                                        </div>
+                                        <div class="btn-group btn-group-xs" style="margin-right: 16px;">
+                                            <button type="button" ng-click="uploadFile()" class="btn btn-primary btn-xs"
+                                                    id="addRelSupplierButton">
+                                                <i class="fa fa-plus">上传附件</i>
+                                            </button>
+                                        </div>
+
+                                        <div class="btn-group btn-group-xs" ng-if="true">
+
+<!--                                            <button type="button" ng-click="editRelSupplier()" class="btn btn-default btn-xs"
+                                                    id="editRelSupplierButton"
+                                            >
+                                                <i class="fa fa-pencil">修改</i>
+                                            </button>-->
+                                            <button type="button" ng-click="delUploadFile()" class="btn btn-default btn-xs"
+                                                    id="delRelSupplierButton">
+                                                <i class="fa fa-trash">删除</i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="data-table ">
+                                    <div base-data-table="relSupplierTable"
+                                         ng-params="relSupplierParams"
+                                         data-keys="{'key':'functionId','value':'functionId','name':'模块id'}"
+                                         data-checked-type="checkbox"
+                                         data-show-index="true"
+                                         data-auto-request="false"
+                                         data-url="findBaseAttachmentList"
+                                         data-legend="[
+                                     {'value':'sourceFileName','name':'上传附件名称'},
+                                     {'value':'filePath','name':'上传附件地址'},
+                                     {'value':'creationDate','name':'上传时间'},
+                                     {'value':'createdByUser','name':'上传人'}
+                                 ]"
+                                         data-func-column = "[{'icon':'fa fa-download','text':'下载附件','callback':'downFileEvent'}]"
+                                    >
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 下载信息 -->
+                            <div class="tab-pane fade in col-md-12" id="supplementDownLoadId">
+                                <div>
+                                    <label style="margin-left: 10px">&nbsp;</label>
+
+<!--                                    <div class="btn-group btn-group-xs pull-right" ng-if="true">
+                                        <button type="button" ng-click="addSupplierDept()" class="btn btn-default btn-xs"
+                                                id="addSupplierDeptButton"
+                                        >
+                                            <i class="fa fa-plus">新增</i>
+                                        </button>
+                                        <button type="button" ng-click="editSupplierDept()" class="btn btn-default btn-xs"
+                                                id="editSupplierDeptButton"
+                                        >
+                                            <i class="fa fa-pencil">修改</i>
+                                        </button>
+                                        <button type="button" ng-click="delSupplierDept()" class="btn btn-default btn-xs"
+                                                id="delSupplierDeptButton"
+                                        >
+                                            <i class="fa fa-trash">删除</i>
+                                        </button>
+                                    </div>-->
+                                </div>
+                                <div class="data-table">
+                                    <div base-data-table="attachmentDownTable"
+                                         ng-params="attachmentParams"
+                                         data-keys="{'key':'fileId','value':'fileId','name':'下载附件id'}"
+                                         data-checked-type="checkbox"
+                                         data-show-index="true"
+                                         data-auto-request="false"
+                                         data-url="ttaAttachmentDownloadFind"
+                                         data-paging-show="true"
+                                         data-page-size = "10"
+                                         data-legend="[
+                                     {'value':'sourceFileName','name':'下载附件名称'},
+                                     {'value':'creationDate','name':'下载时间'},
+                                     {'value':'createdByUser','name':'下载人'},
+                                 ]">
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <!-- tabContent -->
+                    </div>
+
+                </div>
+                </div>
+
+                <div ng-if="!urlParams.businessKey" ng-show="tabAction== 'opinion'" role="tabpanel" class="tab-pane "
+                     id="opinion"
+                     style="border: 0;width:100%;height: 100%; overflow: hidden;position: relative;">
+                    <div id="processImg" style="width: 100%;height:100%; overflow: auto;">流程图加载中，请稍候...</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

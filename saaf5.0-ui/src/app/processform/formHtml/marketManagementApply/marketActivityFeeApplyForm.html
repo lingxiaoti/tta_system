@@ -1,0 +1,342 @@
+<!-- Created by lijiayao on 2018-08-23 -->
+<div ng-controller="marketActivityFeeApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOaMarketingCostCompain"
+         data-api-get="findOaMarketingCostCompainDetailById" data-api-del="" data-api-update="updateOaMarketingCostCompain">
+         <div class="col-md-12 pt15">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none" data-load-callback="respCallback"></div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'deptName',label:'申请部门',readonly:true,required:true},
+                        {key:'personName',label:'申请人',readonly:true,required:true},
+                        {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                        {key:'billNo',label:'申请单号',readonly:true},
+                        {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                        {key:'statusStr',label:'状态',readonly:true},
+                        ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><i class="red">*</i>申请主体</span></label>
+                        <label class="radio-inline"><input type="radio" ng-model="formParams.costMain" name="costMain" ng-value="'Y'" ng-change="yesOrNo()">人员</label>
+                        <label class="radio-inline"><input type="radio" ng-model="formParams.costMain" name="costMain" ng-value="'N'" ng-change="yesOrNo()">经销商</label>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4" ng-if="formParams.costMain == 'Y'">
+                    <div class="input-group input-group-xs  positionName_2">
+                        <label class="input-group-addon bn ng-scope">
+                            <span class="w100 ng-binding"><i class="red ng-scope">* </i>费用人员</span>
+                        </label>
+                        <input type="text" 
+                            class="form-control radius3 ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-required ng-valid-maxlength readonly-white"
+                            ng-required="true" 
+                            maxlength="" 
+                            name="showPerson" 
+                            data-required-msg="" 
+                            data-error-msg="" 
+                            id="showPerson" 
+                            placeholder="" 
+                            ng-model="formParams.costUserName" 
+                            required="required" 
+                            readonly="true">
+                        <span class="input-group-btn ng-scope" data-toggle="modal" data-target="#purchaseRequisitionsDepartment">
+                            <a class="btn btn-default"><i class="fa fa-search"></i></a>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4" ng-if="formParams.costMain == 'N'">
+                    <div class="input-group input-group-xs  positionName_2">
+                        <label class="input-group-addon bn ng-scope">
+                            <span class="w100 ng-binding"><i class="red ng-scope">* </i>费用经销商</span>
+                        </label>
+                        <input type="text" 
+                            class="form-control radius3 ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-required ng-valid-maxlength readonly-white"
+                            ng-required="true" 
+                            maxlength="" 
+                            name="showPerson" 
+                            data-required-msg="" 
+                            data-error-msg="" 
+                            id="showPerson" 
+                            placeholder="" 
+                            ng-model="formParams.custAccountName" 
+                            required="required" 
+                            readonly="true">
+                        <span class="input-group-btn ng-scope" data-toggle="modal" data-target="#deCode1">
+                            <a class="btn btn-default"><i class="fa fa-search"></i></a>
+                        </span>
+                    </div>
+                </div>
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'channelType',label:'渠道',required:true,readonly:true},
+                        {key:'departmentName',label:'费用部门',required:true,readonly:true},
+                        {key:'expenseAccountName',label:'费用科目',required:true,type:'lov',readonly:true,target:'#expensesCourse',css:'readonly-white'},
+                    ]"
+                     ng-model="formParams"
+                ></div>
+                <div class="form-group col-xs-6 col-md-4 ng-scope">
+                    <div class="input-group input-group-xs  expensePeriod_3">
+                        <label class="input-group-addon bn ng-scope">
+                            <span class="w100 ng-binding"><i class="red ng-scope">* </i>费用期间</span>
+                        </label>
+                        <select class="form-control input-xs" ng-model="formParams.expensePeriod">
+                            <option value="">请选择</option>
+                            <option ng-value="expensePeriod.expensePeriod" ng-repeat="expensePeriod in expensePeriodList">{{expensePeriod.expensePeriod}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'expenseType',label:'费用类型',required:true,type:'lookCode',lookCode:'EXPENSE_TYPE',disabled:true},
+                        {key:'startDate',label:'开始时间',required:true,type:'time',endDate:'endDate'},
+                        {key:'endDate',label:'结束时间',required:true,type:'time',startDate:'startDate'},
+                        {key:'encumbranceAmount',label:'提交金额',readonly:true},
+                        {key:'expenseAmount',label:'报销金额',readonly:true},
+                        {key:'reverseAmount',label:'冲回金额',readonly:true},
+                    ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>申请原因</span></label>
+                        <textarea class="form-control" rows="1" auto-textarea="" ng-model="formParams.eventDesc" maxlength="500" placeholder="字数限制500" required name="eventDesc" style="height: auto"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>会签意见</span></label>
+                        <textarea class="form-control" rows="1" auto-textarea="" ng-model="formParams.signOpinion" maxlength="500" placeholder="字数限制500" required name="signOpinion" style="height: auto"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 pt5">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>市场活动费用信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'compaignTypeId',label:'活动类型',required:true,type:'lookCode',lookCode:'OA_ACTIVITY_CLASS'},
+                    ]"
+                     ng-model="formParams.itemCompain[0]"
+                ></div>
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs  positionName_2" ng-if="formParams.costMain == 'Y'">
+                        <label class="input-group-addon bn ng-scope">
+                            <span class="w100 ng-binding"><i class="red ng-scope">* </i>人员门店</span>
+                        </label>
+                        <input type="text" 
+                            class="form-control radius3 ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-required ng-valid-maxlength readonly-white"
+                            ng-required="true" 
+                            maxlength="" 
+                            name="showPerson" 
+                            data-required-msg="" 
+                            data-error-msg="" 
+                            id="showPerson" 
+                            placeholder="" 
+                            ng-model="formParams.itemCompain[0].storeName" 
+                            required="required" 
+                            readonly="true">
+                        <span class="input-group-btn ng-scope" data-toggle="modal" data-target="#erpStoreList1">
+                            <a class="btn btn-default"><i class="fa fa-search"></i></a>
+                        </span>
+                    </div>
+                    <div class="input-group input-group-xs  positionName_2" ng-if="formParams.costMain == 'N'">
+                        <label class="input-group-addon bn ng-scope">
+                            <span class="w100 ng-binding"><i class="red ng-scope">* </i>经销商门店</span>
+                        </label>
+                        <input type="text" 
+                            class="form-control radius3 ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-required ng-valid-maxlength readonly-white"
+                            ng-required="true" 
+                            maxlength="" 
+                            name="showPerson" 
+                            data-required-msg="" 
+                            data-error-msg="" 
+                            id="showPerson" 
+                            placeholder="" 
+                            ng-model="formParams.itemCompain[0].storeName" 
+                            required="required" 
+                            readonly="true">
+                        <span class="input-group-btn ng-scope" data-toggle="modal" data-target="#erpStoreList2">
+                            <a class="btn btn-default"><i class="fa fa-search"></i></a>
+                        </span>
+                    </div>
+                </div>
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'campaignCode',label:'市场活动编号',required:true,maxlength:50,placeholder:' '},
+                        {key:'costAddress',label:'地区',required:true,type:'lov',target:'#citysModal1',readonly:true,css:'readonly-white'},
+                        {key:'address',label:'活动详细地址',required:true,maxlength:200}
+                    ]"
+                     ng-model="formParams.itemCompain[0]"
+                ></div>
+                <!--{key:'familyNum',label:'到场用户数',required:true,maxlength:10,placeholder:' ',validFormat:'number=2'},-->
+                <!-- {key:'outHire',label:'是否外聘',required:true,type:'lookCode',lookCode:'COMPAIN_OUT_HIRE'}, -->
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs ">
+                        <label class="input-group-addon bn">
+                            <span class="w100 ng-binding">到场用户数</span>
+                        </label>
+                        <input type="text" class="form-control radius3" required ng-pattern="/^[1-9]\d*$/"
+                               maxlength="10" placeholder="请输入正整数" title="请输入正整数" ng-model="formParams.itemCompain[0].familyNum">
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><i class="red">*</i>是否外聘</span></label>
+                        <label class="radio-inline" style="margin-left: 30px"><input type="radio" ng-model="formParams.itemCompain[0].outHire" name="outHire" ng-value="'Y'">是</label>
+                        <label class="radio-inline"><input type="radio" ng-model="formParams.itemCompain[0].outHire"  name="outHire" ng-value="'N'">否</label>
+                    </div>
+                </div>
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'lecturerName',label:'讲师名称',required:true,maxlength:50},
+                    ]"
+                     ng-model="formParams.itemCompain[0]"
+                ></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>活动总结<br/>&nbsp;（到会情况、<br/>&nbsp;新客数量、<br/>&nbsp;动销数量）</span></label>
+                                <textarea class="form-control" rows="4" ng-model="formParams.itemCompain[0].compaignSummary" maxlength="200" placeholder="字数限制200" required name="compaignSummary" style="height: auto"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 pt5">
+            <h5 class="fontwB">
+                <span class="fa fa-cog mr15"></span>项目明细
+                <button type="button" class="btn btn-default btn-xs pull-right"
+                        ng-hide="formType === 'readonly' || action === 'detail'"
+                        ng-click="tableEndit1.addTableRows()"><i class="fa fa-plus">增加</i></button>
+            </h5>
+            <div base-data-table-edit="tableEndit1"
+                data-legend="[
+                    {value:'itemName',name:'费用项目',required:true,maxlength:100,placeholder:' ',maxlength:200},
+                    {value:'itemAmount',name:'费用金额',disabled:true,operationStr:'+',operationKey:['companyAmount','provinceAmount'],type:'operation'},
+                    {value:'companyAmount',name:'公司承担金额',validFormat:'number=8',required:true},
+                    {value:'provinceAmount',name:'省区承担金额',validFormat:'number=8',required:true},
+                ]"
+                data-form-params-key="secItemCompain"
+                data-show-total="true"
+                data-is-edit="isEdit"
+                data-count-key="['itemAmount','companyAmount','provinceAmount']"
+                ng-model="formParams">
+            </div>
+        </div>
+    </div>
+    <!-- 申请人 -->
+    <div lov-list="department" role="dialog" data-title="请选择人员" id="purchaseRequisitionsDepartment" ng-model="code3"  class="  "
+        data-url="findPaginationPersonInfo"
+        data-callback="getCostUser"
+        data-pagination="{'pageIndex':'1','pageRows':'5'}"
+        data-checked-type="radio"
+        data-keys="{'key':'personId','value':'personName',name:'人员名称',hide:'true'}"
+        data-other-column="[{'name':'工号','key':'employeeNumber'},{'name':'人员名称','key':'personName'},{'name':'部门','key':'departmentName'},{'name':'渠道','key':'channelName'}]"
+        data-show-index="false"
+        data-search-key="[{'key':'personName','placeholder':'请输入姓名'}]"
+        >
+        </div>
+    <!-- 经销商 -->
+    <div lov-list="personCusBankPaginatioLov" 
+        id="deCode1" 
+        ng-model="code4"
+        data-url="findCustomerPagination"
+         data-dynamic-params="customerParams"
+        data-callback="getCustAccount"
+        data-title="请选择经销商"
+        data-checked-type="radio"
+        data-search-key="[{'key':'customerName','placeholder':'经销商名称'},{'key':'customerNumber','placeholder':'经销商编码'}]"
+        data-keys="{'key':'customerNumber','value':'customerName',hide:true}"
+        data-other-column="[{'name':'经销商编码','key':'customerNumber'},{'name':'经销商名称',key:'customerName'}]" 
+        ></div>
+    <!-- 费用科目 -->
+    <div lov-list="expensesCourse" role="dialog" data-title="请选择费用科目" id="expensesCourse" ng-model="code2"  class="  "
+        data-url="findExpenseAccountOutList"
+        data-dynamic-params="getRespParams"
+        data-pagination="{'pageIndex':'1','pageRows':'5'}"
+        data-return-value="formParams.expenseAccountName"
+        data-return-key="formParams.expenseAccount"
+        data-callback="getExpenseAccount"
+        data-checked-type="radio"
+        data-keys="{'key':'expenseAccountId','value':'expenseAccountName','hide':'true'}"
+        data-other-column="[{'name':'费用科目编码','key':'expenseAccountId'},{'name':'费用科目名称','key':'expenseAccountName'}]"
+        data-show-index="false"
+        data-search-key="[{'key':'expenseAccountId','placeholder':'请输入费用科目编码'},{'key':'expenseAccountName','placeholder':'请输入费用科目名称'}]"
+        ></div>
+    <!-- 人员下属门店名称 -->
+    <div lov-list="erpStoreList" role="dialog" data-title="请选择门店" id="erpStoreList1" ng-model="code2"  class="  "
+        data-url="findStorePaginationByPerson"
+        data-dynamic-params="storeParams"
+        data-callback="getStoreByPerson"
+        data-pagination="{'pageIndex':'1','pageRows':'5'}"
+        data-checked-type="radio"
+        data-keys="{'key':'storeCode','value':'storeName',name:'门店名称'}"
+        data-other-column="[{'name':'门店编码','key':'storeCode'}]"
+        data-show-index="false"
+        data-search-key="[{'key':'storeCode','placeholder':'请输入门店编码'},{'key':'storeName','placeholder':'请输入门店名称'}]"
+    >
+    </div>
+    <!-- 经销商下属门店名称 -->
+    <div lov-list="erpStoreList" role="dialog" data-title="请选择门店" id="erpStoreList2" ng-model="code2"  class="  "
+        data-url="findStorePagination"
+        data-dynamic-params="storeParams"
+        data-callback="getStoreByCustAccount"
+        data-pagination="{'pageIndex':'1','pageRows':'5'}"
+        data-checked-type="radio"
+        data-keys="{'key':'storeCode','value':'storeName',name:'门店名称'}"
+        data-other-column="[{'name':'门店编码','key':'storeCode'}]"
+        data-show-index="false"
+        data-search-key="[{'key':'storeCode','placeholder':'请输入门店编码'},{'key':'storeName','placeholder':'请输入门店名称'}]"
+    >
+    </div>
+    <!-- 城市 -->
+    <div class="modal fade" id="citysModal1" data-des="请选择城市" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        请选择城市
+                    </h4>
+                </div>
+                <form id="costCityForm" name="costCityForm">
+                    <div class="modal-body oh">
+                        <div city-area="businessCity" ng-model="citys" class="col-xs-12" data-select-level="4" data-required="true"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button type="button" ng-click="citySave1()" validate-form-btn="costCityForm" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>

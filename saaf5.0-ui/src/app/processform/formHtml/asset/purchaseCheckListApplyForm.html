@@ -1,0 +1,200 @@
+<div ng-controller="purchaseCheckListApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOrUpdateAssetCheck"
+         data-api-update="saveOrUpdateAssetCheck"
+         data-api-get="findAssetCheckDetailById">
+        <div class="col-md-12 pt15 pb30">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="row">
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w200">申请人</span></label>
+                        <input type="text"   class="form-control radius3"
+                               ng-model="formParams.personName" name="requestPersonName" ng-disabled="true">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">申请时间</span></label>
+                        <input type="text"   class="form-control radius3"
+                               ng-model="formParams.requestTime" name="requestPersonName" ng-disabled="true">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">验收单号</span></label>
+                        <input type="text"  class="form-control radius3"
+                               ng-model="formParams.billNo" name="requestPersonName" ng-disabled="true">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w200">申请部门/省区</span></label>
+                        <input type="text"   class="form-control radius3"
+                               ng-model="formParams.deptName" name="hrOrganizationId" ng-disabled="true">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>职位</span></label>
+                        <input type="text"  class="form-control radius3"
+                               ng-model="formParams.positionName" required name="positionId" ng-disabled="true">
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w200">资产名称</span></label>
+                        <input type="text"  class="form-control radius3"
+                               ng-model="formParams.assetName" name="assetName" ng-disabled="true">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>规格/型号</span></label>
+                        <input type="text"  class="form-control radius3"
+                               ng-model="formParams.assetModel" id="formParams_assetModel" name="assetModel" required max-length="200" placeholder=" ">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>单价(元)</span></label>
+                        <input type="text"  class="form-control radius3"
+                               ng-model="formParams.assetPrice" id="formParams_assetPrice" name="assetPrice" required number="8">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w200">购置原因</span></label>
+                        <input type="text"  class="form-control radius3"
+                               ng-model="formParams.reasonTypeStr" name="reasonTypeStr" ng-disabled="true">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">备注</span></label>
+                        <input type="text"  class="form-control radius3"
+                               ng-model="formParams.buyReason" name="buyReason" ng-disabled="true">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">资产类别</span></label>
+                        <input type="text"  class="form-control radius3"
+                               ng-model="formParams.assetTypeStr" name="assetTypeStr" ng-disabled="true">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w200">资产编号</span></label>
+                        <input type="text"  class="form-control radius3"
+                               ng-model="formParams.assetCode" name="assetCode" ng-disabled="true">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-4" ng-if="showFlag">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>规定使用年限</span></label>
+                        <input type="text"  class="form-control radius3"
+                               ng-model="formParams.planUse" name="planUse" ng-required="true" number="1" max-length="11" placeholder=" " title=" ">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                    <div class="form-group col-xs-12 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w200"><i class="red">*</i>规格/型号是否相符</span></label>
+                            <div lookup-code="OA_ASSET_CHECK_FLAG" required=""  name="modelFlag" ng-model="formParams.modelFlag" ></div>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-4"  ng-if="formParams.modelFlag=='QT'">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>备注</span></label>
+                            <input type="text"  class="form-control radius3"
+                                   ng-model="formParams.modelFlagRemark" name="modelFlagRemark" required max-length="200" placeholder="字数限制200"  title="字数限制200">
+                        </div>
+                    </div>
+            </div>
+            <div class="row">
+                    <div class="form-group col-xs-12 col-md-4" >
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w200"><i class="red">*</i>外观有无损坏/资料附件是否齐全</span></label>
+                            <div lookup-code="OA_ASSET_CHECK_FLAG"  required=""  name="facadeFlag" ng-model="formParams.facadeFlag" ></div>
+                        </div>
+                    </div>
+                
+                    <div class="form-group col-xs-12 col-md-4" ng-if="formParams.facadeFlag=='QT'">
+                        <div class="input-group input-group-xs" >
+                            <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>备注</span></label>
+                            <input type="text"  class="form-control radius3"
+                                   ng-model="formParams.facadeFlagRemark" name="facadeFlagRemark" required max-length="200" placeholder="字数限制200"  title="字数限制200">
+                        </div>
+                    </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w200"><i class="red">*</i>安装/调试记录</span></label>
+                        <div lookup-code="OA_ASSET_CHECK_FLAG" required=""  name="installFlag" ng-model="formParams.installFlag" ></div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-4"  ng-if="formParams.installFlag=='QT'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i   class="red">*</i>备注</span></label>
+                        <input type="text"  class="form-control radius3"
+                                ng-model="formParams.installFlagRemark" name="installFlagRemark" required  max-length="200" placeholder="字数限制200"  title="字数限制200">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                    <div class="form-group col-xs-12 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w200"><i class="red">*</i>质量/性能是否合格</span></label>
+                            <div lookup-code="OA_ASSET_CHECK_FLAG" required=""  name="qualityFlag" ng-model="formParams.qualityFlag" ></div>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-4" ng-if="formParams.qualityFlag=='QT'">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>备注</span></label>
+                            <input type="text"  class="form-control radius3"
+                                   ng-model="formParams.qualityFlagRemark" name="qualityFlagRemark" required max-length="200"  placeholder="字数限制200"  title="字数限制200">
+                        </div>
+                    </div>
+            </div>
+            <div class="row">
+                <!-- <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w200">电脑物理地址编码</span></label>
+                        <input type="text"  class="form-control radius3"
+                               ng-model="formParams.macAddr" name="macAddr" max-length="200" placeholder=" " title=" ">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">IP地址</span></label>
+                        <input type="text"  class="form-control radius3"
+                               ng-model="formParams.ipAddr" name="macAddr" max-length="200" placeholder=" " title=" ">
+                    </div>
+                </div> -->
+                <div class="form-group col-xs-12 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w200"><i class="red">*</i>验收结论</span></label>
+                        <textarea class="form-control" rows="3" ng-model="formParams.checkConclusion" maxlength="100" placeholder="最大输入长度100字符" required name="checkConclusion" style="height: auto"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+    </div>
+</div>

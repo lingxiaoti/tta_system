@@ -1,0 +1,288 @@
+<div ng-controller="equPosSuspendEditCtrl" class="bigdata">
+    <div id="processForm"
+         data-api-post="saveEquPosSuspend"
+         data-api-get="findSupSuspendDatail"
+         data-api-update="saveEquPosSuspend">
+    </div>
+    <div>
+
+
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white p5">
+            <!--<div class=" pull-right ml10">-->
+
+                <!--<div class="btn-group btn-group-xs">-->
+                    <!--<button class="btn btn-default" permission-btn="btnSave" data-validate-form="userForm"></button>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="btn-group btn-group-xs ">
+                <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                </button>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+
+                <!--工作流集成添加TAB-->
+                <ul ng-if="!urlParams.businessKey" class="nav nav-tabs mt10">
+                    <li role="presentation" class="active" ng-click="tabChange('requestFundsBusiness')">
+                        <a href="#requestFundsBusiness" aria-controls="requestFundsBusiness" role="tab"
+                           data-toggle="tab">{{$l('业务表单')}}</a>
+                    </li>
+                    <li role="presentation" ng-click="tabChange('approvalHistory')">
+                        <a href="#approvalHistory" aria-controls="approvalHistory" role="tab" data-toggle="tab">{{$l('审批历史')}}</a>
+                    </li>
+                    <li role="presentation" ng-click="tabChange('opinion')">
+                        <a href="#opinion" aria-controls="opinion" role="tab" data-toggle="tab">{{$l('流程图')}}</a>
+                    </li>
+                    <li ng-show="tabAction=='opinion'">
+                        <ul>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #cc0033;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">{{$l('未接收')}}</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #ff6600;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">{{$l('办理中')}}</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #339933;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">{{$l('已办结')}}</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #666666;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">{{$l('预设步骤')}}</span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div ng-show="tabAction== 'requestFundsBusiness'" role="tabpanel" class="tab-pane active"
+                     id="requestFundsBusiness"
+                     style="border: 0;width:100%;height: 100%;overflow-y: auto;">
+
+                    <div class=" mt10 pb5  oh"
+                         data-des="此节点必需－用于识别输入表单的指令">
+
+                        <form id="userForm" name="userForm">
+                            <header class="col-xs-12 mb10">
+                                <i class="fa fa-cog" aria-hidden="true"></i>
+                                <span>{{$l('供应商暂停/淘汰详情')}}</span>
+                                <div class="pull-right ml10">
+                                    <div class="btn-group btn-group-xs ">
+                                        <button class="btn btn-default" ng-if="saveFlag" type="button"
+                                                ng-click="save('save')">
+                                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('保存')}}
+                                        </button>
+                                        <!--<button class="btn btn-default" ng-if="submitFlag" type="button"-->
+                                        <!--ng-click="save('submit')">-->
+                                        <!--<i class="fa fa-undo" aria-hidden="true"></i>提交-->
+                                        <!--</button>-->
+                                        <button class="btn btn-default" type="button" ng-if="submitFlag"
+                                                ng-click="btnSubmit()">
+                                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('提交')}}
+                                        </button>
+                                        <!--<button class="btn btn-default" ng-if="approveFlag" type="button"-->
+                                                <!--ng-click="save('approve')">-->
+                                            <!--<i class="fa fa-search" aria-hidden="true"></i>审批-->
+                                        <!--</button>-->
+                                        <!--<button class="btn btn-default" ng-if="rejectFlag" type="button"-->
+                                                <!--ng-click="save('reject')">-->
+                                            <!--<i class="fa fa-search" aria-hidden="true"></i>驳回-->
+                                        <!--</button>-->
+                                        <button class="btn btn-default" ng-if="cancelFlag" type="button"
+                                                ng-click="save('cancel')">
+                                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('取消')}}
+                                        </button>
+                                    </div>
+                                    <!--<div class="btn-group btn-group-xs "    permission-buttons="btnNew,btnModify"></div>-->
+                                </div>
+                            </header>
+
+                            <div class="form-group col-xs-3 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100"><i class="red">*</i>{{$l('供应商名称')}}</span></label>
+                                    <input type="text" class="form-control radius3" disabled
+                                           ng-model="params.supplierName">
+                                    <span class="input-group-btn ng-scope" ng-if="saveFlag">
+                                <button class="btn btn-default" ng-click="getSupplierLov()" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-3 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">{{$l('供应商档案')}}</span></label>
+                                    <input type="text" class="form-control radius3" disabled
+                                           ng-model="params.supplierNumber">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-3 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">{{$l('供应商状态')}}</span></label>
+                                    <input type="text" class="form-control radius3" disabled
+                                           ng-model="params.supplierDeptStatusName">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-3 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">{{$l('单据编号')}}</span></label>
+                                    <input type="text" class="form-control radius3" disabled
+                                           ng-model="params.supSuspendCode">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-3 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">{{$l('单据状态')}}</span></label>
+                                    <select class="form-control input-xs" ng-model="params.supSuspendStatus" disabled>
+                                        <option saaf-select-lookupcode="EDU_SUP_SUSPEND_STATUS"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--{key:'supSuspendStatus',label:'单据状态',type:'lookCode','disabled':'true',lookCode:'EDU_SUP_SUSPEND_STATUS'},-->
+                            <div class="form-group col-xs-3 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span class="w100">{{$l('创建时间')}}：</span></label>
+                                    <input type="text" class="form-control radius3" disabled
+                                           ng-model="params.creationDate">
+                                </div>
+                            </div>
+                            <!--{key:'creationDate',label:'创建时间','disabled':'true','type':'time','date':'yyyy-mm-dd'},-->
+                            <div class="form-group col-xs-3 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span class="w100">{{$l('创建人')}}</span></label>
+                                    <input type="text" class="form-control radius3" disabled
+                                           ng-model="params.createdByName">
+                                </div>
+                            </div>
+                            <!--{key:'userName',label:'创建人','disabled':'true'},-->
+                            <div class="form-group col-xs-3 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span class="w100"><i
+                                            class="red">*</i>{{$l('暂停/淘汰')}}</span></label>
+                                    <select class="form-control input-xs" ng-model="params.supSuspendType"
+                                            ng-change="changeType()"
+                                            ng-disabled="params.supSuspendId!=null">
+                                        <option saaf-select-lookupcode="EDU_SUP_SUSPEND_TYPE"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--{key:'supSuspendType',label:'暂停/淘汰',type:'lookCode',lookCode:'EDU_SUP_SUSPEND_TYPE'},-->
+                            <div class="form-group col-xs-3 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">{{params.dateName}}</span></label>
+                                    <input type="text" class="form-control radius3" ng-disabled="!saveFlag"
+                                           date-time-picker data-date-format="yyyy-mm-dd" data-min-View="2"
+                                           placeholder="" ng-model="params.supSuspendDate">
+                                </div>
+                            </div>
+                            <!--{key:'supSuspendDate',label:'暂停时间','type':'time','date':'yyyy-mm-dd'},-->
+
+                            <div class="form-group col-xs-10 col-md-10">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>{{params.reasonName}}：</span></label>
+                                    <textarea rows="2" cols="171" ng-disabled="!saveFlag"
+                                              ng-model="params.supSuspendReason"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-10 col-md-10">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span class="w100">{{$l('备注说明')}}：</span></label>
+                                    <textarea rows="2" cols="171" ng-disabled="!saveFlag"
+                                              ng-model="params.remark"></textarea>
+                                </div>
+                            </div>
+                            <!--<div class="form-group col-xs-10 col-md-10">-->
+                                <!--<div class="input-group input-group-xs">-->
+                                    <!--<label class="input-group-addon bn"><span class="w100">驳回原因：</span></label>-->
+                                    <!--<textarea rows="2" cols="171" ng-disabled="params.supSuspendStatus!='20'"-->
+                                              <!--ng-model="params.rejectReason"></textarea>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <div class="form-group col-xs-10 col-md-10">
+                                <div class="btn-group btn-group-xs pull-right">
+                                    <div class="btn-group btn-group-xs" style="">
+                                        <input type="file" name="file" ng-if="params.fileId==null&&saveFlag" id="fileId"
+                                               onchange="angular.element(this).scope().uploadFile()"
+                                               emms-file-upload="myFile">
+                                        <span class="input-group-addon bn" ng-if="params.fileId!=null"
+                                              style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{params.filePath}}"
+                                       target="_blank">{{params.fileName}}
+                                    </a>&nbsp;&nbsp;
+                                </span>
+                                    </div>
+                                    <div class="btn-group btn-group-xs" style="margin-right: 16px;" ng-if="saveFlag">
+                                        <button type="button" ng-click="changeFile()" class="btn btn-primary btn-xs"
+                                                ng-if="params.fileId!=null">
+                                            <i class="fa fa-plus">{{$l('重新上传')}}</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div ng-show="tabAction== 'approvalHistory'" role="tabpanel" class="tab-pane"
+                     id="approvalHistory"
+                     style="border: 0;width:100%;height: 100%;overflow-y: auto;">
+                    <div class="pl15 pr15 pr">
+                        <h5><span class="fa  fa-pencil-square-o"></span>{{$l('审批历史')}}</h5>
+                        <div base-data-table="taskTable" id="taskTable"
+                             data-url="processFindHistoricActivities"
+                             data-page-size="20"
+                             data-onload="historicListLoad"
+                             data-auto-request="true"
+                             ng-params="processInstanceParams"
+                             data-legend='[{"value": "taskName","name": "节点名称",style:"width:10%"},
+                                 {"value": "userFullName","name": "处理人",style:"width:16%;"},
+                                 {"value": "his_detail_option","name": "处理结果",style:"width:8%;"},
+                                 {"value": "his_detail_opinion","name": "审批意见",nowrap:false,"maxWidth":"700px"},
+                                 {"value": "startTime","name": "审批开始时间",style:"width:136px;"},
+                                 {"value": "endTime","name": "审批结束时间",style:"width:136px;"}]'>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-if="!urlParams.businessKey" ng-show="tabAction== 'opinion'" role="tabpanel"
+                     class="tab-pane "
+                     id="opinion"
+                     style="border: 0;width:100%;height: 100%; overflow: hidden;position: relative;">
+                    <div id="processImg" style="width: 100%;height:100%; overflow: auto;">{{$l('流程图加载中，请稍候...')}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div lov-list="cityLov" role="dialog" data-title="选择供应商信息" id="supplierLov" ng-model="current.em"
+         data-url="findSupplierLov"
+         data-dynamic-params=''
+         data-callback="selectSupplierLov"
+         data-params={{param}}
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'supplierNumber','value':'supplierNumber','name':'供应商档案'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+         data-search-key="[{'key':'supplierNumber','placeholder':'供应商档案'},
+                          {'key':'supplierName','placeholder':'供应商名称'}]"
+    >
+    </div>
+    </form>
+</div>
+</div>

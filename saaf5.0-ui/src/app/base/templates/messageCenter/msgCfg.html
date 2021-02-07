@@ -1,0 +1,389 @@
+<div ng-controller="msgCfgCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ">
+                    <div class="btn-group btn-group-xs ml10">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>搜索
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>重置
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnDel,btnNew,btnModify">
+
+                    </div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>高级查询
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>数据全屏
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option={{niceOpction}} data-des="此节点必需-滚动内容及指令">
+                <!--------------------- 输入表单  --->
+                <form ng-submit="dataTable.search(1)">
+                    <div class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+                        <div resp-change="" class="col-xs-6 col-md-4 col-lg-3"></div>
+                        <div search-form
+                             data-legend="[
+                          {key:'msgCfgId',label:'配置编码'},
+                          {key:'msgCfgName',label:'配置名称'},
+                          {key:'orgId',label:'事业部',type:'lookCode',lookCode:'SAM_OU'},
+                          {key:'channelTypeName',label:'渠道类型',type:'lov',target:'#findChannelFind','disabled':false},
+                          {key:'msgTypeCode',label:'消息类型',type:'lookCode',lookCode:'MESSAGE_TYPE'},
+                          {key:'msgSourceName',label:'消息源',type:'lov',target:'#msgSourceCfgFind','disabled':false},
+                          {key:'templeName',label:'模版',type:'lov',target:'#msgTempleCfgFind','disabled':false},
+                          {key:'enableFlag',label:'是否启用',type:'lookCode',lookCode:'MESSAGE_FLAG'},
+                          {key:'compensateFlag',label:'是否补偿',type:'lookCode',lookCode:'MESSAGE_BLACKLIST_FLAG'},
+                          {key:'blacklistFlag',label:'是否过滤黑名单',type:'lookCode',lookCode:'MESSAGE_BLACKLIST_FLAG'},
+                        ]"
+                             ng-model="params"
+                        ></div>
+
+                      <!--  <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100 ">配置编码：</span></label>
+                                <input required type="text" class="form-control radius3" name="msgCfgId"
+                                       ng-model="params.msgCfgId" placeholder="配置编码">
+                            </div>
+                        </div>-->
+                       <!-- <div class="form-group col-xs-3 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100" class="pl10">事业部：</span>
+                            </label>
+                            <select class="form-control radius3" ng-model="params.orgId" >
+                                <option value="" class="ng-binding">请选择</option>
+                                <option ng-repeat="item in buData" value="{{item.orgId}}" ng-bind="item.orgDescription"></option>
+                            </select>
+                        </div>
+                    </div>-->
+
+                        <input type="submit" hidden>
+                    </div>
+                </form>
+                <!--------------------- ./  输入表单  --->
+                <!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-auto-request="true"
+                         data-checked-type="checkbox"
+                         data-keys="{'key':'msgCfgId'}"
+                         data-url="msgCfgFind"
+                         data-legend="[
+                                 {'value':'msgCfgId','name':'配置编码'},
+                                 {'value':'msgCfgName','name':'配置名称'},
+                                 {'value':'orgName','name':'事业部'},
+                                 {'value':'channelTypeName','name':'渠道类型'},
+                                 {'value':'msgTypeName','name':'消息类型'},
+                                 {'value':'msgSourceName','name':'消息源'},
+                                 {'value':'templeName','name':'模版'},
+                                 {'value':'enabledFlagName','name':'是否启用'},
+                                 {'value':'compensateFlagName','name':'是否补偿'},
+                                 {'value':'blacklistFlagName','name':'是否过滤黑名单'},
+                         ]"
+                    ></div>
+                </div>
+                <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="msgCfgModal" data-des="收藏夹" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        {{modalTitle}}
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm" ng-submit="btnSave()">
+                    <div class="modal-body">
+                       <!-- <div search-form
+                             data-col='6'
+                             data-legend="[
+                                 {key:'orgId',label:'事业部',type:'lookCode',lookCode:'SAM_OU',required:true},
+                                 {key:'channelTypeName',label:'渠道类型',type:'lov',target:'#findChannelSave','disabled':true,required:true},
+                                 {key:'msgTypeCode',label:'消息类型',type:'lookCode',lookCode:'MESSAGE_TYPE',required:true},
+                                 {key:'msgSourceName',label:'消息源',type:'lov',target:'#msgSourceCfgSave','disabled':true,required:true},
+                                 {key:'templeName',label:'模版',type:'lov',target:'#msgTempleCfgSave','disabled':true},
+                            ]"
+                             ng-model="addParams"
+                        ></div>-->
+
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">* </i>事业部</span></label>
+                                <div lookup-code="BASE_OU" ng-model="addParams.orgId" required="true"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">* </i>配置名称</span></label>
+                                <input required type="text" class="form-control radius3" name="msgCfgName"
+                                       maxlength="255" ng-model="addParams.msgCfgName">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">* </i>渠道类型</span></label>
+                                <input type="text" class="form-control radius3"  name="channelTypeName" id="channelTypeName"
+                                       ng-model="addParams.channelTypeName" disabled
+                                       data-required-msg="请选择渠道" ng-required="true">
+
+                                <span class="input-group-btn">
+                                         <button type="button" class="btn btn-default btn-xs"
+                                                 ng-click="showChannel()">
+                                             <i class="fa fa-search"></i>
+                                         </button>
+                                     </span>
+                            </div>
+                        </div>
+
+                       <!-- <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"> <i class="red">*</i>{{$l('员工姓名')}}</span>
+                                </label>
+                                <input type="text" class="form-control radius3" ng-model="params.personName"
+                                       name="paramsPersonName" id="paramsPersonName" data-required-msg="请选择员工"
+                                       disabled ng-required="true">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="showChannel()" type="button"><i
+                                            class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </div>-->
+
+
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">* </i>消息类型</span></label>
+                                <div lookup-code="MESSAGE_TYPE" ng-model="addParams.msgTypeCode" required="true" ng-change="msgTypeChange();"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div required="true" class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100"><i class="red">* </i>消息源</span></label>
+                        <input type="text" required class="form-control input-xs" name="msgSourceName" ng-model="addParams.msgSourceName" disabled
+                        >
+
+                        <span class="input-group-btn">
+                                         <button type="button" class="btn btn-default btn-xs"
+                                                 ng-click="showMsgSource()">
+                                             <i class="fa fa-search"></i>
+                                         </button>
+                                     </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">模版</span></label>
+                                <input class="form-control input-xs" name="templeName" ng-model="addParams.templeName" disabled
+                                >
+
+                                <span class="input-group-btn">
+                                         <button type="button" class="btn btn-default btn-xs"
+                                                 ng-click="showTemple()">
+                                             <i class="fa fa-search"></i>
+                                         </button>
+                                     </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-6" ng-hide="addParams.msgTypeCode != 'WECHAT'">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red" ng-hide="addParams.msgTypeCode != 'WECHAT'">* </i>应用ID</span></label>
+                                <input ng-required="{{addParams.msgTypeCode == 'WECHAT'}}" type="text" class="form-control radius3" name="agentId"
+                                        maxlength="10" ng-model="addParams.agentId">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">是否启用</span>
+                                </label>
+                                <input type="radio" name="radiobutton" ng-model="addParams.enabledFlag"
+                                       ng-model="{{addParams.enabledFlag}}" value="1">
+                                &nbsp;<span class="w100">是</span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="radiobutton" ng-model="addParams.enabledFlag"
+                                       ng-model="{{addParams.enabledFlag}}" value="0">
+                                &nbsp;<span class="w100">否</span>
+                                <!--<input type="checkbox" name="radiobutton" ng-model="addParams.enabledFlag"
+                                       ng-model="{{addParams.enabledFlag}}" ng-false-value="'0'" ng-true-value="'1'"
+                                       >-->
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">是否补偿</span>
+                                </label>
+                                <input type="radio" name="radiobutton1" ng-model="addParams.compensateFlag"
+                                       ng-model="{{addParams.compensateFlag}}" value="Y">
+                                &nbsp;<span class="w100">是</span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="radiobutton1" ng-model="addParams.compensateFlag"
+                                       ng-model="{{addParams.compensateFlag}}" value="N">
+                                &nbsp;<span class="w100">否</span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-6" ng-hide="addParams.msgTypeCode != 'SMS'">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">是否过滤黑名单</span>
+                                </label>
+                                <input type="radio" name="radiobutton2" ng-model="addParams.blacklistFlag"
+                                       ng-model="{{addParams.blacklistFlag}}" value="Y">
+                                &nbsp;<span class="w100">是</span>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="radiobutton3  " ng-model="addParams.blacklistFlag"
+                                       ng-model="{{addParams.blacklistFlag}}" value="N">
+                                &nbsp;<span class="w100">否</span>
+                            </div>
+                        </div>
+
+
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button type="submit" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div lov-list="findChannelSave" role="dialog" data-title="请选择渠道" id="findChannelSave" ng-model="code3" class="   "
+                data-url="findChannelCfg"
+                data-auto-request="false"
+                data-params="{'orgType':'INV_ORG'}"
+                data-return-key="addParams.channelType"
+                data-return-value="addParams.channelTypeName"
+                data-pagination="{'pageIndex':'1','pageRows':'5'}"
+                data-checked-type="radio"
+                data-keys="{'key':'channelCode','value':'channelName',name:'渠道'}"
+                data-show-index="false"
+                data-type="competitor"
+                data-search-key="[{'key':'channelName_like','placeholder':'渠道'}]"
+>
+</div>
+
+    <div lov-list="msgSourceCfgSave" role="dialog" data-title="请选择消息源" id="msgSourceCfgSave" ng-model="code3" class="   "
+         data-url="msgSourceCfgFind"
+         data-auto-request="false"
+         data-params="{'msgTypeCode':'{{addParams.msgTypeCode}}'}"
+         data-return-key="addParams.msgSourceId"
+         data-return-value="addParams.msgSourceName"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'msgSourceId','value':'sourceName',name:'消息源'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'sourceName_like','placeholder':'消息源'}]"
+    >
+    </div>
+
+
+    <div lov-list="msgTempleCfgSave" role="dialog" data-title="请选择消息模板" id="msgTempleCfgSave" ng-model="code3" class="   "
+         data-url="msgTempleCfgFind"
+         data-auto-request="false"
+         data-params="{'orgType':'INV_ORG'}"
+         data-return-key="addParams.templeId"
+         data-return-value="addParams.templeName"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'templeId','value':'templeName',name:'消息模板'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'templeName_like','placeholder':'消息模板'}]"
+    >
+    </div>
+
+
+    <div lov-list="findChannelFind" role="dialog" data-title="请选择渠道" id="findChannelFind" ng-model="code3" class="   "
+         data-url="findChannelCfg"
+         data-auto-request="false"
+         data-params="{'orgType':'INV_ORG'}"
+         data-return-key="params.channelType"
+         data-return-value="params.channelTypeName"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'channelCode','value':'channelName',name:'渠道'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'channelName_like','placeholder':'渠道'}]"
+    >
+    </div>
+
+    <div lov-list="msgSourceCfgFind" role="dialog" data-title="请选择消息源" id="msgSourceCfgFind" ng-model="code3" class="   "
+         data-url="msgSourceCfgFind"
+         data-auto-request="false"
+         data-params="{'orgType':'INV_ORG'}"
+         data-return-key="params.msgSourceId"
+         data-return-value="params.msgSourceName"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'msgSourceId','value':'sourceName',name:'消息源'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'sourceName_like','placeholder':'消息源'}]"
+    >
+    </div>
+
+
+    <div lov-list="msgTempleCfgFind" role="dialog" data-title="请选择消息模板" id="msgTempleCfgFind" ng-model="code3" class="   "
+         data-url="msgTempleCfgFind"
+         data-auto-request="false"
+         data-params="{'orgType':'INV_ORG'}"
+         data-return-key="params.templeId"
+         data-return-value="params.templeName"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'templeId','value':'templeName',name:'消息模板'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'templeName_like','placeholder':'消息模板'}]"
+    >
+    </div>
+</div>

@@ -1,0 +1,398 @@
+<div ng-controller="ttaSroiBillLineCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDel,PLSC">
+
+                    </div>
+                    <!-- 导入、下载模板start -->
+                    <div class="btn-group btn-group-xs" permission-btn-group="btnImport" ng-style="myStyle" id="isSq">
+                        <button  class="btn btn-default  a-black "  onclick="window.location.href='app/base/templates/tta/exampleFlie/ttaSroiBillLine.xlsx'" ><i class="fa fa-file-excel-o"></i>下载模板</button>
+                        <button  class="btn btn-default  a-black "   ng-click="daoru()" ><i class="fa fa-upload"></i>导入</button>
+
+                    </div>
+                    <!-- 导入、下载模板end -->
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+
+
+                <!--------------------- 输入表单  --->
+
+                <div class=" mt10 pb5  oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form id="contractForm" name="contractForm">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>单据头信息</span>
+
+
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110">月份：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       date-time-picker="" data-date-format="yyyy-mm"
+                                       data-start-view="3" data-min-view="3" data-max-view="3"
+                                       ng-model="params.accountMonth" >
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">供应商编号：</span></label>
+                                <input  type="text" ng-model="params.rmsCode"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">供应商名称:</span></label>
+                                <input  type="text" ng-model="params.venderName"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="row"></div>
+
+
+                    </form>
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="false"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="findSROIPagination"
+                         data-legend="[
+                                {'value':'accountMonth','name':'月份'},
+                                {'value':'rmsCode','name':'供应商编号'},
+                                {'value':'venderName','name':'供应商名称'},
+                                {'value':'bookInJv','name':' JV'},
+                                {'value':'bookInJv1','name':'供应商编号+JV'},
+                                {'value':'buyer','name':'采购'},
+                                {'value':'tc','name':'TC采购总监'},
+                                {'value':'department','name':'部门'},
+                                {'value':'brand','name':'品牌'},
+                                {'value':'venderab','name':'供应商属性'},
+                                {'value':'userContractId','name':'合同编号'},
+                                {'value':'cooperateStatus','name':'合作状态'},
+                                {'value':'venderType','name':'供应商类型'},
+                                {'value':'familyPlaningFlag','name':'计生供应商'},
+                                {'value':'validBeginDate','name':'合同有效期开始日期'},
+                                {'value':'validEndDate','name':'合同有效期结束日期'},
+                                {'value':'pickUpRate','name':'购货折扣比例'},
+                                {'value':'venderContainTax','name':'购货折扣比例是否含税'},
+                                {'value':'netPurchase','name':'monthly Net Purchase(本月净采购额)折扣前'},
+                                {'value':'netPurchaseOrigin','name':'monthly Net Purchase(本月净采购额)折扣后'},
+                                {'value':'monthPur','name':'本月采购额计算'},
+                                {'value':'monthCount','name':'本月计算'},
+                                {'value':'monthAbi','name':'本月计算-ABI(TTA)'},
+                                {'value':'monthAbiOntop','name':'本月计算-ABI(On top)'},
+                                {'value':'yearAbi','name':'以前年度计算-ABI(TTA)'},
+                                {'value':'yearAbiOntop','name':'以前年度计算-ABI(On top)'},
+                                {'value':'contractAdj','name':'本月合同调整'},
+                                {'value':'billAdj','name':'本月对帐调整'},
+                                {'value':'yearContractAdj','name':'以前年度合同调整'},
+                                {'value':'yearBillAdj','name':'以前年度对帐调整'},
+                                {'value':'yearPurchaseCount','name':'以前年度采购额计算/PRG补收/自查补收'},
+                                {'value':'apOiTotalTax','name':'AP OI Total(含税)'},
+                                {'value':'apOiTotalNotax','name':'AP OI Total(不含税-VAT)'},
+                                {'value':'tax6','name':'税金（6% VAT)'},
+                                {'value':'nss','name':'条款- 新店宣传推广服务费'},
+                                {'value':'nssValue','name':'条款(%)- 新店宣传推广服务费'},
+                                {'value':'nssStoreCount','name':'店铺数量- 新店宣传推广服务费'},
+                                {'value':'nssStoreData','name':'店铺资料- 新店宣传推广服务费'},
+                                {'value':'nssSum','name':'本月计算- 新店宣传推广服务费'},
+                                {'value':'nssMonthContrAdj','name':'本月合同调整- 新店宣传推广服务费'},
+                                {'value':'nssMonthReconAdj','name':'本月对帐调整- 新店宣传推广服务费'},
+                                {'value':'nssPycontrAdj','name':'以前年度合同调整- 新店宣传推广服务费'},
+                                {'value':'nssPyreconAdj','name':'以前年度对帐调整- 新店宣传推广服务费'},
+                                {'value':'nssPyotherAdj','name':'以前年度采购额计算/PRG调整/自查调整- 新店宣传推广服务费'},
+                                {'value':'nssMemo','name':'备注- 新店宣传推广服务费'},
+                                {'value':'nssTotal','name':'新店宣传推广服务费total'},
+                                {'value':'rss','name':'条款- 店铺升级推广服务费'},
+                                {'value':'rssValue','name':'条款(%)- 店铺升级推广服务费'},
+                                {'value':'rssStoreCount','name':'店铺数量- 店铺升级推广服务费'},
+                                {'value':'rssStoreData','name':'店铺资料- 店铺升级推广服务费'},
+                                {'value':'rssSum','name':'本月计算- 店铺升级推广服务费'},
+                                {'value':'rssMonthContrAdj','name':'本月合同调整- 店铺升级推广服务费'},
+                                {'value':'rssMonthReconAdj','name':'本月对帐调整- 店铺升级推广服务费'},
+                                {'value':'rssPycontrAdj','name':'以前年度合同调整- 店铺升级推广服务费'},
+                                {'value':'rssPyreconAdj','name':'以前年度对帐调整- 店铺升级推广服务费'},
+                                {'value':'rssPyotherAdj','name':'以前年度采购额计算/PRG调整/自查调整- 店铺升级推广服务费'},
+                                {'value':'rssMemo','name':'备注- 店铺升级推广服务费'},
+                                {'value':'rssTotal','name':'店铺升级推广服务费Total'},
+                                {'value':'fps','name':'条款- 节庆促销服务费'},
+                                {'value':'fpsValue','name':'条款(%)- 节庆促销服务费'},
+                                {'value':'fpsStoreCount','name':'店铺数量- 节庆促销服务费'},
+                                {'value':'fpsSum','name':'本月计算- 节庆促销服务费'},
+                                {'value':'fpsMonthContrAdj','name':'本月合同调整- 节庆促销服务费'},
+                                {'value':'fpsMonthReconAdj','name':'本月对帐调整- 节庆促销服务费'},
+                                {'value':'fpsPycontrAdj','name':'以前年度合同调整- 节庆促销服务费'},
+                                {'value':'fpsPyreconAdj','name':'以前年度对帐调整- 节庆促销服务费'},
+                                {'value':'fpsPyotherAdj','name':'以前年度采购额计算/PRG调整/自查调整- 节庆促销服务费'},
+                                {'value':'fpsMemo','name':'备注- 节庆促销服务费'},
+                                {'value':'fpsTotal','name':'节庆促销服务费Total'},
+                                {'value':'womdp','name':'条款- 节庆促销服务费（38妇女节）'},
+                                {'value':'womdpValue','name':'条款(%)- 节庆促销服务费（38妇女节）'},
+                                {'value':'womdpStoreCount','name':'店铺数量- 节庆促销服务费（38妇女节）'},
+                                {'value':'womdpSum','name':'本月计算- 节庆促销服务费（38妇女节）'},
+                                {'value':'womdpMonthContrAdj','name':'本月合同调整- 节庆促销服务费（38妇女节）'},
+                                {'value':'womdpMonthReconAdj','name':'本月对帐调整- 节庆促销服务费（38妇女节）'},
+                                {'value':'womdpPycontrAdj','name':'以前年度合同调整- 节庆促销服务费（38妇女节）'},
+                                {'value':'womdpPyreconAdj','name':'以前年度对帐调整- 节庆促销服务费（38妇女节）'},
+                                {'value':'womdpPyotherAdj','name':'以前年度PRG调整/自查调整- 节庆促销服务费（38妇女节）'},
+                                {'value':'womdpMemo','name':'备注-节庆促销服务费（38妇女节）'},
+                                {'value':'womdpTotal','name':'节庆促销服务费（38妇女节）Total'},
+                                {'value':'npmf','name':'条款- 新城市宣传推广服务费'},
+                                {'value':'npmfValue','name':'条款(%)- 新城市宣传推广服务费'},
+                                {'value':'npmfStoreCount','name':'店铺数量- 新城市宣传推广服务费'},
+                                {'value':'npmfStoreData','name':'店铺资料- 新城市宣传推广服务费'},
+                                {'value':'npmfSum','name':'本月计算- 新城市宣传推广服务费'},
+                                {'value':'npmfMonthContrAdj','name':'本月合同调整- 新城市宣传推广服务费'},
+                                {'value':'npmfMonthReconAdj','name':'本月对帐调整- 新城市宣传推广服务费'},
+                                {'value':'npmfPycontrAdj','name':'以前年度合同调整- 新城市宣传推广服务费'},
+                                {'value':'npmfPyreconAdj','name':'以前年度对帐调整- 新城市宣传推广服务费'},
+                                {'value':'npmfPyotherAdj','name':'以前年度PRG调整/自查调整- 新城市宣传推广服务费'},
+                                {'value':'npmfMemo','name':'备注- 新城市宣传推广服务费'},
+                                {'value':'npmfTotal','name':'新城市宣传推广服务费Total'},
+                                {'value':'rgts','name':'条款- 退货处理服务费'},
+                                {'value':'rgtsValue','name':'条款(%)- 退货处理服务费'},
+                                {'value':'rgtsPur','name':'本月采购额计算- 退货处理服务费'},
+                                {'value':'rgtsMonthContrAdj','name':'本月合同调整- 退货处理服务费'},
+                                {'value':'rgtsMonthReconAdj','name':'本月对帐调整- 退货处理服务费'},
+                                {'value':'rgtsPycontrAdj','name':'以前年度合同调整- 退货处理服务费'},
+                                {'value':'rgtsPyreconAdj','name':'以前年度对帐调整- 退货处理服务费'},
+                                {'value':'rgtsPyotherAdj','name':'以前年度调整-PRG- 退货处理服务费'},
+                                {'value':'rgtsMemo','name':'备注- 退货处理服务费'},
+                                {'value':'rgtsTotal','name':'退货处理服务费Total'},
+                                {'value':'lpup','name':'条款- 延误退货罚款'},
+                                {'value':'lpupValue','name':'条款(%)- 延误退货罚款'},
+                                {'value':'lpupSum','name':'本月计算- 延误退货罚款'},
+                                {'value':'lpupMonthContrAdj','name':'本月合同调整- 延误退货罚款'},
+                                {'value':'lpupMonthReconAdj','name':'本月对帐调整- 延误退货罚款'},
+                                {'value':'lpupPycontrAdj','name':'以前年度合同调整- 延误退货罚款'},
+                                {'value':'lpupPyreconAdj','name':'以前年度对帐调整- 延误退货罚款'},
+                                {'value':'lpupPyotherAdj','name':'以前年度调整-PRG- 延误退货罚款'},
+                                {'value':'lpupMemo','name':'备注- 延误退货罚款'},
+                                {'value':'lpupTotal','name':'延误退货罚款Total'},
+                                {'value':'ocrf','name':'本月计算- QA审查服务费'},
+                                {'value':'ocrfMonthContrAdj','name':'本月合同调整- QA审查服务费'},
+                                {'value':'ocrfMonthReconAdj','name':'本月对帐调整- QA审查服务费'},
+                                {'value':'ocrfPycontraAdj','name':'以前年度合同调整- QA审查服务费'},
+                                {'value':'ocrfPyreconAdj','name':'以前年度对帐调整- QA审查服务费'},
+                                {'value':'ocrfPyotherAdj','name':'以前年度调整-PRG- QA审查服务费'},
+                                {'value':'ocrfMemo','name':'备注- QA审查服务费'},
+                                {'value':'ocrfTotal','name':'QA审查服务费Total'},
+                                {'value':'comin','name':'条款- 赔偿(补偿)收入'},
+                                {'value':'cominValue','name':'条款(%)- 赔偿(补偿)收入'},
+                                {'value':'cominStoreCount','name':'本月计算- 赔偿(补偿)收入'},
+                                {'value':'cominSum','name':'本月采购额计算- 赔偿(补偿)收入'},
+                                {'value':'cominMonthContrAdj','name':'本月合同调整- 赔偿(补偿)收入'},
+                                {'value':'cominMonthReconAdj','name':'本月对帐调整- 赔偿(补偿)收入'},
+                                {'value':'cominPyContrAdj','name':'以前年度合同调整- 赔偿(补偿)收入'},
+                                {'value':'cominPyReconAdj','name':'以前年度对帐调整- 赔偿(补偿)收入'},
+                                {'value':'cominPyOtherAdj','name':'以前年度调整-PRG- 赔偿(补偿)收入'},
+                                {'value':'cominMemo','name':'备注- 赔偿(补偿)收入'},
+                                {'value':'cominTotal','name':'赔偿(补偿)收入Total'},
+                                {'value':'psfvt','name':'条款- 促销服务费(第三方)'},
+                                {'value':'psfvtValue','name':'条款(%)- 促销服务费(第三方)'},
+                                {'value':'psfvtSum','name':'本月计算- 促销服务费(第三方)'},
+                                {'value':'psfvtMonthContrAdj','name':'本月合同调整- 促销服务费(第三方)'},
+                                {'value':'psfvtMonthReconAdj','name':'本月对帐调整- 促销服务费(第三方)'},
+                                {'value':'psfvtPyContrAdj','name':'以前年度合同调整- 促销服务费(第三方)'},
+                                {'value':'psfvtPyReconAdj','name':'以前年度对帐调整- 促销服务费(第三方)'},
+                                {'value':'psfvtPyOtherAdj','name':'以前年度调整-PRG- 促销服务费(第三方)'},
+                                {'value':'psfvtMemo','name':'备注- 促销服务费(第三方)'},
+                                {'value':'psfvtTotal','name':'促销服务费(第三方)Total'},
+                                {'value':'creationDate','name':''},
+                                {'value':'createdBy','name':''},
+                                {'value':'nssPurchaseSum','name':'本月采购额计算new store support-新店赞助'},
+                                {'value':'rssPurchaseSum','name':'本月采购额计算refie store support-店铺装修补偿费'},
+                                {'value':'fpsPurchaseSum','name':'本月采购额计算Anniversary & Festival Sales Support-周年庆及节庆赞助'},
+                                {'value':'womdpPurchaseSum','name':'本月采购额计算3.8 Women day promotion support三八节'},
+                                {'value':'npmfPurchaseSum','name':'本月采购额计算New provincial Marketing Fund-新地区市场发展费'},
+                                {'value':'istd','name':'条款In store TV-店铺电视费'},
+                                {'value':'istdValue','name':'条款% In store TV-店铺电视费'},
+                                {'value':'istdStoreCount','name':'店铺数量In store TV-店铺电视费'},
+                                {'value':'istdSum','name':'本月计算In store TV-店铺电视费'},
+                                {'value':'istdPurchaseSum','name':'本月采购额计算In store TV-店铺电视费'},
+                                {'value':'istdMonthContrAdj','name':'本月合同调整In store TV-店铺电视费'},
+                                {'value':'istdMonthReconAdj','name':'本月对帐调整In store TV-店铺电视费'},
+                                {'value':'istdPycontrAdj','name':'以前年度合同调整In store TV-店铺电视费'},
+                                {'value':'istdPyreconAdj','name':'以前年度对帐调整In store TV-店铺电视费'},
+                                {'value':'istdPyotherAdj','name':'以前年度PRG调整/自查调整In store TV-店铺电视费'},
+                                {'value':'istdMemo','name':'备注In store TV-店铺电视费'},
+                                {'value':'istdTotal','name':'In store TV-店铺电视费 Total'},
+                                {'value':'nsod','name':'条款New store order discount-新店第一次订货折扣'},
+                                {'value':'nsodValue','name':'条款% New store order discount-新店第一次订货折扣'},
+                                {'value':'nsodStoreCount','name':'店铺数量New store order discount-新店第一次订货折扣'},
+                                {'value':'nsodSum','name':'本月计算New store order discount-新店第一次订货折扣'},
+                                {'value':'nsodPurchaseSum','name':'本月采购额计算New store order discount-新店第一次订货折扣'},
+                                {'value':'nsodMonthContrAdj','name':'本月合同调整New store order discount-新店第一次订货折扣'},
+                                {'value':'nsodMonthReconAdj','name':'本月对帐调整New store order discount-新店第一次订货折扣'},
+                                {'value':'nsodPycontrAdj','name':'以前年度合同调整New store order discount-新店第一次订货折扣'},
+                                {'value':'nsodPyreconAdj','name':'以前年度对帐调整New store order discount-新店第一次订货折扣'},
+                                {'value':'nsodPyotherAdj','name':'以前年度PRG调整/自查调整New store order discount-新店第一次订货折扣'},
+                                {'value':'nsodMemo','name':'备注New store order discount-新店第一次订货折扣'},
+                                {'value':'nsodTotal','name':'New store order discount-新店第一次订货折扣 Total'},
+                                {'value':'oicn','name':'条款Non-Trade-其他业务费用'},
+                                {'value':'oicnValue','name':'条款% Non-Trade-其他业务费用'},
+                                {'value':'oicnStoreCount','name':'本月计算(TTA)Non-Trade-其他业务费用'},
+                                {'value':'oicnSum','name':'本月计算(On top)Non-Trade-其他业务费用'},
+                                {'value':'oicnYearSumTta','name':'以前年度计算(TTA)Non-Trade-其他业务费用'},
+                                {'value':'oicnYearSumOntop','name':'以前年度(On top)Non-Trade-其他业务费用'},
+                                {'value':'oicnMonthCount','name':'本月计算Non-Trade-其他业务费用(GL)'},
+                                {'value':'oicnMonthContrAdj','name':'本月合同调整Non-Trade 其他业务费用'},
+                                {'value':'oicnMonthReconAdj','name':'本月对帐调整Non-Trade 其他业务费用'},
+                                {'value':'oicnPycontrAdj','name':'以前年度合同调整Non-Trade 其他业务费用'},
+                                {'value':'oicnPyreconAdj','name':'以前年度对帐调整Non-Trade 其他业务费用'},
+                                {'value':'oicnPyotherAdj','name':'以前年度PRG调整/自查调整Non-Trade 其他业务费用'},
+                                {'value':'oicnMemo','name':'备注Non-Trade-其他业务费用'},
+                                {'value':'oicnTotal','name':'Non-Trade-其他业务费用 Total'},
+                                {'value':'oiob','name':'条款OB推广服务费'},
+                                {'value':'oiobValue','name':'条款% OB推广服务费'},
+                                {'value':'oiobStoreCount','name':'本月计算(TTA)OB推广服务费'},
+                                {'value':'oiobSum','name':'本月计算(On top)OB推广服务费'},
+                                {'value':'oiobYearSumTta','name':'以前年度计算(TTA)OB推广服务费'},
+                                {'value':'oiobYearSumOntop','name':'以前年度(On top)OB推广服务费'},
+                                {'value':'oiobMonthCount','name':'本月合同调整OB推广服务费'},
+                                {'value':'oiobMonthContrAdj','name':'本月对帐调整OB推广服务费'},
+                                {'value':'oiobMonthReconAdj','name':'以前年度合同调整OB推广服务费'},
+                                {'value':'oiobPycontrAdj','name':'以前年度对帐调整OB推广服务费'},
+                                {'value':'oiobPyreconAdj','name':'以前年度PRG调整/自查调整OB推广服务费'},
+                                {'value':'oiobPyotherAdj','name':'备注OB推广服务费'},
+                                {'value':'oiobMemo','name':'OB推广服务费 Total'},
+                                {'value':'lpupStoreValue','name':'店铺数量Late Pick Up Penalty-延误退货罚款'},
+                                {'value':'lpupPurchaseSum','name':'本月采购额计算Late Pick Up Penalty-延误退货罚款'},
+                                {'value':'olpd','name':'条款-BOwn label product Development Fund-自有产品市场发展费'},
+                                {'value':'olpdValue','name':'条款(%)Own label product Development Fund-自有产品市场发展费'},
+                                {'value':'olpdStoreValue','name':'店铺数量Own label product Development Fund-自有产品市场发展费'},
+                                {'value':'olpdSum','name':'本月计算Own label product Development Fund-自有产品市场发展费'},
+                                {'value':'olpdPurchaseSum','name':'本月采购额计算Own label product Development Fund-自有产品市场发展费P*CZ'},
+                                {'value':'olpdMonthContrAdj','name':'本月合同调整Own label product Development Fund-自有产品市场发展费'},
+                                {'value':'olpdMonthReconAdj','name':'本月对帐调整Own label product Development Fund-自有产品市场发展费'},
+                                {'value':'olpdPycontrAdj','name':'以前年度合同调整Own label product Development Fund-自有产品市场发展费'},
+                                {'value':'olpdPyreconAdj','name':'以前年度对帐调整Own label product Development Fund-自有产品市场发展费'},
+                                {'value':'olpdPyotherAdj','name':'以前年度PRG调整/自查调整Own label product Development Fund-自有产品市场发展费'},
+                                {'value':'olpdMemo','name':'备注Own label product Development Fund-自有产品市场发展费'},
+                                {'value':'olpdTotal','name':'Own label product Development Fund-自有产品市场发展费 Total'}
+                             ]"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <div class="modal fade" id="excelTtaSroiBillLine" data-des="excel_ttaSroiBillLine" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        导入
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm"   >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12" ng-if="buttonFlag">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">选择文件</span></label>
+                                <input type="file" required accept="*.xlsx"  id="fileUpLoad">
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer " ng-if="buttonFlag">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="save(funcMenuForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="PLDeleteTtaSroiBillLine" data-des="批量删除" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog " style="width: 300px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        选择月份
+                    </h4>
+                </div>
+                <form class="ngValid" name="TtaTermsAcCountForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">月份</span></label>
+                                <input type="text" class="form-control radius3" required
+                                       date-time-picker="" data-date-format="yyyy-mm"
+                                       data-start-view="3" data-min-view="3" data-max-view="3"
+                                       ng-model="paramsPL.month" >
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="saveWindow(TtaTermsAcCountForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+</div>

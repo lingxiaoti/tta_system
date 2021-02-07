@@ -1,0 +1,91 @@
+<!--
+    data-api-post : 此表单要提交请求的服务
+    data-api-get : 此表单草稿或查看时的内容服务
+    默认的表单参数对象为： formParams  与 showProcessCtrl 定义一至
+-->
+
+<div class="data-table" id="processForm" data-api-post="formVacation" data-api-get="formVacationGet">
+    <h3 class="tc">请假流程申请</h3>
+    <div class="form-group col col-xs-11 col-md-12">
+        <div class="input-group input-group-xs">
+            <label class="input-group-addon bn"><span class=""><i class="red">*</i>类别：</span></label>
+            <select class="form-control radius3  " name="formParams_type" id="formParams_type" required
+                    ng-model="formParams.class_">
+                <option value="事假">事假</option>
+                <option value="病假">病假</option>
+                <option value="婚假">婚假</option>
+                <option value="产假">产假</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group col col-xs-11 col-md-12">
+        <div class="input-group input-group-xs">
+            <label class="input-group-addon bn"><span class="">说明：</span></label>
+
+            <textarea class="form-control radius3" style="height: 50px;" ng-model="formParams.descri"
+                      name="descri"></textarea>
+        </div>
+    </div>
+
+    <div class="form-group col-xs-11 col-md-12">
+        <div class="input-group input-group-xs">
+            <label class="input-group-addon bn">
+                <span><i class="red">*</i>开始日期：</span></label>
+            <input type="text" class="formatTime form-control radius3" date-time-picker=""
+                   name="formParams_startTime" id="formParams_startTime" required ng-model="formParams.start">
+        </div>
+    </div>
+
+    <div class="form-group col-xs-11 col-md-12">
+        <div class="input-group input-group-xs">
+            <label class="input-group-addon bn">
+                <span><i class="red">*</i>结束日期：</span></label>
+            <input type="text" class="formatTime form-control radius3" date-time-picker=""
+                   name="formParams_endTime" id="formParams_endTime" required ng-model="formParams.end">
+        </div>
+    </div>
+
+   　
+    <div class="form-group col-xs-11 col-md-12">
+        <div class="input-group input-group-xs">
+            <label class="input-group-addon bn">
+                <span >选人的LOV控件：</span>
+            </label>
+            <input type="text" class="form-control radius3" disabled
+                   ng-model="formParams.ccRoleKeys">
+             <span class="input-group-btn">
+                 <button class="btn btn-default" type="button" data-toggle="modal"
+                         data-target="#lovccRoleKeys">
+                     <i class="fa fa-search" aria-hidden="true"></i>
+                 </button>
+             </span>
+
+        </div>
+    </div>
+   <div>
+       <h4>
+           <a class="btn btn-default btn-xs" ng-click="createRows('apple',{title:'',count:1})">新增行</a>
+           <a class="btn btn-default btn-xs" ng-click="logParams()">查看参数</a>
+       </h4>
+       <table class="table table-bordered table-hover table-condensed">
+           <tr><th>标题</th><th>数量</th><th>操作</th></tr>
+           <tr ng-repeat="row in formParams.apple">
+               <td><input class="form-control input-xs" required ng-model="row.title" ></td>
+               <td><input class="form-control input-xs" ng-model="row.count"  ></td>
+               <td><a class="btn btn-default btn-xs" ng-click="deleteRow('apple',$index)">删除</a></td>
+
+           </tr>
+       </table>
+   </div>
+</div>
+
+<div lov-list="lovccRoleKeys" id="lovccRoleKeys" data-url="processFindRoles" ng-model="current.ccroles"
+     data-title="抄送角色"
+     data-checked-type="checkbox"
+     data-return-key="formParams.ccRoleKeys"
+     data-return-value="formParams.ccRoleNames"
+     data-keys="{'key':'roleKey','value':'roleName','name':'角色名'}"
+     data-other-column="[{key:'roleKey',name:'角色ID'}]"
+></div>
+

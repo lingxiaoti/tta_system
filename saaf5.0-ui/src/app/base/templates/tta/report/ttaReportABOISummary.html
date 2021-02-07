@@ -1,0 +1,445 @@
+<div ng-controller="ttaReportABOISummaryCtrl" class="gridtable">
+
+    <div data-des="此节点必需－用户计算滚动区域高度" main-scroll-style>
+            <div class="nicescroll-height  bg-white" data-des="此节点必需-滚动内容及指令"
+                 nice-option="{cursorcolor: '#009E96',cursorwidth:10,zindex:10,autohidemode:false}">
+       <!-- <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">-->
+            <div class="col-xs-12 col-md-12 br p0">
+                <ul class="nav nav-tabs" id="tab">
+                    <li class="active" ng-click="tabChangeInfo('cWInfo')">
+                        <a data-toggle="tab" ng-href="#cWInfo"><i class="fa fa-list-alt"></i>
+                            <label>报表明细</label></a>
+                    </li>
+                    <li ng-click="tabChangeInfo('brandInfo')" >
+                        <a data-toggle="tab" href="#brandInfo"><i class="fa fa-list-alt"></i>
+                            <label>汇总-按品牌</label></a>
+                    </li>
+                    <li ng-click="tabChangeInfo('groupInfo')" >
+                        <a data-toggle="tab" href="#groupInfo"><i class="fa fa-list-alt"></i>
+                            <label>汇总-按Group</label></a>
+                    </li>
+                </ul>
+                <!-- Start tabContent -->
+                <div class="tab-content" id="tabContent">
+                    <!-- Start cWInfo -->
+                    <div class="tab-pane fade in active col-md-12" id="cWInfo">
+                        <!--------------------- 按钮--->
+                        <div class="bg-gray-white p5">
+                            <div class=" pull-right ml10">
+                                <div class="btn-group btn-group-xs ml10" id="outputButton">
+                                    <button class="btn btn-default" type="button" ng-click="search()">
+                                        <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                                    </button>
+                                    <button type="button" class="btn btn-default" permission-btn=""  ng-click="btnSave(cWReportForm)" ></button>
+                                    <button type="button" class="btn btn-default" permission-btn=""  ng-click="btnExport()" ></button>
+                                </div>
+                            </div>
+                            <div class="btn-group btn-group-xs ">
+                                <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                                </button>
+                            </div>
+                        </div>
+                        <!---------------------  / .按钮  --->
+                        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                            <div class="nicescroll-height  bg-white "
+                                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                                <div class="col-xs-12 col-md-12" style="margin-right: -1px; height: 100%; ">
+                                        <form class="  m10" ng-submit="cWTable.getData()">
+
+                                            <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn"><span
+                                                            class="w100"><i class="red">*</i>年度</span></label>
+                                                    <input type="text" class="form-control radius3"
+                                                           date-time-picker="" data-date-format="yyyy"
+                                                           data-start-view="4" data-min-view="4" data-max-view="4"
+                                                           ng-model="params.reportYear">
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn"><span
+                                                            class="w120">供应商编码：</span></label>
+                                                    <input  type="text" ng-model="params.vendorNbr"
+                                                            class="form-control radius3">
+
+                                                </div>
+                                            </div>
+                                            <div class="row"></div>
+                                        </form>
+                                        <form id="cWReportForm" name="cWReportForm">
+                                            <div id ="parentFixedId" style="" main-scroll-style>
+                                            <div id ="fixedId" style =" height: auto;overflow:auto;position:relative" class="data-table"  nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2',cursorwidth:'10px',autohidemode:false,zindex:10}" >
+                                                <table saaf-table="cWTable"
+                                                       id = "cwTableId"
+                                                       data-url="ttaReportAboiSummaryFindPagination"
+                                                       data-after-get-data="afterGetData()"
+                                                       data-params="params"
+                                                       data-checked-type="radio"
+                                                       data-auto-get-data="true"
+                                                       data-page-rows="10"
+                                                       class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                                    <thead class="bg-gray-white">
+                                                    <tr class="text-center">
+                                                        <th>
+                                                            <input  ng-checked="selectedAll" type="checkbox"
+                                                                                                       ng-click="checkedAll($event)" >
+                                                        </th>
+                                                        <th>序号</th>
+                                                        <th>合同开始日期</th>
+                                                        <th>合同结束日期</th>
+                                                        <th>关联供应商</th>
+                                                        <th>Supplier code</th>
+                                                        <th>Mother Company</th>
+                                                        <th>Group</th>
+                                                        <th>Dept Code</th>
+                                                        <th>Department</th>
+                                                        <th>Brand_EN</th>
+                                                        <th>Brand_CN</th>
+                                                        <th style="background: #A9D08E;    color: white;">Purchase</th>
+                                                        <th style="background: #A9D08E;    color: white;" ng-repeat="row in title">
+                                                            {{row.termsCn}}
+                                                        </th>
+                                                        <th style="background: #A9D08E;    color: white;">ABOI$</th>
+                                                        <th style="background: #A9D08E;    color: white;">ABOI% (as of Purchase)</th>
+
+                                                        <th style="background: #548235;    color: white;" ng-repeat="row in title">
+                                                            {{row.termsCn}}
+                                                        </th>
+                                                        <th style="background: #548235;    color: white;">ABOI$</th>
+                                                        <th style="background: #548235;    color: white;">ABOI% (as of Purchase)</th>
+
+                                                        <th style="background: #375623;    color: white;" ng-repeat="row in title">
+                                                            {{row.termsCn}}
+                                                        </th>
+                                                        <th style="background: #375623;    color: white;">ABOI$</th>
+                                                        <th style="background: #375623;    color: white;">ABOI% (as of Purchase)</th>
+
+                                                        <th style="background: #375623;    color: white;">Action code</th>
+                                                        <th style="background: #375623;    color: white;">Reason code</th>
+                                                        <th style="background: #375623;    color: white;">Remark</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody ng-show="cWTable.data">
+                                                    <tr class="text-center" ng-repeat="row in cWTable.data"
+                                                        ng-class="{'active':cWTable.data.selectRow==$index}"
+                                                        ng-click="cWTable.data.selectRow=$index;
+                                                         cWTable.data.selectRowData =row;" >
+                                                        <td>
+                                                            <input id="{{  'cWTable_'+row.cwId}}" ng-checked="row.checked" type="checkbox"
+                                                                   ng-click="check(row,$event)" name="keys">
+                                                        </td>
+                                                        <td ng-bind="$index+1" class="w50">1</td>
+                                                        <td><span>{{row.beginDate}}</span></td>
+                                                        <td><span>{{row.endDate}}</span></td>
+                                                        <td><span>{{row.promotionStartDate}}</span></td>
+                                                        <td><span>{{row.vendorNbr}}</span></td>
+                                                        <td><span>{{row.promotionLocation}}</span></td>
+                                                        <td><span>{{row.groupDesc}}</span></td>
+                                                        <td><span>{{row.deptCode}}</span></td>
+                                                        <td><span>{{row.deptDesc}}</span></td>
+                                                        <td><span>{{row.brandEn}}</span></td>
+                                                        <td><span>{{row.brandCn}}</span></td>
+                                                        <td><span>{{row.purchase  | currency:'':0}}</span></td>
+                                                        <td ng-repeat="rowss in title track by $index">
+                                                            <input class="form-control input-xs"
+                                                                   ng-model="row.fcs[$index].feeIntas" to-change-number
+                                                            >
+                                                        </td>
+
+                                                        <td>
+                                                            <input class="form-control input-xs" ng-value="$eval(rowFcs) | currency:'':0" type="text" disabled>
+                                                        </td>
+                                                        <td><input class="form-control input-xs" ng-value="$eval(rowFcsOfP)" type="text" disabled></td>
+
+                                                        <td ng-repeat="rowss in title track by $index">
+                                                            <span>{{row.ac[$index].feeIntas | currency:'':0}}</span>
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control input-xs" ng-value="$eval(rowAc)  | currency:'':0" type="text" disabled>
+                                                        </td>
+                                                        <td><input class="form-control input-xs" ng-value="$eval(rowAcOfP)" type="text" disabled></td>
+
+                                                        <td ng-repeat="rowss in title track by $index">
+                                                            <input class="form-control input-xs"
+                                                                   ng-value="(row.ac[$index].feeIntas - row.fcs[$index].feeIntas)   | currency:'':0" disabled
+                                                            >
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control input-xs" ng-value="($eval(rowAc) - $eval(rowFcs))   | currency:'':0" type="text" disabled>
+                                                        </td>
+                                                        <td><input class="form-control input-xs" ng-value="($eval(rowAcOfP) - $eval(rowFcsOfP)) " type="text" disabled></td>
+                                                        <td>
+                                                            <div class="input-group input-group-xs"   style="width: 100px;">
+                                                                <input class="form-control input-xs"  name = "{{'actionCode' + $index}}"
+                                                                       ng-model="row.actionCode">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group input-group-xs"   style="width: 100px;">
+                                                                <input class="form-control input-xs"  name = "{{'reasonCode' + $index}}"
+                                                                       ng-model="row.reasonCode">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group input-group-xs"   style="width: 100px;">
+                                                                <input class="form-control input-xs"  name = "{{'remake' + $index}}"
+                                                                       ng-model="row.remake">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+
+                                            </div>
+                                                <div saaf-table-tfoot="cWTable" ng-show="cWTable.data.length>0"></div>
+                                        </div>
+                                        </form>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End cWInfo -->
+
+                    <div class="tab-pane fade in col-md-12" id="brandInfo">
+                        <!--------------------- 按钮--->
+                        <div class="bg-gray-white p5">
+                            <div class=" pull-right ml10">
+                                <div class="btn-group btn-group-xs ml10" id="outputButton">
+                                    <button class="btn btn-default" type="button" ng-click="searchBrand()">
+                                        <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                                    </button>
+                                    <button type="button" class="btn btn-default" permission-btn=""  ng-click="btnExport()" ></button>
+                                </div>
+                            </div>
+                            <div class="btn-group btn-group-xs ">
+                                <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                                </button>
+                            </div>
+                        </div>
+                        <!---------------------  / .按钮  --->
+                        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                            <div class="nicescroll-height  bg-white "
+                                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                                <div class="col-xs-12 col-md-12" style="margin-right: -1px; height: 100%; ">
+                                    <form class="  m10" ng-submit="BrandTable.getData()">
+                                        <div class="form-group col-xs-4 col-md-3">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn">
+                                                    <span class="w110">年度：</span></label>
+                                                <input type="text" class="form-control radius3"
+                                                       date-time-picker="" data-date-format="yyyy"
+                                                       data-start-view="4" data-min-view="4" data-max-view="4"
+                                                       ng-model="paramsBrand.reportYear">
+                                            </div>
+                                        </div>
+
+                                        <div class="row"></div>
+                                    </form>
+                                    <form id="BarndReportForm" name="BarndReportForm">
+                                        <div id ="brandParentFixedId" style="" main-scroll-style>
+                                            <div id ="brandFixedId" style =" height: auto;overflow:auto;position:relative" class="data-table"  nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2',cursorwidth:'10px',autohidemode:false,zindex:10}" >
+                                                <table saaf-table="BrandTable"
+                                                       id = "BrandTableId"
+                                                       data-url="ttaReportAboiSummaryFindBrandList"
+                                                       data-after-get-data="brandAfterGetData()"
+                                                       data-params="paramsBrand"
+                                                       data-checked-type="radio"
+                                                       data-auto-get-data="false"
+                                                       data-page-rows="10"
+                                                       class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                                    <thead class="bg-gray-white">
+                                                    <tr class="text-center">
+                                                        <th>序号</th>
+                                                        <th>Group</th>
+                                                        <th>Dept Code</th>
+                                                        <th>Department</th>
+                                                        <th>Brand_EN</th>
+                                                        <th>Brand_CN</th>
+                                                        <th style="background: #A9D08E;    color: white;">Purchase</th>
+                                                        <th style="background: #A9D08E;    color: white;">ABOI$</th>
+                                                        <th style="background: #A9D08E;    color: white;">ABOI% (as of Purchase)</th>
+
+                                                        <th style="background: #548235;    color: white;">ABOI$</th>
+                                                        <th style="background: #548235;    color: white;">ABOI% (as of Purchase)</th>
+
+                                                        <th style="background: #375623;    color: white;">ABOI$</th>
+                                                        <th style="background: #375623;    color: white;">ABOI% (as of Purchase)</th>
+
+                                                        <th style="background: #375623;    color: white;">Action code</th>
+                                                        <th style="background: #375623;    color: white;">Reason code</th>
+                                                        <th style="background: #375623;    color: white;">Remark</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody ng-show="BrandTable.data">
+                                                    <tr class="text-center" ng-repeat="row in BrandTable.data"
+                                                        ng-class="{'active':BrandTable.data.selectRow==$index}"
+                                                        ng-click="BrandTable.data.selectRow=$index;
+                                                         BrandTable.data.selectRowData =row;" >
+                                                        <td ng-bind="$index+1" class="w50">1</td>
+                                                        <td><span>{{row.groupDesc}}</span></td>
+                                                        <td><span>{{row.deptCode}}</span></td>
+                                                        <td><span>{{row.deptDesc}}</span></td>
+                                                        <td><span>{{row.brandEn}}</span></td>
+                                                        <td><span>{{row.brandCn}}</span></td>
+                                                        <td><span>{{row.purchase  | currency:'':0}}</span></td>
+
+                                                        <td>
+                                                            <input class="form-control input-xs" ng-value="row.fcsInAmount | currency:'':0" type="text" disabled>
+                                                        </td>
+                                                        <td><input class="form-control input-xs" ng-value="(row.fcsInAmount*1/row.purchase).toFixed(2)" type="text" disabled></td>
+                                                        <td>
+                                                            <input class="form-control input-xs" ng-value="row.acInAmount  | currency:'':0" type="text" disabled>
+                                                        </td>
+                                                        <td><input class="form-control input-xs" ng-value="(row.acInAmount*1/row.netpurchase).toFixed(2)" type="text" disabled></td>
+
+                                                        <td>
+                                                            <input class="form-control input-xs" ng-value="(row.acInAmount - row.fcsInAmount)  | currency:'':0" type="text" disabled>
+                                                        </td>
+                                                        <td><input class="form-control input-xs" ng-value="(row.acInAmount*1/row.netpurchase).toFixed(2) - (row.fcsInAmount*1/row.purchase).toFixed(2)" type="text" disabled></td>
+                                                        <td>
+                                                            <div class="input-group input-group-xs"   style="width: 100px;">
+                                                                <input class="form-control input-xs"  name = "{{'actionCode' + $index}}"
+                                                                       ng-model="row.actionCode" disabled title="{{row.actionCode}}">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group input-group-xs"   style="width: 100px;">
+                                                                <input class="form-control input-xs"  name = "{{'reasonCode' + $index}}"
+                                                                       ng-model="row.reasonCode" disabled title="{{row.reasonCode}}">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group input-group-xs"   style="width: 100px;">
+                                                                <input class="form-control input-xs"  name = "{{'remake' + $index}}"
+                                                                       ng-model="row.remake" disabled title="{{row.remake}}">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+
+                                            </div>
+                                            <div saaf-table-tfoot="BrandTable" ng-show="BrandTable.data.length>0"></div>
+                                        </div>
+                                    </form>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade in col-md-12" id="groupInfo">
+                        <!--------------------- 按钮--->
+                        <div class="bg-gray-white p5">
+                            <div class=" pull-right ml10">
+                                <div class="btn-group btn-group-xs ml10" id="outputButton">
+                                    <button class="btn btn-default" type="button" ng-click="searchGroup()">
+                                        <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                                    </button>
+                                    <button type="button" class="btn btn-default" permission-btn=""  ng-click="btnExport()" ></button>
+                                </div>
+
+                            </div>
+                            <div class="btn-group btn-group-xs ">
+                                <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                                </button>
+                            </div>
+                        </div>
+                        <!---------------------  / .按钮  --->
+                        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                            <div class="nicescroll-height  bg-white "
+                                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                                <div class="col-xs-12 col-md-12" style="margin-right: -1px; height: 100%; ">
+                                    <form class="  m10" ng-submit="groupTable.getData()">
+                                        <div class="form-group col-xs-4 col-md-3">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn">
+                                                    <span class="w110">年度：</span></label>
+                                                <input type="text" class="form-control radius3"
+                                                       date-time-picker="" data-date-format="yyyy"
+                                                       data-start-view="4" data-min-view="4" data-max-view="4"
+                                                       ng-model="paramsGroup.reportYear">
+                                            </div>
+                                        </div>
+                                        <div class="row"></div>
+                                    </form>
+                                    <form id="groupReportForm" name="groupReportForm">
+                                        <div id ="groupParentFixedId" style="" main-scroll-style>
+                                            <div id ="groupFixedId" style =" height: auto;overflow:auto;position:relative" class="data-table"  nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2',cursorwidth:'10px',autohidemode:false,zindex:10}" >
+                                                <table saaf-table="groupTable"
+                                                       id = "groupTableId"
+                                                       data-url="ttaReportAboiSummaryFindGroupList"
+                                                       data-after-get-data="groupAfterGetData()"
+                                                       data-params="paramsGroup"
+                                                       data-checked-type="radio"
+                                                       data-auto-get-data="false"
+                                                       data-page-rows="10"
+                                                       class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                                    <thead class="bg-gray-white">
+                                                    <tr class="text-center">
+                                                        <th>序号</th>
+                                                        <th>Group</th>
+
+                                                        <th style="background: #A9D08E;    color: white;">ABOI$</th>
+
+                                                        <th style="background: #548235;    color: white;">ABOI$</th>
+
+                                                        <th style="background: #375623;    color: white;">ABOI$</th>
+
+                                                        <th style="background: #375623;    color: white;">Action code</th>
+
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody ng-show="groupTable.data">
+                                                    <tr class="text-center" ng-repeat="row in groupTable.data"
+                                                        ng-class="{'active':groupTable.data.selectRow==$index}"
+                                                        ng-click="groupTable.data.selectRow=$index;
+                                                         groupTable.data.selectRowData =row;" >
+                                                        <td ng-bind="$index+1" class="w50">1</td>
+                                                        <td><span>{{row.groupDesc}}</span></td>
+
+                                                        <td>
+                                                            <input class="form-control input-xs" ng-value="row.fcsInAmount | currency:'':0" type="text" disabled>
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control input-xs" ng-value="row.acInAmount | currency:'':0" type="text" disabled>
+                                                        </td>
+
+                                                        <td>
+                                                            <input class="form-control input-xs" ng-value="(row.acInAmount - row.fcsInAmount) | currency:'':0" type="text" disabled>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group input-group-xs"   style="width: 100px;">
+                                                                <input class="form-control input-xs"  name = "{{'actionCode' + $index}}"
+                                                                       ng-model="row.actionCode" disabled title="{{row.actionCode}}">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+
+                                            </div>
+                                            <div saaf-table-tfoot="groupTable" ng-show="groupTable.data.length>0"></div>
+                                        </div>
+                                    </form>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- End tabContent -->
+            </div>
+            </div>
+     </div>
+</div>

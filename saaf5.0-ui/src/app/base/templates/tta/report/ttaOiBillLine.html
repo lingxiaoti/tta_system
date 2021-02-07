@@ -1,0 +1,364 @@
+<div ng-controller="ttaOiBillLineCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDel">
+
+                    </div>
+                    <!-- 导入、下载模板start -->
+                    <div class="btn-group btn-group-xs" permission-btn-group="btnImport" ng-style="myStyle" id="isSq">
+                        <button  class="btn btn-default  a-black "  onclick="window.location.href='app/base/templates/tta/exampleFlie/ttaOiBillLine.xlsx'" ><i class="fa fa-file-excel-o"></i>下载模板</button>
+                        <button  class="btn btn-default  a-black "   ng-click="daoru()" ><i class="fa fa-upload"></i>导入</button>
+
+                        <!--                        <button type="button" class="btn btn-default" saaf-xls-import-component data-list-options="{-->
+<!--                                accountMonth:{headName:'导入月份'},-->
+<!--                                rmsCode:{headName:'供应商编号'},-->
+<!--                                venderName:{headName:'供应商名称'},-->
+<!--                                importjv:{headName:'JV'},-->
+<!--                                invoicename:{headName:'开票抬头'},-->
+<!--                                buyer:{headName:'Buyer'},-->
+<!--                                tc:{headName:'TC'},-->
+<!--                                department:{headName:'部门'},-->
+<!--                                brand:{headName:'品牌'},-->
+<!--                                venderab:{headName:'供应商属性'},-->
+<!--                                userContractId:{headName:'合同编号'},-->
+<!--                                cooperateStatus:{headName:'合作状态'},-->
+<!--                                venderType:{headName:'供应商类型'},-->
+<!--                                familyPlaningFlag:{headName:'计生供应商'},-->
+<!--                                validBeginDate:{headName:'合同开始日期'},-->
+<!--                                purchase:{headName:'采购额（折扣前）'},-->
+<!--                                goodsReturn:{headName:'退货额（折扣前）'},-->
+<!--                                netPurchase:{headName:'净采购额（折扣前）'},-->
+<!--                                dsd:{headName:'免送额（折扣前）'},-->
+<!--                                purchaseOrigin:{headName:'采购额（折扣后）'},-->
+<!--                                goodsReturnOrigin:{headName:'退货额（折扣后）'},-->
+<!--                                netPurchaseOrigin:{headName:'净采购额（折扣后）'},-->
+<!--                                adrbContractText:{headName:'条款一般购货折扣'},-->
+<!--                                adrbSumMoney:{headName:'一般购货折扣 Total'},-->
+<!--                                epContractText:{headName:'条款（提前付款）购货折扣'},-->
+<!--                                epSumMoney:{headName:'（提前付款）购货折扣 Total'},-->
+<!--                                adpfContractText:{headName:'条款宣传牌及促销用品制作费'},-->
+<!--                                adpfSumMoney:{headName:'宣传牌及促销用品制作费'},-->
+<!--                                addaContractText:{headName:'条款（集中收退货）购货折扣'},-->
+<!--                                addaSumMoney:{headName:'（集中收退货）购货折扣 Total'},-->
+<!--                                vir002ContractText:{headName:'条款(集中收货)购货折扣'},-->
+<!--                                vir002SumMoney:{headName:'(集中收货)购货折扣 Total'},-->
+<!--                                vir001ContractText:{headName:'条款退货运输费'},-->
+<!--                                vir001SumMoney:{headName:'退货运输费 Total'},-->
+<!--                                addgContractText:{headName:'条款（残损）购货折扣'},-->
+<!--                                addgSumMoney:{headName:'（残损）购货折扣 Total'},-->
+<!--                                adtrContractText:{headName:'达到目标条款相应的点数目标退佣'},-->
+<!--                                adtrSumMoney:{headName:'目标退佣Total'},-->
+<!--                                bdfContractText:{headName:'条款%商业发展基金'},-->
+<!--                                bdfSumMoney:{headName:'%商业发展基金 Total'},-->
+<!--                                nss001ContractText:{headName:'条款新店宣传推广服务费'},-->
+<!--                                nss001ContractNum:{headName:'店铺数量新店宣传推广服务费'},-->
+<!--                                nss001ContractData:{headName:'店铺资料新店宣传推广服务费'},-->
+<!--                                nss001SumMoney:{headName:'新店宣传推广服务费 total'},-->
+<!--                                rss001ContractText:{headName:'条款陈列区域装修费'},-->
+<!--                                rss001ContractNum:{headName:'店铺数量陈列区域装修费'},-->
+<!--                                rss001ContractData:{headName:'店铺资料陈列区域装修费'},-->
+<!--                                rss001SumMoney:{headName:'陈列区域装修Total'},-->
+<!--                                ass001ContractText:{headName:'条款节庆促销服务费（周年庆、春节、劳动节、国庆节、圣诞节）'},-->
+<!--                                ass001ContractNum:{headName:'店铺数量节庆促销服务促销费（周年庆、春节、劳动节、国庆节、圣诞节）'},-->
+<!--                                ass001SumMoney:{headName:'节庆促销服务费（周年庆、春节、劳动节、国庆节、圣诞节） Total'},-->
+<!--                                wdp001ContractText:{headName:'条款节庆促销服务费（38妇女节）'},-->
+<!--                                wdp001SumMoney:{headName:'节庆促销服务费（38妇女节） Total'},-->
+<!--                                npm001ContractText:{headName:'条款新城市宣传推广服务费'},-->
+<!--                                npm001ContractNum:{headName:'店铺数量新城市宣传推广服务费'},-->
+<!--                                npm001ContractData:{headName:'店铺资料新城市宣传推广服务费'},-->
+<!--                                npm001SumMoney:{headName:'新城市宣传推广服务费 Total'},-->
+<!--                                drg001ContractText:{headName:'条款促销陈列服务费（端架）'},-->
+<!--                                drg001SumMoney:{headName:'促销陈列服务费（端架） Total'},-->
+<!--                                drh001ContractText:{headName:'条款促销陈列服务费（焦点货架）'},-->
+<!--                                drh001summoney:{headName:'促销陈列服务费（焦点货架）Total'},-->
+<!--                                drb001ContractText:{headName:'条款促销陈列服务费（促销助理管理费）'},-->
+<!--                                drb001SumMoney:{headName:'促销陈列服务费（促销助理管理费）Total'},-->
+<!--                                dro001ContractText:{headName:'条款促销陈列服务费（其他）'},-->
+<!--                                dro001SumMoney:{headName:'促销陈列服务费（其他）Total'},-->
+<!--                                cri001ContractText:{headName:'条款专柜促销陈列服务费'},-->
+<!--                                cri001SumMoney:{headName:'专柜促销陈列服务费Total'},-->
+<!--                                dmi001ContractText:{headName:'条款宣传单张制作费（快讯及传单）'},-->
+<!--                                dmi001SumMoney:{headName:'宣传单张制作费（快讯及传单） Total'},-->
+<!--                                hbi001ContractText:{headName:'条款H & B健与美'},-->
+<!--                                hbi001SumMoney:{headName:'H & B健与美Total'},-->
+<!--                                npd001ContractText:{headName:'条款新品种宣传推广服务费'},-->
+<!--                                npd001SumMoney:{headName:'新品种宣传推广服务费Total'},-->
+<!--                                bdf001ContractText:{headName:'条款商业发展基金'},-->
+<!--                                bdf001SumMoney:{headName:'商业发展基金 Total'},-->
+<!--                                cos001ContractText:{headName:'条款成本补差'},-->
+<!--                                cos001SumMoney:{headName:'成本补差 Total'},-->
+<!--                                oth001ContractText:{headName:'条款其他'},-->
+<!--                                oth001SumMoney:{headName:'其他Total'},-->
+<!--                                nti001ContractText:{headName:'条款其他业务费用 '},-->
+<!--                                nti001SumMoney:{headName:'其他业务费用 Total'},-->
+<!--                                ldp001SumMoney:{headName:'延误送货罚款 Total'},-->
+<!--                                ldp001ContractText:{headName:'条款延误送货罚款'},-->
+<!--                                nfp001ContractText:{headName:'条款送货满足率低于95%罚款'},-->
+<!--                                nfp001SumMoney:{headName:'送货满足率低于95%罚款 Total'},-->
+<!--                                cou001ContractText:{headName:'条款优惠券 '},-->
+<!--                                cou001SumMoney:{headName:'优惠券 Total'},-->
+<!--                                vip001ContractText:{headName:'条款会员优惠 '},-->
+<!--                                vip001SumMoney:{headName:'会员优惠 Total'},-->
+<!--                                lpu001ContractText:{headName:'条款延误退货罚款'},-->
+<!--                                lpu001SumMoney:{headName:'延误退货罚款 Total'},-->
+<!--                                bac001ContractText:{headName:'条款促销服务费'},-->
+<!--                                bac001SumMoney:{headName:'促销服务费 Total'},-->
+<!--                                uep001ContractText:{headName:'条款未在合同上的提早付款折扣 '},-->
+<!--                                uep001SumMoney:{headName:'未在合同上的提早付款折扣 Total'},-->
+<!--                                otf001ContractText:{headName:'条款差旅费(供应商承担部份)'},-->
+<!--                                otf001SumMoney:{headName:'差旅费(供应商承担部份) Total'},-->
+<!--                                psf001ContractText:{headName:'条款促销服务费(VAT项目)'},-->
+<!--                                psf001SumMoney:{headName:'促销服务费(VAT项目)Total'},-->
+<!--                                cps001ContractText:{headName:'条款其他业务收入-赔偿(补偿)收入'},-->
+<!--                                cps001SumMoney:{headName:'其他业务收入-赔偿(补偿)收入Total'},-->
+<!--                                apSumMoney:{headName:'AP OI Total'}-->
+
+
+
+<!--                    }" data-url="saveImportOIInfo"-->
+<!--                                data-info="{date:'{{params.id}}'}"-->
+<!--                                data-after-action="dataTable.getData()"-->
+<!--                                data-message="导入月份，供应商编号不可为空，日期格式为 yyyy/mm/dd,按月导入格式为 yyyymm;日期都是文本格式的我哦"   >-->
+<!--                            <i class="fa fa-upload"></i>导入-->
+<!--                        </button>-->
+                    </div>
+                    <!-- 导入、下载模板end -->
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+
+
+                <!--------------------- 输入表单  --->
+
+                <div class=" mt10 pb5  oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form id="contractForm" name="contractForm">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>单据头信息</span>
+
+
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110">月份：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       date-time-picker="" data-date-format="yyyy-mm"
+                                       data-start-view="3" data-min-view="3" data-max-view="3"
+                                       ng-model="params.accountMonth" >
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">供应商编号：</span></label>
+                                <input  type="text" ng-model="params.rmsCode"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">供应商名称:</span></label>
+                                <input  type="text" ng-model="params.venderName"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="row"></div>
+
+
+                    </form>
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="false"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="findTtaOiBillLinePagination"
+                         data-legend="[
+                            {'value':'accountMonth','name':'导入月份'},
+                            {'value':'rmsCode','name':'供应商编号'},
+                            {'value':'venderName','name':'供应商名称'},
+                            {'value':'importjv','name':'JV'},
+                            {'value':'invoicename','name':'开票抬头'},
+                            {'value':'buyer','name':'Buyer'},
+                            {'value':'tc','name':'TC'},
+                            {'value':'department','name':'部门'},
+                            {'value':'brand','name':'品牌'},
+                            {'value':'venderab','name':'供应商属性'},
+                            {'value':'userContractId','name':'合同编号'},
+                            {'value':'cooperateStatus','name':'合作状态'},
+                            {'value':'venderType','name':'供应商类型'},
+                            {'value':'familyPlaningFlag','name':'计生供应商'},
+                            {'value':'validBeginDate','name':'合同开始日期'},
+                            {'value':'purchase','name':'采购额（折扣前）'},
+                            {'value':'goodsReturn','name':'退货额（折扣前）'},
+                            {'value':'netPurchase','name':'净采购额（折扣前）'},
+                            {'value':'dsd','name':'免送额（折扣前）'},
+                            {'value':'purchaseOrigin','name':'采购额（折扣后）'},
+                            {'value':'goodsReturnOrigin','name':'退货额（折扣后）'},
+                            {'value':'netPurchaseOrigin','name':'净采购额（折扣后）'},
+                            {'value':'adrbContractText','name':'条款一般购货折扣'},
+                            {'value':'adrbSumMoney','name':'一般购货折扣 Total'},
+                            {'value':'epContractText','name':'条款（提前付款）购货折扣'},
+                            {'value':'epSumMoney','name':'（提前付款）购货折扣 Total'},
+                            {'value':'adpfContractText','name':'条款宣传牌及促销用品制作费'},
+                            {'value':'adpfSumMoney','name':'宣传牌及促销用品制作费'},
+                            {'value':'addaContractText','name':'条款（集中收退货）购货折扣'},
+                            {'value':'addaSumMoney','name':'（集中收退货）购货折扣 Total'},
+                            {'value':'vir002ContractText','name':'条款(集中收货)购货折扣'},
+                            {'value':'vir002SumMoney','name':'(集中收货)购货折扣 Total'},
+                            {'value':'vir001ContractText','name':'条款退货运输费'},
+                            {'value':'vir001SumMoney','name':'退货运输费 Total'},
+                            {'value':'addgContractText','name':'条款（残损）购货折扣'},
+                            {'value':'addgSumMoney','name':'（残损）购货折扣 Total'},
+                            {'value':'adtrContractText','name':'达到目标条款相应的点数目标退佣'},
+                            {'value':'adtrSumMoney','name':'目标退佣Total'},
+                            {'value':'bdfContractText','name':'条款%商业发展基金'},
+                            {'value':'bdfSumMoney','name':'%商业发展基金 Total'},
+                            {'value':'nss001ContractText','name':'条款新店宣传推广服务费'},
+                            {'value':'nss001ContractNum','name':'店铺数量新店宣传推广服务费'},
+                            {'value':'nss001ContractData','name':'店铺资料新店宣传推广服务费'},
+                            {'value':'nss001SumMoney','name':'新店宣传推广服务费 total'},
+                            {'value':'rss001ContractText','name':'条款陈列区域装修费'},
+                            {'value':'rss001ContractNum','name':'店铺数量陈列区域装修费'},
+                            {'value':'rss001ContractData','name':'店铺资料陈列区域装修费'},
+                            {'value':'rss001SumMoney','name':'陈列区域装修Total'},
+                            {'value':'ass001ContractText','name':'条款节庆促销服务费（周年庆、春节、劳动节、国庆节、圣诞节）'},
+                            {'value':'ass001ContractNum','name':'店铺数量节庆促销服务促销费（周年庆、春节、劳动节、国庆节、圣诞节）'},
+                            {'value':'ass001SumMoney','name':'节庆促销服务费（周年庆、春节、劳动节、国庆节、圣诞节） Total'},
+                            {'value':'wdp001ContractText','name':'条款节庆促销服务费（38妇女节）'},
+                            {'value':'wdp001SumMoney','name':'节庆促销服务费（38妇女节） Total'},
+                            {'value':'npm001ContractText','name':'条款新城市宣传推广服务费'},
+                            {'value':'npm001ContractNum','name':'店铺数量新城市宣传推广服务费'},
+                            {'value':'npm001ContractData','name':'店铺资料新城市宣传推广服务费'},
+                            {'value':'npm001SumMoney','name':'新城市宣传推广服务费 Total'},
+                            {'value':'drg001ContractText','name':'条款促销陈列服务费（端架）'},
+                            {'value':'drg001SumMoney','name':'促销陈列服务费（端架） Total'},
+                            {'value':'drh001ContractText','name':'条款促销陈列服务费（焦点货架）'},
+                            {'value':'drh001summoney','name':'促销陈列服务费（焦点货架）Total'},
+                            {'value':'drb001ContractText','name':'条款促销陈列服务费（促销助理管理费）'},
+                            {'value':'drb001SumMoney','name':'促销陈列服务费（促销助理管理费）Total'},
+                            {'value':'dro001ContractText','name':'条款促销陈列服务费（其他）'},
+                            {'value':'dro001SumMoney','name':'促销陈列服务费（其他）Total'},
+                            {'value':'cri001ContractText','name':'条款专柜促销陈列服务费'},
+                            {'value':'cri001SumMoney','name':'专柜促销陈列服务费Total'},
+                            {'value':'dmi001ContractText','name':'条款宣传单张制作费（快讯及传单）'},
+                            {'value':'dmi001SumMoney','name':'宣传单张制作费（快讯及传单） Total'},
+                            {'value':'hbi001ContractText','name':'条款H & B健与美'},
+                            {'value':'hbi001SumMoney','name':'H & B健与美Total'},
+                            {'value':'npd001ContractText','name':'条款新品种宣传推广服务费'},
+                            {'value':'npd001SumMoney','name':'新品种宣传推广服务费Total'},
+                            {'value':'bdf001ContractText','name':'条款商业发展基金'},
+                            {'value':'bdf001SumMoney','name':'商业发展基金 Total'},
+                            {'value':'cos001ContractText','name':'条款成本补差'},
+                            {'value':'cos001SumMoney','name':'成本补差 Total'},
+                            {'value':'oth001ContractText','name':'条款其他'},
+                            {'value':'oth001SumMoney','name':'其他Total'},
+                            {'value':'nti001ContractText','name':'条款其他业务费用 '},
+                            {'value':'nti001SumMoney','name':'其他业务费用 Total'},
+                            {'value':'ldp001SumMoney','name':'延误送货罚款 Total'},
+                            {'value':'ldp001ContractText','name':'条款延误送货罚款'},
+                            {'value':'nfp001ContractText','name':'条款送货满足率低于95%罚款'},
+                            {'value':'nfp001SumMoney','name':'送货满足率低于95%罚款 Total'},
+                            {'value':'cou001ContractText','name':'条款优惠券 '},
+                            {'value':'cou001SumMoney','name':'优惠券 Total'},
+                            {'value':'vip001ContractText','name':'条款会员优惠 '},
+                            {'value':'vip001SumMoney','name':'会员优惠 Total'},
+                            {'value':'lpu001ContractText','name':'条款延误退货罚款'},
+                            {'value':'lpu001SumMoney','name':'延误退货罚款 Total'},
+                            {'value':'bac001ContractText','name':'条款促销服务费'},
+                            {'value':'bac001SumMoney','name':'促销服务费 Total'},
+                            {'value':'uep001ContractText','name':'条款未在合同上的提早付款折扣 '},
+                            {'value':'uep001SumMoney','name':'未在合同上的提早付款折扣 Total'},
+                            {'value':'otf001ContractText','name':'条款差旅费(供应商承担部份)'},
+                            {'value':'otf001SumMoney','name':'差旅费(供应商承担部份) Total'},
+                            {'value':'psf001ContractText','name':'条款促销服务费(VAT项目)'},
+                            {'value':'psf001SumMoney','name':'促销服务费(VAT项目)Total'},
+                            {'value':'cps001ContractText','name':'条款其他业务收入-赔偿(补偿)收入'},
+                            {'value':'cps001SumMoney','name':'其他业务收入-赔偿(补偿)收入Total'},
+                            {'value':'apSumMoney','name':'AP OI Total'},
+                            {'value':'creationDate','name':'创建日期'}
+
+
+
+                             ]"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <div class="modal fade" id="excelUp" data-des="EXCEL_UP" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        导入
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">选择文件</span></label>
+                                <input type="file" required accept="*.xlsx"  id="fileUpLoad">
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="save(funcMenuForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+</div>

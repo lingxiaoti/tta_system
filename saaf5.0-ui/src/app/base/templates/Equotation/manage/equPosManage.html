@@ -1,0 +1,221 @@
+<div ng-controller="equPosManageCtrl" class="gridtable">
+    <style>
+        table{
+            table-layout:fixed;
+        }
+        table td{
+            border-bottom: 10px solid #666666;
+            /*下面4行是实现超过td文字变省略号,另外还要给table加上table-layout:fixed;*/
+            text-overflow:ellipsis;
+            -moz-text-overflow:ellipsis;
+            overflow:hidden;
+            white-space: normal;
+        }
+    </style>
+    <div>
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <div class="btn-group btn-group-xs ml10">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.getData()">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{ $l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{ $l('重置')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="add()">
+                            <i class="fa fa-plus" aria-hidden="true"></i>{{ $l('新增')}}
+                        </button>
+                    </div>
+                </div>
+                <div class="btn-group btn-group-xs ">
+                </div>
+            </div>
+        </div>
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+
+                <form name="addForm" class=" mt10 pb5 bb oh"
+                      data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form>
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">*</i>{{ $l('场景类型')}}</span></label>
+                                <select type="text"  class="form-control radius3" required=""
+                                        name="sceneType"
+                                        ng-model="params.sceneType">
+                                    <option></option>
+                                    <!--<option saaf-select-lookupcode="EQU_SUPPLIER_SCENE_TYPE"></option>-->
+                                    <option saaf-select-lookupcode="EQU_SUPPLIER_SCENE_TYPE"></option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="data-table" >
+                                <table saaf-table="dataTable"
+                                       class="table table-bordered table-hover table-condensed"
+                                       data-url="findEquPosSceneManageInfo"
+                                       data-params="params"
+                                       data-checked-type="radio"
+                                       data-auto-get-data="true"
+                                       data-page-rows="10">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <th width="20%">{{ $l('业务类型')}}</th>
+                                        <th width="15%">{{ $l('业务说明')}}</th>
+                                        <th width="5%">{{ $l('资质审查')}}</th>
+                                        <th width="5%">{{ $l('信用审核')}}</th>
+                                        <th width="5%">{{ $l('CSR审核')}}</th>
+                                        <th width="5%">{{ $l('质量审核')}}</th>
+                                        <th width="10%">{{ $l('供应商入库审核')}}</th>
+                                        <th width="5%">{{ $l('状态')}}</th>
+                                        <th width="15%">{{ $l('最后更新时间')}}</th>
+                                        <th width="10%">{{ $l('最后更新人')}}</th>
+                                        <th width="5%">{{ $l('操作')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody ng-show="dataTable.data">
+                                    <tr class="text-center" ng-repeat="row in dataTable.data"
+                                        ng-class="{'active':dataTable.data.selectRow==$index}"
+                                        ng-click="dataTable.data.selectRow=$index;
+                                        dataTable.data.selectRowData =row;">
+
+
+                                        <!--业务类型-->
+                                        <td>{{row.sceneTypeName}}</td>
+                                        </td>
+                                        <!--业务说明-->
+                                        <td >
+                                             {{row.sceneDescription}}
+                                        </td>
+                                        <!--资质审查-->
+                                        <td><input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                                   ng-model="row.qualifiedCensorFlag"
+                                                    disabled>
+                                        </td>
+                                        <!--信用审核-->
+                                        <td><input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                                   ng-model="row.creditAuditFlag"
+                                                   disabled></td>
+                                        <!--CSR审核-->
+                                        <td><input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                                   ng-model="row.csrAuditFlag"
+                                                   disabled></td>
+                                        <!--质量审核-->
+                                        <td><input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                                   ng-model="row.qualityAuditFlag"
+                                                   disabled>
+                                        </td>
+                                        <!--供应商入库审核-->
+                                        <td><input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                                   ng-model="row.qualifiedAuditFlag"
+                                                   disabled></td>
+                                        <!--状态-->
+                                        <td>{{row.sceneStatusName}}</td>
+                                        <!--最后更新时间-->
+                                        <td>{{row.lastUpdateDate}}</td>
+                                        <!--最后更新人-->
+                                        <td>{{row.lastUpdatedName}}</td>
+                                        <!--删除-->
+                                        <td>
+                                            <button class="btn btn-success btn-xs" type="button" ng-if="row.sceneStatus!='20'"
+                                                    ng-click="deleteData(row,$index)"
+                                            ><i class="fa fa-trash fa-lg"></i></button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div saaf-table-tfoot="dataTable" ng-show="dataTable.data.length>0"></div>
+                            </div>
+                        </div>
+                    </form>
+                    <!--编辑参数-->
+                    <div class="modal fade" id="addParameters" tabindex="-1" role="dialog" aria-hidden="true">
+                        <!--add by luofu-->
+                        <form ng-submit="addParams()">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">{{ $i18('新增场景信息')}}</h4>
+                                    </div>
+                                    <div class="modal-body ">
+                                        <div class="pl30 pr30">
+                                            <div class="row">
+                                                <div class="form-group col-xs-10 col-md-10">
+                                                    <div class="input-group input-group-xs">
+                                                        <label class="input-group-addon bn"><span class="w150"><i class="red">*</i>{{ $l('场景类型')}}</span></label>
+                                                        <select type="text"   class="form-control radius3" required=""
+                                                                name="paramSceneType"
+                                                                ng-model="addParameters.sceneType">
+                                                            <option></option>
+                                                            <option saaf-select-lookupcode="EQU_SUPPLIER_SCENE_TYPE"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-xs-10 col-md-10">
+                                                    <div class="input-group input-group-xs">
+                                                        <label class="input-group-addon bn"><span class="w150">{{ $l('场景说明')}}</span></label>
+                                                        <input type="text"   class="form-control input-xs" ng-model="addParameters.sceneDescription" string-validation maxlength="80">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-xs-10 col-md-10">
+                                                    <div class="input-group input-group-xs">
+                                                        <label class="input-group-addon bn"><span class="w150">{{ $l('资质审查')}}</span></label>
+                                                        <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" ng-model="addParameters.qualifiedCensorFlag">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-xs-10 col-md-10">
+                                                    <div class="input-group input-group-xs">
+                                                        <label class="input-group-addon bn"><span class="w150">{{ $l('信用审核')}}</span></label>
+                                                        <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" ng-model="addParameters.creditAuditFlag" >
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-xs-10 col-md-10">
+                                                    <div class="input-group input-group-xs">
+                                                        <label class="input-group-addon bn"><span class="w150">{{ $l('CSR审核')}}</span></label>
+                                                        <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" ng-model="addParameters.csrAuditFlag" >
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-xs-10 col-md-10">
+                                                    <div class="input-group input-group-xs">
+                                                        <label class="input-group-addon bn"><span class="w150">{{ $l('质量审核')}}</span></label>
+                                                        <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" ng-model="addParameters.qualityAuditFlag" >
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-xs-10 col-md-10">
+                                                    <div class="input-group input-group-xs">
+                                                        <label class="input-group-addon bn"><span class="w150">{{ $l('供应商入库审核')}}</span></label>
+                                                        <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" ng-model="addParameters.qualifiedAuditFlag" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="col-xs-6 col-md-6">
+                                            <button id="editorButton" type="submit" class="btn btn-primary">{{ $l('提交')}}</button>
+                                        </div>
+                                        <div class="col-xs-6 col-md-6 tl">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">{{ $l('取消')}}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal -->
+                        </form>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,182 @@
+<div ng-controller="ttaOiTaxCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDel,PLSC">
+
+                    </div>
+                    <!-- 导入、下载模板start -->
+                    <div class="btn-group btn-group-xs" permission-btn-group="btnImport" ng-style="myStyle" id="isSq">
+                        <button  class="btn btn-default  a-black "  onclick="window.location.href='app/base/templates/tta/exampleFlie/ttaOiTax.xlsx'" ><i class="fa fa-file-excel-o"></i>下载模板</button>
+                        <button  class="btn btn-default  a-black "   ng-click="daoru()" ><i class="fa fa-upload"></i>导入</button>
+
+                    </div>
+                    <!-- 导入、下载模板end -->
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+
+
+                <!--------------------- 输入表单  --->
+
+                <div class=" mt10 pb5  oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form id="contractForm" name="contractForm">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>单据头信息</span>
+
+
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110">年月：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       date-time-picker="" data-date-format="yyyy-mm"
+                                       data-start-view="3" data-min-view="3" data-max-view="3"
+                                       ng-model="params.yearMonth" >
+                            </div>
+                        </div>
+                        <div class="row"></div>
+
+
+                    </form>
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="false"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="findTAXPagination"
+                         data-legend="[
+                            {'value':'yearMonth','name':'年月'},
+                            {'value':'tax','name':'税率'},
+                            {'value':'terms','name':'条款中文名称'},
+                            {'value':'familyPlaningFlag','name':'计生供应商（Y/N）'},
+                            {'value':'chineseHerbalDrink','name':'中药饮品(Y/N)'}
+                             ]"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <div class="modal fade" id="excelTtaOiTax" data-des="excel_ttaOiTax" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        导入
+                    </h4>
+                </div>
+                <form class="ngValid" name="ttaOiTaxForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12" ng-if="buttonFlag">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">选择文件</span></label>
+                                <input type="file" required accept="*.xlsx"  id="fileUpLoad">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12" ng-if="!buttonFlag">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">当前阶段：</span></label>
+                                <span id="value1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12" ng-if="!buttonFlag">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">当前行(列)数：</span></label>
+                                <span id="value2"></span>
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer " ng-if="buttonFlag">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="save(ttaOiTaxForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="PLDeleteTtaOiTax" data-des="批量删除" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog " style="width: 300px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        选择月份
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">月份</span></label>
+                                <input type="text" class="form-control radius3" required
+                                       date-time-picker="" data-date-format="yyyy-mm"
+                                       data-start-view="3" data-min-view="3" data-max-view="3"
+                                       ng-model="paramsPL.month" >
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="saveWindow(funcMenuForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+</div>

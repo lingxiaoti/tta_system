@@ -1,0 +1,83 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.2.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-3.2.xsd ">
+
+    <bean  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:com/sie/saaf/app/config/db_jdbc.properties</value>
+                <value>classpath:com/sie/saaf/app/config/mongodb_cfg.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- ActiveMQ配置 -->
+    <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <!-- 本地 -->
+        <!--<property name="brokerURL" value="failover:(tcp://139.159.229.31:61616,tcp://139.159.229.33:61616)"/>-->
+        <!-- 华为云 -->
+        <property name="brokerURL" value="failover:(tcp://localhost:61616)"/>
+        <!-- 松下正式 -->
+        <!--<property name="brokerURL" value="failover:(tcp://localhost:61616)"/>-->
+        <property name="useAsyncSend" value="true"></property>
+        <property name="redeliveryPolicy">
+            <bean id="redeliveryPolicy" class="org.apache.activemq.RedeliveryPolicy">
+                <!--是否在每次尝试重新发送失败后,增长这个等待时间-->
+                <property name="useExponentialBackOff" value="true"></property>
+                <!--重发次数,默认为6次-->
+                <property name="maximumRedeliveries" value="3"></property>
+                <!--重发时间间隔,默认为1秒-->
+                <property name="initialRedeliveryDelay" value="1000"></property>
+                <!--第一次失败后重新发送之前等待500毫秒,第二次失败再等待500 * 2毫秒,这里的2就是value-->
+                <property name="backOffMultiplier" value="2"></property>
+                <!--最大传送延迟，只在useExponentialBackOff为true时有效（V5.5），假设首次重连间隔为10ms，倍数为2，那么第 二次重连时间间隔为 20ms，第三次重连时间间隔为40ms，当重连时间间隔大的最大重连时间间隔时，以后每次重连时间间隔都为最大重连时间间隔。-->
+                <property name="maximumRedeliveryDelay" value="1000"></property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- 配置JMS模板（Queue），Spring提供的JMS工具类，它发送、接收消息。 -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="receiveTimeout" value="10000"/>
+    </bean>
+    <!-- MQ生产者 -->
+    <bean id="saveMessage2Redis" class="com.yhg.transaction.compensation.core.TransactionCompensationIdempotentCore">
+        <property name="jedisCluster" ref="jedisCluster"></property>
+        <property name="redisKeyName" value="MQ_Message"></property>
+        <property name="mapIndexKeyName" value="mq_Message_Index"></property>
+        <!--如果没有idempotentKey属性默认为idempotent_key值-->
+        <property name="idempotentKey" value="idempotent_key"></property>
+        <property name="producerService" ref="producerService"></property>
+    </bean>
+
+    <!-- 送Mq方法 -->
+    <bean id="transactionConsistencyCore" class="com.yhg.transaction.compensation.core.TransactionConsistencyCore">
+        <property name="jedisCluster" ref="jedisCluster"></property>
+        <property name="producerService" ref="producerService"></property>
+        <property name="restTemplate" ref="restTemplate"/>
+    </bean>
+
+    <bean id="producerService" class="com.yhg.activemq.framework.queue.ProducerServiceImpl">
+        <property name="jmsTemplate" ref="jmsTemplate"></property>
+    </bean>
+
+    <!--queue消息生产者 -->
+    <bean id="accessLogProducerService" class="com.yhg.activemq.framework.queue.ProducerServiceImpl">
+        <property name="jmsTemplate" ref="jmsTemplate"></property>
+    </bean>
+
+</beans>

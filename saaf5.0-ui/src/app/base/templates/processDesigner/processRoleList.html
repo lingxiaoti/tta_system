@@ -1,0 +1,186 @@
+<div ng-controller="processRoleListCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--- 按钮-->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ">
+
+                    <div class="btn-group btn-group-xs ml10" permission-buttons="btnNew,btnDel,btnSave">
+
+                        <button class="btn btn-default" type="button" ng-click="btnNew()"  >
+                            <i class="fa fa-plus">{{ $l('新增')}}</i>
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="btnDel()"
+                                ng-disabled="action!=='detail'">
+                            <i class="fa fa-trash-o">{{ $l('删除')}}</i>
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="btnSave()"
+                                validate-form-btn="roleContent" ng-disabled="!role">
+                            <i class="fa fa-save" aria-hidden="true"></i>{{ $l('保存')}}
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="btn-group btn-group-xs  ">
+
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>数据全屏
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <!---------------------  / .按钮  -->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="col-sm-3">
+                <form ng-submit="roleListTable.search()">
+
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                        <div class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+                            <div resp-change="" class="resp-change-left"></div>
+                            <div class="input-group input-group-xs">
+
+                                <input type="text" class="form-control radius3" ng-model="roleListParams.searchKey"
+                                       placeholder="{{ $l('请输入角色名称') }}">
+                                <span class="input-group-btn">
+                                         <button class="btn btn-default" type="submit">
+                                             <i class="fa fa-search" aria-hidden="true"></i>
+                                         </button>
+                                   </span>
+                            </div>
+                        </div>
+
+                        <div class="data-table text-center">
+                            <div base-data-table="roleListTable"
+                                 data-url="processFindRoles" data-show-index='false'
+                                 data-click-row="clickRoleListRow"
+                                 ng-params="roleListParams"
+                                 data-onload='loadData'
+                                 data-delete-url="processRoleDelete"
+                                 data-keys="{'key':'roleId',asKey:'roleIds'}"
+                                 data-legend='[
+                            {"value": "roleName","name": "角色名称"}]'>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-9" ng-show="role">
+                <form name="roleContent">
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                        <div class="pl30 pr30 pt30">
+                            <div class="row">
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn w100"><span
+                                                class=""><i class="red">*</i>{{$l('角色名称')}}：</span></label>
+                                        <input type="text" class="form-control radius3" required="required"
+                                               max-length="10"
+                                               name="role_roleName"
+                                               ng-model="role.roleName">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn w100"><span
+                                                class=""><i class="red">*</i>{{$l('角色KEY')}}：</span></label>
+                                        <input type="text" class="form-control radius3" required placeholder="请输入唯一的值，且最大字符长度不能超过32"
+                                               ng-disabled="action!=='new'"
+                                               max-length="32" name="role_roleKey" ng-model="role.roleKey">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn w100"><span
+                                                class=""><i class="red">*</i>{{$l('表达式类型')}}：</span></label>
+
+                                        <select ng-model="role.handlerExpressionType" class="form-control radius3"
+                                                required
+                                                ng-change="changeExpressionType()"
+                                                name="role_handlerExpressionType"
+                                                ng-options="type for type in expressionTypes">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-12"
+                                     ng-if="role.handlerExpressionType=='SQL'">
+                                    <div class="input-group input-group-xs ">
+                                        <label class="input-group-addon bn w100"><span
+                                                class=""><i class="red">*</i>{{$l('表达式')}}：</span></label>
+                                        <textarea class="form-control radius3" style="height: 50px;"
+                                                  ng-model="role.handlerExpression" max-length="250"
+                                                  name="role_handlerExpression"
+                                                  required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-11 col-md-12"
+                                     ng-if="role.handlerExpressionType=='ASSIGN'">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span><i class="red">*</i>操作人：</span>
+                                        </label>
+                                        <input type="text" class="form-control radius3" disabled required
+                                               name="role_handlerExpression"
+                                               ng-model="role.handlerExpression">
+                                        <span class="input-group-btn">
+                                                    <button class="btn btn-default" type="button"
+                                                            data-target="#lovUserFind" data-toggle="modal">
+                                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                                    </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-12"
+                                     ng-if="role.handlerExpressionType=='URL'">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span><i class="red">*</i>URL：</span>
+                                        </label>
+                                        <input type="text" class="form-control radius3"  required
+                                               name="role_handlerExpression"
+                                               ng-model="role.handlerExpression">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="action === 'detail'">
+                                <div base-data-table="RoleProcessTable" id="RoleProcessTable"
+                                     data-url="processFindModels" data-show-index='true'
+                                     ng-params="myProcessParams"
+                                     data-callback="[{value:'title',callback:'clickColumns'}]"
+                                     data-auto-request="false"
+                                     data-legend='[
+                                     {value:"categoryName", name:"分类"},
+                             {"value": "name","name": "流程名称"},
+                            {"value": "key","name": "流程标识"},
+                            {"value": "status","name": "流程状态","boolean":"icon"},
+                            {"value": "deploymentTime","name": "发布时间","date":"yyyy-MM-dd HH:mm"},
+                            {"value": "createTime","name": "创建时间","date":"yyyy-MM-dd"},
+                            {"value": "lastUpdateTime","name": "最后更新时间","date":"yyyy-MM-dd"}
+
+
+                            ]'>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <div lov-list="lovUserFind" id="lovUserFind" data-url="processFindInternalUsers" ng-model="current.userFind" data-title="操作人"
+         data-checked-type="checkbox"
+         data-return-key="role.handlerExpression"
+         data-search-key="[{'key':'userFullName','placeholder':'请输入员工姓名'},{'key':'userName','placeholder':'请输入员工账号'}]"
+         data-keys="{'key':'userName','value':'userName','name':'账号'}"
+         data-other-column="[{key:'userFullName',name:'员工姓名'}]"
+    ></div>
+</div>

@@ -1,0 +1,679 @@
+<div ng-controller="contractApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveFinAgreement"
+         data-api-get="findFinAgreementInfoById" data-api-del="" data-api-version="findHisFinAgreementInfo"
+         data-api-update="updateFinAgreement" id="mainDiv">
+        <div class="col-md-12 pt15">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none" data-load-callback="respCallback"></div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                          {key:'deptName',label:'申请部门',readonly:true,required:true},
+                          {key:'personName',label:'申请人',readonly:true,required:true},
+                          {key:'positionName',label:'职位',type:'lov',readonly:true,target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                          {key:'billNo',label:'申请单号',readonly:true},
+                          {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                          {key:'statusStr',label:'状态',readonly:true},
+                        ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row" ng-if="action != 'outer'">
+                <div search-list=""
+                     data-col="4"
+                     ng-model="formParams"
+                     data-legend="[
+                      {key:'agmtNum',label:'合同编号',readonly:true},
+                      {key:'agmtName',label:'合同名称',required:true},
+                      {key:'agmtObjSecond',label:'合同签订方',required:true},
+
+                    ]"></div>
+            </div>
+            <div class="row" ng-if="action == 'outer'">
+                <div search-list=""
+                     data-col="4"
+                     ng-model="formParams"
+                     data-legend="[
+                          {key:'agmtNum',label:'合同编号',disabled:true},
+                          {key:'agmtName',label:'合同名称',required:true,disabled:true},
+                          {key:'agmtObjSecond',label:'合同签订方',required:true,disabled:true},
+    
+                        ]"></div>
+            </div>
+            <div class="row">
+                <!--<div search-list=""-->
+                <!--data-col="4"-->
+                <!--ng-model="formParams"-->
+                <!--data-legend="[-->
+                <!--{key:'trxType',label:'大类',type:'lookCode',lookCode:'OA_AGT_F_TYPE',required:true},-->
+                <!--{key:'trxSubtype',label:'小类',type:'lookCode',lookCode:'OA_AGT_S_TYPE',required:true},-->
+
+                <!--]"></div>-->
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>大类</span></label>
+                        <div lookup-code="OA_AGT_F_TYPE" id="paramsPROVINCE" name="trxType"
+                             ng-model="formParams.trxType" ng-id="trxTypeId"></div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>小类</span></label>
+                        <div lookup-code="OA_AGT_S_TYPE" name="trxSubtype" ng-model="formParams.trxSubtype"
+                             ng-linkage="trxTypeId" ng-id="trxSubtypeId"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><i class="red">*</i>是否框架合同</span></label>
+                        <label class="radio-inline" style="margin-left: 30px"><input type="radio" ng-model="formParams.framework" name="framework" ng-value="'Y'" ng-change="yesOrNo()">是</label>
+                        <label class="radio-inline"><input type="radio" ng-model="formParams.framework"  name="framework" ng-value="'N'" ng-change="yesOrNo()">否</label>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>合同类型</span></label>
+                        <div lookup-code="OA_AGMT_TYPE" ng-model="formParams.finAgmtType"
+                            ng-required="true"
+                            id="formParams.finAgmtType"
+                            data-callback="showOrNot"
+                            name="formParams.finAgmtType" ng-disabled="isEdit1" ng-readonly="item.readonly"></div>
+                    </div>
+                </div>
+                        <!-- <div search-list="" ng-if="action != 'outer'"
+                     data-col="4"
+                     ng-model="formParams"
+                     ng-change="showOrNot()"
+                     data-legend="[
+                      {key:'finAgmtType',label:'合同类型',type:'lookCode',lookCode:'OA_AGMT_TYPE',required:true,callback:'showOrNot'},
+                     ]"></div>
+                <div search-list="" ng-if="action == 'outer'"
+                     data-col="4"
+                     ng-model="formParams"
+                     data-legend="[
+                      {key:'finAgmtType',label:'合同类型',type:'lookCode',lookCode:'OA_AGMT_TYPE',disabled:true},
+                     ]"></div> -->
+                <div class="form-group col-xs-6 col-md-4" ng-if="formParams.finAgmtType=='SEED'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>主合同编号</span></label>
+                        <input class="form-control readonly-white" ng-model="formParams.mainAgmtNum" name="mainAgmtNum" required
+                               ng-readonly="true"/>
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" data-toggle="modal" data-target="#mainAgmtNum">
+                            <i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4" ng-if="formParams.finAgmtType=='SEED'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100">主合同版本</span></label>
+                        <input class="form-control" ng-model="formParams.mainAgmtVersion" name="mainAgmtVersion"
+                               ng-disabled="true"/>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4" ng-if="formParams.finAgmtType=='SEED'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100">主合同金额</span></label>
+                        <input class="form-control" ng-model="formParams.agmtSumAc" name="agmtSum"
+                                ng-disabled="true"/>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4" ng-if="formParams.finAgmtType=='SEED'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100">提示</span></label>
+                        <input class="form-control" ng-model="formParams.tipsAc" name="tips"
+                                ng-disabled="true"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><i class="red">*</i>发票类型</span></label>
+                        <div lookup-code="OA_RECEIPT_TYPE" ng-model="formParams.receiptType"
+                            ng-required="true"
+                            id="formParams.receiptType"
+                            data-callback="clearTaxRate"
+                            name="formParams.receiptType" ng-disabled="isEdit2" ng-readonly="item.readonly"></div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4" ng-if="formParams.receiptType == '10'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><i class="red">*</i>税率</span></label>
+                        <div lookup-code="OA_ADDED_VALUE" ng-model="formParams.taxRate"
+                            ng-required="true"
+                            id="formParams.taxRate"
+                            data-callback=""
+                            name="formParams.taxRate" ng-disabled="isEdit2" ng-readonly="item.readonly"></div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><i class="red">*</i>币种</span></label>
+                        <div lookup-code="MONEY_TYPE" ng-model="formParams.moneyType"
+                            ng-required="true"
+                            id="formParams.moneyType"
+                            data-callback="changeCurrencyType"
+                            name="formParams.moneyType" ng-disabled="isEdit2" ng-readonly="item.readonly"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xl-6 col-md-8">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>合同金额</span></label>
+                        <input class="form-control" type="text" ng-model="formParams.agmtSum" number="8" integer="17"
+                               ng-blur="borrowMoneyStr()" name="agmtSum" required ng-change="agmtSumCallback()"/>
+                        <div class="input-group-addon">
+                            <div class="w300 oh ellipsis">
+                                {{formParams.borrowMoneyZh}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div search-list=""
+                     data-col="4"
+                     ng-model="formParams"
+                     data-legend="[
+                      {key:'agdateStart',label:'合同开始时间',type:'time',endDate:'agdateEnd',required:true},
+                      {key:'agdateEnd',label:'合同结束时间',type:'time',startDate:'agdateStart',required:true},
+                     ]"></div>
+            </div>
+
+            <div class="row">
+                <!--disabled:true,type:'lov',target:'#debitCusBankPaginatioLov' lov弹框选开户-->
+                <div search-list=""
+                     data-col="4"
+                     ng-model="formParams"
+                     data-legend="[
+                          {key:'acctName',label:'开户名',required:true},
+                          {key:'acctNo',label:'账号',required:true,maxlength:'50',placeholder:' '},
+                          {key:'acctBankDeposit',label:'开户行',required:true},
+                     ]"></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100">对方提供相关资质</span></label>
+                        <div class="checkbox " style="margin: 0" id="clearance">
+                            <label class="checkbox-inline " style="color:#555;font-size: 12px;">
+                                <input type="checkbox" name="isBusinessLic" ng-model="formParams.isBusinessLic"
+                                       ng-true-value="'Y'" ng-false-value="'N'">营业执照正/副复印件
+                            </label>
+                            <label class="checkbox-inline " style="color:#555;font-size: 12px;">
+                                <input type="checkbox" name="isTaxRegCert" ng-model="formParams.isTaxRegCert"
+                                       ng-true-value="'Y'" ng-false-value="'N'">税务登记证正/副复印件
+                            </label>
+                            <label class="checkbox-inline " style="color:#555;font-size: 12px;">
+                                <input type="checkbox" name="isOrgStrCode" ng-model="formParams.isOrgStrCode"
+                                       ng-true-value="'Y'" ng-false-value="'N'">组织结构代码复印件
+                            </label>
+                            <label class="checkbox-inline " style="color:#555;font-size: 12px;">
+                                <input type="checkbox" name="isLegalRepId" ng-model="formParams.isLegalRepId"
+                                       ng-true-value="'Y'" ng-false-value="'N'">法人代表身份证复印件
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>合同内容</span></label>
+                        <textarea class="form-control" rows="1" auto-textarea="" ng-model="formParams.agmtContent" required
+                                  name="agmtContent" style="height: auto"></textarea>
+                        <!-- <input class="form-control" ng-model="formParams.agmtContent" name="agmtContent" required/> -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 合同变更 -->
+            <div ng-if="action !='new'">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label><span class="fa fa-cog mr15"></span>合同变更记录</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table  table-bordered table-hover table-condensed ">
+                            <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                            <tr class="text-center" id="orderSortTh">
+                                <th>序号</th>
+                                <th>版本</th>
+                                <th>变更日期</th>
+                                <th>变更原因</th>
+                            </tr>
+                            </thead>
+                            <tbody ng-repeat="row in formParams.secItems">
+                            <tr>
+                                <td>{{$index+1}}</td>
+                                <td>{{row.finAgmtVersion}}</td>
+                                <td>{{row.changeDate}}</td>
+                                <td ng-if="$index+1!=formParams.secItems.length">{{row.changeReason}}</td>
+                                <td ng-if="$index+1==formParams.secItems.length"><input
+                                        class="form-control radius3 input-xs" ng-model="row.changeReason"
+                                        name="changeReason" required/></td>
+                            </tr>
+                            <!--<tr ng-if="action == 'outer'">-->
+                            <!--<td>{{$index+1}}</td>-->
+                            <!--<td>{{row.finAgmtVersion}}</td>-->
+                            <!--<td>{{row.changeDate}}</td>-->
+                            <!--<td><input class="form-control radius3 input-xs" ng-model="row.changeReason" name="changeReason" required/></td>-->
+                            <!--</tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- <div  ng-if="action == 'version'">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label><span class="fa fa-cog mr15"></span>合同变更记录</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table  class="table  table-bordered table-hover table-condensed ">
+                            <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                <tr class="text-center" id="orderSortTh">
+                                    <th>序号</th>
+                                    <th>版本</th>
+                                    <th>变更日期</th>
+                                    <th>变更原因</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>{{formParams.finAgmtVersion}}</td>
+                                    <td>{{formParams.changeDate}}</td>
+                                    <td>{{formParams.changeReason}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> -->
+            <!-- 付款明细 -->
+            <!-- <div ng-if="action == 'new'">
+                <h5 class="fontwB"><span class="fa fa-cog mr15"></span>付款明细
+                    <div class="btn-group btn-group-xs ml5 pull-right">
+                        <button type="button" class="btn btn-default btn-xs"
+                                ng-if="!isEdit"
+                                ng-click="addRows()"><i class="fa fa-plus"></i>增加
+                        </button>
+                    </div>
+                </h5>
+                <div class="">
+                    <table class="table table-bordered table-hover table-condensed">
+                        <thead class="bg-gray-white">
+                        <tr class="text-center">
+                            <th>序号</th>
+                            <th><i class="red">*</i>付款次数</th>
+                            <th><i class="red">*</i>付款金额</th>
+                            <th><i class="red">*</i>预计付款日期</th>
+                            <th><i class="red">*</i>本次付款比例</th>
+                            <th><i class="red">*</i>币种</th>
+                            <th><i class="red">*</i>汇率</th>
+                            <th><i class="red">*</i>本位币（人民币）</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="text-center" ng-repeat="row in formParams.items">
+                            <td>
+                                {{$index+1}}
+                            </td>
+                            <td>
+                                <input class="form-control radius3 input-xs"
+                                       ng-model="row.seqNum"
+                                       required
+                                       ng-disabled="isEdit"
+                                       number="2"
+                                       max-length="11"
+                                       title=" "
+                                       placeholder=" "
+                                       name="frequency"
+                                >
+                            </td>
+                            <td>
+                                <input class="form-control radius3 input-xs"
+                                       ng-model="row.mSum"
+                                       required
+                                       ng-disabled="isEdit"
+                                       number="8"
+                                       integer="17"
+                                       ng-change="mSumCallback($index,1)"
+                                       name="amount"
+                                ></td>
+                            <td data="付款日期">
+                                <input class="form-control radius3 input-xs"
+                                       ng-model="row.dBegin"
+                                       date-time-picker=""
+                                       data-start-view="2"
+                                       data-date-format="yyyy-mm-dd"
+                                       data-min-view="2"
+                                       required
+                                       ng-disabled="isEdit"
+                                       name="day"
+                                ></td>
+                            <td>
+                                <input class="form-control radius3 input-xs"
+                                       ng-model="row.mPerStr"
+                                       ng-disabled="true"
+                                       name="proportion">
+                            </td>
+                            <td>
+                                <input class="form-control radius3 input-xs"
+                                       ng-model="row.currencyType"
+                                       ng-disabled="true"
+                                       name="proportion">
+                            </td>
+                            <td>
+                                <input class="form-control radius3 input-xs exchangeRate"
+                                       ng-model="row.exchangeRate"
+                                       ng-disabled="true"
+                                       name="exchangeRate">
+                            </td>
+                            <td>
+                                <input class="form-control radius3 input-xs"
+                                       ng-model="row.standardMoney"
+                                       ng-disabled="true"
+                                       name="proportion">
+                            </td>
+                            <td>
+                                <input class="form-control radius3 input-xs"
+                                       ng-model="row.memo"
+                                       ng-disabled="isEdit"
+                                ></td>
+                            <td>
+                                <button type="button" class="btn btn-default btn-xs"
+                                        ng-click="relief('thirdItems',$index)"
+                                        ng-hide="isEdit">删除
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> -->
+            <div ng-if="action == 'new'">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label><span class="fa fa-cog mr15"></span>付款明细</label>
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                ng-click="addRows()"
+                                ng-show="childData.isEdit"
+                        ><i class="fa fa-plus">增加</i></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div base-data-table-edit="tableEndit2"
+                            data-start-disabled="true"
+                            data-legend="[
+                                {value:'seqNum',name:'付款次数',validFormat:'number=2',required:true},
+                                {value:'mSum',name:'付款金额',validFormat:'number=7',callback:'mSumCallback',required:true},
+                                {value:'dBegin',name:'预计付款日期',type:'time',required:true},
+                                {value:'mPerStr',name:'本次付款比例',disabled:true},
+                                {value:'currencyType',name:'币种',disabled:true},
+                                {value:'exchangeRate',name:'汇率',callback:'calculateStandardMoney',required:true},
+                                {value:'standardMoney',name:'本位币（人民币）',disabled:true},
+                                {value:'memo',name:'备注'},
+                                ]"
+                            data-form-params-key="items"
+                            ng-model="formParams">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="action != 'new'">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label><span class="fa fa-cog mr15"></span>付款明细</label>
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                ng-click="tableEndit2.addTableRows()"
+                                ng-show="childData.isEdit"
+                        ><i class="fa fa-plus">增加</i></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div base-data-table-edit="tableEndit2"
+                             data-start-disabled="true"
+                             data-legend="[
+                               {value:'seqNum',name:'付款次数',validFormat:'number=2',required:true},
+                               {value:'mSum',name:'付款金额',validFormat:'number=7',callback:'mSumCallback',required:true},
+                               {value:'dBegin',name:'预计付款日期',type:'time',required:true},
+                               {value:'mPerStr',name:'本次付款比例',disabled:true},
+                               {value:'currencyType',name:'币种',disabled:true},
+                               {value:'exchangeRate',name:'汇率',callback:'calculateStandardMoney',required:true},
+                               {value:'standardMoney',name:'本位币（人民币）',disabled:true},
+                               {value:'memo',name:'备注'},
+                               {value:'costReqId',name:'费用申请单号',type:'href'},
+                           ]"
+                             data-form-params-key="items"
+                             ng-model="formParams">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hook-normal">
+                <div saaf-file="" data-label="<h5 style='font-weight:bold'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                     data-file-data="fileData.file"
+                     data-file-filter='{{fileType}}'
+                     data-view-only="fileViewOnly"
+                ></div>
+            </div>
+        </div>
+        <div lov-list="mainAgmtNum" role="dialog" data-title="请选择主合同编号" id="mainAgmtNum" ng-model="code3"
+             data-url="findMainFinAgreement"
+             data-auto-request='false'
+             data-pagination="{'pageIndex':'1','pageRows':'5'}"
+             data-checked-type="radio"
+             data-keys="{'key':'mainAgmtNum','value':'mainAgmtNum',name:'主合同编号'}"
+             data-show-index="false"
+             data-other-column="[
+              {'name':'主合同版本号','key':'mainAgmtVersion'},
+              {'name':'合同名称','key':'agmtName'},
+              {'name':'合同签定方','key':'agmtObjSecond'},
+                ]"
+             data-search-key="[{'key':'agmtNumLink','placeholder':'主合同编号'}]"
+             data-callback="setRowInput"
+        >
+        </div>
+
+        <div lov-list="debitCusBankPaginatioLov"
+             id="debitCusBankPaginatioLov"
+             ng-model="code4"
+             data-url="findPersonCusBankPagination"
+             data-callback="personCusBankCallback"
+             data-cancel-callback="personCusBankCancelCallback"
+             data-dynamic-params="personCusBankPaginatioParams"
+             data-auto-request='false'
+             data-title="请选择"
+             data-checked-type="radio"
+             data-return-value="formParams.acctName"
+             data-return-key="formParams.acctNo"
+             data-search-key="[{'key':'primaryAcctOwnerName_like','placeholder':'收款人'},{'key':'bankAccountNumElectronic_like','placeholder':'银行帐号'}]"
+             data-keys="{'key':'bankAccountNumElectronic','value':'primaryAcctOwnerName','name':'收款人'}"
+             data-other-column="[{'name':'开户银行','key':'bankName'},{'name':'银行帐号',key:'bankAccountNumElectronic'}]"
+        ></div>
+        <div lov-list="expensePeriodLov"
+             style="z-index: 99999"
+             class="hook-normal"
+             id="expensePeriodLov"
+             ng-model="code3"
+             data-url="expensePeriodList"
+             data-dynamic-params="expensePeriodLovParams"
+             data-title="请选择报帐年月"
+             data-auto-request='false'
+             data-checked-type="radio"
+             data-return-value="currentParams.expensePeriod"
+             data-search-key="[{'key':'expensePeriod','placeholder':'报帐年月'}]"
+             data-keys="{'key':'RN','value':'expensePeriod','name':'报帐年月'}"
+        ></div>
+        <div lov-list="expensesCourse" Data-title="请选择费用科目" id="expensesCourse" ng-model="code2"
+             style="z-index: 99999"
+             class="hook-normal"
+             data-url="findExpenseAccountOutList"
+             data-auto-request="false"
+             data-dynamic-params="ljyParams"
+             data-return-value="currentParams.expenseAccountName"
+             data-return-key="currentParams.expenseAccount"
+             data-pagination="{'pageIndex':'1','pageRows':'5'}"
+             data-checked-type="radio"
+             data-keys="{'key':'expenseAccountId','value':'expenseAccountName',name:'费用科目名称'}"
+             data-other-column="[{'name':'费用科目编码','key':'expenseAccountId'}]"
+             data-show-index="false"
+             data-type="competitor"
+             data-search-key="[{'key':'expenseAccountId','placeholder':'请输入费用科目编码'},{'key':'expenseAccountName','placeholder':'请输入费用科目名称'}]"
+        >
+        </div>
+
+        <!--<div class="modal fade hook-normal" id="contractModal" data-des="条款明细" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close"
+                                data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            条款明细1212
+                        </h4>
+                    </div>
+                    <form class="ngValid" name="addSourceType" ng-submit="importSave(addSourceType.$invalid)">
+                        <div class="modal-body oh">
+                            <div search-list
+                                 data-col="6"
+                                 data-legend="[
+                                            {key:'expensePeriod',label:'期间',disabled:true,type:'lov',target:'#expensePeriodLov',required:true},
+                                            {key:'expenseAccountName',label:'科目',disabled:true,type:'lov',target:'#expensesCourse',required:true},
+                                        ]"
+                                 ng-model="currentParams"
+                            ></div>
+                            <div class="cb"></div>
+                            <div base-data-table="importTataTablet"
+                                 ng-params="currentTableParams"
+                                 data-show-index="true"
+                                 data-auto-request="false"
+
+                                 data-keys="{key:'finLineId'}"
+                                 data-url="findFinAgreementLinePagination"
+                                 data-legend="[
+                                        {'value':'seqNum','name':'付款次数'},
+                                        {'value':'mSum','name':'付款金额'},
+                                        {'value':'mPer','name':'本次付款比例'},
+                                        {'value':'memo','name':'备注'},
+                                        {'value':'finAgmtVersion','name':'合同版本'},
+                                        {'value':'costReqId','name':'费用申请单号'},
+                                   ]"
+                            ></div>
+
+                        </div>
+
+                        <div class="modal-footer " ng-if="!isEdit">
+                            <div style="text-align:center">
+                                <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                                </button>
+                                <button type="submit" ng-click="importSave()" validate-form-btn="addSourceType"  id="saveButton" class="btn btn-primary mr10">确定</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>&lt;!&ndash; /.modal-content &ndash;&gt;
+            </div>&lt;!&ndash; /.modal &ndash;&gt;
+        </div>-->
+        <div class="modal fade hook-normal" id="meetingManagement" data-des="付款明细" data-backdrop="static" tabindex="-1"
+             ng-if="importSwitch">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            条款明细
+                        </h4>
+                    </div>
+                    <form name="addSourceType" id="addSourceType" name="addSourceType"
+                          ng-submit="importSave(addSourceType.$invalid)">
+                        <div class="modal-body oh">
+                            <div class="form-group col-xs-6 col-md-6 ng-scope">
+                                <div class="input-group input-group-xs  expensePeriod_0">
+                                    <label class="input-group-addon bn ng-scope">
+                                        <span class="w100 ng-binding"><i class="red ng-scope">* </i>期间</span>
+                                    </label>
+                                    <select class="form-control input-xs" ng-model="currentParams.expensePeriod">
+                                        <option value="">请选择</option>
+                                        <option ng-value="expensePeriod.expensePeriod" ng-repeat="expensePeriod in expensePeriodList">{{expensePeriod.expensePeriod}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--{key:'expensePeriod',label:'期间',disabled:true,type:'lov',target:'#expensePeriodLov',required:true},-->
+                            <div search-list
+                                 data-col="6"
+                                 data-legend="[
+                                    {key:'expenseAccountName',label:'科目',disabled:true,type:'lov',target:'#expensesCourse',required:true}
+                                ]"
+                                 ng-model="currentParams"
+                            ></div>
+                            <!--data-checked-disabled="{value:'status',condition:['Y']}"-->
+
+                            <div class="col-md-12">
+                                <div base-data-table="importTataTablet"
+                                     ng-params="currentTableParams"
+                                     data-show-index="true"
+                                     data-auto-request="false"
+                                     data-checked-type="radio"
+                                     data-keys="{key:'finLineId'}"
+                                     data-checked-disabled="{value:'status',condition:['Y']}"
+                                     data-url="findFinAgreementLinePagination"
+                                     data-legend="[
+                                        {'value':'seqNum','name':'付款次数'},
+                                        {'value':'mSum','name':'付款金额'},
+                                        {'value':'mPerStr','name':'本次付款比例'},
+                                        {'value':'memo','name':'备注'},
+                                        {'value':'finAgmtVersion','name':'合同版本'},
+                                        {'value':'costReqId','name':'费用申请单号'},
+                                   ]"
+                                ></div>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer ">
+                            <div style="text-align:center">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                <button type="submit" ng-click="importSave()" validate-form-btn="addSourceType"
+                                        class="btn btn-primary mr10">确定
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+    </div>
+</div>

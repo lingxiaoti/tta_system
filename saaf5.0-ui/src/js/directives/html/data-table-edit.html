@@ -1,0 +1,247 @@
+<table  class="table table-bordered table-hover table-condensed">
+    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+        <tr class="text-center">
+            <th>序号</th>
+            <th ng-repeat="item in legend" class="{{item.className}}"><span class="red" ng-if="item.required">*</span>{{item.name}}</th>
+            <th  ng-if="deleteShow">操作</th>
+        </tr>
+    </thead>
+    <tbody ng-repeat="row in model track by $index" ng-init="parentIndex = $index" >
+        <tr class="text-center"
+            >
+            <td rowspan="{{second.length+1}}" style="vertical-align: middle">{{$index+1}}</td>
+            <td ng-repeat="item in legend track by $index" ng-init="childIndex = $index" class="{{item.rowClassName}}">
+                <!--lov modle-->
+
+                <a href="javaScript:;" ng-if="item.type=='href'" ng-click="inputCallback(item.callback,parentIndex)" ng-bind="row[item.value]"></a>
+                <span ng-if="item.type==='testString'" data="字符">{{row}}</span>
+                <div class="input-group input-group-xs" ng-if="item.type==='lov' ">
+                    <input type="text" class="form-control radius3"
+                           ng-model="row[item.value]" ng-disabled="item.disabled||isEdit"
+                           ng-required="item.required"
+                           id="{{ name +'_'+modelKey+'_'+ item.value+'_'+parentIndex }}"
+                           placeholder="{{item.placeholder||''}}"
+                           title="{{item.title?item.title:row[item.value]}}"
+                           name="{{ name +'_'+modelKey+'_'+ item.value+'_'+parentIndex }}">
+                    <span class="input-group-btn"  ng-disabled="isEdit"   data-toggle="modal" data-target="{{ isEdit?'':item.target }}" ng-click="callback(item.callback,parentIndex)">
+                       <a class="btn btn-default" ng-disabled="isEdit"><i class="fa fa-search"></i></a>
+                    </span>
+                </div>
+                <!-- <div ng-if="item.type == 'citys'" city-area="" ng-model="row[item.value]"></div> -->
+
+                <div class="input-group input-group-xs w100p" ng-if="item.type=='textarea'">
+                    <textarea class="form-control" rows="3"
+                              ng-model="row[cond.value]"
+                              placeholder="{{item.placeholder||''}}"
+                              title="{{item.title?item.title:row[item.value]}}"
+                              ng-required="item.required"
+                              ng-disabled="item.disabled||isEdit||startDisabled?row.status=='Y':''"
+                              ng-readonly="item.readonly"
+                              data-required-msg="{{ item.requiredMsg }}"
+                              data-error-msg="{{ item.errorMsg }}"
+                              id="{{ name +'_'+modelKey+'_'+ item.value+'_'+condparentIndex }}"
+                              name="{{ name +'_'+modelKey+'_'+ item.value+'_'+condparentIndex }}"
+                              style="height: auto">{{row[item.value]}}
+
+                    </textarea>
+                    <!--<textarea class="form-control " rows="3"
+                              placeholder="{{cond.placeholder||''}}"
+                              title="{{cond.placeholder||''}}"
+                              ng-required="cond.required"
+                              ng-disabled="cond.disabled||isEdit"
+                              ng-model="row[cond.value]"
+                              ng-readonly="cond.readonly"
+                              data-required-msg="{{ cond.requiredMsg }}"
+                              data-error-msg="{{ cond.errorMsg }}"
+                              id="{{ name +'_'+modelKey+'_'+ cond.value+'_'+condparentIndex }}"
+                              name="{{ name +'_'+modelKey+'_'+ cond.value+'_'+condparentIndex }}"
+                              name="travelReason" style="height: auto"></textarea>-->
+                </div>
+                <!--文字-->
+                <input class="form-control radius3 input-xs"
+                       ng-if="item.type == 'text' || !item.type"
+                       type="text"
+                       ng-required="item.required"
+                       ng-disabled="item.disabled||isEdit||startDisabled?row.status=='Y':''"
+                       ng-model="row[item.value]"
+                       ng-readonly="item.readonly"
+                       placeholder="{{item.placeholder||''}}"
+                       title="{{item.title?item.title:row[item.value]}}"
+                       data-required-msg="{{ item.requiredMsg }}"
+                       ng-change="inputCallback(item.callback,parentIndex)"
+                       data-error-msg="{{ item.errorMsg }}"
+                       id="{{ name +'_'+modelKey+'_'+ item.value+'_'+parentIndex }}"
+                       name="{{ name +'_'+modelKey+'_'+ item.value+'_'+parentIndex }}"
+                >
+                <input class="form-control radius3 input-xs"
+                       ng-if=" item.type == 'operation'"
+                       type="text"
+                       ng-required="item.required"
+                       ng-disabled="true"
+                       ng-model="row[item.value]"
+                       ng-readonly="item.readonly"
+                       data-required-msg="{{ item.requiredMsg }}"
+                       ng-change="inputCallback(item.callback,parentIndex)"
+                       data-error-msg="{{ item.errorMsg }}"
+                       placeholder="{{item.placeholder||''}}"
+                       title="{{item.title?item.title:row[item.value]}}"
+                       id="{{ name +'_'+modelKey+'_'+ item.value+'_'+parentIndex }}"
+                       name="{{ name +'_'+modelKey+'_'+ item.value+'_'+parentIndex }}"
+                >
+                <div class="input-group input-group-xs w100p" ng-if=" item.type == 'lookCode'||item.type == 'lookUpCode'||item.type == 'lookupCode'">
+                    <div lookup-code="{{ item.lookCode||item.lookUpCode||item.lookupCode }}" ng-model="row[item.value]"
+                         ng-required="item.required"  data-required-msg="{{ item.requiredMsg }}"  data-error-msg="{{ item.errorMsg }}"
+                         id="{{ name +'_'+modelKey+'_'+ item.value+'_'+parentIndex }}"
+                         data-callback="{{item.callback?item.callback:''}}"
+                         name="{{ name +'_'+modelKey+'_'+ item.value+'_'+parentIndex }}" ng-disabled="item.disabled||isEdit" ng-readonly="item.readonly"></div>
+                </div>
+
+
+                <!--时间-->
+                <input type="text" class="form-control radius3 input-xs"
+                       ng-required="item.required"
+                       ng-disabled="item.disabled||isEdit||startDisabled?row.status=='Y':''"
+                       ng-readonly="item.readonly"
+                       placeholder="{{item.placeholder||''}}"
+                       title="{{item.title?item.title:row[item.value]}}"
+                       data-required-msg="{{ item.requiredMsg }}"
+                       data-error-msg="{{ item.errorMsg }}"
+                       id="{{ name +'_'+modelKey+'_'+ item.value+'_'+parentIndex }}"
+                       name="{{ name +'_'+modelKey+'_'+ item.value+'_'+parentIndex }}"
+                       ng-if="item.type == 'time'"
+                       data-stratdate="{{ row[item.startDate]}}"
+                       data-enddate="{{ row[item.endDate]}}"
+                       ng-change="inputCallback(item.callback,parentIndex)"
+                       date-time-picker
+                       data-is-today="{{ item.isToday}}"
+                       data-show-meridian="{{item.showMeridian}}"
+                       data-minute-step="{{item.minuteStep}}"
+                       data-start-view="{{ startView(item.date)}}"
+                       data-date-format="{{ item.date || 'yyyy-mm-dd' }}"
+                       data-min-view="{{ minView(item.date)}}"
+                       ng-model="row[item.value]">
+            </td>
+            <td rowspan="{{second.length+1}}" style="vertical-align: middle" ng-if="deleteShow">
+               <!-- <a type="button" ng-hide="isEdit  || model.length == 1"
+                   ng-click="relief(childIndex)" style="cursor: pointer;white-space: nowrap;">
+                    <i class="fa fa-trash-o fa-lg"></i>删除
+                </a>-->
+                <button type="button" class="btn btn-default btn-xs editDelete"
+                        ng-click="relief(parentIndex)"
+                        ng-hide="model.length == 1||row.deleteShow || isEdit||startDisabled?row.status=='Y':''" >删除</button>
+                <!-- <a ng-repeat="icon in funcColumn" type="button"
+                   ng-if="funcColumn.length >0"
+                   ng-click="funcCallback(icon.callback,item,childIndex)" style="cursor: pointer;white-space: nowrap;">
+                    <i ng-class="icon.icon" class="fa "></i>{{icon.text || icon.value}}
+                </a> -->
+            </td>
+
+        </tr>
+        <tr ng-if="second"  data="次标题" ng-repeat="itemCond in second track by $index" ng-init="condparentIndex = $index">
+            <td ng-repeat="cond in itemCond.items track by $index" ng-init="secondIndex = $index" class="{{cond.rowClassName}}" colspan="{{cond.colspan}}" style="vertical-align: middle">
+                <!--lov modle-->
+                <span ng-if="cond.type=='label'"><span class="red" ng-if="cond.required">*</span>{{cond.name}}</span>
+                <div class="input-group input-group-xs w100p" ng-if="cond.type=='textarea'">
+                    <textarea class="form-control" rows="3"
+                              placeholder="{{cond.placeholder||''}}"
+                              title="{{cond.title?cond.title:row[cond.value]}}"
+                              ng-required="cond.required"
+                              ng-disabled="cond.disabled||isEdit"
+                              ng-readonly="cond.readonly"
+                              data-required-msg="{{ cond.requiredMsg }}"
+                              data-error-msg="{{ cond.errorMsg }}"
+                              id="{{ name +'_'+modelKey+'_'+ cond.value+'_'+parentIndex }}"
+                              name="{{ name +'_'+modelKey+'_'+ cond.value+'_'+parentIndex }}"
+                              style="height: auto">{{row[cond.value]}}
+
+                    </textarea>
+                    <!--<textarea class="form-control " rows="3"
+                              placeholder="{{cond.placeholder||''}}"
+                              title="{{cond.placeholder||''}}"
+                              ng-required="cond.required"
+                              ng-disabled="cond.disabled||isEdit"
+                              ng-model="row[cond.value]"
+                              ng-readonly="cond.readonly"
+                              data-required-msg="{{ cond.requiredMsg }}"
+                              data-error-msg="{{ cond.errorMsg }}"
+                              id="{{ name +'_'+modelKey+'_'+ cond.value+'_'+condparentIndex }}"
+                              name="{{ name +'_'+modelKey+'_'+ cond.value+'_'+condparentIndex }}"
+                              name="travelReason" style="height: auto"></textarea>-->
+                </div>
+                <div class="input-group input-group-xs" ng-if="cond.type==='lov' ">
+                    <input type="text" class="form-control radius3"
+                           ng-model="row[cond.value]" 
+                           ng-disabled="cond.disabled||isEdit" 
+                           ng-required="cond.required"  
+                           placeholder="{{cond.placeholder||''}}"
+                           title="{{cond.title?cond.title:row[cond.value]}}"
+                           id="{{ name +'_'+modelKey+'_'+ cond.value+'_'+parentIndex }}"
+                           name="{{ name +'_'+modelKey+'_'+ cond.value+'_'+parentIndex }}">
+                    <span class="input-group-btn"  ng-disabled="isEdit"   data-toggle="modal" data-target="{{ isEdit?'':cond.target }}" ng-click="callback(cond.callback,parentIndex)">
+                       <a class="btn btn-default" ng-disabled="isEdit"><i class="fa fa-search"></i></a>
+                    </span>
+                </div>
+                <div ng-if="cond.type == 'citys'" city-area="" ng-model="row[cond.value]"></div>
+                <!--文字-->
+                <input class="form-control radius3 input-xs"
+                       ng-if="cond.type == 'text'|| !cond.type"
+                       type="text"
+                       placeholder="{{cond.placeholder||''}}"
+                       title="{{cond.title?cond.title:row[cond.value]}}"
+                       ng-required="cond.required"
+                       ng-disabled="cond.disabled||isEdit"
+                       ng-model="row[cond.value]"
+                       ng-readonly="cond.readonly"
+                       data-required-msg="{{ cond.requiredMsg }}"
+                       data-error-msg="{{ cond.errorMsg }}"
+                       id="{{ name +'_'+modelKey+'_'+ cond.value+'_'+parentIndex }}"
+                       name="{{ name +'_'+modelKey+'_'+ cond.value+'_'+parentIndex }}"
+                >
+                <!-- 计算 -->
+                <div class="input-group input-group-xs" ng-if=" cond.type == 'lookCode'||cond.type == 'lookUpCode'||cond.type == 'lookupCode'" >
+                    <div lookup-code="{{ cond.lookCode||cond.lookUpCode||cond.lookupCode }}" ng-model="row[cond.value]"
+                         ng-required="cond.required"  data-required-msg="{{ cond.requiredMsg }}"  data-error-msg="{{ cond.errorMsg }}"
+                         id="{{ name +'_'+ cond.value+'_'+parentIndex }}"
+                         placeholder="{{cond.placeholder||''}}"
+                         title="{{cond.placeholder||''}}"
+                         data-callback="{{cond.callback?cond.callback:''}}"
+                         name="{{ name +'_'+modelKey+'_'+ cond.value+'_'+parentIndex }}" ng-disabled="cond.disabled||isEdit" ng-readonly="cond.readonly"></div>
+                </div>
+
+                <!--时间-->
+                <input type="text" class="form-control radius3 input-xs"
+                       ng-required="cond.required"
+                       ng-disabled="cond.disabled||isEdit"
+                       ng-readonly="cond.readonly"
+                       placeholder="{{cond.placeholder||''}}"
+                       title="{{cond.title?cond.title:row[cond.value]}}"
+                       data-required-msg="{{ cond.requiredMsg }}"
+                       data-error-msg="{{ cond.errorMsg }}"
+                       id="{{ name +'_'+modelKey+'_'+ cond.value+'_'+parentIndex }}"
+                       name="{{ name +'_'+modelKey+'_'+ cond.value+'_'+parentIndex }}"
+                       ng-if="cond.type == 'time'"
+                       data-stratdate="{{ cond[item.startDate]}}"
+                       data-enddate="{{ cond[item.endDate]}}"
+                       date-time-picker
+                       data-is-today="{{ cond.isToday}}"
+                       data-show-meridian="{{cond.showMeridian}}"
+                       data-minute-step="{{cond.minuteStep}}"
+                       data-start-view="{{ startView(cond.date)}}"
+                       data-date-format="{{ cond.date || 'yyyy-mm-dd' }}"
+                       data-min-view="{{ minView(cond.date)}}"
+                       ng-model="row[cond.value]">
+
+            </td>
+        </tr>
+    </tbody>
+    <tfoot ng-if="showTotal" class="tfoot">
+        <tr ng-repeat="item in ngModel[modelKey+'Total'] track by $index">
+            <td>合计</td>
+            <td ng-repeat="row in legend" class="text-left">{{item[row.value+'Total']||''}}</td>
+            <td></td>
+        </tr>
+        <!--<tr ng-repeat="item in ngModel.totalData track by $index">-->
+            <!--<td ng-repeat="row in legend track by $index">{{row}}</td>-->
+        <!--</tr>-->
+    </tfoot>
+</table>

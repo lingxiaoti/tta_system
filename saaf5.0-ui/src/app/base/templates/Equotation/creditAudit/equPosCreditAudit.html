@@ -1,0 +1,129 @@
+<div ng-controller="equPosCreditAuditCtrl" class="gridtable">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.getData()">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.getData()">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{ $l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{ $l('重置')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="add()">
+                            <i class="fa fa-plus" aria-hidden="true"></i>{{ $l('新增')}}
+                        </button>
+                    </div>
+                    <!--<div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify"></div>-->
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)"><i
+                            class="fa fa-square-o"></i>{{ $l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <!--------------------- 输入表单  --->
+                <div class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+                    <!-- 搜索输入框组-->
+                    <div search-form
+                         data-legend="[
+                        {key:'supplierName',label:'供应商名称'},
+                        {key:'supCreditAuditCode',label:'信用审核单号'},
+                        {key:'supCreditAuditStatus',label:'单据状态',type:'lookCode',lookCode:'EDU_SUP_SUSPEND_STATUS'},
+                        {key:'creationDateFrom',type:'time','date':'yyyy-mm-dd',label:'创建时间从'}
+                        ]"
+                         ng-model="params"
+                    ></div>
+                </div>
+                <div class="form-group col-xs-3 col-md-3">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100">{{ $l('创建时间至')}}</span></label>
+                        <input type="text" date-time-picker required
+                               data-date-format="yyyy-mm-dd"
+                               data-min-View="2"
+                               class="form-control radius3"
+                               ng-model="params.creationDateTo ">
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-3 col-md-3">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100">{{ $l('业务类型')}}</span></label>
+                        <select class="form-control input-xs" ng-model="params.supCreditAuditType"   >
+                            <option ></option>
+                            <option ng-hide="data.lookupCode>'40'" saaf-select-lookupcode="EQU_SUPPLIER_SCENE_TYPE"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-3 col-md-3">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100">{{ $l('部门')}}</span></label>
+                        <input type="text" class="form-control radius3" disabled
+                               ng-model="params.deptName"/>
+                    </div>
+                </div>
+                
+                <div class="data-table" >
+                    <table saaf-table="dataTable"
+                           class="table table-bordered table-hover table-condensed"
+                           data-url="findEquPosCreditAuditInfo"
+                           data-params="params"
+                           data-checked-type="radio"
+                           data-auto-get-data="true"
+                           data-page-rows="10">
+                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                        <tr class="text-center">
+                            <th>{{ $l('序号')}}</th>
+                            <th>{{ $l('供应商信用审核单号')}}</th>
+                            <th>{{ $l('供应商名称')}}</th>
+                            <th>{{ $l('信用审核结果')}}</th>
+                            <th>{{ $l('单据状态')}}</th>
+                            <th>{{ $l('业务类型')}}</th>
+                            <th>{{ $l('创建时间')}}</th>
+                            <th>{{ $l('创建人')}}</th>
+                            <th>{{ $l('操作')}}</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-show="dataTable.data">
+                        <tr class="text-center" ng-repeat="row in dataTable.data"
+                            ng-class="{'active':dataTable.data.selectRow==$index}"
+                            ng-click="dataTable.data.selectRow=$index;
+                                        dataTable.data.selectRowData =row;">
+
+                            <td ng-bind="$index+1" class="w50">1</td>
+                            <td><a ng-click="edit(row)">{{row.supCreditAuditCode}}</a>
+                            </td>
+                            <td>{{row.supplierName}}</td>
+                            <td>{{row.creditAuditResuleName}} </td>
+                            <td>{{row.supCreditAuditStatusName}} </td>
+                            <td>{{row.supCreditAuditTypeName}} </td>
+                            <td>{{row.creationDate}}</td>
+                            <td>
+                                {{row.createdByName}}
+                            </td>
+                            <td>
+                                <button class="btn btn-success btn-xs" type="button" ng-if="row.supCreditAuditStatus !='20'&&row.supCreditAuditStatus !='30'"
+                                        ng-click="delrow(row,$index)"
+                                ><i class="fa fa-trash fa-lg"></i></button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div saaf-table-tfoot="dataTable" ng-show="dataTable.data.length>0"></div>
+                </div>
+                <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+            </div>
+        </div>
+    </form>
+</div>

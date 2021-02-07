@@ -1,0 +1,155 @@
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #1e90c2;
+  z-index: 10;
+  transition: opacity .65s
+}
+
+.preloader-hidden-add {
+  opacity: 1;
+  display: block
+}
+
+.preloader-hidden-add-active {
+  opacity: 0
+}
+
+.preloader-hidden {
+  display: none
+}
+
+.cs-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%
+}
+
+.cs-loader-inner {
+  transform: translateY(-50%);
+  top: 50%;
+  position: absolute;
+  width: 100%;
+  color: #fff;
+  text-align: center
+}
+
+.cs-loader-txt {
+  transform: translateY(-50%);
+  top: 50%;
+  position: absolute;
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  margin-top: -25px;
+}
+
+.cs-loader-inner label {
+  display: inline-block
+}
+
+@keyframes lol {
+  0% {
+    opacity: 0;
+    transform: translateX(-300px)
+  }
+  33% {
+    opacity: 1;
+    transform: translateX(0)
+  }
+  66% {
+    opacity: 1;
+    transform: translateX(0)
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(300px)
+  }
+}
+
+.cs-loader-inner label:nth-child(6) {
+  animation: lol 3s infinite ease-in-out
+}
+
+.cs-loader-inner label:nth-child(5) {
+  animation: lol 3s .1s infinite ease-in-out
+}
+
+.cs-loader-inner label:nth-child(4) {
+  animation: lol 3s .2s infinite ease-in-out
+}
+
+.cs-loader-inner label:nth-child(3) {
+  animation: lol 3s .3s infinite ease-in-out
+}
+
+.cs-loader-inner label:nth-child(2) {
+  animation: lol 3s .4s infinite ease-in-out
+}
+
+.cs-loader-inner label:nth-child(1) {
+  animation: lol 3s .5s infinite ease-in-out
+}
+
+.browseLi li {
+  list-style: none;
+
+  display: inline-block;
+}
+
+.browseLi li a {
+  background-image: url('./img/browse.jpg');
+  width: 127px;
+  height: 170px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  position: relative;
+  color: #FF9900;
+
+  border: 1px dotted #e6e6e6;
+}
+
+.browseLi {
+  padding: 0;
+
+}
+
+.browseLi li {
+  margin: 0 15px;
+}
+
+.browseLi li a:hover {
+  border: 1px dotted #999;
+
+}
+
+.browseLi li a span {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  display: block;
+  padding: 3px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #fff;
+}
+
+.chrome {
+  background-position: 0 0;
+}
+
+.se360 {
+  background-position: -250px 0;
+}
+
+.firefox {
+  background-position: -125px 0;
+}

@@ -1,0 +1,682 @@
+<div ng-controller="dynamicChartsDetailCtrl" class="gridtable">
+	<div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+		<div class="form bg-white" id="rooForm">
+			<!--------------------- 按钮--->
+			<div class="bg-gray-white bt">
+				<div class="bg-gray-white p5">
+					<div class="btn-group btn-group-xs pull-right ml10"
+						 id="outputButton">
+						<button id="headerSave" class="btn btn-default" type="button"   data-validate-form="headerForm"
+								ng-click="btnSave(headerForm.$invalid)"><i class="fa fa-save"></i>保存
+						</button>
+						<button   class="btn btn-default ng-scope"  permission-btn="btnDelLines"
+								ng-click="deleteLines()" ng-disabled="!currentRow" type="button"><i
+								class="fa fa-trash-o"></i>删除行
+						</button>
+					</div>
+
+					<div class="btn-group btn-group-xs pull-right ml10">
+						<button type="button" class="btn btn-default" data-toggle="modal"
+								data-target="#editModal" ng-click="createLineRow()"
+								ng-disabled="!headerData.reportHeaderId"><i class="fa fa-plus"></i>新增字段
+						</button>
+						<button type="button" class="btn btn-default"
+								ng-click="updateLineRow(currentRow)"
+								ng-disabled="!currentRow"><i class="fa fa-pencil"></i>编辑字段
+						</button>
+					</div>
+
+					<div class="btn-group btn-group-xs pull-right ml10">
+						<button class="btn btn-default" type="button" ng-click="previewTable()"
+								ng-disabled="dataTable.data.length==0"><i class="fa fa-table"></i>列表预览
+						</button>
+						<button class="btn btn-default" type="button" ng-click="previewEcharts()"
+								ng-disabled="headerData.webScript==null"><i class="fa fa-bar-chart"></i>图表预览
+						</button>
+					</div>
+
+					<div class="btn-group btn-group-xs ">
+						<button class="btn btn-primary" ng-click="fullWindow($event)" type="button">
+							<i class="fa fa-square-o"></i>数据全屏
+						</button>
+					</div>
+				</div>
+			</div>
+			<!---------------------  / .按钮  --->
+			<div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+				<div class="nicescroll-height  bg-white " ng-nicescroll
+					 nice-option="{{niceOpction}}"
+					 data-des="此节点必需-滚动内容及指令">
+					<!--------------------- 输入表单  --->
+					<form name="headerForm" class=" mt10 pb5 bb oh" data-des="此节点必需－用于识别输入表单的指令"
+						  ng-submit="saveHeader(headerForm.$invalid)">
+						<header class="col-xs-12 mb10">
+							<i class="fa fa-cog" aria-hidden="true"></i>
+							<span>动态报表配置信息</span>
+						</header>
+						<div resp-change="" class="col-xs-4 col-md-3 none"></div>
+						<div class="form-group col-xs-4 col-md-3">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn"><span class="w100"><i
+										class="red">*</i>动态报表名称</span></label>
+								<input type="text" class="form-control radius3" ng-model="headerData.reportDesc"
+									   required>
+							</div>
+						</div>
+						<div class="form-group col-xs-4 col-md-3">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn"><span class="w100"><i
+										class="red">*</i>动态报表编码<i class="fa fa-question-circle-o"
+																  title="功能配置时作为参数使用"></i></span></label>
+								<input type="text" class="form-control radius3" ng-model="headerData.reportHeaderCode"
+									   required>
+								<span class="input-group-btn">
+									<button class="btn btn-primary" type="button" ng-click="jianpin()">简拼</button>
+								</span>
+							</div>
+						</div>
+
+						<!--<div class="form-group col-xs-4 col-md-2">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn"><span class="w100">值集类型</span></label>
+								<div lookup-code="FLEX_VALIDATION_TYPE" ng-model="headerData.flexValuesType"></div>
+							</div>
+						</div>-->
+						<div class="form-group col-xs-4 col-md-3">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn">
+									<span class="w100"><i class="red">*</i>数据源</span>
+								</label>
+								<select class="form-control radius3" ng-model="headerData.dsId" convert-to-number required>
+									<option ng-repeat="item in dataSourceList" ng-bind="item.dsName"
+											value="{{item.dsId}}" ng-selected="headerData.dsId==item.dsId"></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group col-xs-4 col-md-3">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn"><span class="w100">默认查询数据</span></label>
+								<input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+									   ng-model="headerData.queryFlag"/>
+							</div>
+						</div>
+						<!--<div class="form-group col-xs-4 col-md-2">-->
+							<!--<div class="input-group input-group-xs">-->
+								<!--<label class="input-group-addon bn"><span class="w100">是否显示序号</span></label>-->
+								<!--<input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"-->
+									   <!--ng-model="headerData.showSeqFlag" ng-init="headerData.showSeqFlag='Y'"/>-->
+							<!--</div>-->
+						<!--</div>-->
+						<div class="form-group col-xs-12 col-md-12">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn">
+									<span class="w100">
+										<i class="red">*</i>查询条件SQL<i class="fa fa-question-circle-o" title="输入可直接运行的查询SQL，若最外层SQL无WHERE时，添加where 1=1;
+环境变量{system.varSystemCode}、{system.varUserName}、{system.varUserId}、{system.varMemberId}、{system.varIsadmin}；
+例如（获取当前用户数据）and user_id = {system.varUserId}"></i>
+										
+									</span>
+								</label>
+								<textarea type="text" class="form-control  radius3-4 "
+										  ng-model="headerData.querySql"
+										  style="height: 150px" required></textarea>
+								<div class="btn-group mt5 ">
+									<button id="generateColumnButton" type="button" class="btn btn-sm btn-primary"
+											 ng-click="generateColumns(headerForm.$invalid)">生成栏位配置
+									</button>
+								</div>
+							</div>
+						</div>
+					<!--	<div class="form-group col-xs-4 col-md-6">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn"><span class="w100">分页统计SQL</span></label>
+								<textarea type="text" class="form-control radius3"
+										  ng-model="headerData.countSql"
+										  style="height: 170px"></textarea>
+							</div>
+						</div>-->
+						<div class="form-group col-xs-4 col-md-6">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn"><span class="w100">Order/Group By<i
+										class="fa fa-question-circle-o" title="分组及排序功能，配合数据源中SQL使用"></i></span></label>
+								<input type="text" class="form-control radius3" ng-model="headerData.orderBy"/>
+							</div>
+						</div>
+
+						<div class="form-group col-xs-4 col-md-6">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn"> <span class="w100">选择图表模板<i
+										class="fa fa-question-circle-o" title="在此处选择一个图表展示的模板，按照模板要求的数据格式配置SQL进行展示"></i></span>
+								</label>
+								<input type="text" class="form-control radius3" ng-model="headerData.chartsName"/>
+								<span class="input-group-btn" saaf-lov
+									  data-return-value1="headerData.chartsCode"
+									  data-return-value2="headerData.chartsName"
+									  data-return-value3="headerData.chartsTitle"
+									  data-return-value4="headerData.dimensions"
+									  data-return-value5="headerData.dimensionLength"
+									  data-return-value6="headerData.dataConversionScript"
+									  data-return-value7="headerData.webScript"
+									  data-return-value8="headerData.chartsType"
+									  data-return-value9="headerData.description"
+									  saaf-lov-option="{dataUrl:'dynamicReportTypeList',params:{},
+                                        searchLabel1:'图表编码',
+                                        searchLabel2:'图表名称',
+                                        searchColName1:'chartsCode',
+                                        searchColName2:'chartsName',
+                                        label1:'图表类型编码',
+                                        label2:'图表类型名称',
+                                        label3:'图表类型',
+                                        colName1:'chartsCode',
+                                        colName2:'chartsName',
+                                        colName3:'chartsTypeStr',
+                                        returnColName1:'chartsCode',
+                                        returnColName2:'chartsName',
+                                        returnColName3:'chartsTitle',
+                                        returnColName4:'dimensions',
+                                        returnColName5:'dimensionLength',
+                                        returnColName6:'dataConversionScript',
+                                        returnColName7:'chartsScript',
+                                        returnColName8:'chartsType',
+                                        returnColName9:'description'}"></span>
+								<!-- <div class="btn-group btn-group-xs pull-left">
+									<button class="btn btn-default" ng-click="searchCharts()" data-toggle="modal" data-target="#selectChartsModal"><i class="fa fa-search" aria-hidden="true"></i></button>
+								</div> -->
+								<div class="btn-group btn-group-xs pull-left">
+									<button class="btn btn-default" data-toggle="modal"
+											data-target="#editWebScriptModal">自定义图表
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="form-group col-xs-4 col-md-6">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn"><span class="w100">图表标题</span></label>
+								<input type="text" class="form-control radius3" ng-model="headerData.chartsTitle"/>
+							</div>
+						</div>
+					</form>
+
+					<!--------------------- ./  输入表单  --->
+
+					<!--------------------- 表格--------------------------------->
+					<!--<div base-data-table="dataTable" id="dataTable" data-click-row=""-->
+						 <!--data-legend="[{'value':'orderNo','name':'排序编号'},-->
+						 <!--{'value':'columnCode','name':'列编码'},-->
+						 <!--{'value':'columnName','name':'列名称'},-->
+						 <!--{'value':'columnDisplayWidth','name':'显示宽度'},-->
+						 <!--{'value':'columnDataType','name':'数据类型'},-->
+						 <!--{'value':'columnDisplayFlag','name':'是否显示','boolean':'icon'},-->
+						 <!--{'value':'conditionFlag','name':'是否查询条件','boolean':'icon'},-->
+						 <!--{'value':'paramRequiredFlag','name':'查询条件必输','boolean':'icon'},-->
+						 <!--{'value':'paramDefaultValue','name':'默认值'}-->
+						 <!--]"-->
+					<!--&gt;-->
+
+					<!--</div>-->
+
+					<table class=" table-hover report-data " id="reportLine">
+						<thead>
+						<tr>
+							<th>排序编号</th>
+							<th>列编码</th>
+							<th>列名称</th>
+							<th>显示宽度</th>
+							<th>数据类型</th>
+							<th>来源的渠道</th>
+							<th>是否显示</th>
+							<th>是否查询条件</th>
+							<th>查询条件必输</th>
+							<th>默认值</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat=" row in reportLineData" ng-click="setRow(row,$index)" ng-class="{'active':rowIndex===$index}">
+							<td>{{row.orderNo}}</td>
+							<td>{{row.columnCode}}</td>
+							<td>{{row.columnName}}</td>
+							<td>{{row.columnDisplayWidth}}</td>
+							<td>{{row.columnDataType | lookupCode: paramDisplayType.dataList}}</td>
+							<td>{{row.paramDataFromType | lookupCode: paramDataFromType.dataList}}</td>
+							<td ng-bind-html="(row.columnDisplayFlag | boolean: 'icon') | tohtml"></td>
+							<td ng-bind-html="(row.conditionFlag | boolean: 'icon') | tohtml"></td>
+							<td ng-bind-html="(row.paramRequiredFlag | boolean: 'icon') | tohtml"></td>
+							<td>{{row.paramDefaultValue}}</td>
+						</tbody>
+					</table>
+					<!--<div class="data-table">
+						<table saaf-table="dataTable" data-url="dynamicReportLine" data-params="queryParam"
+							   data-auto-get-data="false"
+							   class="table table-bordered table-hover table-condensed">
+							<thead class="bg-gray-white">
+							<tr class="text-center">
+								<th ng-if="saafPageButtons.delete" class="w30" ng-click="selectedAll(dataTable.data);">
+									<input style="margin-top:1px;" type="checkbox" ng-model="selectAllCheck"
+										   ng-checked="headIsSelected()">
+								</th>
+								<th>序号</th>
+								<th>显示顺序</th>
+								<th>字段编码</th>
+								<th>字段名称</th>
+								<th>显示宽度</th>
+								<th>字段类型</th>
+								<th>是否是否显示</th>
+								<th>是否必输</th>
+
+							</tr>
+							</thead>
+							<tbody ng-show="dataTable.data.length==0">
+							<tr>
+								<td style="height: 200px;text-align: left;color: gray;" colspan="12">无查询结果！</td>
+							</tr>
+							</tbody>
+							<tbody ng-show="dataTable.data">
+							<tr class="text-center" ng-repeat="row in dataTable.data"
+								ng-class="{'active':dataTable.selectRow==$index}" ng-click="dataTable.selectRow=$index"
+								ng-dblclick="saafPageButtons.modify?updateLineRow(row):null">
+								<td ng-if="saafPageButtons.delete" style="padding: 2px; margin-top:1px;"
+									ng-click="selectedAction($event,row.querySetLineId,row)">
+									<input type="checkbox" name="selectLine"
+										   ng-checked="isSelected(row.querySetLineId)">
+								</td>
+								<td ng-bind="(dataTable.curIndex-1)*dataTable.pageSize+$index+1"
+									style="width: 50px;text-align: center">1
+								</td>
+								<td>{{row.orderNo}}</td>
+								<td>{{row.columnCode}}</td>
+								<td>{{row.columnName}}</td>
+								<td>{{row.columnDisplayWidth}}</td>
+								<td>
+									{{row.columDataType=='STRING'?'字符':row.columDataType=='NUMBER'?'数字':row.columDataType=='DATE'?'日期':row.columDataType=='DATETIME'?'日期时间':row.columDataType}}
+								</td>
+								<td><input style="margin-top:1px;" type="checkbox" ng-true-value="'Y'"
+										   ng-false-value="'N'" ng-model="row.columnDisplayFlag" disabled/></td>
+								<td><input style="margin-top:1px;" type="checkbox" ng-true-value="'Y'"
+										   ng-false-value="'N'" ng-model="row.paramRequiredFlag" disabled/></td>
+
+							</tr>
+							</tbody>
+						</table>
+						<div saaf-table-tfoot="dataTable"></div>
+					</div>-->
+					<!--------------------- 表格--------------------------------->
+				</div>
+			</div>
+
+			<!--------------------图表脚本弹出框----------------------->
+			<div class="modal fade" id="editWebScriptModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+				 role="dialog" aria-labelledby="editWebScriptModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-lg" style="margin-top: 2%;">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title pull-left" id="editWebScriptModalLabel">编写图表生成脚本</h4>
+						</div>
+						<div class="modal-body ">
+							<div class="row">
+								<div class="form-group col-xs-11 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"> <span class="w80">选择图表模板</span>
+										</label>
+										<input type="text" class="form-control radius3"
+											   ng-model="headerData.chartsName"/>
+										<span class="input-group-btn" saaf-lov
+											  data-return-value1="headerData.chartsCode"
+											  data-return-value2="headerData.chartsName"
+											  data-return-value3="headerData.chartsTitle"
+											  data-return-value4="headerData.dimensions"
+											  data-return-value5="headerData.dimensionLength"
+											  data-return-value6="headerData.dataConversionScript"
+											  data-return-value7="headerData.webScript"
+											  data-return-value8="headerData.chartsType"
+											  data-return-value9="headerData.description"
+											  saaf-lov-option="{dataUrl:'dynamicReportTypeList',params:{},
+		                                        searchLabel1:'图表编码',
+		                                        searchLabel2:'图表名称',
+		                                        searchColName1:'chartsCode',
+		                                        searchColName2:'chartsName',
+		                                        label1:'图表类型编码',
+		                                        label2:'图表类型名称',
+		                                        label3:'图表类型',
+		                                        colName1:'chartsCode',
+		                                        colName2:'chartsName',
+		                                        colName3:'chartsTypeStr',
+		                                        returnColName1:'chartsCode',
+		                                        returnColName2:'chartsName',
+		                                        returnColName3:'chartsTitle',
+		                                        returnColName4:'dimensions',
+		                                        returnColName5:'dimensionLength',
+		                                        returnColName6:'dataConversionScript',
+		                                        returnColName7:'chartsScript',
+		                                        returnColName8:'chartsType',
+                                        		returnColName9:'description'}"></span>
+									</div>
+								</div>
+								<div class="form-group col-xs-11 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"><span class="w80">图表标题</span></label>
+										<input type="text" class="form-control radius3"
+											   ng-model="headerData.chartsTitle"/>
+									</div>
+								</div>
+								<div class="form-group col-xs-11 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"><span class="w80">图表维度</span></label>
+										<input type="text" class="form-control radius3"
+											   ng-model="headerData.dimensions"/>
+									</div>
+								</div>
+								<div class="form-group col-xs-11 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"><span class="w80">维度大小</span></label>
+										<input type="text" class="form-control radius3"
+											   ng-model="headerData.dimensionLength"/>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-xs-11 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"><span class="w80">数据转换脚本<br/>已输入{{headerData.dataConversionScript?headerData.dataConversionScript.length:0}}字符</span></label></span></label>
+										<textarea type="text" class="form-control radius3"
+												  ng-model="headerData.dataConversionScript"
+												  style="height: 300px"></textarea>
+									</div>
+								</div>
+								<div class="form-group col-xs-11 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"><span class="w80">图表脚本<br/>已输入{{headerData.webScript?headerData.webScript.length:0}}字符</span></label>
+										<textarea type="text" class="form-control radius3"
+												  ng-model="headerData.webScript"
+												  style="height: 300px"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer ">
+							<div style="text-align: center">
+								<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+								<button type="submit" id="saveButton" class="btn btn-primary mr10">保存</button>
+								<!--<button type="submit" id="savePreview" class="btn btn-primary mr10"
+										ng-click="previewEcharts()">保存&预览
+								</button>-->
+							</div>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+			</div>
+			<!--------------------end图表脚本弹出框----------------------->
+
+		</div>
+
+		<!--------------------行编辑弹出框----------------------->
+		<div class="modal fade" id="editModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+			 aria-labelledby="editModalLabel" aria-hidden="true">
+			<form ng-submit="saveLine(editForm.$invalid)" name="editForm">
+				<div class="modal-dialog modal-dialog-lg" style="margin-top: 2%;">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="editModalLabel">字段维护</h4>
+						</div>
+						<div class="modal-body ">
+							<div class="pl30 pr30">
+								<div class="row">
+									<div class="form-group col-xs-11 col-md-4">
+										<div class="input-group input-group-xs">
+											<label class="input-group-addon bn"> <span class="w100"><i
+													class="red ">*</i>字段编码</span>
+											</label>
+											<input type="text" class="form-control radius3"
+												   ng-model="current.columnCode" required>
+										</div>
+									</div>
+									<div class="form-group col-xs-11 col-md-4">
+										<div class="input-group input-group-xs">
+											<label class="input-group-addon bn">
+												<span class="w100"><i class="red ">*</i>列名称</span>
+											</label>
+											<input type="text" class="form-control radius3"
+												   ng-model="current.columnName" required>
+										</div>
+									</div>
+
+									<div class="form-group col-xs-11 col-md-4">
+										<div class="input-group input-group-xs">
+											<label class="input-group-addon bn">
+												<span class="w100"> <i class="red ">*</i> 排序编号</span>
+											</label>
+											<input type="text" class="form-control radius3"
+												   ng-model="current.orderNo" required>
+										</div>
+									</div>
+
+									<div class="form-group col-xs-11 col-md-4">
+										<div class="input-group input-group-xs">
+											<label class="input-group-addon bn">
+												<span class="w100"> 显示宽度</span>
+											</label>
+											<input type="number" class="form-control radius3"
+												   ng-model="current.columnDisplayWidth">
+										</div>
+									</div>
+									<div class="form-group col-xs-11 col-md-4">
+										<div class="input-group input-group-xs">
+											<label class="input-group-addon bn">
+												<span class="w100">是否显示</span>
+											</label>
+											<input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+												   ng-model="current.columnDisplayFlag"/>
+										</div>
+									</div>
+									<div class="form-group col-xs-11 col-md-4">
+										<div class="input-group input-group-xs">
+											<label class="input-group-addon bn">
+												<span class="w100"><i class="red ">*</i> 数据类型</span>
+											</label>
+											<div lookup-code="DATA_TYPE" ng-model="current.columnDataType" id="columnDataType"
+												 data-required="true"></div>
+										</div>
+									</div>
+
+
+
+
+									<div class="form-group col-xs-11 col-md-4">
+										<div class="input-group input-group-xs">
+											<label class="input-group-addon bn" title="界面显示的字段名">
+												<span class="w100"><i class="red ">*</i>界面字段名</span>
+											</label>
+											<input type="text" class="form-control radius3"
+												   ng-model="current.paramDisplayName" required>
+										</div>
+									</div>
+									<div class="form-group col-xs-11 col-md-4">
+										<div class="input-group input-group-xs">
+											<label class="input-group-addon bn" title="系统使用的字段名">
+												<span class="w100">系统字段名</span>
+											</label>
+											<input type="text" class="form-control radius3"
+												   ng-model="current.paramUseCode">
+										</div>
+									</div>
+									<div class="form-group col-xs-11 col-md-4">
+										<div class="input-group input-group-xs">
+											<label class="input-group-addon bn" title="系统使用的字段名">
+												<span class="w100">默认值</span>
+											</label>
+											<input type="text" class="form-control radius3"
+												   ng-model="current.paramDefaultValue">
+										</div>
+									</div>
+
+
+								</div>
+
+								<fieldset class="mb15">
+									<legend>查询参数配置</legend>
+									<div class="row pt10 pb10">
+
+										<div class="form-group col-xs-11 col-md-4">
+											<div class="input-group input-group-xs">
+												<label class="input-group-addon bn"  >
+													<span class="w100">是否查询条件</span>
+												</label>
+												<input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+													   ng-model="current.conditionFlag"/>
+											</div>
+										</div>
+
+										<div class="form-group col-xs-11 col-md-4">
+											<div class="input-group input-group-xs">
+												<label class="input-group-addon bn" >
+													<span class="w100">来源的渠道</span>
+												</label>
+												<div lookup-code="PARAM_DATA_TYPE" id="paramDataFromType" ng-disabled="current.conditionFlag!=='Y'"
+													 ng-model="current.paramDataFromType"></div>
+											</div>
+										</div>
+
+										<div class="form-group col-xs-11 col-md-4">
+											<div class="input-group input-group-xs">
+												<label class="input-group-addon bn">
+													<span class="w100"><i class="red" ng-show="current.paramDataFromType">*</i>来源渠道代码</span>
+												</label>
+												<input type="text" class="form-control radius3" ng-disabled="!current.paramDataFromType" ng-required="current.paramDataFromType"
+													   ng-model="current.paramDataFromTypeCode">
+											</div>
+										</div>
+
+
+
+										<div class="form-group col-xs-11 col-md-4">
+											<div class="input-group input-group-xs">
+												<label class="input-group-addon bn" title="查询条件是否必输">
+													<span class="w100">是否必输</span>
+												</label>
+												<input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" ng-disabled="current.conditionFlag!=='Y'"
+													   ng-model="current.paramRequiredFlag"/>
+											</div>
+										</div>
+
+										<div class="form-group col-xs-11 col-md-4">
+											<div class="input-group input-group-xs">
+												<label class="input-group-addon bn" title="范围查询标识">
+													<span class="w100">查询表达式</span>
+												</label>
+												<div lookup-code="CONDITION_EXPRESSION" ng-model="current.conditionExpression" ng-disabled="current.conditionFlag!=='Y'"></div>
+											</div>
+										</div>
+										<div class="form-group col-xs-11 col-md-4">
+											<div class="input-group input-group-xs">
+												<label class="input-group-addon bn" title="查询条件显示类型">
+													<span class="w100"><i class="red ">*</i>显示类型</span>
+												</label>
+												<div lookup-code="DATA_TYPE" ng-model="current.paramDisplayType" id="paramDisplayType"  ng-disabled="current.conditionFlag!=='Y'"
+													 required=""></div>
+											</div>
+										</div>
+										<div class="form-group col-xs-11 col-md-4">
+											<div class="input-group input-group-xs">
+												<label class="input-group-addon bn" title="范围查询标识">
+													<span class="w100">范围查询</span>
+												</label>
+												<input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" ng-disabled="current.conditionFlag!=='Y'"
+													   ng-model="current.rangeFlag"/>
+											</div>
+										</div>
+									</div>
+
+								</fieldset>
+
+							</div>
+						</div>
+						<div class="modal-footer ">
+							<div style="text-align: center">
+								<button style="" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+								<button type="submit" class="btn btn-primary mr10">保存</button>
+							</div>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal dialog -->
+			</form>
+		</div>
+		<!--------------------end行编辑弹出框----------------------->
+		<!--------------------图表编辑弹出框----------------------->
+		<div class="modal fade" id="selectChartsModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+			 role="dialog" aria-labelledby="selectChartsModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="selectChartsModalLabel">选择图表模板</h4>
+					</div>
+					<div class="modal-body ">
+						<div class="pl30 pr30">
+							<div class="row">
+								<div class="form-group col-xs-11 col-md-4">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"><span class="w90">图表类型编码</span></label>
+										<input type="text"
+											   class="form-control radius3" ng-model="queryChartsParam.chartsCode">
+									</div>
+								</div>
+								<div class="form-group col-xs-11 col-md-4">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"><span class="w90">图表类型名称</span></label>
+										<input type="text"
+											   class="form-control radius3" ng-model="queryChartsParam.chartsName">
+									</div>
+								</div>
+								<div class="form-group col-xs-11 col-md-3">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"> <span class="w90">图表类型</span>
+										</label>
+										<select class="form-control radius3"
+												ng-model="queryChartsParam.chartsType">
+											<option></option>
+											<option saaf-select-lookupcode="CHARTS_TYPE"></option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group col-xs-11 col-md-1">
+									<div class="input-group input-group-xs">
+										<div class="btn-group btn-group-xs pull-left">
+											<button class="btn btn-default" ng-click="searchCharts()">
+												<i class="fa fa-search" aria-hidden="true"></i>搜索
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="pl30 pr30">
+							<div class="row" ng-repeat="type in chartsTypeData">
+								<h5>{{type.chartsTypeStr}}</h5>
+									<div class="form-group col-xs-11 col-md-4" ng-if="type.chartsType==row.chartsType"
+										 ng-repeat="row in chartsData">
+										<div class="input-group input-group-xs">
+											{{row.chartsName}}
+											<img src=""/>
+										</div>
+									</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer ">
+						<div style="text-align: center">
+							<button style="" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+							<button type="submit" id="saveButton2" class="btn btn-primary mr10">确认</button>
+						</div>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal dialog -->
+		</div>
+		<!--------------------end图表编辑弹出框----------------------->
+	</div>
+</div>

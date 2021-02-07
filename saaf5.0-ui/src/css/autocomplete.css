@@ -1,0 +1,10 @@
+.autocompleteList {
+  background-color: #fff;
+  box-shadow: 0 5px 5px #999 ;
+}
+.autocompleteList ul {
+  padding: 5px;
+}
+.autocompleteList ul a {
+  color: #000;
+}

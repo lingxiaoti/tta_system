@@ -1,0 +1,262 @@
+<div ng-controller="plmBrandInfoDetailCtrl" class="bigdata">
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" permission-btn="btnSave"   ng-click="btnSave(plmBrandInfoForm.$invalid)" ng-disabled="headerData.billStatus!=='TODO'" data-validate-form="plmBrandInfoForm"></button>
+                <button class="btn btn-default" permission-btn="btnSubmit"   ng-click="btnSubmit(plmBrandInfoForm.$invalid)" ng-disabled = "headerData.billStatus=='Y'||headerData.billStatus=='N'
+                ||(headerData.billStatus==='BIC_IN_APPROVAL'&&headerData.bic!==userId)||(headerData.billStatus=='BA_IN_APPROVAL'&&headerData.ba!==userId)||(headerData.billStatus=='TA_IN_APPROVAL'&&headerData.ta!==userId)" data-validate-form="plmBrandInfoForm"></button>
+                <button class="btn btn-default" permission-btn="btnDiscard"   ng-click="btnDiscard()" ng-disabled = "headerData.billStatus=='N'
+                ||(headerData.billStatus==='BIC_IN_APPROVAL'&&headerData.bic!==userId)||(headerData.billStatus=='BA_IN_APPROVAL'&&headerData.ba!==userId)||(headerData.billStatus=='TA_IN_APPROVAL'&&headerData.ta!==userId)"></button>
+                <button class="btn btn-default" permission-btn="reject"   ng-click="reject()" ng-disabled = "headerData.billStatus=='N'||headerData.billStatus==='TODO'"></button>
+            </div>
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+            <!--------------------- 输入表单  --->
+
+            <div class=" mt10 pb5  oh"
+                 data-des="此节点必需－用于识别输入表单的指令">
+
+                <form id="plmBrandInfoForm" name="plmBrandInfoForm">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>Brand</span>
+                    </header>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>Brand中文</span>
+                            </label>
+
+                            <input  required type="text" ng-disabled="headerData.billStatus!='TODO'" class="form-control radius3"
+                                    name="plmBrandCn"
+                                   ng-model="headerData.plmBrandCn">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>Brand英文</span>
+                            </label>
+
+                            <input type="text" ng-disabled="headerData.billStatus!='TODO'" required class="form-control radius3"
+                                   name="plmBrandEn"
+                                   ng-model="headerData.plmBrandEn">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">Brand ID</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   name="plmBrandCode"
+                                   ng-model="headerData.plmBrandCode">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">PLM ID</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   name="plmLocalBrandCode"
+                                   ng-model="headerData.plmLocalBrandCode">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">Group Brand</span>
+                            </label>
+
+                            <input type="text" ng-disabled="headerData.billStatus!='TODO'" class="form-control radius3"
+                                   name="plmGroupBrand"
+                                   ng-model="headerData.plmGroupBrand">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">Mother Company</span>
+                            </label>
+
+                            <input type="text" ng-disabled="headerData.billStatus!='TODO'" class="form-control radius3" name="plmMotherCompany"
+                                   ng-model="headerData.plmMotherCompany">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>单据状态</span>
+                            </label>
+
+                            <div lookup-code="PLM_BRAND_STATUS" data-required="true" ng-model="headerData.billStatus"
+                                 required  id="billStatus" ng-disabled="true" name="billStatus">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">Brand备注</span>
+                            </label>
+
+                            <input type="text" ng-disabled="headerData.billStatus!='TODO'" class="form-control radius3"
+                                   ng-model="headerData.remarks">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>审批BIC</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3 readonly-white" required name="bicName" ng-model="headerData.bicName" readonly>
+                            <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" data-target="#bicInfoId"
+                                    ng-disabled="headerData.billStatus!=='TODO'"
+                                    class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3" ng-show="headerData.plmMotherCompany!==undefined">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red" ng-show="headerData.plmMotherCompany!==undefined&&headerData.billStatus==='BIC_IN_APPROVAL'">*</i>审批BA</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3 readonly-white" ng-required="headerData.plmMotherCompany!==undefined&&headerData.billStatus==='BIC_IN_APPROVAL'"
+                                   name="baName" ng-model="headerData.baName" readonly>
+                            <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" data-target="#baInfoId"
+                                    ng-disabled="headerData.billStatus!=='BIC_IN_APPROVAL'||headerData.bic!==userId"
+                                    class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red" ng-show="(headerData.plmMotherCompany!==undefined&&headerData.billStatus==='TA_IN_APPROVAL')
+                                   ||(headerData.plmMotherCompany===undefined&&headerData.billStatus==='BIC_IN_APPROVAL')">*</i>审批TA</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3 readonly-white"
+                                   ng-required="(headerData.plmMotherCompany!==undefined&&headerData.billStatus==='TA_IN_APPROVAL')
+                                   ||(headerData.plmMotherCompany===undefined&&headerData.billStatus==='BIC_IN_APPROVAL')"
+                                   name="taName" ng-model="headerData.taName" readonly>
+                            <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" data-target="#taInfoId"
+                                    ng-disabled="!((headerData.billStatus==='BIC_IN_APPROVAL'&&headerData.bic===userId)||(headerData.billStatus==='BA_IN_APPROVAL'&&headerData.ba===userId))"
+                                    class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="row"></div>
+
+                </form>
+            </div>
+            
+
+
+        </div>
+    </div>
+
+    <div lov-list="bicInfoLov" role="dialog" data-title="选择审批BIC" id="bicInfoId" ng-model="current.em"
+         data-url="userFind"
+         data-dynamic-params='{"status":"Y","userType":"45"}'
+         data-callback="returnBicInfo"
+         data-auto-request="false"
+         data-return-value=""
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'userId','value':'userName','name':'BIC名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'userName_like','placeholder':'BIC名称'}
+                          ]"
+    >
+    </div>
+
+    <div lov-list="baInfoId" role="dialog" data-title="选择审批BA" id="baInfoId" ng-model="current.em"
+         data-url="userFind"
+         data-dynamic-params='{"status":"Y","userType":"46"}'
+         data-callback="returnBaInfo"
+         data-auto-request="false"
+         data-return-value=""
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'userId','value':'userName','name':'BA名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'userName_like','placeholder':'BA名称'}
+                          ]"
+    >
+    </div>
+
+    <div lov-list="taInfoId" role="dialog" data-title="选择审批TA" id="taInfoId" ng-model="current.em"
+         data-url="userFind"
+         data-dynamic-params='{"status":"Y","userType":"47"}'
+         data-callback="returnTaInfo"
+         data-auto-request="false"
+         data-return-value=""
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'userId','value':'userName','name':'TA名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'userName_like','placeholder':'TA名称'}
+                          ]"
+    >
+    </div>
+
+
+
+</div>

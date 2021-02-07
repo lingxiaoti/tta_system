@@ -1,0 +1,299 @@
+<div ng-controller="salesSiteCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDel,PLSC">
+
+                    </div>
+                    <!-- 导入、下载模板start -->
+                    <div class="btn-group btn-group-xs" permission-btn-group="btnImport" ng-style="myStyle" id="isSq">
+                        <button  class="btn btn-default  a-black "  onclick="window.location.href='app/base/templates/tta/exampleFlie/ttaOsdSalesSite.xlsx'" ><i class="fa fa-file-excel-o"></i>下载模板</button>
+                        <button  class="btn btn-default  a-black "   ng-click="daoru()" ><i class="fa fa-upload"></i>导入</button>
+
+                    </div>
+                    <!-- 导入、下载模板end -->
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+
+
+                <!--------------------- 输入表单  --->
+
+                <div class=" mt10 pb5  oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form id="contractForm" name="contractForm">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>单据头信息</span>
+
+
+                        </header>
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">年份：</span></label>
+                                <input  type="text" ng-model="params.salesYear"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">促销位置:</span></label>
+                                <input  type="text" ng-model="params.salesSite"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">供应商:</span></label>
+                                <input  type="text" ng-model="params.supplierCode"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">部门:</span></label>
+                                <input  type="text" ng-model="params.dept"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="row"></div>
+
+
+                    </form>
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="false"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="ttaSalesSiteFind"
+                         data-legend="[
+                            {'value':'salesYear','name':'年份'},
+                            {'value':'supplierCode','name':'供应商'},
+                            {'value':'dept','name':'部门'},
+                            {'value':'salesSite','name':'促销位置'},
+                            {'value':'salesSite2','name':'促销位置-2'},
+                            {'value':'deptItemNo','name':'收费标准序号'},
+                            {'value':'deptItemName','name':'收费标准'},
+                            {'value':'createdByName','name':'创建人'},
+                            {'value':'creationDate','name':'创建日期'},
+                             ]"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <div class="modal fade" id="excelTtaOsdSalesSite" data-des="excel_ttaOsdSalesSite" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        导入
+                    </h4>
+                </div>
+                <form class="ngValid" name="ttaOsdSalesSiteForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12" ng-if="buttonFlag">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">选择文件</span></label>
+                                <input type="file" required accept="*.xlsx"  id="fileUpLoad">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12" ng-if="!buttonFlag">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">当前阶段：</span></label>
+                                <span id="value1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12" ng-if="!buttonFlag">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">当前行(列)数：</span></label>
+                                <span id="value2"></span>
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer " ng-if="buttonFlag">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="save(ttaOsdSalesSiteForm.$invalid)" validate-form-btn="" data-validate-form="ttaOsdSalesSiteForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="PLDelete" data-des="批量删除" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog " style="width: 300px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        选择年份
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">年份</span></label>
+                                <input  type="text" ng-model="paramsPL.year" required
+                                        class="form-control radius3">
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer " >
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="saveWindow(funcMenuForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div style="z-index: 1043;"  class="modal fade" id="saleSiteLov" data-des="信息" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                    </button>
+                    <h4 class="modal-title" id="driverModalLabel">
+                        信息
+                    </h4>
+                </div>
+                <form class="ngValid" name="salesSiteForm">
+                    <div class="modal-body">
+
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>年份：</span></label>
+                                <input data-required-msg="年份" type="text" ng-model="alertInfo.salesYear"
+                                       required    class="form-control radius3">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">供应商：</span></label>
+                                <input data-required-msg="供应商" type="text" ng-model="alertInfo.supplierCode"
+                                           class="form-control radius3">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">部门：</span></label>
+                                <input data-required-msg="部门" type="text" ng-model="alertInfo.dept"
+                                           class="form-control radius3">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>促销位置：</span></label>
+                                <input data-required-msg="促销位置" type="text" ng-model="alertInfo.salesSite"
+                                       required    class="form-control radius3">
+                            </div>
+                        </div>                        <div class="form-group col-xs-12 col-md-6">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>促销位置-2：</span></label>
+                            <input data-required-msg="促销位置-2" type="text" ng-model="alertInfo.salesSite2"
+                                   required    class="form-control radius3">
+                        </div>
+                    </div>                        <div class="form-group col-xs-12 col-md-6">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>收费标准序号：</span></label>
+                            <input data-required-msg="收费标准序号" type="text" ng-model="alertInfo.deptItemNo"
+                                   required    class="form-control radius3">
+                        </div>
+                    </div>                        <div class="form-group col-xs-12 col-md-6">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>收费标准：</span></label>
+                            <input data-required-msg="收费标准" type="text" ng-model="alertInfo.deptItemName"
+                                   required    class="form-control radius3">
+                        </div>
+                    </div>
+
+
+
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="saveInfo(salesSiteForm.$invalid)" validate-form-btn=""
+                                    data-validate-form="salesSiteForm" id="saveDriverBtn" class="btn btn-primary mr10">保存
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+
+</div>

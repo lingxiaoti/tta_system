@@ -1,0 +1,96 @@
+<div ng-controller="saafQuestionnaireViewCtrl">
+
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <div>
+            <!--------------------- 按钮--->
+            <div class="bg-gray-white bt">
+                <div class="bg-gray-white p5">
+                    <div class="btn-group btn-group-xs ">
+                        <button type="button" class="btn btn-primary" ng-click="fullWindow($event)"><i
+                                class="fa fa-square-o"></i>数据全屏
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!---------------------  / .按钮  --->
+            <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                <div class="nicescroll-height  bg-white " ng-nicescroll
+                     nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                    <div style="padding:20px 30px;">
+                        <div style="padding:20px;border: 1px dashed #ddd;">
+                            <p class="text-center">
+                                <strong style="font-size: 24px;">{{headList[0].qnTitle}}</strong>
+                                <span style="font-size: 14px;padding-left: 10px;">{{headList[0].qnCode}}</span>
+                            </p>
+                            <p style="padding-top: 10px;padding-left: 10px;font-size: 16px;">{{headList[0].description}}</p>
+                            <div class="lineListInfo" ng-repeat="(itemIndex,item) in lineList"
+                                 ng-class="{'active':selectRow==$index}">
+                                <div ng-show="item.showFlag">
+                                    <p><span style="color:red;" ng-show="item.requireFlag=='Y'">*</span>
+                                        <strong style="font-size:15px;font-weight: 600;">Q{{$index+1}}：{{item.projectTitle}}</strong></p>
+                                    <!--不同题型不同的状态-->
+                                    <p ng-show="item.projectType=='text'" ng-repeat="subItem in item.qnChoiceData">
+                                        <!--输入框使用-->
+                                        <input type="text" style="max-width: 500px;" class="form-control radius3"
+                                               ng-change="changeText(itemIndex,item)" ng-readonly="hideSubmitBtnFlag"
+                                               ng-model="item.itemValue">
+                                    </p>
+                                    <p ng-show="item.projectType=='textarea'" ng-repeat="subItem in item.qnChoiceData">
+                                        <!--输入框使用-->
+                                        <textarea rows="5"  style="max-width: 600px;height:100%;" class="form-control radius3" ng-readonly="hideSubmitBtnFlag"
+                                                  ng-change="changeText(itemIndex,item)" ng-model="item.itemValue" maxlength="500"></textarea>
+                                    </p>
+                                    <p ng-show="item.projectType=='single_selection'"
+                                       ng-repeat="subItem in item.qnChoiceData">
+                                        <!--单选框使用-->
+                                        <input type="radio" name="{{item.qnLineId}}" ng-disabled="hideSubmitBtnFlag"
+                                               ng-click="changeRadio(itemIndex,subItem)">
+                                        {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                    </p>
+                                    <p ng-show="item.projectType=='multi_selection'"
+                                       ng-repeat="(subIndex,subItem) in item.qnChoiceData">
+                                        <!--复选框使用-->
+                                        <input type="checkbox" name="{{item.testQnLineId}}"
+                                               ng-model="subItem.itemValue" ng-readonly="hideSubmitBtnFlag"
+                                               ng-click="changeCheckbox(itemIndex,subItem)">
+                                        {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                    </p>
+                                    <p ng-show="item.projectType=='drop_down_list'">
+                                        <!--下拉框使用-->
+                                        <select class="form-control radius3" style="max-width: 500px;"
+                                                ng-change="changeSelect(itemIndex,item)" ng-disabled="hideSubmitBtnFlag"
+                                                ng-model="item.itemValue">
+                                            <option ng-repeat="(subIndex ,subItem) in item.qnChoiceData"
+                                                    value="{{subIndex}}">
+                                                {{subItem.qnChoiceContent}}
+                                            </option>
+                                        </select>
+                                    </p>
+
+                                    <p ng-show="item.projectType=='single_selection_skip'"
+                                       ng-repeat="subItem in item.qnChoiceData">
+                                        <!--单选框跳题使用-->
+                                        <input type="radio" name="{{item.testQnLineId}}" ng-disabled="hideSubmitBtnFlag"
+                                               ng-click="changeRadioSkip(itemIndex,subItem)">
+                                        {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                    </p>
+                                    <p ng-show="item.projectType=='single_selection_show'"
+                                       ng-repeat="subItem in item.qnChoiceData">
+                                        <!--单选框显示题目使用-->
+                                        <input type="radio" name="{{item.testQnLineId}}" ng-disabled="hideSubmitBtnFlag"
+                                               ng-click="changeRadioShow(itemIndex,subItem)">
+                                        {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center" style="margin-top: 20px;" ng-show="allowUpdate && !hideSubmitBtnFlag">
+                            <button type="button" class="btn btn-primary" ng-click="submitSurvey()">提交问卷</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

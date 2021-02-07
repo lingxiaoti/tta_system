@@ -1,0 +1,64 @@
+<div ng-controller="maintenanceApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOrUpdateMaintenanceApply"
+     data-api-get="findAssetMaintenanceDetailById" data-api-del="deleteAssetMaintenanceItem" data-api-update="updateMaintenanceApply">
+        <div class="col-md-12 pt15 pb10 oh">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" data-load-callback="respCallback" style="display: none"></div>
+            <div class="row">
+                <div search-form
+                     data-col="4"
+                     data-legend="[
+                        {key:'deptName',label:'申请部门',readonly:true,required:true},
+                        {key:'personName',label:'申请人',readonly:true,required:true},
+                        {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                        {key:'billNo',label:'申请单号',readonly:true},
+                        {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                        {key:'statusStr',label:'状态',readonly:true},
+                      ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+        </div>
+
+        <div class="col-md-12" >
+            <label><span class="fa fa-cog mr15"></span>报修详情</label>
+            <button type="button" class="btn btn-default btn-xs pull-right"  ng-show="childData.isEdit"
+                    ng-click="tableEndit.addTableRows({assetId:-1})"><i class="fa fa-plus">增加</i></button>
+        </div>
+        <div class="col-md-12">
+            <div base-data-table-edit="tableEndit"
+                 data-legend="[
+                    {value:'assetCode',name:'资产编号',disabled:true,type:'lov',target:'#assetMaterialModel',callback:'setRowIndex',required:true},
+                    {value:'assetName',name:'资产名称',readonly:true},
+                    {value:'assetModel',name:'规格/型号',readonly:true},
+                    {value:'maintenanceScrapReason',name:'维修原因',required:true,maxlength:'200',placeholder:' '},
+                ]"
+                 data-form-params-key="items"
+                 ng-model="formParams"></div>
+        </div>
+        <div class="col-md-12 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+    </div>
+    <div lov-list="assetMaterial" role="dialog" data-title="固定资产列表" id="assetMaterialModel" ng-model="code1"
+             data-url="findAssetMaterialPaginationByOrgId"
+             data-params="{'status': '1','queryType':'maintenance','orgId':'{{formParams.orgId}}'}"
+             data-pagination="{'pageIndex':'1','pageRows':'5'}"
+             data-checked-type="radio"
+             data-keys="{'key':'assetCode','value':'assetCode',name:'资产编号'}"
+             data-show-index="false"
+             data-other-column="[
+              {'name':'资产名称','key':'assetName'},
+              {'name':'规格/型号','key':'assetModel'},
+              {'name':'使用部门','key':'deptName'},
+              {'name':'当前使用人姓名','key':'assetUserPerson'}
+             ]"
+             data-search-key="[{'key':'assetCode','placeholder':'资产编号'},{'key':'assetName','placeholder':'资产名称'}]"
+             data-callback="setRowInput"
+        >
+        </div>
+</div>

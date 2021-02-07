@@ -1,0 +1,123 @@
+<div>
+    <form  name="approvalForm"  id="approvalForm" >
+        <div class="modal fade" id="approvalFormModal" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            {{ apporvalParamsBtn }}
+                        </h4>
+                    </div>
+
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col col-xs-12 col-md-12"  ng-if="apporvalParamsBtn==='增加助审'">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span><i class="red">*</i>{{ $l('助审标题') }}：</span></label>
+                                        <input class="form-control radius3" ng-model="addParams.helpApporvalTitle" name="addParams_helpApporvalTitle" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-12 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>{{  apporvalParamsBtn==='增加助审'? '助审描述':'审批意见' }}：</span></label>
+                                        <textarea required class="radius3-4 w100p" rows="3" ng-model="addParams.opinion" name="approvalOpinion" ></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group col col-xs-12 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="">{{ $l('快捷回复') }}：</span></label>
+                                        <select class="form-control radius3 " ng-model="showParams.opinion" ng-change="toOpinion()" name="addParams_Opinion">
+                                            <option value="同意审核">同意审核</option>
+                                            <option value="建议通过，同意">建议通过，同意</option>
+                                            <option value="请补充附件">请补充附件</option>
+                                            <option value="不同意">不同意</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-12 col-md-12"  ng-if="apporvalParamsBtn==='发消息'">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span><i class="red">*</i>{{ $l('接收人') }}：</span></label>
+                                        <select class="form-control radius3 " ng-model="addParams.receiverId"  required  name="addParams_receiverId">
+                                            <option value>请选择</option>
+                                            <option value="{{ item.userId}}" ng-repeat="item in taksUserList"> {{  item.userName}}</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col col-xs-12 col-md-12"  ng-if="apporvalParamsBtn==='驳回重审'">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span><i class="red">*</i>{{ $l('选择节点') }}：</span></label>
+                                        <select class="form-control radius3 " ng-model="addParams.taskDefinitionId"  required  name="addParams_taskDefinitionId">
+                                            <option value>请选择</option>
+                                            <option value="{{ item.taskDefinitionId}}" ng-repeat="item in taskList"> {{  item.taskName}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-12 col-md-12"  ng-if="apporvalParamsBtn==='增加助审'">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>{{ $l('助审人') }}：</span></label>
+                                        <input class="radius3 form-control" required  ng-model="showParams.people" name="approvalpeople" disabled >
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#lovUserFind" >
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!--  <div class="form-group col col-xs-12 col-md-12"  ng-if="apporvalParamsBtn==='增加助审'">
+                                      <div class="input-group input-group-xs">
+                                          <label class="input-group-addon bn"><span><i class="red">*</i>{{ $l('节点选择') }}：</span></label>
+                                          <select class="form-control radius3 " required ng-model="showParams.before"   name="showParams_before">
+                                              <option value="0">在我之前审核</option>
+                                              <option value="1">在我之后审核</option>
+                                          </select>
+                                      </div>
+                                  </div>-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true">{{ $l('取消')}}
+                            </button>
+                            <button type="button" ng-click="btnApproval()"
+                                    validate-form-btn="approvalForm" class="btn btn-primary mr10">确定
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+    </form>
+    
+    <div lov-list="LovAssessing" id="LovAssessing" data-url="processFindTaskUsers" ng-model="current.assessing" data-title="审批人选择"
+         data-callback="setAuditor"
+         data-dynamic-params='LovAssessingParams'
+         data-checked-type="checkbox"
+         data-keys="{'key':'userId','value':'userFullName','name':'姓名'}"
+         data-other-column="[{'key':'userName','name':'账号  '}]"
+    ></div>
+
+    <div lov-list="lovUserFind" id="lovUserFind" data-url="userFind" ng-model="current.userFind" data-title="助审批人"
+         data-checked-type="radio"
+         data-return-key="addParams.helpApporvalUserId"
+         data-return-value="showParams.people"
+         data-search-key="[{'key':'userFullName','placeholder':'请输入员工姓名'},{'key':'userName','placeholder':'请输入员工编号'}]"
+         data-keys="{'key':'userId','value':'userFullName','name':'账号'}"
+         data-other-column="[{key:'userName',name:'员工姓名'}]"
+    ></div>
+</div>

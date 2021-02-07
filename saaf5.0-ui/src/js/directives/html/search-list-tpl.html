@@ -1,0 +1,62 @@
+<div class="form-group col-xs-6 col-md-{{ item.col?item.col:col }}" ng-repeat="item in formList">
+    <div class="input-group input-group-xs " ng-class="item.key +'_'+ $index">
+
+
+
+        <label class="input-group-addon bn" ng-if="item.type !=='ztreeSelect'">
+            <span class="w100"><i class="red" ng-if="isRequired(item)">* </i>{{item.label }}</span>
+        </label>
+        <input ng-if="item.type == 'text'|| item.type == 'lov' || !item.type" type="text" class="form-control radius3 {{ item.css}}"
+               ng-disabled="item.disabled" ng-readonly="item.readonly" ng-required="isRequired(item)" maxlength="{{item.maxlength}}"
+               name="{{ ngModelName +'_'+ item.key }}" data-required-msg="{{ item.requiredMsg }}"  data-error-msg="{{ item.errorMsg }}"  title="{{item.title||''}}"
+               ng-change="inputCallback(item.callback,$index,item.key)"
+               id="{{ ngModelName +'_'+ item.key }}" placeholder="{{item.placeholder||''}}"
+               data-toggle="modal" data-target="{{ item.target }}"
+               ng-model="ngModel[item.key]">
+        <input ng-if="item.type == 'autoComplete'|| item.type == 'lovAutoComplete'" type="text" class="form-control radius3 {{ item.css}}"
+               ng-required="isRequired(item)" maxlength="{{item.maxlength}}" auto-complete=""
+               data-url="{{ item.options.url}}"
+               ng-change="inputCallback(item.callback,$index,item.key)"
+               data-keys='{{ item.options.keys}}'
+               data-options="{{ item.options }}"
+               placeholder="{{item.placeholder||''}}"
+               data-return-key="ngModel[item.options.returnKey]"
+               data-params="{{ item.options.params }}"
+               title="{{item.title||''}}"
+               name="{{ ngModelName +'_'+ item.key }}" data-required-msg="{{ item.requiredMsg }}"  data-error-msg="{{ item.errorMsg }}"
+               id="{{ ngModelName +'_'+ item.key }}"
+               ng-model="ngModel[item.key]">
+
+        <div ng-if=" item.type == 'lookCode'||item.type == 'lookUpCode'||item.type == 'lookupCode'" lookup-code="{{ item.lookCode||item.lookUpCode||item.lookupCode }}" ng-model="ngModel[item.key]"
+             data-other-type="{{item.otherType}}"
+             ng-required="item.required"  data-required-msg="{{ item.requiredMsg }}"  data-error-msg="{{ item.errorMsg }}"
+             id="{{ ngModelName +'_'+ item.key }}"
+             name="{{ ngModelName +'_'+ item.key }}" ng-disabled="item.disabled" ng-readonly="item.readonly"></div>
+        <!--<select ng-if="item.type == 'lookCode'||item.type == 'lookUpCode'" select2 ng-model="ngModel[item.key]" class="form-control radius3" placeholder="" ng-change="change()" ng-required="item.required">-->
+        <!--<option value="">{{firstText}}</option>-->
+        <!--<option ng-repeat="s in lookUpData" value="{{s.lookupCode}}" ng-bind="s.meaning"></option>-->
+        <!--</select>-->
+
+        <input type="text" class="form-control radius3 input-xs {{ item.css}}" ng-required="item.required" ng-disabled="item.disabled"
+               ng-readonly="item.readonly"  data-required-msg="{{ item.requiredMsg }}"  data-error-msg="{{ item.errorMsg }}"
+               id="{{ ngModelName +'_'+ item.key }}" placeholder="{{item.placeholder||''}}"
+               name="{{ ngModelName +'_'+ item.key }}"
+               ng-if="item.type == 'time'"
+               placeholder="{{item.placeholder||''}}"
+               data-stratdate="{{ ngModel[item.startDate]}}"
+               data-enddate="{{ ngModel[item.endDate]}}"
+               date-time-picker
+               data-minute-step="{{item.minuteStep}}"
+               data-is-today="{{ item.isToday}}"
+               title="{{item.title||''}}"
+               data-start-view="{{ startView(item.date)}}"
+               data-date-format="{{ item.date || 'yyyy-mm-dd' }}"
+               ng-change="inputCallback(item.callback,$index,item.key)"
+               data-min-view="{{ minView(item.date)}}"
+               ng-model="ngModel[item.key]">
+        <span class="input-group-btn" ng-if="item.type == 'lovAutoComplete' || item.type==='lov' " ng-click="callback(item.callback,$index,item.key)" data-toggle="modal" data-target="{{ item.target }}">
+           <a class="btn btn-default"><i class="fa fa-search"></i></a>
+        </span>
+
+    </div>
+</div>

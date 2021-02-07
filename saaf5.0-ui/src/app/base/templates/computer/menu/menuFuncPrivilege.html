@@ -1,0 +1,95 @@
+<div ng-controller="menuFuncPrivilegeCtrl" class="gridtable" data-desc="角色分配菜单">
+	<div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+		<!--------------------- 按钮--->
+		<div class="bg-gray-white bt">
+			<div class="bg-gray-white p5">
+
+				<div class="btn-group btn-group-xs pull-right ml10" permission-buttons="btnSave" ng-if="!currentResp.isAdmin">
+					<button class="btn btn-default" ng-click="btnSave()"><i class="fa fa-save"></i>保存</button>
+				</div>
+
+				<div class="btn-group btn-group-xs pull-right ml10" ng-if="currentResp.isAdmin">
+					<button class="btn btn-default" ng-click="btnSave()"><i class="fa fa-save"></i>保存</button>
+				</div>
+
+				<div class="btn-group btn-group-xs ">
+					<button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!---------------------  / .按钮  --->
+
+		<div class="bg-white " main-scroll-style>
+			<!--------------------- 输入表单  --->
+
+			<!--------------------- ./  输入表单  --->
+			<!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+			<div class="col-xs-4 col-md-4 br  p0" style="margin-right: -1px; height: 100%; ">
+				<form class="  m10" ng-submit="dataTable.search(1)">
+					<div class=" input-group-xs col-xs-6" ng-if="currentResp.isAdmin">
+						<div lookup-code="SYSTEM_CODE" ng-model="params.systemCode" data-first-text="全部系统"  data-callback="search"></div>
+					</div>
+					<div class="input-group input-group-xs" ng-class="{'col-xs-6':currentResp.isAdmin,'col-xs-12':!currentResp.isAdmin}">
+
+						<input type="text" class="form-control " ng-model="params.roleName"
+							   placeholder="请输入角色名称">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary btn-xs "><i
+									class="fa fa-search"></i>
+							</button>
+                        </span>
+					</div>
+
+				</form>
+				<div base-data-table="dataTable"
+					 ng-params="params"
+					 data-paging-class="min-paging"
+					 data-show-index="true"
+					 data-url="roleList"
+					 data-legend="[{'value':'roleName','name':'角色名称'}]"
+					 data-callback="[{'value':'roleName','callback':'getRespData'}]"
+				></div>
+			</div>
+
+			<!--ng-show="dataTable.selectRow"-->
+			<div ng-show="dataTable.selectRow">
+				<div main-scroll-style class="col-xs-4 col-md-3 br bl" style="margin-right: -1px;" 　
+					 data-des="此节点必需－用户计算滚动区域高度">
+					<div class="nicescroll-height  " ng-nicescroll
+						 nice-option="{cursorcolor: '#1e90c2',cursorwidth:5}"
+						 data-des="此节点必需-滚动内容及指令">
+						<ul z-tree="" class="ztree p10" id="menuTree"
+							data-url="menuListByButton"
+							data-params='{{params}}'
+							data-watch="true"
+							data-check="true" data-edit='{"enable":false,"showRemoveBtn":false,"showRenameBtn":false}'
+							data-keys='{"name":"menuName"}'
+							data-simpledata='{"enable":true,"idKey":"menuId","pIdKey":"menuParentId"}'>
+						</ul>
+					</div>
+				</div>
+				<div main-scroll-style class="col-xs-4 col-md-4 bl h">
+					<a href="javascript:" class="tree-copy none" ng-click="treeCopy()" title="分配菜单">
+						<span class="fa fa-angle-double-right"></span>
+					</a>
+					<div class="nicescroll-height  " ng-nicescroll
+						 nice-option="{cursorcolor: '#1e90c2',touchbehavior:true,cursorwidth:5}"
+						 data-des="此节点必需-滚动内容及指令">
+						<h5>已分配菜单</h5>
+						<ul z-tree="" class="ztree h" id="existing"
+							data-keys='{"name":"menuName"}'
+							data-edit='{"enable":true,"showRemoveBtn":false,"showRenameBtn":false}'
+							data-simpledata='{"enable":"true","idKey":"menuId","pIdKey":"menuParentId"}'>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+		</div>
+
+	</div>
+
+</div>

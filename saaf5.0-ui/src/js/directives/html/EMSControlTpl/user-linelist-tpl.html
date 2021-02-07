@@ -1,0 +1,94 @@
+<div class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content {{ css}}">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">{{title}}
+                    <small> {{ subTitle}}</small>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div style="max-height: 450px;position: relative;">
+
+                    <div class="search pb10">
+
+                        <form ng-submit="dataTableSelection.search(1)" class="row">
+                            <div class="form-group col-md-12">
+                                <div class="input-group input-group-sm">
+                                    <label class="input-group-addon bn">人员姓名</label>
+                                    <input type="text" required class="form-control radius3" name="userName"
+                                           ng-model="params.personName">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary btn-sm"
+                                                ng-click="dataTableSelection.search(1)">
+                                            <i class="fa fa-search mr5"></i>搜索
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!--<div class="form-group col-xs-2 col-md-2">-->
+                                <!--<div class="input-group input-group-xs input-group-sm">-->
+                                    <!--<button type="button" class="btn btn-primary btn-sm"-->
+                                            <!--ng-click="dataTableSelection.search(1)">-->
+                                        <!--<i class="fa fa-search mr5"></i>搜索-->
+                                    <!--</button>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                        </form>
+                    </div>
+
+                    <div class="data-table">
+                        <fieldset class="currentList mb10" ng-show="dataTableSelection.selectRow">
+                            <legend class="text-brand-primary">当前挑选</legend>
+                            <ul>
+                                <li>
+                                    <label>
+                                        <input type="radio" checked="checked"
+                                               ng-value="dataTableSelection.selectRow.personName">
+                                        {{dataTableSelection.selectRow.personName}}
+                                    </label>
+                                </li>
+                            </ul>
+                        </fieldset>
+                        <div base-data-table="dataTableSelection"
+                             data-auto-request="false"
+                             data-checked-type="radio"
+                             data-keys="{'key':'accessId','value':'personId',delKey:'id',delKeyType:'array'}"
+                             ng-params="params"
+                             data-show-index="true"
+                             data-url="personLineList"
+                             data-onload=""
+                             data-page-size="5"
+                             data-legend="[
+                                {'value':'departmentName','name':'部门'},
+                                 {'value':'personId','name':'员工编号'},
+                                 {'value':'personName','name':'姓名'},
+                                 {'value':'positionName','name':'职位'}
+                             ]"
+                        ></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div style="padding: 3px 10px;">
+                    <button type="button" ng-class="{'mt10': paging.total }" class="btn btn-default btn-sm "
+                            data-dismiss="modal">取消
+                    </button>
+                    <button type="button" ng-class="{'mt10': paging.total }" class="btn btn-default btn-sm "
+                            ng-click="cancel()" data-dismiss="modal">清除选择
+                    </button>
+                    <button type="button" ng-class="{'mt10': paging.total }" class="btn btn-primary btn-sm "
+                            ng-click="callback()" data-dismiss="modal">确定
+                    </button>
+                </div>
+
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+
+</div>
+

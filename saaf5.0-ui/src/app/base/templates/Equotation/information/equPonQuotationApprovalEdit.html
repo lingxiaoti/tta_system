@@ -1,0 +1,717 @@
+<div ng-controller="equPonQuotationApprovalEditCtrl" class="bigdata">
+    <div>
+        <!--------------------- 按钮--->
+        <div id="processForm"
+             data-api-post="saveEquPonQuoApprove"
+             data-api-get="findPonQuotationApprovalDatail"
+             data-api-update="saveEquPonQuoApprove">
+        </div>
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white p5">
+            <div class=" pull-right ml10">
+
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" permission-btn="btnSave" data-validate-form="userForm"></button>
+                </div>
+            </div>
+            <div class="btn-group btn-group-xs ">
+                <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>{{ $l('数据全屏')}}
+                </button>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+
+                <!--工作流集成添加TAB-->
+                <ul ng-if="!urlParams.businessKey" class="nav nav-tabs mt10">
+                    <li role="presentation" class="active" ng-click="tabChange('requestFundsBusiness')">
+                        <a href="#requestFundsBusiness" aria-controls="requestFundsBusiness" role="tab"
+                           data-toggle="tab">{{ $l('业务表单')}}</a>
+                    </li>
+                    <li role="presentation" ng-click="tabChange('approvalHistory')">
+                        <a href="#approvalHistory" aria-controls="approvalHistory" role="tab" data-toggle="tab">{{ $l('审批历史')}}</a>
+                    </li>
+                    <li role="presentation" ng-click="tabChange('opinion')">
+                        <a href="#opinion" aria-controls="opinion" role="tab" data-toggle="tab">{{ $l('流程图')}}</a>
+                    </li>
+                    <li ng-show="tabAction=='opinion'">
+                        <ul>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #cc0033;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">{{ $l('未接收')}}</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #ff6600;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">{{ $l('办理中')}}</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #339933;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">{{ $l('已办结')}}</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #666666;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">{{ $l('预设步骤')}}</span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class=" mt10 pb5  oh" ng-show="tabAction== 'requestFundsBusiness'"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form id="userForm" name="userForm">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>{{ $l('报价结果审批详情')}}</span>
+                            <div class="pull-right ml10">
+                                <div class="btn-group btn-group-xs ">
+                                    <button class="btn btn-default" ng-if="stopFlag&&userId==params.createdBy"
+                                            type="button" ng-click="btnSubmit('stop')">
+                                        <i class="fa fa-search" aria-hidden="true"></i>{{ $l('终止')}}
+                                    </button>
+                                    <!--<button class="btn btn-default" ng-if = "approveFlag" type="button" ng-click="save('approve')">-->
+                                    <!--<i class="fa fa-undo" aria-hidden="true"></i>通过-->
+                                    <!--</button>-->
+                                    <!--<button class="btn btn-default" ng-if = "approveFlag" type="button" ng-click="save('reject')">-->
+                                    <!--<i class="fa fa-search" aria-hidden="true"></i>驳回-->
+                                    <!--</button>-->
+                                    <button class="btn btn-default" ng-if="saveFlag" type="button"
+                                            ng-click="save('save')">
+                                        <i class="fa fa-search" aria-hidden="true"></i>{{ $l('保存')}}
+                                    </button>
+                                    <button class="btn btn-default" ng-if="submitFlag" type="button"
+                                            ng-click="btnSubmit('submit')">
+                                        <i class="fa fa-undo" aria-hidden="true"></i>{{ $l('提交')}}
+                                    </button>
+                                    <button class="btn btn-default"
+                                            ng-if="params.approvalStatus==10&&userId==params.createdBy&&params.orderType==20"
+                                            type="button" ng-click="save('second')">
+                                        <i class="fa fa-undo" aria-hidden="true"></i>{{ $l('发送二次报价邀请')}}
+                                    </button>
+
+                                    <button class="btn btn-default"
+                                            ng-if="params.approvalStatus=='30'&&userId==params.createdBy" type="button"
+                                            ng-click="sendResults('submit')">
+                                        <i class="fa" aria-hidden="true"></i>{{ $l('发送竞价结果')}}
+                                    </button>
+                                </div>
+                                <!--<div class="btn-group btn-group-xs "    permission-buttons="btnNew,btnModify"></div>-->
+                            </div>
+                        </header>
+
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">{{ $l('报价审批单号')}}</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="params.approvalNumber">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">{{ $l('单据状态')}}</span></label>
+
+                                <select class="form-control radius3" disabled
+                                        ng-model="params.approvalStatus">
+                                    <option></option>
+                                    <option saaf-select-lookupcode=" EQU_PON_APPROVAL_STATUS"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">*</i>{{ $l('单据类型')}}</span></label>
+                                <select class="form-control radius3" ng-disabled="params.approvalStatus!='10'"
+                                        ng-change="changeShowFlag()"
+                                        ng-model="params.orderType">
+                                    <option saaf-select-lookupcode=" EQU_PON_ORDER_TYPE"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">*</i>{{ $l('审批类型')}}</span></label>
+                                <select class="form-control radius3" ng-disabled="params.approvalStatus!='10'&&params.approvalStatus!='40'"
+                                        ng-model="params.approvalType">
+                                    <option></option>
+                                    <option saaf-select-lookupcode=" EQU_PON_APPROVE_TYPE"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">*</i>{{ $l('评分单号')}}</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="params.scoringNumber">
+                                <span class="input-group-btn ng-scope" ng-if="params.approvalId == null">
+                                    <button class="btn btn-default" ng-click="showComplain()" ng-disabled="!saveFlag"
+                                            type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('项目名称')}}</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="params.projectName">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('部门')}}</span></label>
+                                <input type="text" class="form-control radius3" disabled ng-model="param.deptName">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('项目品类')}}</span></label>
+                                <select class="form-control radius3" disabled
+                                        ng-model="params.relevantCatetory">
+                                    <option saaf-select-lookupcode=" EQU_PROJECT_CATEGORY"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('项目类型')}}</span></label>
+
+                                <select class="form-control radius3" disabled
+                                        ng-model="params.projectCategory">
+                                    <option saaf-select-lookupcode=" EQU_PROJECT_TYPE"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('系列名称')}}</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-disabled="params.supRecoverStatus!='20'"
+                                       ng-model="params.seriesName"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('采购金额(元)')}}</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="params.projectPurchaseAmount">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('项目周期')}}</span></label>
+                                <input type="text" class="form-control radius3" disabled ng-model="params.projectCycle">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs" ng-if="params.orderType=='10'">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('报价截止时间')}}</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="params.quotationDeadline">
+                            </div>
+
+                            <div class="input-group input-group-xs" ng-if="params.orderType=='20'">
+                                <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>{{ $l('二次议价截止日期')}}</span></label>
+                                <input type="text" class="form-control radius3"
+                                       date-time-picker data-date-format="yyyy-mm-dd HH:mm:ss"
+                                       data-enddate="{{today}}"
+                                       ng-disabled="params.approvalStatus!='10'"
+                                       data-start-view="2"
+                                        placeholder="" ng-model="params.secondQuotationDeadline">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('项目负责人')}}</span></label>
+                                <input type="text" class="form-control radius3" disabled ng-model="params.userFullName">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('创建时间')}}</span></label>
+                                <input type="text" class="form-control radius3" disabled ng-model="params.creationDate">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('项目现合作供应商')}}</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="params.presentCooperationSupplier">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('评分标准')}}</span></label>
+                                <a ng-click="edit(params.standardsId)">{{params.scoringStandard}}</a>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-10 col-md-10">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('备注说明')}}</span></label>
+                                <textarea rows="2" cols="171" disabled
+                                          ng-model="params.remark"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-10 col-md-10">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{ $l('驳回原因')}}:</span></label>
+                                <textarea rows="2" cols="171" ng-disabled="params.approvalStatus!='20'"
+                                          ng-model="params.rejectReason"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12">
+
+                            <div ng-if="params.orderType == '10'">
+
+                                <i class="fa "
+                                   aria-hidden="true" style="font-size: 15px;cursor: pointer;">{{ $l('报价资料开启信息')}}</i>
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>Invited suppliers</th>
+                                            <th ng-repeat="column in supplierInvitationListColumns">
+                                                {{column.supplierName}}
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">1st rount opening("Y"
+                                                or "N")
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in supplierInvitationListColumns">
+                                                {{firstRountParamter[column.supplierNumber]}}
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">2st rount opening("Y"
+                                                or "N")
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in supplierInvitationListColumns">
+                                                {{secondRountParamter[column.supplierNumber]}}
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">Remark(reasons for NOT
+                                                qualified for<br> 2nd round opening,e.g. fail to fulfill the<br>
+                                                requirement on key ingredient /<br>packaging)
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in supplierInvitationListColumns"><textarea
+                                                    type="text" rows="4" disabled
+                                                    class="form-control input-xs"
+                                                    ng-model="operationRemarkParamter[column.supplierNumber]"/>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                            <i class="fa " ng-if="params.orderType == '20'"
+                               aria-hidden="true" style="font-size: 15px;cursor: pointer;">{{ $l('二次议价供应商选择')}}</i>
+                            <i class="fa " ng-if="params.orderType == '10'"
+                               aria-hidden="true" style="font-size: 15px;cursor: pointer;">Evaluation</i>
+                            <div class="data-table">
+                                <table
+                                        class="table table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <th>Value</th>
+                                        <th>Weighting%</th>
+                                        <th ng-repeat="column in nonPriceCalColumns">{{column.supplierName}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!--<tr class="text-center">-->
+                                    <tr class="text-center" ng-repeat="row in nonPriceCalTable"
+                                        ng-class="{'active':nonPriceCalTable.selectRow==$index}"
+                                        ng-click="nonPriceCalTable.selectRow=$index">
+                                        <td style="text-align:left;vertical-align:middle;"><span><span
+                                                ng-if="row.lineNumber.length > 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>{{row.lineNumber}}&nbsp;</span>{{row.gradingDivision}}
+                                        </td>
+                                        <td style="text-align:center;vertical-align:middle;"><span
+                                                ng-if="row.lineNumber.length > 1">{{row.weight}}%</span>
+                                        </td>
+                                        <td style="text-align:center;vertical-align:middle;"
+                                            ng-repeat="column in nonPriceCalColumns">{{row[column.supplierNumber]}}
+                                        </td>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td style="text-align:left;vertical-align:middle;">Total
+                                        </td>
+                                        <td style="text-align:center;vertical-align:middle;">
+                                            100%
+                                        </td>
+                                        <td style="text-align:center;vertical-align:middle;"
+                                            ng-repeat="column in nonPriceCalColumns">
+                                            {{quotationCalTotalParamter[column.supplierNumber]}}
+                                        </td>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td style="text-align:left;vertical-align:middle;" colspan="2">Scoring Ranking
+                                        </td>
+                                        <td style="text-align:center;vertical-align:middle;"
+                                            ng-repeat="column in nonPriceCalColumns">
+                                            <span ng-if="quotationCalRankParamter[column.supplierNumber] != undefined">{{ $l('第')}}</span>{{quotationCalRankParamter[column.supplierNumber]}}<span
+                                                ng-if="quotationCalRankParamter[column.supplierNumber] != undefined">{{ $l('名')}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr ng-repeat="row in nonPriceCalChange">
+                                        <td ng-if="params.orderType == '20'"
+                                            style="text-align:left;vertical-align:middle;">{{ $l('选择二次议价供应商')}}
+                                        </td>
+                                        <td ng-if="params.orderType == '10'"
+                                            style="text-align:left;vertical-align:middle;">{{ $l('选择获选供应商')}}
+                                        </td>
+                                        <td style="text-align:center;vertical-align:middle;"><span
+                                                ng-if="row.lineNumber.length > 1"></span>
+                                        </td>
+                                        <td style="text-align:center;vertical-align:middle;"
+                                            ng-repeat="column in nonPriceCalColumns"><input
+                                                ng-disabled="params.approvalStatus!='10'&&params.approvalStatus!='40'"
+                                                type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                                class="radius3 ng-pristine ng-untouched ng-valid ng-empty"
+                                                ng-model=row[column.supplierNumber]>
+                                        </td>
+                                    </tr>
+
+
+                                    <!--<tr class="text-center">-->
+                                    <!--<td style="text-align:left;vertical-align:middle;">Total-->
+                                    <!--</td>-->
+                                    <!--<td style="text-align:center;vertical-align:middle;">-->
+                                    <!--100%-->
+                                    <!--</td>-->
+                                    <!--<td style="text-align:center;vertical-align:middle;"-->
+                                    <!--ng-repeat="column in nonPriceCalColumns">-->
+                                    <!--{{quotationCalTotalParamter[column.supplierNumber]}}-->
+                                    <!--</td>-->
+                                    <!--</tr>-->
+                                    <!--<tr class="text-center">-->
+                                    <!--<td style="text-align:left;vertical-align:middle;" colspan="2">Scoring Ranking-->
+                                    <!--</td>-->
+                                    <!--<td style="text-align:center;vertical-align:middle;"-->
+                                    <!--ng-repeat="column in nonPriceCalColumns">-->
+                                    <!--<span ng-if="quotationCalRankParamter[column.supplierNumber] != undefined">第</span>{{quotationCalRankParamter[column.supplierNumber]}}<span ng-if="quotationCalRankParamter[column.supplierNumber] != undefined">名</span>-->
+                                    <!--</td>-->
+                                    <!--</tr>-->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                        <div ng-if="params.orderType == '20'" class="form-group col-xs-12 col-md-12">
+                            <div>
+                                <!--<i class="fa fa-caret-down"-->
+                                <!--ng-class="{true : 'fa-caret-right',false : 'fa-caret-down' }[params.selectDouble]"-->
+                                <!--aria-hidden="true" style="font-size: 22px;cursor: pointer;"-->
+                                <!--ng-click="showDouble()"></i>-->
+                                <i class="fa "
+                                   aria-hidden="true" style="font-size: 15px;cursor: pointer;">{{ $l('报价资料开启信息')}}</i>
+                                <div class="data-table">
+                                    <label style="margin-left: 10px"></label>
+                                    <!--permission-buttons="btnNew"-->
+                                    <div class="btn-group btn-group-xs ml5 pull-right">
+                                        <button type="button" class="btn btn-default btn-xs"
+                                                ng-if="params.approvalStatus=='60'"
+                                                ng-show="secondResultTable.data.length==0" ng-click="getDoubleTotal()">
+                                            <i
+                                                    class="fa fa-plus">{{ $l('二次报价总得分计算')}}</i></button>
+                                    </div>
+                                    <table saaf-table="secondResultTable"
+                                           class="table table-bordered table-hover table-condensed"
+                                           data-url="findSecondResult"
+                                           data-params="params"
+                                           data-checked-type="radio"
+                                           data-auto-get-data="false"
+                                           data-page-rows="10">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th style="width: 10%;">{{ $l('选择')}}</th>
+                                            <th>{{ $l('排名')}}</th>
+                                            <th>{{ $l('供应商名称')}}</th>
+                                            <th>{{ $l('报价编号')}}</th>
+                                            <th>{{ $l('二次报价编号')}}</th>
+                                            <th>{{ $l('非价格资料得分')}}</th>
+                                            <th>{{ $l('价格资料得分')}}</th>
+                                            <th>{{ $l('报价总得分')}}</th>
+                                            <th>{{ $l('备注说明')}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody ng-show="secondResultTable.data">
+                                        <tr class="text-center" ng-repeat="row in secondResultTable.data"
+                                            ng-disabled="params.approvalStatus!='60'"
+                                            ng-click="selectRow(row,secondResultTable.data)"
+                                            ng-class="{'active':secondResultTable.data.selectRow==$index}"
+                                            ng-click="secondResultTable.data.selectRow=$index;
+                                            secondResultTable.data.selectRowData =row;">
+
+                                            <td class="w50">
+                                                <input type="checkbox" name="isEffective" value="2"
+                                                       ng-click="selectRow(row,secondResultTable.data)"
+                                                       ng-model="row.isSelect" ng-disabled="params.approvalStatus!='60'"
+                                                       ng-true-value="'Y'" ng-false-value="'N'">
+                                            </td>
+                                            <td ng-bind="$index+1" class="w50">1</td>
+                                            <td>{{row.supplierName}}</td>
+                                            <td><a ng-click="qedit(row)">{{row.quotationNumber}}</a></td>
+                                            <td><a ng-click="sedit(row)">{{row.sQuotationNum}}</a></td>
+
+                                            <td>{{row.noPriceScore}}</td>
+                                            <td>{{row.priceScore}}</td>
+                                            <td>{{row.totalScore}}</td>
+                                            <td><input type="text" class="form-control radius3"
+                                                       ng-click="selectRow(row,secondResultTable.data)"
+                                                       ng-model="row.remark"/></td>
+
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="params.orderType == '20'" class="form-group col-xs-12 col-md-12">
+                            <div>
+                                <!--<i class="fa fa-caret-down"-->
+                                <!--ng-class="{true : 'fa-caret-right',false : 'fa-caret-down' }[params.selectDouble]"-->
+                                <!--aria-hidden="true" style="font-size: 22px;cursor: pointer;"-->
+                                <!--ng-click="showDouble()"></i>-->
+                                <i class="fa "
+                                   aria-hidden="true" style="font-size: 15px;cursor: pointer;">{{ $l('二次报价明细对比')}}</i>
+                                <div class="data-table" style="overflow-x:scroll">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white">
+                                        <tr class="text-center">
+                                            <th>{{ $l('产品')}}</th>
+                                            <th ng-repeat="column in colums">{{column.columName}}
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center" ng-repeat="row in doubleData"
+                                            ng-class="{'active':row.selectRow==row.bidHeaderId}"
+                                            ng-click="doubleData.selectRow=row.bidHeaderId">
+                                            <td>{{row.productName}}</td>
+                                            <td ng-repeat="column in colums"
+                                                ng-style="{'color':(row[column.columNumber]>0 && column.isUp == 'Y')?'red':''}">
+                                                {{row[column.columNumber]}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!--</div>-->
+                <!--</div>-->
+                <div ng-show="tabAction== 'approvalHistory'" role="tabpanel" class="tab-pane"
+                     id="approvalHistory"
+                     style="border: 0;width:100%;height: 100%;overflow-y: auto;">
+                    <div class="pl15 pr15 pr">
+                        <h5><span class="fa  fa-pencil-square-o"></span>{{ $l('审批历史')}}</h5>
+                        <div base-data-table="taskTable" id="taskTable"
+                             data-url="processFindHistoricActivities"
+                             data-page-size="20"
+                             data-onload="historicListLoad"
+                             data-auto-request="true"
+                             ng-params="processInstanceParams"
+                             data-legend='[{"value": "taskName","name": "节点名称",style:"width:10%"},
+                                 {"value": "userFullName","name": "处理人",style:"width:16%;"},
+                                 {"value": "his_detail_option","name": "处理结果",style:"width:8%;"},
+                                 {"value": "his_detail_opinion","name": "审批意见",nowrap:false,"maxWidth":"700px"},
+                                 {"value": "startTime","name": "审批开始时间",style:"width:136px;"},
+                                 {"value": "endTime","name": "审批结束时间",style:"width:136px;"}]'>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-if="!urlParams.businessKey" ng-show="tabAction== 'opinion'" role="tabpanel" class="tab-pane "
+                     id="opinion"
+                     style="border: 0;width:100%;height: 100%; overflow: hidden;position: relative;">
+                    <div id="processImg" style="width: 100%;height:100%; overflow: auto;">{{ $l('流程图加载中，请稍候...')}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="complainModal" ng-show="tabAction== 'requestFundsBusiness'"
+             data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" ng-click="close()"
+                                data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel1">
+                            {{ $l('评分选择')}}
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="">
+                            <div class="row">
+                                <div class="form-group col-xs-4 col-md-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w110 inline-block tr">{{ $l('项目名称')}}</span>
+                                        </label>
+                                        <input type="text" class="form-control radius3"
+                                               ng-model="current.projectName_like" required {{status}}
+                                               data-container="body" data-toggle="popover" data-trigger="manual"
+                                               data-placement="bottom" data-content="请填写产品名称"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-4 col-md-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w110 inline-block tr"> <i class="red">*</i>{{ $l('评分单号')}}</span></label>
+                                        <input type="text" class="form-control radius3" required
+                                               ng-model="current.scoringNumber_like"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-4 col-md-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w110 inline-block tr">{{ $l('单据状态')}}</span></label>
+                                        <select class="form-control radius3" disabled
+                                                ng-model="current.scoringStatus">
+                                            <option></option>
+                                            <option saaf-select-lookupcode="EQU_PON_PROJECT_STATUS"></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-4 col-md-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w110 inline-block tr">{{ $l('项目负责人')}}</span></label>
+                                        <input type="text" class="form-control radius3" disabled
+                                               ng-model="current.userName"/>
+                                    </div>
+                                </div>
+
+                                <div ng-if="param.businessFlag" class="form-group col-xs-4 col-md-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w110 inline-block tr">{{ $l('部门')}}</span></label>
+                                        <input type="text" class="form-control radius3" disabled
+                                               ng-model="current.deptCode"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-4 col-md-4">
+                                    <div class="pull-right ml10">
+                                        <div class="btn-group btn-group-xs ">
+                                            <button type="button" class="btn btn-primary"
+                                                    ng-click="lovDataTable.getData()">
+                                                <i class="fa fa-search mr5"></i>{{ $l('搜索')}}
+                                            </button>
+                                            <!--<button class="btn btn-default" type="button" ng-click="lovDataTable.restore()">-->
+                                            <!--<i class="fa fa-undo" aria-hidden="true"></i>重置-->
+                                            <!--</button>-->
+                                        </div>
+                                        <div class="btn-group btn-group-xs ">
+                                        </div>
+                                        <!--<div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify"></div>-->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <fieldset class="currentList mb10" ng-if="isLovSelect=='Y'">
+                                <legend class="text-brand-primary">{{ $l('当前挑选')}}</legend>
+                                <ul>
+                                    <li>
+                                        <label>
+                                            {{params.radioValue}}
+                                        </label>
+                                    </li>
+                                </ul>
+                            </fieldset>
+
+                            <div class="data-table">
+                                <table saaf-table="lovDataTable"
+                                       class="table table-bordered table-hover table-condensed"
+                                       data-url="findScoringInfo"
+                                       data-params="current"
+                                       data-checked-type="radio"
+                                       data-auto-get-data="false"
+                                       data-page-rows="10">
+                                    <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                    <tr class="text-center">
+                                        <th style="width: 10%;">{{ $l('选择')}}</th>
+                                        <th>{{ $l('评分单号')}}</th>
+                                        <th>{{ $l('项目名称')}}</th>
+                                        <th>{{ $l('单据状态')}}</th>
+                                        <th>{{ $l('创建时间')}}</th>
+                                        <th>{{ $l('项目负责人')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody ng-show="lovDataTable.data">
+                                    <tr class="text-center" ng-repeat="row in lovDataTable.data"
+                                        ng-click="selectProjectRow(row,lovDataTable.data)"
+                                        ng-class="{'active':lovDataTable.data.selectRow==$index}"
+                                        ng-click="lovDataTable.data.selectRow=$index;
+                                        lovDataTable.data.selectRowData =row;">
+
+                                        <td class="w50">
+                                            <input type="radio" name="isEffective" value="2"
+                                                   ng-model="row.isSelect"
+                                                   ng-checked="row.isSelect=='Y'">
+                                        </td>
+                                        <td>{{row.scoringNumber}}</td>
+                                        <td>{{row.projectName}}</td>
+                                        <td>{{row.scoringStatusMeaning}}</td>
+                                        <td>{{row.creationDate}}</td>
+                                        <td>{{current.userName}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="modal-footer">
+                                <!-- 分页-->
+                                <div saaf-table-tfoot="lovDataTable" ng-show="lovDataTable.data.length>0"></div>
+                                <div>
+                                    <!--<button type="button" ng-class="{'mt10': paging.total }" class="btn btn-default btn-sm "-->
+                                    <!--ng-click="cancel()" data-dismiss="modal">取消选择-->
+                                    <!--</button>-->
+                                    <button type="button" ng-class="{'mt10': paging.total }"
+                                            class="btn btn-primary btn-sm "
+                                            ng-click="callback()" data-dismiss="modal">{{ $l('确定')}}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

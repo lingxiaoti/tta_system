@@ -1,0 +1,733 @@
+------备份: 2019.12.17 start ------
+--purchase模式:
+ "select \n" +
+                    "       tlls.brandDetails as brandDetails,\n" +
+                    "       tlls.tranDate as tranDate,\n" +
+                    "       tlls.purchType as purchType,\n" +
+                    "       tlls.groupCode as groupCode,\n" +
+                    "       tlls.groupDesc as groupDesc,\n" +
+                    "       tlls.deptCode as deptCode,\n" +
+                    "       tlls.deptDesc as deptDesc,\n" +
+                    "       tlls.brandCn as brandCn,\n" +
+                    "       tlls.brandEn as brandEn,\n" +
+                    "       tlls.brandCode as brandCode,\n" +
+                    "       tlls.salesAmt as salesAmt,\n" +
+                    "       tlls.cancel_receiving_amt,\n" +
+                    "       tlls.total_netpurchase,\n" +
+                    "       tlls.total_brand_po_amt,\n" +
+                    "       --decode(tlls.total_brand_po_amt,0,0,round((tlls.poRecord/tlls.total_brand_po_amt) * tlls.total_netpurchase,0)) as poRecord, -- 采购额,\n" +
+                    "       --decode(tlls.total_brand_po_amt,0,0,round((tlls.fcsPurchase/tlls.total_brand_po_amt) * tlls.total_netpurchase,0)) as fcsPurchase, --预估未来的采购额,\n" +
+                    "      decode(tlls.totol_poRecord,0,0,round((tlls.poRecord/tlls.totol_poRecord) * tlls.total_netpurchase,0)) as poRecord, -- 采购额,\n" +
+                    "      decode(tlls.totol_poRecord,0,0,round((tlls.fcsPurchase/tlls.totol_poRecord) * tlls.total_netpurchase,0)) as fcsPurchase, --预估未来的采购额,\n" +
+                    "       tlls.sales as sales,\n"+
+                    "       tlls.fcsSales as fcsSales,\n"+
+                    "       --decode(tlls.total_brand_po_amt,0,0,round((tlls.fcsPurchase/tlls.total_brand_po_amt) * tlls.total_netpurchase,0)) as annualPurchase,\n"+
+                    "      decode(tlls.totol_poRecord,0,0,round((tlls.fcsPurchase/tlls.totol_poRecord) * tlls.total_netpurchase,0)) as annualPurchase,\n"+
+                    "       tlls.fcsSales as annualSales,\n"+
+                    "       tlls.actualGp as actualGp,\n" +
+                    "       tlls.gp as gp,\n" +
+                    "       tlls.gpa\n" +
+                    " from (" +
+                    " select \n" +
+                    "    mid.brandDetails,\n" +
+                    "    mid.tranDate,\n" +
+                    "    mid.purchType,\n" +
+                    "    mid.groupCode,\n" +
+                    "    mid.groupDesc,\n" +
+                    "    mid.deptCode,\n" +
+                    "    mid.deptDesc,\n" +
+                    "    mid.brandCn,\n" +
+                    "    mid.brandEn,\n" +
+                    "    mid.brandCode,\n" +
+                    "    mid.salesAmt,\n" +
+                    "    mid.cancel_receiving_amt,\n" +
+                    "    mid.total_netpurchase,\n" +
+                    "    mid.total_brand_po_amt,\n" +
+                    "    mid.fcsPurchase,\n" +
+                    "    mid.poRecord,\n" +
+                    "    mid.fcsSales,\n" +
+                    "    mid.sales,\n" +
+                    "    mid.actualGp,\n" +
+                    "    mid.gp,\n" +
+                    "    mid.gpa,\n" +
+                    "    sum(mid.poRecord) over() as totol_poRecord ,\n" +
+                    "    mid.brandPo_Record \n" +
+                    "  from \n" +
+                    " (\n" +
+                    "   select \n" +
+                    "       t.brand_Details as brandDetails,\n" +
+                    "       t.tran_date as tranDate,\n" +
+                    "       t.purch_type as purchType,\n" +
+                    "       t.group_code as groupCode,\n" +
+                    "       t.group_desc as groupDesc,\n" +
+                    "       t.dept_code as deptCode,\n" +
+                    "       t.dept_desc as deptDesc,\n" +
+                    "       t.brand_cn as brandCn,\n" +
+                    "       t.brand_en as brandEn,\n" +
+                    "       t.brand_code as brandCode,\n" +
+                    "       t.sales_amt as salesAmt,\n" +
+                    "       t.cancel_receiving_amt,\n"+
+                    "       t.total_netpurchase,\n" +
+                    "       t.total_brand_po_amt,\n"+
+                    "       t.po_Record as brandPo_Record,\n" +
+                    "       round(" + sqlPurchaseStr + ",0) as fcsPurchase,--预测未来采购成本\n" +
+                    "       round(t.po_Record-nvl(t.cancel_receiving_amt,0),0) as poRecord, --采购成本 \n" +
+                    "       round(" + sqlSalesStr + ",0) as fcsSales, --预测未来销售总金额\n " +
+                    "       round(t.TOTAL,0) as sales,--销售总金额\n " +
+                    "       case when t.TOTAL is null or t.total = 0 then 0 else round(t.gpr / t.TOTAL * 100 , 2) end as actualGp, --\n" +
+                    "       case when t.TOTAL is null or t.total = 0 then 0 else round(t.gpr / t.TOTAL * 100 , 2) end as gp, --\n" +
+                    "       case when t.TOTAL is null or t.total = 0 then 0 else round(t.gpr / t.TOTAL * 100 , 2) end as gpa\n" +
+                    "  from (\n" +
+                    "        select \n" +
+                    "               'Existing_Brand' as brand_Details,\n" +
+                    "               tcst.tran_date,\n" +
+                    "               tcst.vendor_nbr,\n" +
+                    "               tcst.purch_type,--采购类型\n" +
+                    "               tcst.group_code,\n" +
+                    "               tcst.group_desc,\n" +
+                    "               tcst.dept_code,\n" +
+                    "               tcst.dept_desc,\n" +
+                    "               tcst.brand_cn,\n" +
+                    "               tcst.brand_en,\n" +
+                    "               tcst.brand_code,\n" +
+                    "               tcst.sales_amt, --最先交易日期的销售金额\n" +
+                    "               nvl(tpur.cancel_receiving_amt,0) cancel_receiving_amt,\n"+
+                    "               nvl(rms.total_netpurchase,0) total_netpurchase, --某个供应商和关联供应商的净采购额,\n" +
+                    "               sum(tcst.po_amt) over() total_brand_po_amt, --供应商所以品牌采购总额,\n" +
+                    "               sum(tcst.po_amt) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) as po_Record, --采购成本\n" +
+                    "               sum(tcst.gp_supplier_popt_amt) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) as gpr, --销售毛利额\n" +
+                    "               sum(tcst.sales_amt) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) AS total, --销售总额\n" +
+                    "               row_number() over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en order by tcst.tran_date) flag\n" +
+                    "          from tta_collect_sales_temp tcst \n" +
+                    "       left join\n" +
+                    "          (\n" +
+                    "               select * from (\n" +
+                    "                select \n" +
+                    "                     tit.group_code,\n" +
+                    "                     tit.group_desc,\n" +
+                    "                     tit.dept_code,\n" +
+                    "                     tit.dept_desc,\n" +
+                    "                     tit.brand_code,\n" +
+                    "                     tit.brand_cn,\n" +
+                    "                     tit.brand_en,\n" +
+                    "                     tss.receiving_amount,\n" +
+                    "                     tss.vendor_nbr, \n" +
+                    "                     '"+vendorNbr+"' as split_supplier_code, \n" +
+                    "                     tss.purch_type,\n" +
+                    "                     tss.po_type,\n" +
+                    "                     sum(tss.receiving_amount) over(partition by tit.group_code, tit.dept_code, tit.brand_cn, tit.brand_en) AS cancel_receiving_amt, --退货总金额\n" +
+                    "                     row_number() over(partition by tit.group_code, tit.dept_code, tit.brand_cn, tit.brand_en order by tss.vendor_nbr) purchase_flag\n" +
+                    "                     from  tta_purchase_in_"+purchaseYear+" tss left join (\n" +
+                    "                                 select *\n" +
+                    "                                   from (SELECT t1.item_nbr,\n" +
+                    "                                                t1.group_code,\n" +
+                    "                                                t1.group_desc,\n" +
+                    "                                                t1.dept_code,\n" +
+                    "                                                t1.dept_desc, \n" +
+                    "                                                t1.brand_code,                               \n" +
+                    "                                                t1.brand_cn,\n" +
+                    "                                                t1.brand_en,\n" +
+                    "                                                ROW_NUMBER() OVER(PARTITION BY t1.item_nbr ORDER BY t1.item_nbr) row_id\n" +
+                    "                                           FROM tta_item t1\n" +
+                    "                                          order by t1.last_update_date desc) t2\n" +
+                    "                                  where t2.row_id = 1\n" +
+                    "                            ) tit\n" +
+                    "                      on tss.item_nbr = tit.item_nbr \n" +
+                    //注释,改为拆分供应商"                      where tss.po_type = 'RETRUN' and tss.purch_type = 'PURCHASE' and tss.vendor_nbr = '"+vendorNbr+"'\n" +
+                    "                      where tss.po_type = 'RETRUN' and tss.purch_type = '"+purchType+"' and tss.split_supplier_code in (select trs.rel_supplier_code\n" +
+                    "  from tta_supplier ts\n" +
+                    "  join tta_rel_supplier trs\n" +
+                    "    on ts.supplier_id = trs.rel_id\n" +
+                    " where ts.supplier_code = '"+vendorNbr+"'\n" +
+                    " union all select '"+vendorNbr+"' from dual\n"+
+                    ") \n" +
+                    "                      ) tpt  where tpt.purchase_flag = 1\n" +
+                    "                                 \n" +
+                    "          ) tpur on tcst.group_code =tpur.group_code and  tcst.dept_code =tpur.dept_code and  tcst.brand_cn =tpur.brand_cn\n" +
+                    // 注释,改为拆分供应商"          and   tcst.brand_en = tpur.brand_en and tcst.vendor_nbr = tpur.vendor_nbr " +
+                    "          and   tcst.brand_en = tpur.brand_en and tcst.split_supplier_code = tpur.split_supplier_code \n" +
+                    "left join ( --根据供应商查询净采购额\n" +
+                    "             select '"+vendorNbr+"' as supplierCode,\n" +
+                    "                    sum(nvl(tosl.netpurchase, 0)) as total_netpurchase\n" +
+                    "               from tta_oi_summary_line tosl\n" +
+                    "              where tosl.rms_code in (select trs.rel_supplier_code\n" +
+                    "                                        from tta_supplier ts\n" +
+                    "                                        join tta_rel_supplier trs\n" +
+                    "                                          on ts.supplier_id = trs.rel_id\n" +
+                    "                                       where ts.supplier_code = '"+vendorNbr+"'\n" +
+                    "                                      union all\n" +
+                    "                                      select '"+vendorNbr+"'\n" +
+                    "                                        from dual)\n" +
+                    "                and to_char(tosl.account_month, 'yyyyMM') >= '"+startMonth+"'\n" +
+                    "                and to_char(tosl.account_month, 'yyyyMM') <= '"+endMonth+"'\n" +
+                    "          ) rms on tcst.split_supplier_code = rms.supplierCode " +
+                    " where tcst.delete_symbol = '"+deleteSymbol+"' \n" +
+                    "          ) t\n" +
+                    " where t.flag = 1 and t.group_code is not null\n" +
+                    " ) mid\n"+
+                    " ) tlls\n";
+
+ -----CVW,CONSIGN 模式:
+"select \n" +
+                    "       tlls.brandDetails as brandDetails,\n" +
+                    "       tlls.tranDate as tranDate,\n" +
+                    "       tlls.purchType as purchType,\n" +
+                    "       tlls.groupCode as groupCode,\n" +
+                    "       tlls.groupDesc as groupDesc,\n" +
+                    "       tlls.deptCode as deptCode,\n" +
+                    "       tlls.deptDesc as deptDesc,\n" +
+                    "       tlls.brandCn as brandCn,\n" +
+                    "       tlls.brandEn as brandEn,\n" +
+                    "       tlls.brandCode as brandCode,\n" +
+                    "       tlls.salesAmt as salesAmt,\n" +
+                    "       tlls.cancel_receiving_amt,\n" +
+                    "       tlls.total_netpurchase,\n" +
+                    "       tlls.total_brand_po_amt,\n" +
+                    "       --decode(tlls.total_brand_po_amt,0,0,round((tlls.poRecord/tlls.total_brand_po_amt) * tlls.total_netpurchase,0)) as poRecord, -- 采购额,\n" +
+                    "       --decode(tlls.total_brand_po_amt,0,0,round((tlls.fcsPurchase/tlls.total_brand_po_amt) * tlls.total_netpurchase,0)) as fcsPurchase, --预估未来的采购额,\n" +
+                    "      decode(tlls.totol_poRecord,0,0,round((tlls.poRecord/tlls.totol_poRecord) * tlls.total_netpurchase,0)) as poRecord, -- 采购额,\n" +
+                    "      decode(tlls.totol_poRecord,0,0,round((tlls.fcsPurchase/tlls.totol_poRecord) * tlls.total_netpurchase,0)) as fcsPurchase, --预估未来的采购额,\n" +
+                    "       tlls.sales as sales,\n" +
+                    "       tlls.fcsSales as fcsSales,\n" +
+                    "       --decode(tlls.total_brand_po_amt,0,0,round((tlls.fcsPurchase/tlls.total_brand_po_amt) * tlls.total_netpurchase,0)) as annualPurchase,\n"+
+                    "      decode(tlls.totol_poRecord,0,0,round((tlls.fcsPurchase/tlls.totol_poRecord) * tlls.total_netpurchase,0)) as annualPurchase,\n"+
+                    "       tlls.fcsSales as annualSales,\n"+
+                    "       tlls.actualGp,\n" +
+                    "       tlls.gp,\n" +
+                    "       tlls.gpa\n" +
+                    " from (" +
+                    " select \n" +
+                    "    mid.brandDetails,\n" +
+                    "    mid.tranDate,\n" +
+                    "    mid.purchType,\n" +
+                    "    mid.groupCode,\n" +
+                    "    mid.groupDesc,\n" +
+                    "    mid.deptCode,\n" +
+                    "    mid.deptDesc,\n" +
+                    "    mid.brandCn,\n" +
+                    "    mid.brandEn,\n" +
+                    "    mid.brandCode,\n" +
+                    "    mid.salesAmt,\n" +
+                    "    mid.cancel_receiving_amt,\n" +
+                    "    mid.total_netpurchase,\n" +
+                    "    mid.total_brand_po_amt,\n" +
+                    "    mid.fcsPurchase,\n" +
+                    "    mid.poRecord,\n" +
+                    "    mid.fcsSales,\n" +
+                    "    mid.sales,\n" +
+                    "    mid.actualGp,\n" +
+                    "    mid.gp,\n" +
+                    "    mid.gpa,\n" +
+                    "    sum(mid.poRecord) over() as totol_poRecord ,\n" +
+                    "    mid.brandPo_Record \n" +
+                    "  from \n" +
+                    " (\n" +
+                    "    select \n" +
+                    "       t.brand_Details as brandDetails,\n" +
+                    "       t.tran_date as tranDate,\n" +
+                    "       t.purch_type as purchType,\n" +
+                    "       t.group_code as groupCode,\n" +
+                    "       t.group_desc as groupDesc,\n" +
+                    "       t.dept_code as deptCode,\n" +
+                    "       t.dept_desc as deptDesc,\n" +
+                    "       t.brand_cn as brandCn,\n" +
+                    "       t.brand_en as brandEn,\n" +
+                    "       t.brand_code as brandCode,\n" +
+                    "       t.sales_amt as salesAmt,\n" +
+                    "       t.cancel_receiving_amt,\n"+
+                    "       t.total_netpurchase,\n" +
+                    "       t.total_brand_po_amt,\n"+
+                    "       t.po_Record as brandPo_Record,\n" +
+                    "       round(" + sqlPurchaseStr + ",0) as fcsPurchase,--预测未来采购成本\n" +
+                    "       round(t.po_Record-nvl(t.cancel_receiving_amt,0),0) as poRecord, --采购成本 \n" +
+                    "       round(" + sqlSalesStr + ",0) as fcsSales, --预测未来销售总金额\n " +
+                    "       round(t.TOTAL,0) as sales,--销售总金额\n " +
+                    "       case when t.TOTAL is null or t.total = 0 then 0 else round(t.gpr / t.TOTAL * 100 , 2) end as actualGp, --\n" +
+                    "       case when t.TOTAL is null or t.total = 0 then 0 else round(t.gpr / t.TOTAL * 100 , 2) end as gp, --\n" +
+                    "       case when t.TOTAL is null or t.total = 0 then 0 else round(t.gpr / t.TOTAL * 100 , 2) end as gpa\n" +
+                    "  from (\n" +
+                    "        select \n" +
+                    "               'Existing_Brand' as brand_Details,\n" +
+                    "               tcst.tran_date,\n" +
+                    "               tcst.vendor_nbr,\n" +
+                    "               tcst.purch_type,--采购类型\n" +
+                    "               tcst.group_code,\n" +
+                    "               tcst.group_desc,\n" +
+                    "               tcst.dept_code,\n" +
+                    "               tcst.dept_desc,\n" +
+                    "               tcst.brand_cn,\n" +
+                    "               tcst.brand_en,\n" +
+                    "               tcst.brand_code,\n" +
+                    "               tcst.sales_amt, --最先交易日期的销售金额\n" +
+                    "               nvl(tpur.cancel_receiving_amt,0) cancel_receiving_amt,\n"+
+                    "               nvl(rms.total_netpurchase,0) total_netpurchase, --某个供应商和关联供应商的净采购额,\n" +
+                    "               sum(tcst.cost) over() total_brand_po_amt, --供应商所以品牌采购总额,\n" +
+                    "               sum(tcst.cost) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) as po_Record, --CVW,CONSIGN模式的采购成本\n" +
+                    "               -- sum(tcst.po_amt) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) as po_Record, --采购成本\n" +
+                    "               sum(tcst.gp_supplier_popt_amt) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) as gpr, --销售毛利额\n" +
+                    "               sum(tcst.sales_amt) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) AS total, --销售总额\n" +
+                    "               row_number() over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en order by tcst.tran_date) flag\n" +
+                    "          from tta_collect_sales_temp tcst " +
+                    "       left join\n" +
+                    "          (\n" +
+                    "               select * from (\n" +
+                    "                select \n" +
+                    "                     tit.group_code,\n" +
+                    "                     tit.group_desc,\n" +
+                    "                     tit.dept_code,\n" +
+                    "                     tit.dept_desc,\n" +
+                    "                     tit.brand_code,\n" +
+                    "                     tit.brand_cn,\n" +
+                    "                     tit.brand_en,\n" +
+                    "                     tss.receiving_amount,\n" +
+                    "                     tss.vendor_nbr, \n" +
+                    "                     '"+vendorNbr+"' as split_supplier_code, \n" +
+                    "                     tss.purch_type,\n" +
+                    "                     tss.po_type,\n" +
+                    "                     sum(tss.receiving_amount) over(partition by tit.group_code, tit.dept_code, tit.brand_cn, tit.brand_en) AS cancel_receiving_amt, --退货总金额\n" +
+                    "                     row_number() over(partition by tit.group_code, tit.dept_code, tit.brand_cn, tit.brand_en order by tss.vendor_nbr) purchase_flag\n" +
+                    "                     from  tta_purchase_in_"+purchaseYear+" tss left join (\n" +
+                    "                                 select *\n" +
+                    "                                   from (SELECT t1.item_nbr,\n" +
+                    "                                                t1.group_code,\n" +
+                    "                                                t1.group_desc,\n" +
+                    "                                                t1.dept_code,\n" +
+                    "                                                t1.dept_desc, \n" +
+                    "                                                t1.brand_code,                               \n" +
+                    "                                                t1.brand_cn,\n" +
+                    "                                                t1.brand_en,\n" +
+                    "                                                ROW_NUMBER() OVER(PARTITION BY t1.item_nbr ORDER BY t1.item_nbr) row_id\n" +
+                    "                                           FROM tta_item t1\n" +
+                    "                                          order by t1.last_update_date desc) t2\n" +
+                    "                                  where t2.row_id = 1\n" +
+                    "                            ) tit\n" +
+                    "                      on tss.item_nbr = tit.item_nbr \n" +
+                    //"                      where tss.po_type = 'RETRUN' and tss.purch_type = 'PURCHASE' and tss.vendor_nbr = '"+vendorNbr+"'\n" +
+                    "                      where tss.po_type = 'RETRUN' and tss.purch_type = '"+purchType+"' and tss.split_supplier_code in (select trs.rel_supplier_code\n" +
+                    "  from tta_supplier ts\n" +
+                    "  join tta_rel_supplier trs\n" +
+                    "    on ts.supplier_id = trs.rel_id\n" +
+                    " where ts.supplier_code = '"+vendorNbr+"'\n" +
+                    " union all select '"+vendorNbr+"' from dual\n " +
+                    ") \n" +
+                    "                      ) tpt  where tpt.purchase_flag = 1\n" +
+                    "                                 \n" +
+                    "          ) tpur on tcst.group_code =tpur.group_code and  tcst.dept_code =tpur.dept_code and  tcst.brand_cn =tpur.brand_cn\n" +
+                    // 注释,改为拆分供应商"          and   tcst.brand_en = tpur.brand_en and tcst.vendor_nbr = tpur.vendor_nbr " +
+                    "          and   tcst.brand_en = tpur.brand_en and tcst.split_supplier_code = tpur.split_supplier_code \n" +
+                    "left join ( --根据供应商查询净采购额\n" +
+                    "             select '"+vendorNbr+"' as supplierCode,\n" +
+                    "                    sum(nvl(tosl.netpurchase, 0)) as total_netpurchase\n" +
+                    "               from tta_oi_summary_line tosl\n" +
+                    "              where tosl.rms_code in (select trs.rel_supplier_code\n" +
+                    "                                        from tta_supplier ts\n" +
+                    "                                        join tta_rel_supplier trs\n" +
+                    "                                          on ts.supplier_id = trs.rel_id\n" +
+                    "                                       where ts.supplier_code = '"+vendorNbr+"'\n" +
+                    "                                      union all\n" +
+                    "                                      select '"+vendorNbr+"'\n" +
+                    "                                        from dual)\n" +
+                    "                and to_char(tosl.account_month, 'yyyyMM') >= '"+startMonth+"'\n" +
+                    "                and to_char(tosl.account_month, 'yyyyMM') <= '"+endMonth+"'\n" +
+                    "          ) rms on tcst.split_supplier_code = rms.supplierCode " +
+                    " where tcst.delete_symbol = '"+deleteSymbol+"' \n" +
+                    "          ) t\n" +
+                    " where t.flag = 1 and t.group_code is not null\n" +
+                    " ) mid\n"+
+                    " ) tlls\n";
+
+
+
+--------------------备份: 2019.12.17 end   -----------------------------
+
+--------------- 2019.12.18 添加了OI场景二的sql start------------------------------------------
+ ------purchase类型
+"select \n" +
+                    "       tlls.brandDetails as brandDetails,\n" +
+                    "       tlls.tranDate as tranDate,\n" +
+                    "       tlls.purchType as purchType,\n" +
+                    "       tlls.groupCode as groupCode,\n" +
+                    "       tlls.groupDesc as groupDesc,\n" +
+                    "       tlls.deptCode as deptCode,\n" +
+                    "       tlls.deptDesc as deptDesc,\n" +
+                    "       tlls.brandCn as brandCn,\n" +
+                    "       tlls.brandEn as brandEn,\n" +
+                    "       tlls.brandCode as brandCode,\n" +
+                    "       tlls.salesAmt as salesAmt,\n" +
+                    "       tlls.cancel_receiving_amt,\n" +
+                    "       tlls.total_netpurchase,\n" +
+                    "       tlls.total_brand_po_amt,\n" +
+                    "       --decode(tlls.total_brand_po_amt,0,0,round((tlls.poRecord/tlls.total_brand_po_amt) * tlls.total_netpurchase,0)) as poRecord, -- 采购额,\n" +
+                    "       --decode(tlls.total_brand_po_amt,0,0,round((tlls.fcsPurchase/tlls.total_brand_po_amt) * tlls.total_netpurchase,0)) as fcsPurchase, --预估未来的采购额,\n" +
+                    "      decode(tlls.totol_poRecord,0,0,round((tlls.poRecord/tlls.totol_poRecord) * tlls.total_netpurchase,0)) as poRecord, -- 采购额,\n" +
+                    "      decode(tlls.totol_poRecord,0,0,round((tlls.fcsPurchase/tlls.totol_poRecord) * tlls.total_netpurchase,0)) as fcsPurchase, --预估未来的采购额,\n" +
+                    "       tlls.sales as sales,\n"+
+                    "       tlls.fcsSales as fcsSales,\n"+
+                    "       --decode(tlls.total_brand_po_amt,0,0,round((tlls.fcsPurchase/tlls.total_brand_po_amt) * tlls.total_netpurchase,0)) as annualPurchase,\n"+
+                    "      decode(tlls.totol_poRecord,0,0,round((tlls.fcsPurchase/tlls.totol_poRecord) * tlls.total_netpurchase,0)) as annualPurchase,\n"+
+                    "       tlls.fcsSales as annualSales,\n"+
+                    "       tlls.actualGp as actualGp,\n" +
+                    "       tlls.gp as gp,\n" +
+                    "       tlls.gpa\n" +
+                    " from (" +
+                    " select \n" +
+                    "    mid.brandDetails,\n" +
+                    "    mid.tranDate,\n" +
+                    "    mid.purchType,\n" +
+                    "    mid.groupCode,\n" +
+                    "    mid.groupDesc,\n" +
+                    "    mid.deptCode,\n" +
+                    "    mid.deptDesc,\n" +
+                    "    mid.brandCn,\n" +
+                    "    mid.brandEn,\n" +
+                    "    mid.brandCode,\n" +
+                    "    mid.salesAmt,\n" +
+                    "    mid.cancel_receiving_amt,\n" +
+                    "    mid.total_netpurchase,\n" +
+                    "    mid.total_brand_po_amt,\n" +
+                    "    mid.fcsPurchase,\n" +
+                    "    mid.poRecord,\n" +
+                    "    mid.fcsSales,\n" +
+                    "    mid.sales,\n" +
+                    "    mid.actualGp,\n" +
+                    "    mid.gp,\n" +
+                    "    mid.gpa,\n" +
+                    "    sum(mid.poRecord) over() as totol_poRecord ,\n" +
+                    "    mid.brandPo_Record \n" +
+                    "  from \n" +
+                    " (\n" +
+                    "   select \n" +
+                    "       t.brand_Details as brandDetails,\n" +
+                    "       t.tran_date as tranDate,\n" +
+                    "       t.purch_type as purchType,\n" +
+                    "       t.group_code as groupCode,\n" +
+                    "       t.group_desc as groupDesc,\n" +
+                    "       t.dept_code as deptCode,\n" +
+                    "       t.dept_desc as deptDesc,\n" +
+                    "       t.brand_cn as brandCn,\n" +
+                    "       t.brand_en as brandEn,\n" +
+                    "       t.brand_code as brandCode,\n" +
+                    "       t.sales_amt as salesAmt,\n" +
+                    "       t.cancel_receiving_amt,\n"+
+                    "       t.total_netpurchase,\n" +
+                    "       t.total_brand_po_amt,\n"+
+                    "       t.po_Record as brandPo_Record,\n" +
+                    "       round(" + sqlPurchaseStr + ",0) as fcsPurchase,--预测未来采购成本\n" +
+                    "       round(t.po_Record-nvl(t.cancel_receiving_amt,0),0) as poRecord, --采购成本 \n" +
+                    "       round(" + sqlSalesStr + ",0) as fcsSales, --预测未来销售总金额\n " +
+                    "       round(t.TOTAL,0) as sales,--销售总金额\n " +
+                    "       case when t.TOTAL is null or t.total = 0 then 0 else round(t.gpr / t.TOTAL * 100 , 2) end as actualGp, --\n" +
+                    "       case when t.TOTAL is null or t.total = 0 then 0 else round(t.gpr / t.TOTAL * 100 , 2) end as gp, --\n" +
+                    "       case when t.TOTAL is null or t.total = 0 then 0 else round(t.gpr / t.TOTAL * 100 , 2) end as gpa\n" +
+                    "  from (\n" +
+                    "        select \n" +
+                    "               'Existing_Brand' as brand_Details,\n" +
+                    "               tcst.tran_date,\n" +
+                    "               tcst.vendor_nbr,\n" +
+                    "               tcst.purch_type,--采购类型\n" +
+                    "               tcst.group_code,\n" +
+                    "               tcst.group_desc,\n" +
+                    "               tcst.dept_code,\n" +
+                    "               tcst.dept_desc,\n" +
+                    "               tcst.brand_cn,\n" +
+                    "               tcst.brand_en,\n" +
+                    "               tcst.brand_code,\n" +
+                    "               tcst.sales_amt, --最先交易日期的销售金额\n" +
+                    "               nvl(tpur.cancel_receiving_amt,0) cancel_receiving_amt,\n"+
+                    "               nvl(rms.total_netpurchase,0) total_netpurchase, --某个供应商和关联供应商的净采购额,\n" +
+                    "               sum(tcst.po_amt) over() total_brand_po_amt, --供应商所以品牌采购总额,\n" +
+                    "               sum(tcst.po_amt) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) as po_Record, --采购成本\n" +
+                    "               sum(tcst.gp_supplier_popt_amt) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) as gpr, --销售毛利额\n" +
+                    "               sum(tcst.sales_amt) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) AS total, --销售总额\n" +
+                    "               row_number() over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en order by tcst.tran_date) flag\n" +
+                    "          from tta_collect_sales_temp tcst \n" +
+                    "       left join\n" +
+                    "          (\n" +
+                    "               select * from (\n" +
+                    "                select \n" +
+                    "                     tit.group_code,\n" +
+                    "                     tit.group_desc,\n" +
+                    "                     tit.dept_code,\n" +
+                    "                     tit.dept_desc,\n" +
+                    "                     tit.brand_code,\n" +
+                    "                     tit.brand_cn,\n" +
+                    "                     tit.brand_en,\n" +
+                    "                     tss.receiving_amount,\n" +
+                    "                     tss.vendor_nbr, \n" +
+                    "                     '"+vendorNbr+"' as split_supplier_code, \n" +
+                    "                     tss.purch_type,\n" +
+                    "                     tss.po_type,\n" +
+                    "                     sum(tss.receiving_amount) over(partition by tit.group_code, tit.dept_code, tit.brand_cn, tit.brand_en) AS cancel_receiving_amt, --退货总金额\n" +
+                    "                     row_number() over(partition by tit.group_code, tit.dept_code, tit.brand_cn, tit.brand_en order by tss.vendor_nbr) purchase_flag\n" +
+                    "                     from  tta_purchase_in_"+purchaseYear+" tss left join (\n" +
+                    "                                 select *\n" +
+                    "                                   from (SELECT t1.item_nbr,\n" +
+                    "                                                t1.group_code,\n" +
+                    "                                                t1.group_desc,\n" +
+                    "                                                t1.dept_code,\n" +
+                    "                                                t1.dept_desc, \n" +
+                    "                                                t1.brand_code,                               \n" +
+                    "                                                t1.brand_cn,\n" +
+                    "                                                t1.brand_en,\n" +
+                    "                                                ROW_NUMBER() OVER(PARTITION BY t1.item_nbr ORDER BY t1.item_nbr) row_id\n" +
+                    "                                           FROM tta_item t1\n" +
+                    "                                          order by t1.last_update_date desc) t2\n" +
+                    "                                  where t2.row_id = 1\n" +
+                    "                            ) tit\n" +
+                    "                      on tss.item_nbr = tit.item_nbr \n" +
+                    //注释,改为拆分供应商"                      where tss.po_type = 'RETRUN' and tss.purch_type = 'PURCHASE' and tss.vendor_nbr = '"+vendorNbr+"'\n" +
+                    "                      where tss.po_type = 'RETRUN' and tss.purch_type = '"+purchType+"' and tss.split_supplier_code in (select trs.rel_supplier_code\n" +
+                    "  from tta_supplier ts\n" +
+                    "  join tta_rel_supplier trs\n" +
+                    "    on ts.supplier_id = trs.rel_id\n" +
+                    " where ts.supplier_code = '"+vendorNbr+"'\n" +
+                    " union all select '"+vendorNbr+"' from dual\n"+
+                    ") \n" +
+                    "                      ) tpt  where tpt.purchase_flag = 1\n" +
+                    "                                 \n" +
+                    "          ) tpur on tcst.group_code =tpur.group_code and  tcst.dept_code =tpur.dept_code and  tcst.brand_cn =tpur.brand_cn\n" +
+                    // 注释,改为拆分供应商"          and   tcst.brand_en = tpur.brand_en and tcst.vendor_nbr = tpur.vendor_nbr " +
+                    "          and   tcst.brand_en = tpur.brand_en and tcst.split_supplier_code = tpur.split_supplier_code \n" +
+                    "  left join ( --根据供应商,group_code,dept_code,brand_cn,brand_en 查询净采购额\n" +
+                    "  select * from\n" +
+                    "   (select \n" +
+                    "   '"+vendorNbr+"' as split_supplier_code,\n" +
+                    "   topti.group_code,\n" +
+                    "   topti.group_desc,\n" +
+                    "   topti.dept_code,\n" +
+                    "   topti.dept_desc,\n" +
+                    "   topti.brand_code,\n" +
+                    "   topti.brand_cn,\n" +
+                    "   topti.brand_en,\n" +
+                    "   sum(nvl(topss.netpurchase,0)) over(partition by topti.group_code, topti.dept_code, topti.brand_cn, topti.brand_en) AS total_netpurchase,--净采购额\n" +
+                    "   row_number() over(partition by topti.group_code, topti.dept_code, topti.brand_cn, topti.brand_en order by topss.split_supplier_code) oipo_flag\n" +
+                    "  from tta_oi_po_scene_sum topss\n" +
+                    "  left join \n" +
+                    "  (\n" +
+                    "        select *\n" +
+                    "               from (SELECT t1.item_nbr,\n" +
+                    "                            t1.group_code,\n" +
+                    "                            t1.group_desc,\n" +
+                    "                            t1.dept_code,\n" +
+                    "                            t1.dept_desc,\n" +
+                    "                            t1.brand_code,\n" +
+                    "                            t1.brand_cn,\n" +
+                    "                            t1.brand_en,\n" +
+                    "                            ROW_NUMBER() OVER(PARTITION BY t1.item_nbr ORDER BY t1.item_nbr) row_id\n" +
+                    "                       FROM tta_item t1\n" +
+                    "                      order by t1.last_update_date desc) t2\n" +
+                    "              where t2.row_id = 1\n" +
+                    "              ) topti\n" +
+                    "    on topss.item_nbr = topti.item_nbr\n" +
+                    "    where topss.split_supplier_code in (select trs.rel_supplier_code\n" +
+                    "                                        from tta_supplier ts\n" +
+                    "                                        join tta_rel_supplier trs\n" +
+                    "                                          on ts.supplier_id = trs.rel_id\n" +
+                    "                                       where ts.supplier_code = '"+vendorNbr+"'\n" +
+                    "                                      union all\n" +
+                    "                                      select '"+vendorNbr+"'\n" +
+                    "                                        from dual)\n" +
+                    "                and to_char(topss.account_month) >= '"+startMonth+"'\n" +
+                    "                and to_char(topss.account_month) <= '"+endMonth+"') topspur where topspur.oipo_flag = 1\n" +
+                    "       ) rms on tcst.split_supplier_code = rms.split_supplier_code \n" +
+                    "  where tcst.delete_symbol = '"+deleteSymbol+"' \n" +
+                    "          ) t\n" +
+                    " where t.flag = 1 and t.group_code is not null\n" +
+                    " ) mid\n"+
+                    " ) tlls\n";
+-------CVW,Consignment -----
+"select \n" +
+                    "       tlls.brandDetails as brandDetails,\n" +
+                    "       tlls.tranDate as tranDate,\n" +
+                    "       tlls.purchType as purchType,\n" +
+                    "       tlls.groupCode as groupCode,\n" +
+                    "       tlls.groupDesc as groupDesc,\n" +
+                    "       tlls.deptCode as deptCode,\n" +
+                    "       tlls.deptDesc as deptDesc,\n" +
+                    "       tlls.brandCn as brandCn,\n" +
+                    "       tlls.brandEn as brandEn,\n" +
+                    "       tlls.brandCode as brandCode,\n" +
+                    "       tlls.salesAmt as salesAmt,\n" +
+                    "       tlls.cancel_receiving_amt,\n" +
+                    "       tlls.total_netpurchase,\n" +
+                    "       tlls.total_brand_po_amt,\n" +
+                    "       --decode(tlls.total_brand_po_amt,0,0,round((tlls.poRecord/tlls.total_brand_po_amt) * tlls.total_netpurchase,0)) as poRecord, -- 采购额,\n" +
+                    "       --decode(tlls.total_brand_po_amt,0,0,round((tlls.fcsPurchase/tlls.total_brand_po_amt) * tlls.total_netpurchase,0)) as fcsPurchase, --预估未来的采购额,\n" +
+                    "      decode(tlls.totol_poRecord,0,0,round((tlls.poRecord/tlls.totol_poRecord) * tlls.total_netpurchase,0)) as poRecord, -- 采购额,\n" +
+                    "      decode(tlls.totol_poRecord,0,0,round((tlls.fcsPurchase/tlls.totol_poRecord) * tlls.total_netpurchase,0)) as fcsPurchase, --预估未来的采购额,\n" +
+                    "       tlls.sales as sales,\n" +
+                    "       tlls.fcsSales as fcsSales,\n" +
+                    "       --decode(tlls.total_brand_po_amt,0,0,round((tlls.fcsPurchase/tlls.total_brand_po_amt) * tlls.total_netpurchase,0)) as annualPurchase,\n"+
+                    "      decode(tlls.totol_poRecord,0,0,round((tlls.fcsPurchase/tlls.totol_poRecord) * tlls.total_netpurchase,0)) as annualPurchase,\n"+
+                    "       tlls.fcsSales as annualSales,\n"+
+                    "       tlls.actualGp,\n" +
+                    "       tlls.gp,\n" +
+                    "       tlls.gpa\n" +
+                    " from (" +
+                    " select \n" +
+                    "    mid.brandDetails,\n" +
+                    "    mid.tranDate,\n" +
+                    "    mid.purchType,\n" +
+                    "    mid.groupCode,\n" +
+                    "    mid.groupDesc,\n" +
+                    "    mid.deptCode,\n" +
+                    "    mid.deptDesc,\n" +
+                    "    mid.brandCn,\n" +
+                    "    mid.brandEn,\n" +
+                    "    mid.brandCode,\n" +
+                    "    mid.salesAmt,\n" +
+                    "    mid.cancel_receiving_amt,\n" +
+                    "    mid.total_netpurchase,\n" +
+                    "    mid.total_brand_po_amt,\n" +
+                    "    mid.fcsPurchase,\n" +
+                    "    mid.poRecord,\n" +
+                    "    mid.fcsSales,\n" +
+                    "    mid.sales,\n" +
+                    "    mid.actualGp,\n" +
+                    "    mid.gp,\n" +
+                    "    mid.gpa,\n" +
+                    "    sum(mid.poRecord) over() as totol_poRecord ,\n" +
+                    "    mid.brandPo_Record \n" +
+                    "  from \n" +
+                    " (\n" +
+                    "    select \n" +
+                    "       t.brand_Details as brandDetails,\n" +
+                    "       t.tran_date as tranDate,\n" +
+                    "       t.purch_type as purchType,\n" +
+                    "       t.group_code as groupCode,\n" +
+                    "       t.group_desc as groupDesc,\n" +
+                    "       t.dept_code as deptCode,\n" +
+                    "       t.dept_desc as deptDesc,\n" +
+                    "       t.brand_cn as brandCn,\n" +
+                    "       t.brand_en as brandEn,\n" +
+                    "       t.brand_code as brandCode,\n" +
+                    "       t.sales_amt as salesAmt,\n" +
+                    "       t.cancel_receiving_amt,\n"+
+                    "       t.total_netpurchase,\n" +
+                    "       t.total_brand_po_amt,\n"+
+                    "       t.po_Record as brandPo_Record,\n" +
+                    "       round(" + sqlPurchaseStr + ",0) as fcsPurchase,--预测未来采购成本\n" +
+                    "       round(t.po_Record-nvl(t.cancel_receiving_amt,0),0) as poRecord, --采购成本 \n" +
+                    "       round(" + sqlSalesStr + ",0) as fcsSales, --预测未来销售总金额\n " +
+                    "       round(t.TOTAL,0) as sales,--销售总金额\n " +
+                    "       case when t.TOTAL is null or t.total = 0 then 0 else round(t.gpr / t.TOTAL * 100 , 2) end as actualGp, --\n" +
+                    "       case when t.TOTAL is null or t.total = 0 then 0 else round(t.gpr / t.TOTAL * 100 , 2) end as gp, --\n" +
+                    "       case when t.TOTAL is null or t.total = 0 then 0 else round(t.gpr / t.TOTAL * 100 , 2) end as gpa\n" +
+                    "  from (\n" +
+                    "        select \n" +
+                    "               'Existing_Brand' as brand_Details,\n" +
+                    "               tcst.tran_date,\n" +
+                    "               tcst.vendor_nbr,\n" +
+                    "               tcst.purch_type,--采购类型\n" +
+                    "               tcst.group_code,\n" +
+                    "               tcst.group_desc,\n" +
+                    "               tcst.dept_code,\n" +
+                    "               tcst.dept_desc,\n" +
+                    "               tcst.brand_cn,\n" +
+                    "               tcst.brand_en,\n" +
+                    "               tcst.brand_code,\n" +
+                    "               tcst.sales_amt, --最先交易日期的销售金额\n" +
+                    "               nvl(tpur.cancel_receiving_amt,0) cancel_receiving_amt,\n"+
+                    "               nvl(rms.total_netpurchase,0) total_netpurchase, --某个供应商和关联供应商的净采购额,\n" +
+                    "               sum(tcst.cost) over() total_brand_po_amt, --供应商所以品牌采购总额,\n" +
+                    "               sum(tcst.cost) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) as po_Record, --CVW,CONSIGN模式的采购成本\n" +
+                    "               -- sum(tcst.po_amt) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) as po_Record, --采购成本\n" +
+                    "               sum(tcst.gp_supplier_popt_amt) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) as gpr, --销售毛利额\n" +
+                    "               sum(tcst.sales_amt) over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en) AS total, --销售总额\n" +
+                    "               row_number() over(partition by tcst.group_code, tcst.dept_code, tcst.brand_cn, tcst.brand_en order by tcst.tran_date) flag\n" +
+                    "          from tta_collect_sales_temp tcst " +
+                    "       left join\n" +
+                    "          (\n" +
+                    "               select * from (\n" +
+                    "                select \n" +
+                    "                     tit.group_code,\n" +
+                    "                     tit.group_desc,\n" +
+                    "                     tit.dept_code,\n" +
+                    "                     tit.dept_desc,\n" +
+                    "                     tit.brand_code,\n" +
+                    "                     tit.brand_cn,\n" +
+                    "                     tit.brand_en,\n" +
+                    "                     tss.receiving_amount,\n" +
+                    "                     tss.vendor_nbr, \n" +
+                    "                     '"+vendorNbr+"' as split_supplier_code, \n" +
+                    "                     tss.purch_type,\n" +
+                    "                     tss.po_type,\n" +
+                    "                     sum(tss.receiving_amount) over(partition by tit.group_code, tit.dept_code, tit.brand_cn, tit.brand_en) AS cancel_receiving_amt, --退货总金额\n" +
+                    "                     row_number() over(partition by tit.group_code, tit.dept_code, tit.brand_cn, tit.brand_en order by tss.vendor_nbr) purchase_flag\n" +
+                    "                     from  tta_purchase_in_"+purchaseYear+" tss left join (\n" +
+                    "                                 select *\n" +
+                    "                                   from (SELECT t1.item_nbr,\n" +
+                    "                                                t1.group_code,\n" +
+                    "                                                t1.group_desc,\n" +
+                    "                                                t1.dept_code,\n" +
+                    "                                                t1.dept_desc, \n" +
+                    "                                                t1.brand_code,                               \n" +
+                    "                                                t1.brand_cn,\n" +
+                    "                                                t1.brand_en,\n" +
+                    "                                                ROW_NUMBER() OVER(PARTITION BY t1.item_nbr ORDER BY t1.item_nbr) row_id\n" +
+                    "                                           FROM tta_item t1\n" +
+                    "                                          order by t1.last_update_date desc) t2\n" +
+                    "                                  where t2.row_id = 1\n" +
+                    "                            ) tit\n" +
+                    "                      on tss.item_nbr = tit.item_nbr \n" +
+                    //"                      where tss.po_type = 'RETRUN' and tss.purch_type = 'PURCHASE' and tss.vendor_nbr = '"+vendorNbr+"'\n" +
+                    "                      where tss.po_type = 'RETRUN' and tss.purch_type = '"+purchType+"' and tss.split_supplier_code in (select trs.rel_supplier_code\n" +
+                    "  from tta_supplier ts\n" +
+                    "  join tta_rel_supplier trs\n" +
+                    "    on ts.supplier_id = trs.rel_id\n" +
+                    " where ts.supplier_code = '"+vendorNbr+"'\n" +
+                    " union all select '"+vendorNbr+"' from dual\n " +
+                    ") \n" +
+                    "                      ) tpt  where tpt.purchase_flag = 1\n" +
+                    "                                 \n" +
+                    "          ) tpur on tcst.group_code =tpur.group_code and  tcst.dept_code =tpur.dept_code and  tcst.brand_cn =tpur.brand_cn\n" +
+                    // 注释,改为拆分供应商"          and   tcst.brand_en = tpur.brand_en and tcst.vendor_nbr = tpur.vendor_nbr " +
+                    "          and   tcst.brand_en = tpur.brand_en and tcst.split_supplier_code = tpur.split_supplier_code \n" +
+                    "  left join ( --根据供应商,group_code,dept_code,brand_cn,brand_en 查询净采购额\n" +
+                    "  select * from\n" +
+                    "   (select \n" +
+                    "   '"+vendorNbr+"' as split_supplier_code,\n" +
+                    "   topti.group_code,\n" +
+                    "   topti.group_desc,\n" +
+                    "   topti.dept_code,\n" +
+                    "   topti.dept_desc,\n" +
+                    "   topti.brand_code,\n" +
+                    "   topti.brand_cn,\n" +
+                    "   topti.brand_en,\n" +
+                    "   sum(nvl(topss.netpurchase,0)) over(partition by topti.group_code, topti.dept_code, topti.brand_cn, topti.brand_en) AS total_netpurchase,--净采购额\n" +
+                    "   row_number() over(partition by topti.group_code, topti.dept_code, topti.brand_cn, topti.brand_en order by topss.split_supplier_code) oipo_flag\n" +
+                    "  from tta_oi_po_scene_sum topss\n" +
+                    "  left join \n" +
+                    "  (\n" +
+                    "        select *\n" +
+                    "               from (SELECT t1.item_nbr,\n" +
+                    "                            t1.group_code,\n" +
+                    "                            t1.group_desc,\n" +
+                    "                            t1.dept_code,\n" +
+                    "                            t1.dept_desc,\n" +
+                    "                            t1.brand_code,\n" +
+                    "                            t1.brand_cn,\n" +
+                    "                            t1.brand_en,\n" +
+                    "                            ROW_NUMBER() OVER(PARTITION BY t1.item_nbr ORDER BY t1.item_nbr) row_id\n" +
+                    "                       FROM tta_item t1\n" +
+                    "                      order by t1.last_update_date desc) t2\n" +
+                    "              where t2.row_id = 1\n" +
+                    "              ) topti\n" +
+                    "    on topss.item_nbr = topti.item_nbr\n" +
+                    "    where topss.split_supplier_code in (select trs.rel_supplier_code\n" +
+                    "                                        from tta_supplier ts\n" +
+                    "                                        join tta_rel_supplier trs\n" +
+                    "                                          on ts.supplier_id = trs.rel_id\n" +
+                    "                                       where ts.supplier_code = '"+vendorNbr+"'\n" +
+                    "                                      union all\n" +
+                    "                                      select '"+vendorNbr+"'\n" +
+                    "                                        from dual)\n" +
+                    "                and to_char(topss.account_month) >= '"+startMonth+"'\n" +
+                    "                and to_char(topss.account_month) <= '"+endMonth+"') topspur where topspur.oipo_flag = 1\n" +
+                    "       ) rms on tcst.split_supplier_code = rms.split_supplier_code \n" +
+                    " where tcst.delete_symbol = '"+deleteSymbol+"' \n" +
+                    "          ) t\n" +
+                    " where t.flag = 1 and t.group_code is not null\n" +
+                    " ) mid\n"+
+                    " ) tlls\n";
+--------------- 2019.12.18 添加了OI场景二的sql end------------------------------------------------------

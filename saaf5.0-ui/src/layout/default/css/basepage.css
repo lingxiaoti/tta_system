@@ -1,0 +1,203 @@
+.basepage #buttonGroupArea {
+  border: 1px dotted #ccc;
+  padding: 3px 15px;
+  border-radius: 4px;
+  min-height: 24px;
+}
+.basepage .form-control[disabled],
+.basepage .form-control[readonly],
+.basepage fieldset[disabled] .form-control,
+.basepage .timer-two input[disabled],
+.basepage button[disabled] {
+  background-color: inherit;
+  cursor: default;
+}
+.basepage .modal-body {
+  max-height: 360px;
+  overflow-y: auto;
+}
+.basepage form small {
+  color: #999;
+  padding-bottom: 10px;
+}
+.basepage .form-control:focus {
+  border-color: #ccc;
+  outline: 0;
+  box-shadow: none;
+}
+.basepage input,
+.basepage select,
+.basepage label,
+.basepage textarea {
+  cursor: default !important;
+}
+.basepage textarea {
+  height: auto !important;
+}
+.basepage .table {
+  margin-bottom: 0;
+}
+.basepage select,
+.basepage input {
+  z-index: 0;
+}
+.basepage .table tbody > tr:hover {
+  background-color: #fff;
+}
+.basepage .data-component {
+  width: 100%;
+}
+.basepage .form-group-sm {
+  padding-bottom: 10px;
+  min-height: 36px;
+  clear: both;
+}
+.basepage .form-group-sm label {
+  font-weight: normal;
+}
+.basepage .autocomplete {
+  position: absolute;
+  background-color: #fff;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  box-shadow: #999 0 0 4px;
+  margin: 0 15px;
+  padding-top: 10px;
+  max-height: 210px;
+  overflow-y: auto;
+}
+.basepage .autocomplete li {
+  position: relative;
+}
+.basepage .components {
+  padding: 10px;
+}
+.basepage .components .nav > li > a {
+  padding: 6px 8px;
+}
+.basepage .components ul {
+  list-style: none;
+  padding: 0;
+  min-height: 30px;
+  font-size: 12px;
+}
+.basepage .components .tab-content {
+  padding-top: 10px;
+}
+.basepage .components .form-group {
+  padding: 5px 10px;
+  background-color: #fff;
+  border: 1px dotted #ccc;
+}
+.basepage .components .form-group:hover {
+  box-shadow: #ccc 0 0 3px;
+  z-index: 10000;
+}
+.basepage .sortable-chosen {
+  box-shadow: #00a0e9 0 0 10px !important;
+  border: 1px solid #0099ee;
+  z-index: 10;
+}
+.basepage .sortable-ghost {
+  opacity: .6;
+}
+.basepage .urlIndexActive li:active,
+.basepage .urlIndexActive li.active,
+.basepage .urlIndexActive li:focus,
+.basepage .urlIndexActive li:hover {
+  background-color: #ccc;
+}
+.basepage .js-remove,
+.basepage .fa-pencil {
+  line-height: 16px;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  position: absolute;
+  visibility: hidden;
+  cursor: pointer;
+  color: #c00;
+  font-style: normal;
+}
+.basepage .layout {
+  border: 1px dotted #1e90c2;
+  padding: 15px;
+}
+.basepage .layout .layout-list {
+  min-height: 30px;
+}
+.basepage #DesignStage fieldset {
+  border: 1px dotted #eee;
+  margin-bottom: 15px;
+}
+.basepage #DesignStage .layout .js-remove,
+.basepage #DesignStage .layout .fa-pencil {
+  visibility: hidden;
+  top: auto;
+  right: -3px;
+}
+.basepage #DesignStage .layout .js-remove {
+  bottom: 0;
+}
+.basepage #DesignStage .layout .fa-pencil {
+  top: -5px;
+}
+.basepage #DesignStage .layout:hover .js-remove,
+.basepage #DesignStage .layout:hover .fa-pencil {
+  visibility: visible;
+}
+.basepage #DesignStage .layout:hover .form-group .js-remove,
+.basepage #DesignStage .layout:hover .form-group .fa-pencil {
+  visibility: hidden;
+}
+.basepage #DesignStage .layout:hover .form-group:hover .js-remove,
+.basepage #DesignStage .layout:hover .form-group:hover .fa-pencil {
+  visibility: visible;
+}
+.basepage #DesignStage .layout .btn {
+  position: relative;
+  margin: 0 6px;
+  display: inline-block;
+}
+.basepage #DesignStage .layout .btn .js-remove,
+.basepage #DesignStage .layout .btn .fa-pencil {
+  visibility: visible;
+  right: -5px;
+}
+.basepage #DesignStage .form-group {
+  padding: 6px 15px;
+}
+.basepage #DesignStage .form-group:hover {
+  padding: 5px 14px;
+  border: 1px dotted #ccc;
+}
+.basepage #DesignStage .form-group:hover .js-remove,
+.basepage #DesignStage .form-group:hover .fa-pencil {
+  visibility: visible;
+  top: auto;
+  right: -3px;
+}
+.basepage #DesignStage .form-group:hover .js-remove {
+  bottom: 0;
+}
+.basepage #DesignStage .form-group:hover .fa-pencil {
+  top: -5px;
+}
+.basepage #buttonGroupArea .btn .js-remove,
+.basepage #buttonGroupArea .btn .fa-pencil {
+  visibility: visible;
+  bottom: -17px;
+  top: auto;
+  margin-right: 0;
+  padding: 0 3px;
+}
+.basepage #buttonGroupArea .btn .js-remove {
+  right: 6px;
+}
+.basepage #buttonGroupArea .btn .fa-pencil {
+  left: 6px;
+}
+.pageperview .layout {
+  border: none;
+}

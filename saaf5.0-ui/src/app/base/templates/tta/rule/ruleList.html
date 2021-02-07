@@ -1,0 +1,144 @@
+<div ng-controller="ruleListCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10" >
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                        <!--<div class="btn-group btn-group-xs " permission-buttons="btnNew" >
+                        </div>
+                        <div class="btn-group btn-group-xs " permission-buttons="btnModify" >
+                            <button class="btn btn-default ng-scope"  ng-disabled="!dataTable.selectRow" type="button" ng-click="btnModify()">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>修改
+                            </button>
+                        </div>-->
+                    </div>
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button  type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <div class="col-xs-12 mb10" style="margin: 10px">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>条件信息</span>
+                    </div>
+                    <div search-form
+                         data-legend="[
+                            {key:'ruleName',label:'规则名称'},
+                            {key:'soleResouceType',label:'独家渠道类别',type:'lookCode',lookCode:'SOLE_RESOUCE_TYPE'},
+                            {key:'soleProductType',label:'独家产品类型',type:'lookCode',lookCode:'SOLE_PRODUCT_TYPE'},
+                            {key:'isIncludeEc',label:'是否包含电商渠道',type:'lookCode',lookCode:'YES_OR_NO'},
+                            {key:'isIncludeSpecial',label:'是否包含独家渠道例外情形',type:'lookCode',lookCode:'YES_OR_NO'},
+                            {key:'isEnable',label:'是否启用',type:'lookCode',lookCode:'YES_OR_NO'},
+                        ]"
+                         ng-model="params"
+                    ></div>
+                </div>
+                <!--------------------------------START-------------------------------->
+                <div class="col-xs-12 mb10" style="margin: 10px">
+                    <i class="fa fa-cog" aria-hidden="true"></i>
+                    <span>规则信息</span>
+                </div>
+
+                <div id="part2">
+                    <div  class="col-md-12 tab">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li ng-class="[tab.active===$index?'active':'']" ng-repeat="cur in tab.nav" ng-click="tab.click($index)"><a
+                                    href="javascript:void(0)">{{cur}}</a></li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <!--table start -->
+                            <div ng-class="['tab-pane', tab.active==0?'active':'']" style="width: 100%; margin: 10px 0; height: 20px;">
+                                <div class="btn-group btn-group-xs pull-right">
+                                    <div class="btn-group btn-group-xs " permission-buttons="btnNew" >
+                                    </div>
+                                    <div class="btn-group btn-group-xs " permission-buttons="btnModify" >
+                                        <button class="btn btn-default ng-scope"  ng-disabled="!dataTable.selectRow" type="button" ng-click="btnModify()">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>修改
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-class="['tab-pane', tab.active==0?'active':'']" style="margin: 10px;">
+                                <div class="data-table">
+                                    <div base-data-table="dataTable"
+                                         data-auto-request="true"
+                                         ng-params="params"
+                                         data-show-index="true"
+                                         data-url="findRule"
+                                         data-legend="[
+                                  {'value':'ruleName','name':'规则名称'},
+                                  {'value':'soleResouceTypeName','name':'独家渠道类别'},
+                                  {'value':'soleProductTypeName','name':'独家产品类型'},
+                                  {'value':'isIncludeEc','name':'是否包含电商渠道','boolean':'icon'},
+                                  {'value':'isIncludeSpecial','name':'是否包含独家渠道例外情形','boolean':'icon'},
+                                  {'value':'isEnable','name':'是否启用','boolean':'icon'},
+                                  {'value':'remark','name':'备注信息'}
+                                 ]"
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <div ng-class="['tab-pane', tab.active==1?'active':'']" style="overflow-y:auto">
+                               <div class="col-md-12 tab">
+                                    <div class="row" style="margin: 20px 0px">
+                                            <div class="data-table" ng-style="margin:10">
+                                                <div class="container" style="boeder: 1px solid #ddd">
+                                                   <p>请上传word docx格式:</p>
+                                                    <input style="display:inline; width: 180px;"  type="file" name="file" id="file" emms-file-upload="myFile">
+                                                    <button  style="display:inline" class="btn btn-primary" ng-click="upload()" style="margin: 10px" ng-disabled="">上传</button>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button style="display:inline"   class="btn btn-primary" ng-click="downloadFile()" style="margin: 10px" ng-disabled="">下载模板</button>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!----------------------------END----------------------------------->
+
+                    <!--<div class="data-table">
+                        <div base-data-table="dataTable"
+                             data-auto-request="true"
+                             ng-params="params"
+                             data-show-index="true"
+                             data-url="findRule"
+                             data-legend="[
+                                  {'value':'ruleName','name':'规则名称'},
+                                  {'value':'soleResouceTypeName','name':'独家渠道类别'},
+                                  {'value':'soleProductTypeName','name':'独家产品类型'},
+                                  {'value':'isIncludeEc','name':'是否包含电商渠道','boolean':'icon'},
+                                  {'value':'isIncludeSpecial','name':'是否包含独家渠道例外情形','boolean':'icon'},
+                                  {'value':'isEnable','name':'是否启用','boolean':'icon'},
+                                  {'value':'remark','name':'备注信息'}
+                                 ]"
+                        ></div>
+                    </div>-->
+            </div>
+        </div>
+    </form>
+
+
+</div>

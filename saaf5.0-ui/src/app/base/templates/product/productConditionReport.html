@@ -1,0 +1,75 @@
+
+<div ng-controller="productConditionReportCtrl" class="gridtable">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="search(1)">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                  
+                        <button class="btn btn-default" type="button" ng-click="search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>搜索
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>重置
+                        </button>
+                         
+                    </div>
+                    <div class="btn-group btn-group-xs" permission-buttons="btnExport"></div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+               
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                   
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <!--------------------- 输入表单  --->
+                <div class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+
+                    <!-- 搜索输入框组-->
+                    <div search-form
+                         data-legend="[
+						{key:'productName',label:'商品名称','style':'text-align: center;'},
+						{key:'brandnameCn',label:'品牌名称','style':'text-align: center;'},
+						{key:'creationbegin',label:'月份',type:'time','date':'yyyy-mm','style':'text-align: center;'}
+
+                        ]"
+                         ng-model="params"
+                    ></div>
+
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="FindProductconditionReportList"
+                         data-legend="[
+                             {'value':'PLMCODE','name':'货品编号','style':'text-align: center;'},
+                             {'value':'PRODUCTNAME','name':'商品名称（中文）','style':'text-align: center;'},
+                              {'value':'SUPPLIERID','name':'供应商ID','style':'text-align: center;'},
+                               {'value':'SUPPLIERNAME','name':'供应商名称','style':'text-align: center;'},
+                             {'value':'DEPARTMENT','name':'部门','style':'text-align: center;'},
+                             {'value':'BARCODE','name':'BARCODE','style':'text-align: center;'},
+                             {'value':'PROV_CONDITION','name':'特殊审批备注','style':'text-align: center;'},
+                             {'value':'CREATIONDATE','name':'创建时间','style':'text-align: center;'},
+                             {'value':'CREATEDBY','name':'创建人','style':'text-align: center;'}
+						 ]"
+                    ></div>
+                </div>
+                <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+            </div>
+        </div>
+    </form>
+</div>

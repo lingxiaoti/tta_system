@@ -1,0 +1,80 @@
+<div ng-controller="projectExceptionReportCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                        <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDiscard,btnExport">
+                            <button class="btn btn-default" permission-btn="btnDiscard" ng-disabled="!dataTable.selectRow" ng-click="btnDiscard()" ></button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <div search-form
+                         data-legend="[
+                            {key:'projectName_like',label:'项目名称'},
+                            {key:'exceptionProductName_like',label:'涉及的产品'},
+                            {key:'billStatus',label:'单据状态',type:'lookCode',lookCode:'PLM_PROJECT_STATUS'},
+                            {key:'exceptionOccurrenceStage',label:'异常发生阶段',type:'lookCode',lookCode:'PLM_EXCEPTION_OCCURRENCE_STAGE'},
+                            {key:'exceptionOccurrenceTime_gte',label:'异常发生时间从',type:'time','date':'yyyy-mm-dd'},
+                            {key:'exceptionOccurrenceTime_lt',label:'至',type:'time','date':'yyyy-mm-dd'},
+                        ]"
+                         ng-model="params"
+                    ></div>
+
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="true"
+                         ng-params="params"
+                         data-show-index="true"
+
+                         data-callback="[{'value':'projectName','callback':'btnDetail'}]"
+                         data-url="findPlmProjectInfoInfo"
+                         data-legend="[
+
+                                 {'value':'projectName','name':'项目名称', style:'text-align:center'},
+                                 {'value':'exceptionProductName','name':'涉及产品', style:'text-align:center'},
+                                 {'value':'billStatusName','name':'单据状态', style:'text-align:center'},
+                                 {'value':'exceptionOccurrenceTime','name':'异常发生时间', style:'text-align:center'},
+                                 {'value':'occurrenceStageMeaning','name':'异常发生阶段', style:'text-align:center'},
+                                 {'value':'exceptionDetails','name':'异常详情', style:'text-align:center'},
+                                 {'value':'results','name':'处理结果', style:'text-align:center'},
+                                 {'value':'creatorName','name':'创建人', style:'text-align:center'},
+                                 {'value':'creationDate','name':'创建日期', style:'text-align:center'},
+                         ]"
+                    ></div>
+                    <!--                    {'value':'phoneNumber','name':'手机号码'},-->
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+</div>

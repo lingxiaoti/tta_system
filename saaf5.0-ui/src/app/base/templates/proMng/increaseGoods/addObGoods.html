@@ -1,0 +1,66 @@
+<div ng-controller="addObGoodsCtrl" class="gridtable">
+	<form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+		<!--------------------- 按钮--->
+		<div class="bg-gray-white bt">
+			<div class="bg-gray-white p5">
+				<div class="pull-right ml10">
+					<div class="btn-group btn-group-xs ">
+						<button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+							<i class="fa fa-search" aria-hidden="true"></i>搜索
+						</button>
+						<button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+							<i class="fa fa-undo" aria-hidden="true"></i>重置
+						</button>
+					
+					</div>
+					<div class="btn-group btn-group-xs " permission-buttons="btnModify,btnNew">
+
+
+					</div>
+				</div>
+
+				<div class="btn-group btn-group-xs ">
+					<button type="button" class="btn btn-primary" ng-click="fullWindow($event)"><i
+							class="fa fa-square-o"></i>数据全屏
+					</button>
+				</div>
+			</div>
+		</div>
+		<!---------------------  / .按钮  --->
+		<div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+			<div class="nicescroll-height  bg-white " ng-nicescroll
+				 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+		                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <div search-form
+                         data-legend="[
+                            {key:'productName',label:'产品名称'},
+                            {key:'obId',label:'OBID'},
+                            {key:'productCreator',label:'创建人'},
+                            {key:'creationDate',label:'创建日期'},
+                        ]" ng-model="params"></div>
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="true"
+                         ng-params="params"
+                         data-checked-type="checkbox"
+                         data-keys="{'key':'plmDevelopmentInfoId'}"
+                         data-show-index="true"
+                         data-url="findPlmDevelopmentInfoInfo"
+                         data-legend="[
+                            {'value':'obId','name':'OB ID',style:'text-align:center'},
+                            {'value':'productName','name':'产品名称',style:'text-align:center'},
+                            {'value':'productStatusName','name':'产品状态',style:'text-align:center'}
+                            ]"
+                       ></div>
+                </div>
+
+			</div>
+		</div>
+	</form>
+	
+ 
+        
+</div>

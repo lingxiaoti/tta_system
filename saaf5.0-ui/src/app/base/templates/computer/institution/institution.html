@@ -1,0 +1,518 @@
+<div ng-controller="institutionCtrl" class="gridtable">
+	<div class="form bg-white" data-des="此节点必需－内框页面的指令" ng-style="{height:(saafWindowHeight-10+'px')}">
+		<style>
+			.nicescroll-height {
+				moz-user-select: -moz-none;
+				-moz-user-select: none;
+				-o-user-select: none;
+				-khtml-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+		</style>
+		<!--------------------- 按钮--->
+		<!--<div user-button data-des="此节点必需－用户的按钮指令"></div>-->
+		<div class="bg-gray-white bt">
+			<div class="bg-gray-white p5">
+
+			<!--	<div    class="btn-group btn-group-xs fr   "  ng-show="showFlag!=3">
+					<button class="btn btn-default dropdown-toggle " ng-click="btnNew()" data-toggle="dropdown" id="addNew" permission-btn="">
+						<i class="fa fa-plus"></i>新增 <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu"  aria-labelledby="addNew">
+						<li ng-repeat="li in lookup.dataList">
+							<a id="action-1" href="javascript:"  ng-click="showTypeChange(li.lookupCode);add(li.lookupCode)">{{li.meaning}}</a>
+						</li>
+					</ul>
+
+					<button class="btn btn-default" permission-btn="" ng-show="showType!='PERSON'"
+							ng-disabled=" !(orgTable.selectRow  && (showType==='DEPT' || showType==='ORG')) && !(jobTable.selectRow && showType==='JOB') && !(personTable.selectRow && showType==='PERSON') "
+							ng-click="btnModify()"><i class="fa fa-edit"></i>修改
+					</button>
+
+					<button class="btn btn-default" permission-btn=""
+							ng-disabled=" !(orgTable.selectRow  && (showType==='DEPT' || showType==='ORG')) && !(jobTable.selectRow && showType==='JOB') && !(personTable.selectRow && showType==='PERSON') "
+							ng-click="btnDel()"><i class="fa fa-remove"></i>删除
+					</button>
+				</div>
+				<div class="btn-group btn-group-xs pull-right mr10" ng-show="showFlag==2">
+					<button class="btn btn-default" type="button" ng-click="btnSearch()">
+						<i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+					</button>
+					<button class="btn btn-default" type="button" ng-click="btnRestore()">
+						<i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+					</button>
+				</div>
+-->
+				<div class="btn-group btn-group-xs ">
+
+					<button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+					</button>
+				</div>
+				<div class="btn-group btn-group-xs ">
+					<button class="btn btn-success" ng-disabled="showFlag==1" ng-click="layout(1)">
+						<i class="fa fa-square-o"></i> 使用树状模式
+					</button>
+					<!--<button class="btn btn-success" ng-disabled="showFlag==2" ng-click="layout(2)">
+						<i class="fa fa-square-o"></i> 使用表格模式
+					</button>-->
+					<button class="btn btn-success" ng-disabled="showFlag==3" ng-click="layout(3)">
+						<i class="fa fa-square-o"></i> 使用层级模式
+					</button>
+				</div>
+			</div>
+		</div>
+		<!---------------------  / .按钮  --->
+		<!------------------ 树状模式 --------------->
+		<div ng-show="showFlag==1">
+			<div main-scroll-style class="col-xs-3 br" style="margin-right: -1px;" data-des="此节点必需－用户计算滚动区域高度">
+				<div class="" ng-nicescroll style="height:100%"
+					 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+					<ul sie-ztree="orgTree" style="margin-bottom: 10px;" class="ztree pt10 pb10" id="orgTree"
+						data-url="orgList"
+						data-params="{{ treeParams }}"
+						data-simpledata='{"enable":"true","idKey":"orgId","pIdKey":"parentOrgId","rootPId":{{rootParentId}} }'
+
+						data-keys='{"name":"orgName"}'
+						data-page-rows="10000"
+						data-expand-node="true"
+						data-node-click="treeClick"
+						data-edit="true"
+						data-callback-beforedrop="updateLevel"
+					>
+					</ul>
+				</div>
+			</div>
+			<!--<div class="col-xs-9 bl h">
+				<div class=" mt10 pb5  bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+					<form>
+						<div class="form-group col-xs-4 col-md-3">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn">
+									<span class="">显示类型</span>
+								</label>
+
+								<div lookup-code="{{ lookupCode }}" id="lookup" ng-model="showType" data-callback="showTypeChange"></div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="pb20" id="treeLayout">
+					<div base-data-table="orgTable" id="orgTable" ng-show="showType==='DEPT' || showType==='ORG'"
+						 ng-params="orgTableParams" data-desc="部门＼机构"
+						 data-checked-type="radio"
+						 data-keys="{'key':'orgId','value':'orgName'}"
+						 data-url="{{orgTableUrl}}"
+						 data-auto-request='false'
+						 data-legend="[
+						 {'value':'parentOrgName','name':'父级组织'},
+						 {'value':'orgName','name':'组织名称'},
+						 {'value':'orgCode','name':'组织编码'},
+						 {'value':'treeType','name':'组织树类型'},
+						 {'value':'channelType','name':'渠道类型'},
+						 {'value':'startDate','name':'生效日期'}
+						 ]">
+					</div>
+					<div base-data-table="jobTable" ng-params="jobTableParams" data-desc="职位" ng-show="showType==='JOB'"
+						 data-show-index="true"
+						 data-url="positionListByOrgId"
+						 data-auto-request="false"
+						 data-func-column="[{'icon':'fa  fa-user-plus','text':'新增人员','callback':'addPerson'}]"
+						 data-legend="[{'value':'positionName','name':'职位名称'}]">
+					</div>
+						<div base-data-table="personTable" ng-params="personTableParams" ng-show="showType==='PERSON'"
+						 data-desc="人员"
+						 data-show-index="true"
+						 data-recording-list="false"
+						 data-url="personListByOrgId"
+						 data-auto-request='false'
+						 data-legend="[{'value':'personName','name':'员工名字'},{'name':'员工编号','value':'employeeNumber'},{'value':'sex','name':'性别'},{'value':'email','name':'邮箱'},{'value':'mobilePhone','name':'手机号'},{'value':'postalAddress','name':'通信地址'}]">
+					</div>
+				</div>
+				　
+			</div>-->
+
+		</div>
+		<!------------------ 树状模式end --------------->
+
+		<!--      表格模式      -->
+		<div ng-show="showFlag===2" main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+			<div class="nicescroll-height  bg-white " ng-nicescroll
+				 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+				<!--------------------- 输入表单  --->
+				<form id="formArea" class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+					<div class="form-group col-xs-4 col-md-3">
+						<div class="input-group input-group-xs">
+							<label class="input-group-addon bn"><span
+									class="pl10">组织名称:</span></label>
+							<input type="text" class="form-control radius3" name="interfaceCode"
+								   ng-model="params.responsibilityName" placeholder="">
+						</div>
+					</div>
+					<div class="form-group col-xs-4 col-md-3">
+						<div class="input-group input-group-xs">
+							<label class="input-group-addon bn"><span
+									class="pl10">生效日期从</span></label>
+
+							<input type="text" class="form-control radius3" id="varstartTime1" date-time-picker
+								   data-date-format="yyyy-mm-dd" data-enddate="{{params.varStartDateActiveTo}}"
+
+								   data-min-View="2" ng-model="params.startDateActive">
+
+						</div>
+					</div>
+					<div class="form-group col-xs-4 col-md-3" style="position: relative;right: 70px;">
+						<div class="input-group input-group-xs">
+							<label class="input-group-addon bn tl"><span>至</span></label>
+							<input type="text" class="form-control radius3" id="endTime" date-time-picker
+								   data-date-format="yyyy-mm-dd"
+								   data-stratdate="{{params.startDateActive}}"
+								   data-min-View="2" ng-model="params.endDateActive">
+
+						</div>
+					</div>
+					<input type="submit" hidden>
+
+					<div class="cb"></div>
+				</form>
+				<!--------------------- ./  输入表单  --->
+				<div id="tableLayout"></div>
+				<!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+			</div>
+		</div>
+		<!--------------------------　层级模式------------------------------------------------------->
+		<div ng-show="showFlag==3"   data-des="此节点必需－用户计算滚动区域高度">
+			<div class="nicescroll-height  bg-white " data-des="此节点必需-滚动内容及指令">
+				<div class="bg-white">
+					<div class="col-xs-12 bl pr15 " main-scroll-style>
+						<div class="nicescroll-height " ng-nicescroll1
+							 nice-option="{cursorcolor: '#1e90c2',touchbehavior:false,cursorwidth:10,zindex:10}"
+							 data-des="此节点必需-滚动内容及指令">
+							<div comp-org-tree   data-edit="true"
+								 ng-data-source="orgTree.treeData"
+								 data-keys="{'key':'orgId','value':'orgName'}"
+								 data-simpledata='{"idKey":"orgId","pIdKey":"parentOrgId","pIdVal":"{{ rootParentId }}"}'
+								 data-params='{"params":"{}","pageIndex":"1","pageRows":"9999999"}'
+								 data-table-legend="[{'value':'orgId','name':'ID','style':'width:40px;'},{'value':'orgName','name':'组织名称'},{'value':'orgCode','name':'组织编码'},{'value':'treeType','name':'组织树类型'},{'value':'channelType','name':'渠道类型'},{'value':'businessTypeMeaning','name':'类型'}]"
+								 data-expandlevel="2"
+								 data-callback-remove="comRemove"
+								 data-callback-add="comAdd"
+								 data-callback-edit="comEdit"></div>
+							<div class="cb"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 部门编辑 -->
+		<div class="modal fade" id="deptModal" data-backdrop="static" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="myDeptModalLabel">
+							{{orgTitle}}维护
+						</h4>
+					</div>
+					<div class="modal-body">
+						<form name="orgForm">
+							<div class="row">
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    <i class="red">*</i>{{ orgTitle}}名称</span></label>
+										<input type="text" class="form-control radius3" placeholder="" required name="orgParamsOrgName"
+											   ng-model="orgParams.orgName">
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div z-tree-select="parentOrgId"
+										 name="treeCurrentItemOrgName"
+										 ng-value="treeCurrentItem.orgName"
+										 ng-key="treeCurrentItem.orgId"
+										 ng-tree-data="orgTree.treeData"
+										 data-label="父级组织/部门"
+										 data-input-readonly="true"
+										 data-required="true"
+										 data-simpledata='{"enable":"true","idKey":"orgId","pIdKey":"parentOrgId","rootPId":{{rootParentId}} }'
+										 data-keys='{"name":"orgName"}'
+										 data-expand-node="true"
+										 data-node-click="parentTreeClick"
+										 data-append-node='{"orgName":"顶层组织架构","idKey":"{{rootParentId}}"}'
+									></div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    <i class="red">*</i>{{ orgTitle}}编码</span></label>
+										<input type="text" class="form-control radius3" placeholder="" required name="orgParamsOrgCode"
+											   ng-model="orgParams.orgCode">
+									<span class="input-group-btn">
+									<button type="button" class="btn btn-warning" ng-click="jianpin()">简拼</button>
+								</span>
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    <i class="red">*</i>{{ orgTitle}}树类型</span></label>
+										<div lookup-code="TREE_TYPE" required="" ng-model="orgParams.treeType"  name="orgParamsTreeType" ng-disabled="treeType.toUpperCase()!=='ALL'"></div>
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    <i class="red">*</i>渠道类型</span></label>
+										<div lookup-code="CHANNEL_TYPE" ng-model="orgParams.channelType" name="orgParamsChannelType" required></div>
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    <i class="red">*</i>业务类型</span></label>
+										<span lookup-code="BUSINESS_TYPE" ng-model="orgParams.businessType" name="orgParamsBusinessType"
+											  required></span>
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    <i class="red">*</i>部门/渠道标志</span></label>
+										<div lookup-code="YES_OR_NO" ng-model="orgParams.isDep" name="orgParamsIsDep" required=""></div>
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    <i class="red">*</i>组织类型</span></label>
+										<div lookup-code="ORG_TYPE" ng-model="orgParams.orgType"></div>
+									</div>
+								</div>
+
+
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    排序号</span></label>
+										<input type="text" class="form-control radius3" placeholder=""
+											   ng-model="orgParams.orderNo">
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    邮件地址</span></label>
+										<input type="text" class="form-control radius3" placeholder=""
+											   ng-model="orgParams.orgEmail">
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    {{orgTitle}}领导</span></label>
+										<input type="text" class="form-control radius3" placeholder=""
+											   data-toggle="modal"
+											   data-target="#leader-lov"
+											   ng-model="orgParams.leaderPersonName">
+									<span class="input-group-btn">
+										<button class="btn btn-primary " data-toggle="modal"
+												data-target="#leader-lov">
+											<i class="fa fa-search"></i>
+										</button>
+									</span>
+									</div>
+
+								</div>
+
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    <i class="red">*</i>生效日期</span></label>
+										<input type="text" class="form-control radius3"
+											   data-enddate="{{orgParams.endDate}}" data-min-View="2"
+											   ng-model="orgParams.startDate" data-date-format="yyyy-mm-dd"
+											   data-is-today="true"
+											   date-time-picker>
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    内销业务代码</span></label>
+										<input type="text" class="form-control radius3" placeholder="" disabled
+											   ng-model="orgParams.nxBusinessCode">
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    外销业务代码</span></label>
+										<input type="text" class="form-control radius3" placeholder=""  disabled
+											   ng-model="orgParams.wxBusinessCode">
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    失效日期</span></label>
+
+										<input type="text" class="form-control radius3"
+											   data-stratdate="{{orgParams.startDate}}" data-min-View="2"
+											   ng-model="orgParams.endDate" data-date-format="yyyy-mm-dd"
+											   date-time-picker>
+									</div>
+								</div>
+
+
+								<div class="form-group col-xs-10 col-md-10">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+											<span class="w100">备注</span></label>
+										<input type="text" class="form-control radius3" ng-model="currentData.remark">
+									</div>
+								</div>
+								<div class="cb"></div>
+
+
+							</div>
+
+							<div class="modal-footer ">
+								<div style="text-align:center">
+									<button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+									</button>
+									<button ng-click="saveOrg(orgForm.$invalid)" validate-form-btn="orgForm"  id="saveButton" class="btn btn-primary  ">保存
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+			</div>
+			<!-- /.modal -->
+		</div>
+		<div lov-list="leaderList" role="dialog" data-title="部门领导" id="leader-lov" ng-model="current.leader"
+			 data-url="personFind"
+			 data-params='{}'
+			 data-return-value="orgParams.leaderPersonName"
+			 data-return-key="orgParams.leaderId"
+			 data-checked-type="radio"
+			 data-keys="{'key':'personId','value':'personName'}"
+			 data-show-index="true"
+			 data-other-column="[{'name':'员工编号','key':'employeeNumber'}]"
+			 data-search-key="{'key':'personName','placeholder':'请输入员工姓名'}"
+			 data-pagination="{'pageIndex':'1','pageRows':'5'}"
+		></div>
+		<div lov-list="personLovList" role="dialog" data-title="员工" id="person-lov" ng-model="current.person"
+			 data-url="personFind"
+			 data-checked-type="checkbox"
+			 data-keys="{'key':'personId','value':'personName'}"
+
+			 data-other-column="[{'name':'员工编号','key':'employeeNumber'},{'key':'sex','name':'性别'},{'key':'email','name':'邮箱'},{'key':'mobilePhone','name':'手机号'}]"
+			 data-search-key="{'key':'personName','placeholder':'请输入员工姓名'}"
+			 data-pagination="{'pageIndex':'1','pageRows':'5'}"
+			 data-callback="savePerson"
+		></div>
+		<!-- 职位编辑 -->
+		<div class="modal fade" id="jobModal" data-backdrop="static" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title">
+							职位维护
+						</h4>
+					</div>
+					<div class="modal-body">
+						<form ng-submit="saveJob(jobForm.$invalid)" name="jobForm">
+							<div class="row">
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    <i class="red">*</i>职位名称</span></label>
+										<input type="text" class="form-control radius3" placeholder="" required
+											   ng-model="jobParams.positionName">
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div z-tree-select="parentJobId"
+										 ng-value="treeCurrentItem.orgName"
+										 ng-key="treeCurrentItem.orgId"
+										 ng-tree-data="orgTree.treeData"
+										 data-label="父级组织/部门"
+										 data-input-readonly="true"
+										 data-required="true"
+										 data-simpledata='{"enable":"true","idKey":"orgId","pIdKey":"parentOrgId","rootPId":"{{rootParentId}}"}'
+										 data-keys='{"name":"orgName"}'
+										 data-expand-node="true"
+										 data-node-click="parentTreeClick"
+										 data-append-node='{"orgName":"顶层组织架构－－－","idKey":"{{rootParentId}}"}'
+									></div>
+								</div>
+
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    <i class="red">*</i>生效日期</span></label>
+										<input type="text" class="form-control radius3"
+											   data-enddate="{{jobParams.endDate}}" data-min-View="2"
+											   ng-model="jobParams.startDate" data-date-format="yyyy-mm-dd"
+											   data-is-today="true"
+											   date-time-picker>
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn">
+										<span class="w100">
+                                    <i class="red">*</i>失效日期</span></label>
+										<input type="text" class="form-control radius3"
+											   data-stratdate="{{jobParams.startDate}}" data-min-View="2"
+											   ng-model="jobParams.endDate" data-date-format="yyyy-mm-dd"
+											   date-time-picker>
+									</div>
+								</div>
+
+								<div class="cb"></div>
+
+
+							</div>
+
+							<div class="modal-footer ">
+								<div class="btn-group-md tc">
+									<button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+									</button>
+									<button class="btn btn-primary ">保存</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+			</div>
+			<!-- /.modal -->
+		</div>
+	</div>
+</div>

@@ -1,0 +1,1514 @@
+<script type="text/javascript" src="http://10.82.24.107/api/ttaServer/pageOfficeService/pageoffice.js" id="po_js_main"></script>
+<style>
+    .longHr {
+        width: 97%;
+        border: 1px solid #3e89c0
+    }
+    .soleAgrtInfo thead{
+        border-bottom: 2px solid #d5efed;
+        background-color: #E2EFEF;
+    }
+    .soleAgrtInfo tbody tr td{
+        text-align: center;
+    }
+
+    .soleItemTable thead {
+        border-bottom: 2px solid #d5efed;
+        background-color: #E2EFEF;
+    }
+
+    .soleItemTable  tbody tr td {
+
+    }
+
+</style>
+<div ng-controller="exclusiveDetailCtrl" class="bigdata">
+    <div id="processForm"
+         data-api-post="saveOrUpdateTtaSoleAgrt"
+         data-api-get="findTtaSoleAgrtPagination"
+         data-api-update="saveOrUpdateTtaSoleAgrt">
+    </div>
+    <div class="form bg-white">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <!--<button class="btn btn-default" permission-btn="HTMBDY" ng-click="HTMBDY()" ng-disabled = "project.status != 'C'">
+                        </button>-->
+                        <!--name="printButton"-->
+                        <button class="btn btn-default" type="button" ng-click="btnContractEdit()" ng-if="project.agrtType == 'nostandard'" ng-disabled="project.status !='A'">
+                            <i class="fa fa-search"></i>{{$l('合同编辑')}}
+                        </button>
+                        <button class="btn btn-default dataMax" type="button" ng-click="btnContractView()" id="contractViewId" >
+                            <i class="fa fa-print"></i>{{$l('合同查看')}}
+                        </button>
+                        <button type="button" class="btn btn-default" id="saveButton" permission-btn="btnSave" ng-disabled="project.status != 'A'"
+                                data-validate-form="protocolForm">
+                        </button>
+                        <button type="button" ng-click="submitApproval()" ng-disabled="project.status !='A' || !id"
+                                permission-btn="submitApproval"
+                                class="btn btn-default" data-validate-form="protocolForm" id="submitApproval">
+                        </button>
+                        <button type="button" ng-click="btnChange()" ng-disabled="project.status !='C'"
+                                permission-btn="btnChange"
+                                class="btn btn-default" data-validate-form="protocolForm" id="exclusiveChangeId">
+                        </button>
+
+                        <button class="btn btn-default" type="button" ng-click="btnCancal()" ng-disabled = "project.status !='C'">
+                            <i class="fa fa-print"></i>{{$l('取消')}}
+                        </button>
+
+                        <button type="button" ng-click="btnDiscard()" ng-disabled="project.status !='A' || !id"
+                                permission-btn="btnDiscard"
+                                class="btn btn-default" data-validate-form="protocolForm" >
+                        </button>
+                        <!--<div class="btn-group btn-group-xs" permission-buttons="btnDiscard" ng-disabled = "project.status == 'A'"></div>-->
+                    </div>
+                </div>
+                <div class="btn-group btn-group-xs ">
+                    <button  type="button" class="btn btn-primary dataMax" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i><span ng-bind="$l('全屏')"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+                <ul ng-if="!urlParams.businessKey" class="nav nav-tabs mt10">
+                    <li role="presentation" class="active" ng-click="tabChange('exclusiveDetailBusiness')">
+                        <a href="#exclusiveDetailBusiness" aria-controls="exclusiveDetailBusiness" role="tab"
+                           data-toggle="tab">业务表单</a>
+                    </li>
+                    <li role="presentation" ng-click="tabChange('opinion')">
+                        <a href="#opinion" aria-controls="opinion" role="tab" data-toggle="tab">流程图</a>
+                    </li>
+                    <li ng-show="tabAction=='opinion'">
+                        <ul>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #cc0033;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">未接收</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #ff6600;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">办理中</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #339933;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">已办结</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #666666;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">预设步骤</span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <!--输入表单-->
+                <div ng-show="tabAction== 'exclusiveDetailBusiness'" role="tabpanel" class="tab-pane active"
+                     id="exclusiveDetailBusiness"
+                     style="border: 0;width:100%;overflow-y: auto;">
+                    <div class=" mt10 pb5  "
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <form id="protocolForm" name="protocolForm">
+                        <div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">单据编号:</span></label>
+                                    <input ng-disabled="true" type="text" class="form-control radius3"
+                                           data-required-msg="单据编号" name="projectSideAgrtCode"
+                                           ng-model="project.soleAgrtCode">
+                                    <input type="hidden" class="form-control radius3" ng-model="project.soleAgrtHId">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">版本号:</span></label>
+                                    <input type="text" class="form-control radius3" disabled="true" name="projectSideAgrtVersion"
+                                           ng-model="project.soleAgrtVersion">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100 "><i class="red">*</i>屈臣氏甲方名称:</span>
+                                    </label>
+                                    <div lookup-code="TTA_OWNER_COMPANY" ng-model="project.ownerCompany" required  ng-disabled="project.status != 'A'"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100"><i class="red">*</i>供应商编号:</span></label>
+                                    <input type="text" class="form-control radius3" required
+                                           name="projectVendorCode" disabled
+                                           data-required-msg="供应商编号"
+                                           ng-model="project.vendorCode">
+                                    <span class="input-group-btn ng-scope">
+                                            <button class="btn btn-default" ng-click="getVendorCode()" type="button" ng-disabled="project.status != 'A'">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">供应商名称:</span></label>
+                                    <input type="text" class="form-control radius3"
+                                           name="projectVendorName" disabled
+                                           ng-model="project.vendorName">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100 "><i class="red">*</i>独家协议类型：</span></label>
+                                    <div lookup-code="TTA_EXCLUSIVE_TYPE" data-required="true"
+                                         ng-model="project.agrtType" ng-disabled="true"
+                                         id="projectSaTeyp" name="projectAgrtType"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3" id="isSkipApproveDiv">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                        <span class="w150">是否需要GM审批</span>
+                                    </label>
+                                    <input class=" radius3" name="isShowFlag" ng-model="isShowFlag" ng-show="false">
+                                    <input class="radius3" name="isSkipApprove" ng-false-value="'N'" id="isSkipApprove" ng-disabled="!isShowFlag"
+                                           ng-model="project.isSkipApprove"
+                                           ng-true-value="'Y'" type="checkbox" ng-change="isSkipApproveFun()">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100"><i class="red">*</i>独家销售起始时间:</span></label><!--独家协议开始日期-->
+                                    <!--data-stratdate="{{selectStartDate}}"-->
+                                    <input type="text" required class="form-control radius3 input-xs" ng-disabled="project.status != 'A'"
+                                           date-time-picker data-is-today="false" name="projectStartDate"
+                                           data-stratdate="{{selectStartDate}}"
+                                           data-enddate = "{{project.endDate}}"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-min-view="2" ng-model="project.startDate"
+                                           ng-change="changeDate()"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100"><i class="red">*</i>独家销售结束时间:</span></label><!--独家协议结束日期-->
+                                    <input type="text" required class="form-control radius3 input-xs"
+                                           ng-disabled="project.status != 'A'"
+                                           date-time-picker data-is-today="false" name="projectEndDate"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-stratdate="{{project.startDate}}"
+                                           data-min-view="2" ng-model="project.endDate"
+                                           ng-change="changeDate()"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100 ">单据状态:</span>
+                                    </label>
+                                    <div lookup-code="EXCLUSIVE_STAUTS" disabled ng-model="project.status"
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">制单日期:</span></label>
+                                    <input type="text" class="form-control radius3"
+                                           name="projectCreationDate" disabled
+                                           ng-model="project.creationDate">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">制单人:</span></label>
+                                    <input type="text" class="form-control radius3" disabled name="projectCreatedBy"
+                                           ng-model="project.createByUser">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">部门编码:</span></label>
+                                    <input type="text" class="form-control radius3" disabled name="deptCode"
+                                           ng-model="project.deptCode">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">部门名称:</span></label>
+                                    <input type="text" class="form-control radius3" disabled name="deptName"
+                                           ng-model="project.deptName">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">BIC登记:</span></label>
+                                    <input type="text"  class="form-control radius3 input-xs"
+                                           date-time-picker data-is-today="false" name="bicRegister"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-min-view="2" ng-model="project.bicRegister"
+                                           autocomplete="off" ng-disabled="userData.userType != '45' && project.status != 'B'">
+                                    <!--ng-disabled="userData.userType != '45'"-->
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">财务登记:</span></label>
+                                    <input type="text"  class="form-control radius3 input-xs"
+                                           disabled
+                                           date-time-picker data-is-today="false" name="financeRegister"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-min-view="2" ng-model="project.financeRegister"
+                                           autocomplete="off" ng-disabled="userData.userType != '100' && project.status != 'C'">
+                                    <!--ng-disabled="userData.userType != '100'"-->
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">法务登记:</span></label>
+                                    <input type="text"  class="form-control radius3 input-xs"
+                                           disabled
+                                           date-time-picker data-is-today="false" name="legaRegister"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-min-view="2" ng-model="project.legaRegister"
+                                           autocomplete="off" ng-disabled="userData.userType != '110' && project.status != 'C'">
+                                    <!--ng-disabled="userData.userType != '110'"-->
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">归档日期:</span></label>
+                                    <input type="text"  class="form-control radius3 input-xs"
+                                           disabled
+                                           date-time-picker data-is-today="false" name="pigeonholeDate"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-min-view="2" ng-model="project.pigeonholeDate"
+                                           autocomplete="off" ng-disabled="userData.userType != '45' && project.status != 'C'">
+                                    <!--ng-disabled="userData.userType != '110'"-->
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div>
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <label>{{$l('匹配Proposal供应商')}}</label>
+                            <div class="pull-right ml10">
+                                <div class="btn-group btn-group-xs ">
+                                    <!--data-target="#proposalSupplierLov"-->
+                                    <button class="btn btn-default" type="button" data-toggle="modal" ng-click="getContractVendorProposal()" ng-disabled = "project.status != 'A'" disabled>
+                                        <i class="fa fa-plus" aria-hidden="true"></i>{{$l('选择Proposal')}}
+                                    </button>
+                                    <button class="btn btn-default" type="button" ng-click="btnDelProposalSupplier()" data-toggle="modal"
+                                            ng-disabled="project.status != 'A' || !dataTable.selectRowList">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>{{$l('删除')}}
+                                    </button>
+                                </div>
+                            </div>
+                        </header>
+                        <hr class="longHr">
+                        <div class="data-table" style="margin: auto; width: 97%">
+                            <div base-data-table="dataTable"
+                                 ng-params="params"
+                                 data-url="ttaProposalSupplierFind"
+                                 data-checked-type="checkbox"
+                                 data-auto-request="true"
+                                 data-keys="{'key':'soleSupplierId'}"
+                                 data-legend="[
+                                 {'value':'poposalCode','name':'Proposal合同号'},
+                                 {'value':'proposalVersion','name':'版本号'},
+                                 {'value':'proposalYear','name':'年度'},
+                                 {'value':'supplierCode','name':'供应商编号'},
+                                 {'value':'supplierName','name':'供应商名称'}
+                             ]"
+                            ></div>
+                        </div>
+                        <div style="height: 20px"></div>
+                    </div>
+                    <div id="controlDiv">
+                        <header class="col-xs-12 mb10">
+                            <label>{{$l('独家协议信息')}}</label>
+                            <div class="pull-right ml10">
+                                <div class="btn-group btn-group-xs">
+                                    <button class="btn btn-default" type="button" ng-click="deleteSoleAgrtInfo()" data-toggle="modal" name="readyBtn"
+                                             ng-disabled="project.status !='A' || !currentSoleAgrtInfo.selectRowData">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>{{$l('删除')}}
+                                    </button>
+                                    <button class="btn btn-default" type="button" ng-click="btnNewSoleAgrtInfo()" data-toggle="modal"
+                                            data-target="" ng-disabled="project.status !='A' || !project.soleAgrtHId">
+                                        <i class="fa fa-plus" aria-hidden="true" ></i>{{$l('新增')}}
+                                    </button>
+                                    <button class="btn btn-default" type="button" ng-click="btnUdateSoleAgrtInfo()" data-toggle="modal" name="readyBtn"
+                                            data-target="" ng-disabled="project.status !='A'|| !currentSoleAgrtInfo.selectRowData">
+                                        <i class="fa fa-pencil" aria-hidden="true" ></i>修改
+                                    </button>
+                                    <button id="enableOp" class="btn btn-default" type="button" ng-click="btnSaveSoleAgrtInfo('2')" data-toggle="modal"
+                                            ng-disabled="project.status !='A'" >
+                                        <i class="fa fa-save" aria-hidden="true"></i>{{$l('保存')}}
+                                    </button>
+                                </div>
+                            </div>
+                        </header>
+                            <!--<hr class="longHr">-->
+                        <div class="data-table" style="margin: auto; width: 97%;" ng-nicescroll nice-option="{railvalign: 'bottom',cursorcolor:'#1e90c2',cursorwidth:'10px'}">
+                            <table class="table table-bordered table-hover table-condensed soleAgrtInfo" id="soleAgrtInfoTableId" ><!--ng-nicescroll="" id="nicescroll_{{ id }}" nice-option="{autohidemode:'cursor',railvalign: 'bottom',cursorcolor:'#1e90c2'}"--->
+                                <thead>
+                                    <tr class="text-center">
+                                        <th style="width: 40px;">
+                                            <input ng-checked="selectedAll" type="checkbox"
+                                                   ng-click="checkedAll($event)">
+                                        </th>
+                                        <th style="width: 60px;" ng-if="true">序号</th>
+                                        <th>供应商编号</th>
+                                        <th>供应商名称</th>
+                                        <th>DEPT_CODE</th>
+                                        <th>DEPT_DESC</th>
+                                        <th>独家品牌(中文)</th>
+                                        <th>独家销售起始时间</th>
+                                        <th>独家销售结束时间</th>
+                                        <th>独家产品类型</th>
+                                        <th>独家渠道类型</th>
+                                        <th>独家销售区域</th>
+                                        <th>新品是否直接成为独家产品</th>
+                                        <th>是否独家产品主要成分显著不同</th>
+                                        <th>是否独家期限自动顺延</th>
+                                        <th>是否包含电商渠道</th>
+                                        <th>是否包含独家渠道例外情形</th>
+                                        <th>独家渠道例外情形具体描述</th>
+                                        <th>备注</th>
+                                        <th>是否续签</th>
+                                        <th ng-if="isShowFlag">是否PEB</th>
+                                        <th ng-if="isShowFlag">独家协议是否已结束</th>
+                                        <th ng-if="isShowFlag">是否签订转户协议</th>
+                                        <th ng-if="isShowFlag">是否获得特批</th>
+                                        <th ng-if="isShowFlag">是否追回销售</th>
+                                        <th ng-if="isShowFlag">双方是否已盖章</th>
+                                        <th ng-if="isShowFlag">独家协议情况</th>
+                                        <th ng-if="isShowFlag">独家协议接收时间</th>
+                                        <th ng-if="isShowFlag">系统实际起始时间</th>
+                                        <th ng-if="isShowFlag">系统实际结束时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody  ng-nicescroll="" ng-if="exclusiveProtocolInfo.length > 0">
+                                    <tr class="text-center" ng-repeat="row in exclusiveProtocolInfo track by $index" ng-dblclick="solAgrtInfoRow(row,$index)"
+                                        ng-class="{'active':currentSoleAgrtInfo.selectRow == $index}"
+                                        ng-click="currentSoleAgrtInfo.selectRow=$index;
+                                        currentSoleAgrtInfo.selectRowData =row;">
+                                        <!--ng-click="rowChecked($index,$event)"-->
+                                        <td style="width: 40px;"   >
+                                            <input id="" ng-checked="row.checked" type="checkbox"
+                                                   ng-click="check(row,$event)" name="keys"
+                                                   >
+                                        </td>
+                                        <td>{{$index + 1}}</td><!--序号-->
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                                <span>{{row.supplierCode}}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                                <span class="report-td" title="{{ row.supplierName }}"
+                                                    ng-bind="row.supplierName">
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                                <input data-required-msg="请选择部门" ng-model="row.orgCode"  readonly  class="form-control radius3"  name="currentOrgCode" style="width: 110px" >
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" ng-click="getSoleInfoModal('update')" data-toggle="modal"><i class="fa fa-search"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                                <span class="report-td" title="{{row.orgName}}"
+                                                      ng-bind="row.orgName">
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                                <input type="text" class="form-control radius3" ng-model="row.soleBrandCn" disabled>
+                                                <span class="input-group-btn ng-scope">
+                                                    <button type="button" class="btn btn-default" ng-click="getProposalBrandBtn(row)" data-toggle="modal"><i class="fa fa-search"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <!--独家销售起始时间-->
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                                <input class="form-control radius3" ng-model="row.saleStartDate" date-time-picker style="width: 130px"
+                                                    name="currentSaleStartDate"  data-is-today="false" autocomplete="off"
+                                                    data-min-view="2" data-date-format="yyyy-mm-dd"
+                                                       data-stratdate="{{selectStartDate}}"
+                                                       data-enddate="{{row.saleEndDate}}" ng-change="soleNewChangeDate('update')">
+                                            </div>
+                                        </td>
+                                        <!--独家销售结束时间-->
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                            <input class="form-control radius3" ng-model="row.saleEndDate" date-time-picker style="width: 130px"
+                                                   name="currentSaleEndDate"  data-is-today="false" autocomplete="off"
+
+                                                   data-min-view="2" data-date-format="yyyy-mm-dd" data-stratdate="{{row.saleStartDate}}" ng-change="soleNewChangeDate('update')">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                                <div lookup-code="SOLE_PRODUCT_TYPE" name="currentProductType" ng-model="row.productType"  style="width: 100px"></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                                <div lookup-code="SOLE_RESOUCE_TYPE" name="currentChannelType" ng-model="row.channelType"  style="width: 100px"></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                            <div lookup-code="SOLE_AGRT_INFO_AREA" name="currentSaleRegion" ng-model="row.saleRegion"  style="width: 140px" ></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                            <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsNewSole" ng-model="row.isNewSole"  style="width: 140px" ></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                            <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsSpecial" ng-model="row.isSpecial"  ></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                            <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsAutoDeferral" ng-model="row.isAutoDeferral"  ></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                            <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsEcChannel" ng-model="row.isEcChannel"  ></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                            <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsException" ng-model="row.isException"  ></div>
+                                            </div>
+                                        </td>
+                                        <!--独家渠道例外情形具体描述-->
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                            <input type="text" class="form-control radius3"
+                                                   ng-model="row.exceptionRemark">
+                                            </div>
+                                        </td>
+                                        <!--备注-->
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                            <input type="text" class="form-control radius3" style="width: 100px"
+                                                   ng-model="row.remark">
+                                            </div>
+                                        </td>
+                                        <!--是否续签-->
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                            <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsRenewal" ng-model="row.isRenewal"  ></div>
+                                            </div>
+                                        </td>
+                                        <!--是否PEB-->
+                                        <td ng-if="isShowFlag" name="controlName">
+                                            <div class="input-group input-group-xs">
+                                                <div lookup-code="YES_OR_NO" name="currentIsPeb" ng-model="row.isPeb"  style="height: 25px;padding: 0px 0px;" ></div>
+                                            </div>
+                                        </td>
+
+                                        <!--独家协议是否已结束-->
+                                        <td ng-if="isShowFlag"  name="controlName">
+                                            <div class="input-group input-group-xs">
+                                                <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsEndArgt" ng-model="row.isEndArgt"  ></div>
+                                            </div>
+                                        </td>
+                                        <!--是否签订转户协议-->
+                                        <td ng-if="isShowFlag"  name="controlName">
+                                            <div class="input-group input-group-xs">
+                                                <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsSignAccount" ng-model="row.isSignAccount"  ></div>
+                                            </div>
+                                        </td>
+                                        <!--是否获得特批-->
+                                        <td ng-if="isShowFlag" name="controlName">
+                                            <div class="input-group input-group-xs">
+                                                <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsSpecialApproval" ng-model="row.isSpecialApproval"  ></div>
+                                            </div>
+                                        </td>
+                                        <!--是否追回销售-->
+                                        <td ng-if="isShowFlag" name="controlName">
+                                            <div class="input-group input-group-xs">
+                                                <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsSpecialApproval" ng-model="row.isTakeBackSell"  ></div>
+                                            </div>
+                                        </td>
+                                        <!--双方是否已盖章-->
+                                        <td ng-if="isShowFlag"  name="controlName">
+                                            <div class="input-group input-group-xs">
+                                                <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsCovered" ng-model="row.isCovered"  ></div>
+                                            </div>
+                                        </td>
+                                        <!--独家协议情况-->
+                                        <td ng-if="isShowFlag"  name="controlName">
+                                            <div class="input-group input-group-xs">
+                                                <input type="text" class="form-control radius3" style="width: 100px"
+                                                       ng-model="row.contractSituation" >
+                                            </div>
+                                        </td>
+                                        <!--独家协议接收时间-->
+                                        <td ng-if="isShowFlag"  name="controlName">
+                                            <div class="input-group input-group-xs">
+                                                <input class="form-control radius3" ng-model="row.contractAcceptDate" date-time-picker style="width: 140px"
+                                                       name="currentContractAcceptDate"  data-is-today="true" autocomplete="off"
+                                                       data-min-view="2" data-date-format="yyyy-mm-dd" >
+                                            </div>
+                                        </td>
+                                        <!--系统实际起始时间-->
+                                        <td ng-if="isShowFlag"  name="controlName">
+                                            <!--data-date-format="yyyy-mm-dd hh:mm:ss"-->
+                                            <div class="input-group input-group-xs">
+                                            <input class="form-control radius3" ng-model="row.sysStartDate" date-time-picker style="width: 140px"
+                                                   name="currentSysStartDate"  data-is-today="true" autocomplete="off"
+                                                   data-min-view="2" data-date-format="yyyy-mm-dd hh:mm:ss" data-enddate="{{row.sysEndDate}}">
+                                            </div>
+                                        </td>
+                                        <!--系统实际结束时间-->
+                                        <td ng-if="isShowFlag"  name="controlName">
+                                            <div class="input-group input-group-xs">
+                                            <input class="form-control radius3" ng-model="row.sysEndDate" date-time-picker style="width: 140px"
+                                                   name="currentSysEndDate"  data-is-today="true" autocomplete="off"
+                                                   data-min-view="2" data-date-format="yyyy-mm-dd hh:mm:ss" data-enddate="{{row.sysStartDate}}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div ng-show="exclusiveProtocolInfo.length===0" class="p15 tc red">
+                                没有数据
+                            </div>
+
+                        </div>
+                    </div>
+                    <div>
+                        <header class="col-xs-12 mb10">
+                            <label>{{$l('ITEM明细')}}</label>
+                            <div class="pull-right ml10">
+                                <div class="btn-group btn-group-xs ">
+                                    <button class="btn btn-default" type="button" data-toggle="modal" name="printButton"
+                                            ng-click="excelModelDownLoad()" ng-disabled="project.status != 'A'"   >
+                                        <i class="fa fa-download" aria-hidden="true"></i>{{$l('EXCEL导入模板下载')}}
+                                    </button>
+                                    <button  name="readyBtn" class="btn btn-default" type="button" saaf-xls-import-component
+                                            data-list-options="{
+                                                deptCode:{headName:'部门',require:true},
+                                                brandCn:{headName:'品牌中文',require:true},
+                                                brandEn:{headName:'品牌英文',require:true},
+                                                itemCode:{headName:'货品编号'},
+                                                itemName:{headName:'货品名称',require:true},
+                                                barCode:{headName:'UPC货品条码',require:true}
+                                            }"
+                                            data-url="saveImportItemDetail"
+                                            data-toggle="modal"
+                                            data-info="{date:'{{currentSoleAgrtInfo.selectRowData.soleAgrtInfoId}}',id:'{{project.soleAgrtHId}}'}"
+                                            data-after-action="returnFlash()"
+                                            data-message="部门/品牌中文/品牌英文/货品名称/货品条码列不可为空,货品编号列为非必填哦"
+                                            ng-disabled="project.status != 'A' || !currentSoleAgrtInfo.selectRowData" >
+                                        <i class="fa fa-upload" aria-hidden="true"></i>{{$l('EXCEL导入')}}
+                                    </button>
+
+                                    <button class="btn btn-default" type="button" ng-click="itemDelete()" data-toggle="modal"
+                                            ng-disabled ="project.status != 'A' || selectRowListItem.length == 0" name="readyBtn">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>{{$l('删除')}}
+                                    </button>
+                                    <button class="btn btn-default" type="button" ng-click="itemNew()" data-toggle="modal"  name="readyBtn"
+                                            ng-disabled="project.status != 'A' || !currentSoleAgrtInfo.selectRowData">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>{{$l('新增')}}
+                                    </button>
+                                    <button class="btn btn-default" type="button" ng-click="itemSelect()" data-toggle="modal"  name="readyBtn"
+                                            ng-disabled="project.status != 'A' || !currentSoleAgrtInfo.selectRowData">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>{{$l('ITEM选择')}}
+                                    </button>
+                                    <!--!currentItemDetailRow.selectRowData-->
+<!--                                    <button class="btn btn-default" type="button" ng-click="itemSaveItemDetail()" data-toggle="modal"  name="readyBtn"
+                                            ng-disabled="project.status != 'A'">
+                                        <i class="fa fa-save" aria-hidden="true" ></i>{{$l('保存')}}
+                                    </button>-->
+                                </div>
+                            </div>
+                        </header>
+                        <hr class="longHr">
+                        <!--ng-nicescroll="" nice-option="{railvalign: 'bottom',cursorcolor:'#1e90c2',cursorwidth:'10px',zindex:100,autohidemode:false}"-->
+                        <div class="data-table" style="margin: auto; width: 97%;margin-bottom: 20px;overflow: auto" >
+                            <table class="nicescroll-height table table-bordered table-hover table-condensed soleItemTable">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th style="width: 40px;">
+                                            <input ng-checked="itemSelectedAll" type="checkbox"
+                                                   ng-click="itemCheckedAll($event)">
+                                        </th>
+                                        <th style="width: 60px;" ng-if="true">序号</th>
+                                        <th>ITEM_NBR</th>
+                                        <th>ITEM_DESC_CN</th>
+                                        <th>UPC货品条码</th>
+                                        <th>VENDOR_NBR</th>
+                                        <th>VENDOR_NAME</th>
+                                        <th>GROUP</th>
+                                        <th>GROUP_DESC</th>
+                                        <th>DEPT</th>
+                                        <th>DEPT_DESC</th>
+                                        <th>BRAND_CN</th>
+                                        <th>BRAND_EN</th>
+                                    </tr>
+                                </thead>
+                                <tbody  ng-nicescroll="" ng-if="itemDetail.length > 0">
+                                    <tr class="text-center" ng-repeat="row in itemDetail track by $index"
+                                        ng-class="{'active':$index === currentItemDetailRow.index}"
+                                        ng-click="currentItemDetailRow.index = $index;
+                                            currentItemDetailRow.selectRowData = row;">
+                                        <td style="width: 40px;">
+                                            <input id="soleItemCheckId" ng-checked="row.checked" type="checkbox"
+                                                   ng-click="itemCheck(row,$event)" name="keys">
+                                        </td>
+                                        <td>{{$index + ((pageNumber-1) * paging.pageSize) + 1}}</td><!--序号-->
+                                        <td>
+                                            <span>{{row.itemCode}}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{row.itemName}}</span>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-xs">
+                                                <span class="report-td" title="{{ row.barCode }}"
+                                                      ng-bind="row.barCode">
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td><span>{{row.vendorNbr}}</span></td>
+                                        <td><span>{{row.vendorName}}</span></td>
+                                        <td>
+                                            <span>{{row.groupCode}}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{row.groupName}}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{row.deptCode}}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{row.deptDesc}}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{row.brandCn}}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{row.brandEn}}</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div ng-show="itemDetail.length===0" class="p15 tc red">
+                                没有数据
+                            </div>
+                            <div class="pl10 pr10 z-index-100">
+                                <div paging page="paging.index"
+                                     page-size="paging.pageSize"
+                                     total="paging.total"
+                                     show-prev-next="true"
+                                     hide-if-empty="true"
+                                     paging-action="searchSoleItemInfo(currentSoleAgrtInfo.selectRowData,page)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div ng-if="!urlParams.businessKey" ng-show="tabAction== 'opinion'" role="tabpanel" class="tab-pane "
+                     id="opinion"
+                     style="border: 0;width:100%;height: 100%; overflow: hidden;position: relative;">
+                    <div id="processImg" style="width: 100%;height:100%; overflow: auto;">流程图加载中，请稍候...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    **********************     独家协议新增弹出框  start   *******************      -->
+    <div>
+        <form id="soleAgrtInfoForm" name="soleAgrtInfoForm" ng-submit="savesoleAgrtInfoModelData(soleAgrtInfoForm)" ng-if="soleAgrtInfoFlag">
+        <div class="modal fade" id="soleAgrtModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+             role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog " style="margin-top: 30px;width: 765px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            独家协议新增
+                        </h4>
+                    </div>
+                    <div class="w80p h20" style=""></div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+
+                            <div class="row">
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>供应商编号：</span></label>
+                                        <input data-required-msg="请选择供应商编号" ng-model="current.supplierCode"    required class="form-control radius3"  name="currentSupplierCode"  >
+                                        <span class="input-group-btn">
+									        <button type="button" class="btn btn-default" data-target="#buttonLov" data-toggle="modal"><i class="fa fa-search"></i></button>
+								        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>供应商名称：</span></label>
+                                        <input type="text" class="form-control radius3"  required
+                                               ng-model="current.supplierName">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>DEPT_CODE：</span></label>
+                                        <input data-required-msg="请选择部门" ng-model="current.orgCode"   required readonly class="form-control radius3"  name="currentOrgCode">
+                                        <span class="input-group-btn">
+									        <button type="button" class="btn btn-default" data-toggle="modal" ng-click="getSoleInfoModal('new')"><i class="fa fa-search"></i></button>
+								        </span>
+                                        <!--<span class="input-group-btn">
+									        <button type="button" class="btn btn-default" data-target="#buttonDeptLov" data-toggle="modal"><i class="fa fa-search"></i></button>
+								        </span>-->
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>DEPT_DESC：</span></label>
+                                        <input type="text" class="form-control radius3"  required disabled
+                                               ng-model="current.orgName">
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>独家品牌(中文)：</span></label>
+                                        <input type="text" class="form-control radius3" required disabled
+                                               ng-model="current.soleBrandCn">
+                                        <span class="input-group-btn">
+									        <button type="button" class="btn btn-default" ng-click="getProposalBrandBtn()"><i class="fa fa-search"></i></button>
+								        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>独家销售起始时间：</span></label>
+                                        <input class="form-control radius3" ng-model="current.saleStartDate" date-time-picker required
+                                               name="currentSaleStartDate"  data-is-today="false" autocomplete="off"
+                                               data-min-view="2" data-date-format="yyyy-mm-dd"
+                                               data-stratdate="{{selectStartDate}}"
+                                               data-enddate="{{current.saleEndDate}}" ng-change="soleNewChangeDate('new')">
+                                        <!--hh:mm:ss-->
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>独家销售结束时间：</span></label>
+                                        <input class="form-control radius3" ng-model="current.saleEndDate" date-time-picker required
+                                               name="currentSaleEndDate"  data-is-today="false" autocomplete="off"
+                                               data-min-view="2" data-date-format="yyyy-mm-dd" data-stratdate="{{current.saleStartDate}}" ng-change="soleNewChangeDate('new')">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs"><!--指定产品-->
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>独家产品类型：</span></label>
+                                        <div lookup-code="SOLE_PRODUCT_TYPE" name="currentProductType" ng-model="current.productType" required data-callback="selectProductTypeCallback"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>独家渠道类别：</span></label>
+                                        <div lookup-code="SOLE_RESOUCE_TYPE" name="currentChannelType" ng-model="current.channelType" required ></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>独家销售地域：</span></label>
+                                        <div lookup-code="SOLE_AGRT_INFO_AREA" name="currentSaleRegion" required ng-model="current.saleRegion" ></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>新品是否直接成为独家产品：</span></label>
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsNewSole" required ng-model="current.isNewSole"  ></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>是否独家产品主要成分显著不同：</span></label>
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO"  name="currentIsSpecial" ng-model="current.isSpecial" required disabled></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>是否独家期限自动顺延：</span></label>
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsAutoDeferral" ng-model="current.isAutoDeferral" required ></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>是否包含电商渠道：</span></label>
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsEcChannel" ng-model="current.isEcChannel" required ></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i class="red">*</i>是否包含独家渠道例外情形：</span></label>
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsException" data-callback="isExceptionCallback" ng-model="current.isException" required ></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180"><i ng-show="exceptionRemarkRequired" class="red">*</i>独家渠道例外情形具体描述：</span></label>
+                                        <input type="text" class="form-control radius3"
+                                               ng-model="current.exceptionRemark"
+                                               id="exceptionRemarkId"
+                                        >
+                                    </div>
+                                </div>
+
+<!--                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 "><i class="red">*</i>双方是否已盖章：</span></label>
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsCovered" ng-model="current.isCovered" required ></div>
+                                    </div>
+                                </div>-->
+
+
+<!--                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 "><i class="red">*</i>是否后期变更条：</span></label>
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsChangeClause" ng-model="current.isChangeClause"  required></div>
+                                    </div>
+                                </div>-->
+
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 ">备注：</span></label>
+                                        <input type="text" class="form-control radius3"
+                                               ng-model="current.remark"
+                                        >
+                                    </div>
+                                </div>
+
+
+<!--                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 ">独家生效时间：</span></label>
+                                        <input class="form-control radius3" ng-model="current.saleEffectDate" date-time-picker
+                                        name="currentSaleEffectDate"  data-is-today="true" autocomplete="off"
+                                        data-min-view="2" data-date-format="yyyy-mm-dd" >
+                                    </div>
+                                </div>-->
+
+                                <!--<div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 ">是否获得特批：</span></label>
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsSpecialApproval" ng-model="current.isSpecialApproval"  ></div>
+                                    </div>
+                                </div>-->
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 ">是否续签：</span></label>
+
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsRenewal" ng-model="current.isRenewal"  ></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group col col-xs-11 col-md-6" ng-if="isShowFlag">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180">是否PEB：</span></label>
+                                        <!-- <input type="text" class="form-control radius3" required
+                                                ng-model="current.isPeb">-->
+                                        <div lookup-code="YES_OR_NO" name="currentIsPeb" ng-model="current.isPeb"  ></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" ng-if="isShowFlag">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 "><i class="red">*</i>独家协议是否已结束：</span></label>
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsEndArgt" ng-model="current.isEndArgt" ></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" ng-if="isShowFlag">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 "><i class="red">*</i>是否签订转户协议：</span></label>
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsSignAccount" ng-model="current.isSignAccount"  ></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" ng-if="isShowFlag">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 "><i class="red">*</i>是否获得特批：</span></label>
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsSpecialApproval" ng-model="current.isSpecialApproval"  ></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" ng-if="isShowFlag">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 "><i class="red">*</i>是否追回销售：</span></label>
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsTakeBackSell" ng-model="current.isTakeBackSell"  ></div>
+                                    </div>
+                                </div>
+                                <div class="form-group col col-xs-11 col-md-6" ng-if="isShowFlag">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 "><i class="red">*</i>双方是否已盖章：</span></label>
+                                        <div lookup-code="EXCLUSIVE_YES_OR_NO" name="currentIsCovered" ng-model="current.isCovered"  ></div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group col col-xs-11 col-md-6" ng-if="isShowFlag">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 ">独家协议情况：</span></label>
+                                        <input type="text" class="form-control radius3"
+                                               ng-model="current.contractSituation"
+                                        >
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" ng-if="isShowFlag">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 ">独家协议接收时间：</span></label>
+                                        <input class="form-control radius3" ng-model="current.contractAcceptDate" date-time-picker
+                                               name="currentContractAcceptDate"  data-is-today="true" autocomplete="off"
+                                               data-min-view="2" data-date-format="yyyy-mm-dd" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" ng-if="isShowFlag">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 ">系统实际起始时间：</span></label>
+                                        <input class="form-control radius3" ng-model="current.sysStartDate" date-time-picker
+                                               name="currentSysStartDate"  data-is-today="true" autocomplete="off"
+                                               data-min-view="2" data-date-format="yyyy-mm-dd hh:mm:ss" data-enddate="{{current.sysEndDate}}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" ng-if="isShowFlag">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w180 ">系统实际结束时间：</span></label>
+
+                                        <input class="form-control radius3" ng-model="current.sysEndDate" date-time-picker
+                                               name="currentSysEndDate"  data-is-today="true" autocomplete="off"
+                                               data-min-view="2" data-date-format="yyyy-mm-dd hh:mm:ss" data-stratdate="{{current.sysStartDate}}">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: 20px;">
+                        <div style="text-align: center">
+                          <!--  <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal"
+                                    aria-label="Close" ng-click="dataTable.search(1)"><span
+                                    class="fa ">取消</span>
+                            </button>
+                            <button id="save"  validate-form-btn="" data-validate-form="editForm" ng-click="save()" class="btn btn-primary btn-sm">
+                                <span>保存</span>
+                            </button>-->
+
+                            <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal"
+                                    aria-label="Close"><span
+                                    class="fa ">取消</span>
+                            </button>
+
+                            <button id="submitArgtInfoId"  type="submit" class="btn btn-primary btn-sm">
+                                <span>保存</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+
+    <div ng-if="soleItemModelShow">
+        <form name="soleItemForm" ng-submit="saveSoleItemModelData(soleItemForm)">
+            <div class="modal fade" id="soleItemMode" data-backdrop="static" data-keyboard="false" tabindex="-1"
+             role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog " style="margin-top: 30px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title" id="myItemModalLabel">
+                            ITEM信息新增
+                        </h4>
+                    </div>
+                    <div class="w80p h20" style=""></div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>VENDOR_NBR：</span></label>
+                                        <input type="text" class="form-control radius3" required disabled
+                                               ng-model="soleItem.vendorNbr" name="soleItemVendorNbr">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>VENDOR_NAME：</span></label>
+                                        <input type="text" class="form-control radius3" required disabled
+                                               ng-model="soleItem.vendorName" name="soleItemVendorName">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>GROUP_CODE：</span></label>
+                                        <input type="text" class="form-control radius3" required disabled
+                                               ng-model="soleItem.groupCode" name="soleItemGroupCode">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>GROUP_DESC：</span></label>
+                                        <input type="text" class="form-control radius3" required disabled
+                                               ng-model="soleItem.groupName" name="soleItemGroupName">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>DEPT_CODE：</span></label>
+                                        <input type="text" class="form-control radius3" required
+                                               ng-model="soleItem.deptCode" name="soleItemDeptCode">
+                                        <span class="input-group-btn">
+									        <button type="button" class="btn btn-default" data-toggle="modal" ng-click="soleItemNewDept()"><i class="fa fa-search"></i></button>
+								        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>DEPT_DESC：</span></label>
+                                        <input type="text" class="form-control radius3" required disabled
+                                               ng-model="soleItem.deptDesc" name="soleItemDeptDesc">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>BRAND_CN：</span></label>
+                                        <input type="text" class="form-control radius3" required
+                                               ng-model="soleItem.brandCn" name="soleItemBrandCn">
+                                        <span class="input-group-btn">
+									        <button type="button" class="btn btn-default" data-toggle="modal" ng-click="soleItemNewBrand()"><i class="fa fa-search"></i></button>
+								        </span>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>BRAND_EN：</span></label>
+                                        <input type="text" class="form-control radius3" required
+                                               ng-model="soleItem.brandEn" name="soleItemBrandEn">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>UPC货品条码：</span></label>
+                                        <input type="text" class="form-control radius3" required
+                                               ng-model="soleItem.barCode">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">ITEM_NBR：</span></label>
+                                        <input data-required-msg="请选择ITEM_NBR" ng-model="soleItem.itemCode" class="form-control radius3"  name="soleItemItemCode" readonly disabled>
+                                        <span class="input-group-btn">
+									        <button type="button" class="btn btn-default" data-target="#soleItemLov" data-toggle="modal">
+									        <i class="fa fa-search"></i></button>
+								        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-12" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>ITEM_DESC_CN：</span></label>
+                                        <input type="text" class="form-control radius3" required
+                                               ng-model="soleItem.itemName" name="soleItemName">
+                                    </div>
+                                </div>
+
+                                <!--<div class="form-group col col-xs-11 col-md-6" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">生效时间：</span></label>
+                                        <input class="form-control radius3" ng-model="soleItem.effectiveDate" date-time-picker
+                                               name="soleItemEffectiveDate"  data-is-today="true" autocomplete="off"
+                                               data-min-view="2" data-date-format="yyyy-mm-dd" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">失效时间：</span></label>
+                                        <input class="form-control radius3" ng-model="soleItem.expirationDate" date-time-picker
+                                               name="soleItemExpirationDate"  data-is-today="true" autocomplete="off"
+                                               data-min-view="2" data-date-format="yyyy-mm-dd" data-enddate="{{soleItem.effectiveDate}}">
+                                    </div>
+                                </div>-->
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: 20px;">
+                        <div style="text-align: center">
+                            <button style="" type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+
+                            <button id="submitSoleItemId"  type="submit" class="btn btn-primary btn-sm">
+                                <span>保存</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+
+
+    <!--ITEM信息选择-->
+    <!--data-keys="{'key':'itemId','value':'itemNbr','name':'ITEM_NBR'}"-->
+<!--    <div lov-list="itemSlelectModel" role="dialog" data-title="ITEM信息选择" id="soleItemSelectId" ng-model="meunData.rp"
+         data-url="findItemListByBrand"
+         data-callback="saveSoleItemCallBack"
+         data-params='{"soleAgrtInfoId":"{{currentSoleAgrtInfo.selectRowData["soleAgrtInfoId"]}}"}'
+         data-clear="clear"
+         data-css="w800"
+         data-auto-request="false"
+         data-return-type="value"
+         data-pagination="{'pageIndex':'1','pageRows':'10'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'itemId','value':'vendorNbr','name':'VENDOR_NBR'}"
+         data-show-index="true"
+         data-other-column="[
+                                {key:'vendorName',name:'VENDOR_NAME'},
+                                {key:'groupCode',name:'GROUP_CODE'},
+                                {key:'groupDesc',name:'GROUP_DESC'},
+                                {key:'deptCode',name:'DEPT_CODE'},
+                                {key:'deptDesc',name:'DEPT_DESC'},
+                                {key:'brandCn',name:'BRAND_CN'},
+                                {key:'brandEn',name:'BRAND_EN'},
+                                {key:'itemNbr',name:'ITEM_NBR'},
+                                {key:'itemDescCn',name:'ITEM_DESC_CN'},
+                                {key:'upc',name:'UPC货品条码'},
+                               ]"
+         data-search-key="{'key':'itemNbr','placeholder':'请输入产品编号'}"
+    >
+    </div>-->
+
+    <!--ITEM信息选择-->
+    <div role="dialog" class="modal fade" id="soleItemSelectId" data-des="ITEM信息选择" data-backdrop="static" tabindex="-1" >
+        <div class="modal-dialog" style="width: 950px; height: 300px">
+            <!--addModalForm start-->
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        添加ITEM信息
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group col-xs-6 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="itemParam.itemNbr" class="form-control radius3" placeholder="请输入ITEM编号">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="itemParam.itemDescCn" class="form-control radius3" placeholder="请输入ITEM名称">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="itemParam.deptCode" class="form-control radius3" placeholder="请输入DEPT_CODE">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="itemParam.deptDesc" class="form-control radius3" placeholder="请输入DEPT_DESC">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="itemParam.upc" class="form-control radius3" placeholder="请输入UPC货品条码">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-3 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary"  type="button" ng-click="itemDataTable.search(1)">查询</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button style="float: right;margin-right:20px" class="btn btn-xs btn-primary"  type="button" ng-click="addItemData()">添加所有ITEM信息</button>
+                    </div>
+                    <div>
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div base-data-table="itemDataTable" id="itemSelectModalId"
+                                 data-auto-request="false"
+                                 ng-params="itemParam"
+                                 data-show-index="true"
+                                 data-url="findItemListByBrand"
+                                 data-checked-type="checkbox"
+                                 data-keys="{'key':'itemId'}"
+                                 data-page-size="6"
+                                 data-recording-list='true'
+                                 data-class = "itemScroll"
+                                 data-legend="[
+                                         {'value':'vendorNbr','name':'VENDOR_NBR'},
+                                         {'value':'vendorName','name':'VENDOR_NAME'},
+                                         {'value':'groupCode','name':'GROUP_CODE'},
+                                         {'value':'groupDesc','name':'GROUP_DESC'},
+                                         {'value':'deptCode','name':'DEPT_CODE'},
+                                         {'value':'deptDesc','name':'DEPT_DESC'},
+                                         {'value':'brandCn','name':'BRAND_CN'},
+                                         {'value':'brandEn','name':'BRAND_EN'},
+                                         {'value':'itemNbr','name':'ITEM_NBR'},
+                                         {'value':'itemDescCn','name':'ITEM_DESC_CN'},
+                                         {'value':'upc','name':'UPC货品条码'}
+                                        ]"
+                            >
+                            </div>
+                            <!--<div class="data-table">
+
+                            </div>-->
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="saveSoleItem()" class="btn btn-warning btn-sm">
+                        <span class="fa fa-plus"> 确定新增</span></button>
+                    <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal" aria-label="Close"><span
+                            class="fa ">取消</span>
+                    </button>
+                </div>
+
+
+            </div>
+            <!--addModalForm end-->
+        </div>
+    </div>
+
+
+    <!--供应商弹窗-->
+    <div lov-list="supplierlistLov" role="dialog" data-title="选择供应商" id="buttonLov" ng-model="current.buttonLov"
+         data-url="supplierlistLov"
+         data-callback="selectedSupplier"
+         data-checked-type="radio"
+         data-keys="{'value':'supplierCode',key:'supplierCode',name:'供应商编号'}"
+         data-show-index="true"
+         data-other-column="[{key:'supplierName',name:' 供应商名称'},{key:'statusName',name:' 状态'}]"
+         data-search-key="[{'key':'supplierCode','placeholder':'请输入供应商编号'},{'key':'supplierName','placeholder':'请输入供应商名称'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!--部门弹窗-->
+    <div lov-list="departmentLov" role="dialog" data-title="选择部门" id="buttonDeptLov" ng-model="current.buttonDeptLov"
+         data-url="findProposalDept"
+         data-params='{"soleAgrtHId":"{{project.soleAgrtHId}}","proposalId":"{{dataTable.list[0].poposalId}}"}'
+         data-callback="selectDepartmentCallback"
+         data-checked-type="checkbox"
+         data-keys="{'value':'deptCode',key:'deptCode',name:'部门编码'}"
+         data-show-index="true"
+         data-auto-request="false"
+         data-other-column="[{key:'deptDesc',name:' 部门名称'}]"
+         data-search-key="[{'key':'deptCode','placeholder':'请输入部门编码'},
+                           {'key':'deptDesc','placeholder':'请输入部门名称'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!--部门弹窗1-->
+    <div lov-list="departmentLov1" role="dialog" data-title="选择部门" id="buttonDeptLov1" ng-model="current.buttonDeptLov1"
+         data-url="departmentList"
+         data-auto-request="false"
+         data-params='{"groupCode":"{{soleItem.groupCode}}"}'
+         data-callback="selectDepartmentRowBack"
+         data-checked-type="radio"
+         data-keys="{'value':'deptCode',key:'deptCode',name:'部门编码'}"
+         data-show-index="true"
+         data-other-column="[{key:'deptDesc',name:' 部门名称'}]"
+         data-search-key="[{'key':'deptCode','placeholder':'请输入部门编码'},
+                           {'key':'deptDesc','placeholder':'请输入部门名称'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!--ITEM信息弹窗-->
+    <div lov-list="soleItemLov" role="dialog" data-title="选择ITEM" id="soleItemLov" ng-model="current.buttonItemLov"
+         data-url="soleItemList"
+         data-callback="selectSoleItemCallback"
+         data-checked-type="radio"
+         data-keys="{'value':'itemId',key:'itemNbr',name:'ITEM_NBR'}"
+         data-show-index="true"
+         data-other-column="[
+                                {key:'groupCode',name:'GROUP_CODE'},
+                                {key:'groupDesc',name:'GROUP_DESC'},
+                                {key:'deptCode',name:'DEPT_CODE'},
+                                {key:'deptDesc',name:'DEPT_DESC'},
+                                {key:'brandCn',name:'BRAND_CN'},
+                                {key:'brandEn',name:'BRAND_EN'},
+                                {key:'vendorNbr',name:'VENDOR_NBR'},
+                                {key:'vendorName',name:'VENDOR_NAME'},
+                                {key:'itemDescCn',name:'ITEM_DESC_CN'},
+                                {key:'upc',name:'货品编码'}
+                               ]"
+         data-search-key="[{'key':'itemNbr','placeholder':'请输入产品编号'},{key:'itemDescCn',placeholder:'请输入产品名称'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!--头信息选择供应商-->
+    <!--data-dynamic-params=''-->
+    <div lov-list="supplierList" role="dialog" data-title="选择供应商信息" id="supplierCode" ng-model="current.em"
+         data-url="supplierFindLov"
+         data-params="{isFilter:'true'}"
+         data-callback="selectSupplierReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+         data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                          {'key':'supplierName','placeholder':'供应商名称'}]"
+    >
+    </div>
+
+    <!--data-dynamic-params="params"-->
+    <!--data-params = "{'vendorNbr':'{{params.vendorNbr}}'}"-->
+    <div lov-list="proposalSupplierList" role="dialog" data-title="Proposal供应商" id="proposalSupplierLov"
+         ng-model="current.proposalId"
+         data-url="contractProposalVendorList"
+         data-params='{"vendorCode":"{{project.vendorCode}}","effectiveStartTime":"{{project.startDate}}","effectiveEndTime":"{{project.endDate}}","flag":"exclusive","soleAgrtHId":"{{project.soleAgrtHId}}"}'
+         data-checked-type="radio"
+         data-callback="setProposalSupplierList"
+         data-keys="{'key':'proposalId','value':'proposalOrder',name:'poposal合同号'}"
+         data-auto-request = 'false'
+         data-show-index="true"
+         data-other-column="[
+                                {'name':'版本号','key':'proposalVersion'},
+                                {'name':'年度','key':'proposalYear'},
+                                {'name':'供应商编号','key':'vendorCode'},
+                                {'name':'供应商名称','key':'vendorName'}
+                                ]"
+         data-search-key="[
+                            {'key':'proposalOrder','placeholder':'请输入poposal合同号'},
+                            {'key':'vendorCode','placeholder':'供应商编码'},
+                            {'key':'vendorName','placeholder':'供应商名称'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!--proposal品牌-->
+    <!--data-keys="{'value':'groupCode',key:'groupCode',name:'Group Code'}"-->
+    <div lov-list="proposalBrandLov" role="dialog" data-title="选择品牌" id="buttonBrandLov" ng-model="current.buttonBrandLov"
+         data-url="findProposalBrand"
+         data-params='{"soleAgrtHId":"{{project.soleAgrtHId}}","proposalId":"{{dataTable.list[0].poposalId}}","deptCode":"{{selectDeptList}}"}'
+         data-callback="selectedProposalBrand"
+         data-checked-type="radio"
+         data-keys="{'value':'brandCn',key:'brandCn',name:'Brand_CN'}"
+         data-auto-request = 'false'
+         data-show-index="true"
+         data-other-column="[
+                             {key:'brandEn',name:'Brand_EN'}
+                             ]"
+         data-search-key="[{'key':'brandCn','placeholder':'请输入brandCn'},{'key':'brandEn','placeholder':'请输入brandEn'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+    >
+    </div>
+
+    <!--BRAND-->
+    <div lov-list="brandLov" role="dialog" data-title="选择BRAND" id="brandLov" ng-model="current.em"
+         data-url="itemFind"
+         data-dynamic-params='{"findFlag": "findBrand"}'
+         data-callback="selectBrandReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'brandCode','value':'brandCode','name':'BRAND_CODE'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'BRAND_CN','key':'brandCn'},{'name':'BRAND_EN','key':'brandEn'}]"
+         data-search-key="[{'key':'brandCode','placeholder':'BRAND_CODE'},
+                          {'key':'brandCn','placeholder':'BRAND_CN'},
+                          {'key':'brandEn','placeholder':'BRAND_EN'}]"
+    >
+    </div>
+
+    </div>
+</div>

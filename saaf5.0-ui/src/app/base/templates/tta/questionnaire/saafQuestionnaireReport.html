@@ -1,0 +1,296 @@
+<div ng-controller="saafQuestionnaireReportCtrl">
+    <style>
+        .lineListInfo {
+            padding: 10px 50px;
+            margin-bottom: 5px;
+        }
+    </style>
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{cursorcolor: '#998279',cursorwidth:10,autohidemode:false}" data-des="此节点必需-滚动内容及指令">
+            <div class="data-table">
+                <div class=" mt10 pb5  " data-des="此节点必需－用于识别输入表单的指令">
+                    <ul id="myTab" class="nav nav-tabs">
+                        <li class="active"><a href="#querstionReport" ng-click="changeTab(0)"
+                                              data-toggle="tab">问卷调查报表</a></li>
+                        <li><a href="#questionDetail" ng-click="changeTab(1)"
+                               data-toggle="tab">问卷调查详情</a></li>
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        <div class="tab-pane fade in active" id="querstionReport">
+                            <div class="data-table">
+                                <div ng-nicescroll nice-option="{cursorcolor: '#998279'}">
+                                    <div style="margin-left: 10px; margin-top: 10px;margin-bottom: 10px;">
+                                        <i class="fa fa-list-alt"></i> 问卷调查报表
+                                        <!--<button style="padding: 4px 6px;margin-right:50px;" type="button"-->
+                                                <!--class="btn btn-sm btn-primary pull-right"-->
+                                                <!--ng-click="exportXls()">-->
+                                            <!--<i class="fa fa-download"></i>导出全部-->
+                                        <!--</button>-->
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <p class="text-center">
+                                                <strong style="font-size: 24px;">{{resultReportData.headList[0].qnTitle}}</strong>
+                                                <span style="font-size: 14px;padding-left: 10px;">{{resultReportData.headList[0].qnCode}}</span>
+                                                <span style="font-size:14px;padding-left: 10px;">(收集的问卷数量：{{resultPersonData.length}})</span>
+                                            </p>
+                                        </div>
+                                        <div class="lineListInfo" ng-repeat="item in resultReportData.lineList">
+                                            <div>
+                                                <p>
+                                                    <span style="color:red;" ng-show="item.requireFlag=='Y'">*</span>
+                                                    Q{{$index+1}}：{{item.projectTitle}}&nbsp;&nbsp;&nbsp;
+                                                    <span ng-show="item.projectType=='single_selection'
+                                                    || item.projectType=='single_selection_skip' || item.projectType=='single_selection_show'">(选择题)</span>
+                                                    <span ng-show="item.projectType=='drop_down_list'">(下拉选择题)</span>
+                                                    <span ng-show="item.projectType=='multi_selection'">(多选题)</span>
+                                                    <span ng-show="item.projectType=='text'">(填空题)</span>
+                                                </p>
+
+                                            </div>
+
+                                            <!--选择题-->
+                                            <table class="table table-bordered table-hover table-condensed" ng-show="item.projectType!='text' && item.projectType!='textarea'">
+                                                <thead class="bg-gray-white">
+                                                <tr class="text-center">
+                                                    <th>选项</th>
+                                                    <th>是否答案</th>
+                                                    <th>回复人数</th>
+                                                    <th ng-show="item.projectType!='multi_selection'">回复占比</th>
+                                                    <th>回复人</th>
+                                                    <th class="w100">查看</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr class="text-left" ng-repeat="subItem in item.qnChoiceData">
+                                                    <td class="w500"><div class="w500 ellipsis">{{subItem.qnChoiceContent}}</div></td>
+                                                    <td style="width:80px;text-align: center;"><input type="checkbox" ng-model="subItem.qnAnswer" ng-true-value="'Y'" disabled></td>
+                                                    <td style="text-align: center;">{{subItem.num}}</td>
+                                                    <td ng-show="item.projectType!='multi_selection'">{{subItem.num/item.num*100|number:2}}%</td>
+                                                    <td title="{{subItem.userFullNames}}" class="w300"><div class="w300 ellipsis">{{subItem.userFullNames}}</div></td>
+                                                    <td class="w100" style="text-align: center;">
+                                                        <button type="button"  class="btn btn-default btn-small"
+                                                                style="padding: 0px 8px;" ng-click="queryAnswerList(subItem)">查看信息
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="text-left">
+                                                    <td colspan="5" ng-show="item.projectType=='multi_selection'">回答人数：<strong style="font-size: 14px;">{{item.num}}</strong></td>
+                                                    <td colspan="6" ng-show="item.projectType!='multi_selection'">回答人数：<strong style="font-size: 14px;">{{item.num}}</strong></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <!--填空题-->
+                                            <table class="table table-bordered table-hover table-condensed" ng-show="item.projectType=='text' || item.projectType=='textarea' ">
+                                                <thead class="bg-gray-white">
+                                                <tr class="text-center">
+                                                    <th style="width: 100%;">答案</th>
+                                                    <th class="w100">查看</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr class="text-left" ng-repeat="subItem in item.qnChoiceData[0].resultInfoData">
+                                                    <td title="{{subItem.qnChoiceResult}}">
+                                                        <div style="white-space: pre-line;word-wrap: break-word;word-break: break-all;">{{subItem.qnChoiceResult}}</div>
+                                                    </td>
+                                                    <td class="w100" style="text-align: center;">
+                                                        <button type="button"  class="btn btn-default btn-small"
+                                                                style="padding: 0px 8px;" ng-click="queryAnswerSheet(subItem)">查看答卷
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="text-left">
+                                                    <td colspan="3">回答人数：<strong style="font-size: 14px;">{{item.num}}</strong></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="questionDetail">
+                            <div class="data-table">
+                                <div class="data-table">
+                                    <div ng-nicescroll nice-option="{cursorcolor: '#998279'}">
+                                        <div style="margin-left: 10px; margin-top: 10px;margin-bottom: 10px;">
+                                            <i class="fa fa-list-alt"></i> 问卷调查详情
+                                        </div>
+                                        <table class="table table-bordered table-hover table-condensed">
+                                            <thead class="bg-gray-white">
+                                            <tr class="text-center">
+                                                <th>答卷编号</th>
+                                                <th>问卷编码</th>
+                                                <th>问卷标题</th>
+                                                <th>答卷人</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr class="text-center" ng-repeat="row in resultPersonData"
+                                                ng-class="{'active':resultPersonData.selectRow==$index}"
+                                                ng-click="resultPersonData.selectRow=$index">
+                                                <td class="w80">{{row.resultNum}}</td>
+                                                <td>{{row.qnCode}}</td>
+                                                <td class="w200" style="text-align: left;">
+                                                    <div class="w200 ellipsis">{{row.qnTitle}}</div>
+                                                </td>
+                                                <td>{{row.userFullName}}</td>
+                                                <td>
+                                                    <button type="button" title="查看" class="btn btn-default btn-small"
+                                                            style="padding: 0px 8px;" ng-click="queryAnswerSheet(row)">
+                                                        查看答卷
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="answerSheetInfo" data-backdrop="static"
+         data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="stakeholdersModalLabel" aria-hidden="true" style="z-index: 10000;">
+        <div class="modal-dialog" style="width:90%;margin-top:20px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title">问卷答卷</h4>
+                </div>
+                <div class="modal-body" style="overflow: auto;height: 500px;">
+                    <div class="pl30 pr30">
+                        <div class="row">
+                            <div class="form-group  col-md-12">
+                                <p class="text-center">
+                                    <strong style="font-size: 24px;">{{headList[0].qnTitle}}</strong>
+                                    <span style="font-size: 14px;padding-left: 10px;">{{headList[0].qnCode}}</span>
+                                </p>
+                                <div  class="lineListInfo" ng-repeat="item in lineList"
+                                      ng-class="{'active':selectRow==$index}"
+                                      ng-click="getSelectRow($index)">
+                                    <div>
+                                        <p><span style="color:red;" ng-show="item.requireFlag=='Y'">*</span>
+                                            Q{{$index+1}}：<span ng-bind-html="item.projectTitle|tohtml"></span>
+
+                                            <span ng-show="item.projectType=='single_selection' ||
+                                            item.projectType=='single_selection_skip' || item.projectType=='single_selection_show' ">({{item.qnChoiceResult}})</span>
+                                            <span ng-show="item.projectType=='multi_selection'">({{item.qnChoiceResult}})</span>
+
+                                        </p>
+                                        <!--不同题型不同的状态-->
+                                        <p ng-show="item.projectType=='text'" ng-repeat="subItem in item.qnChoiceData">
+                                            <!--输入框使用-->
+                                            <input type="text" style="max-width: 500px;" class="form-control radius3"
+                                                   ng-model="item.qnChoiceResult" readonly>
+                                        </p>
+
+                                        <p ng-show="item.projectType=='textarea'" ng-repeat="subItem in item.qnChoiceData">
+                                        <textarea style="height:100%;max-width: 600px;" rows="5" class="form-control radius3"
+                                                  ng-model="item.qnChoiceResult" readonly></textarea>
+                                        </p>
+
+                                        <p ng-show="item.projectType=='single_selection' || item.projectType=='single_selection_skip'
+                                           || item.projectType=='single_selection_show'" ng-repeat="subItem in item.qnChoiceData">
+                                            <!--单选框使用-->
+                                            <input type="radio" name="{{item.qnLineId}}" disabled ng-checked="subItem.testQnChoiceId==item.qnChoiceId">
+                                            {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                        </p>
+                                        <p ng-show="item.projectType=='multi_selection'" ng-repeat="subItem in item.qnChoiceData">
+                                            <!--复选框使用-->
+                                            <input type="checkbox" name="{{item.qnLineId}}" disabled ng-checked="subItem.answerFlag=='Y'">
+                                            {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                        </p>
+                                        <p ng-show="item.projectType=='drop_down_list'">
+                                            <!--下拉框使用-->
+                                            <select class="form-control radius3" style="width: 500px;" ng-model="item.qnChoiceResult" disabled>
+                                                <option ng-repeat="subItem in item.qnChoiceData" value="{{subItem.qnChoiceContent}}">
+                                                    {{subItem.qnChoiceContent}}
+                                                </option>
+                                            </select>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <div style="text-align: center">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">返回</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+    </div>
+
+    <div class="modal fade" id="answerListInfo" data-backdrop="static"
+         data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="stakeholdersModalLabel" aria-hidden="true" style="z-index: 6000;">
+        <form>
+            <div class="modal-dialog" style="width:90%;margin-top:20px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">答卷列表</h4>
+                    </div>
+                    <div class="modal-body" >
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group  col-md-12">
+                                    <table class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white">
+                                        <tr class="text-center">
+                                            <th>答卷编号</th>
+                                            <th>问卷编码</th>
+                                            <th>问卷标题</th>
+                                            <th>答卷人</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center" ng-repeat="row in resultData"
+                                            ng-class="{'active':resultData.selectRow==$index}" ng-click="resultData.selectRow=$index">
+                                            <td class="w80">{{row.resultNum}}</td>
+                                            <td>{{row.qnCode}}</td>
+                                            <td class="w200" style="text-align: left;">
+                                                <div class="w200 ellipsis">{{row.qnTitle}}</div>
+                                            </td>
+                                            <td>{{row.userFullName}}</td>
+                                            <td>
+                                                <button type="button" title="查看" class="btn btn-default btn-small"
+                                                        style="padding: 0px 8px;" ng-click="queryAnswerSheet(row)">查看答卷
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align: center">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">返回</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+        </form>
+    </div>
+
+</div>

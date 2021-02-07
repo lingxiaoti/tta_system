@@ -1,0 +1,70 @@
+<!-- Created by lijiayao on 2018-08-18 -->
+<div ng-controller="careApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOrUpdateOaHrCare"
+         data-api-get="findOaHrCareDetailById" data-api-del="" data-api-update="updateOaHrCare">
+        <div class="col-md-12 pt15">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none" data-load-callback="respCallback"></div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'deptName',label:'申请部门',readonly:true,required:true},
+                        {key:'personName',label:'申请人',readonly:true,required:true},
+                        {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                        {key:'billNo',label:'申请单号',readonly:true},
+                        {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                        {key:'statusStr',label:'状态',readonly:true},
+                        ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'careType',label:'关怀类型',required:true,type:'lookCode',lookCode:'CARE_TYPE'},
+                        {key:'currency',label:'币种',required:true,type:'lookCode',lookCode:'MONEY_TYPE'},
+                        {key:'amount',label:'申请金额',required:true,validFormat:'number=8'},
+                        {key:'payee',label:'收款人',readonly:true,required:true,type:'lov',target:'#personCusBankPaginatioLov',css:'readonly-white'},
+                        {key:'depositBank',label:'开户行',required:true,disabled:true},
+                        {key:'bankAccount',label:'银行账号',required:true,disabled:true},
+                    ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>申请原因</span></label>
+                        <textarea class="form-control" rows="1" auto-textarea="" ng-model="formParams.resonDesc" maxlength="500" placeholder="字数限制500" required name="resonDesc" style="height: auto"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 pt15 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+    </div>
+    <div lov-list="personCusBankPaginatioLov" 
+        id="personCusBankPaginatioLov" 
+        ng-model="code4"
+        data-url="findPersonCusBankPagination"
+        data-callback="personCusBankCallback"
+        data-cancel-callback="personCusBankCancelCallback"
+        data-dynamic-params="personCusBankPaginatioParams"
+        data-auto-request = 'false'
+        data-title="请选择"
+        data-checked-type="radio"
+        data-return-value="formParams.payee"
+        data-return-key="formParams.bankAccount"
+        data-search-key="[{'key':'primaryAcctOwnerName_like','placeholder':'收款人'},{'key':'bankAccountNumElectronic_like','placeholder':'银行帐号'}]"
+        data-keys="{'key':'bankAccountNumElectronic','value':'primaryAcctOwnerName','name':'收款人'}"
+        data-other-column="[{'name':'开户银行','key':'bankName'},{'name':'银行帐号',key:'bankAccountNumElectronic'}]" 
+    ></div>
+</div>

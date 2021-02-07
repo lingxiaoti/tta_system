@@ -1,0 +1,64 @@
+server:
+  port: 2211
+  tomcat:
+    max-threads: 2000
+    accept-count: 200
+    max-connections: 2000
+    max-http-post-size: -1
+#  context-path: /saaf-base-server
+
+management:
+  security:
+    enabled : false
+
+spring:
+  application:
+    name: 1006-saaf-base-server
+
+  #  zipkin:
+  #    base-url: http://admin:admin@${eureka.instance.hostname}:8761
+  http:
+    #文件上传配置
+    multipart:
+      file-size-threshold: 10Mb
+      max-file-size: 100MB
+      max-request-size: 200MB
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://admin:admin@${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+  instance:
+    #    hostname: D-SvrC-FSZB-01.hegii.com
+    hostname: 127.0.0.1
+    prefer-ip-address: true
+    port: 8760
+
+#fastdfs配置
+fastdfs:
+  connect_timeout_in_seconds: 2
+  network_timeout_in_seconds: 30
+  charset: utf-8
+  http_anti_steal_token: false
+  http_secret_key: FastDFS1234567890
+  http_tracker_http_port: 80
+  tracker_servers: #TrackerList参数,支持多个
+    - 10.82.24.117:22122   #TTA System uat
+  #- 139.159.229.31:22122
+  #- 139.159.229.33:22122
+  #     - 10.195.36.168:22122
+  #     - 10.195.36.169:22122
+  thumb_image: #缩略图生成参数
+    width: 150
+    height: 150
+  access: #访问地址
+    #address: 139.159.229.31
+    address: 10.82.24.117 #TTA System uat
+    #   address: 10.195.36.168
+    http_type: http://
+    http_port: 8888
+#   http_port: 8081
+
+api:
+  bpm:
+   rms: http://10.82.25.54/WTC_BPM/API/PostMsg.ashx
+   # 正式 http://10.82.97.161/WTC_BPM/API/PostMsg.ashx

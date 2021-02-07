@@ -1,0 +1,184 @@
+<div ng-controller="plmDeptListDetailCtrl" class="bigdata">
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+            <!--------------------- 输入表单  --->
+
+            <div class=" mt10 pb5  oh"
+                 data-des="此节点必需－用于识别输入表单的指令">
+
+                <form id="plmSupplierQaNonObInfoForm" name="plmSupplierQaNonObInfoForm">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>部门分类</span>
+                    </header>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">Group</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.plmGroupCode">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">Group描述</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.plmGroupDesc">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">部门编码</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.plmDeptCode">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">部门描述</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.plmDeptName">
+                        </div>
+                    </div>
+
+
+                    <div class="row"></div>
+
+                </form>
+            </div>
+
+
+            <div class="col-xs-12 col-md-12 br p0">
+
+                <ul id="tab" class="nav nav-tabs">
+
+                    <li class="active">
+                        <a href="#plmDeptClassTab" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>分类</label></a>
+                    </li>
+
+
+                </ul>
+
+                <div id="tabContent" class="tab-content">
+
+                    <!-- 品牌 -->
+                    <div class="tab-pane fade in active col-md-12" id="plmDeptClassTab">
+                        <div class="data-table">
+                            <div base-data-table="plmDeptClassTable"
+                                 data-auto-request="false"
+                                 ng-params="plmDeptClassParams"
+                                 data-show-index="true"
+                                 data-url="findPlmDeptClassInfo"
+                                 data-legend="[
+                                 {'value':'plmDeptCode','name':'部门编码', style:'text-align:center'},
+                                 {'value':'plmDeptName','name':'部门描述', style:'text-align:center'},
+                                 {'value':'plmClassCode','name':'分类编码', style:'text-align:center'},
+                                 {'value':'plmClassName','name':'分类描述', style:'text-align:center'},
+
+                         ]"
+                            ></div>
+                        </div>
+
+                        <div class="data-table">
+                            <div base-data-table="plmDeptSubclassTable"
+                                 data-auto-request="false"
+                                 ng-params="plmDeptSubclassParams"
+                                 data-show-index="true"
+                                 data-url="findPlmDeptSubclassInfo"
+                                 data-legend="[
+                                 {'value':'plmDeptCode','name':'部门编码', style:'text-align:center'},
+                                 {'value':'plmDeptName','name':'部门描述', style:'text-align:center'},
+                                 {'value':'plmClassCode','name':'分类编码', style:'text-align:center'},
+                                 {'value':'plmClassName','name':'分类描述', style:'text-align:center'},
+                                 {'value':'plmSubclassCode','name':'子分类编码', style:'text-align:center'},
+                                 {'value':'plmSubclassName','name':'子分类描述', style:'text-align:center'},
+
+                         ]"
+                            ></div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- tabContent -->
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div lov-list="purchaseInfoLov" role="dialog" data-title="选择审批采购" id="purchaseInfoId" ng-model="current.em"
+         data-url="userFind"
+         data-dynamic-params='{"status":"Y","userType":"13"}'
+         data-callback="selectPurchaseInfoReturn"
+         data-auto-request="false"
+         data-return-value=""
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'userId','value':'userName','name':'采购名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'userName_like','placeholder':'采购名称'}
+                          ]"
+    >
+    </div>
+
+    <div lov-list="qaInfoLov" role="dialog" data-title="选择审批QA" id="qaInfoId" ng-model="current.em"
+         data-url="userFind"
+         data-dynamic-params='{"status":"Y","userType":"75"}'
+         data-callback="selectQaInfoReturn"
+         data-auto-request="false"
+         data-return-value=""
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'userId','value':'userName','name':'QA名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'userName_like','placeholder':'QA名称'}]"
+    >
+    </div>
+
+
+
+
+</div>

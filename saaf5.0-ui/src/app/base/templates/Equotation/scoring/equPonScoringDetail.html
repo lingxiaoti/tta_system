@@ -1,0 +1,1286 @@
+<div ng-controller="equPonScoringDetailCtrl" class="bigdata">
+    <div id="processForm"
+         data-api-post="saveScoringInfo"
+         data-api-get="findScoringInfoForFlow"
+         data-api-update="saveScoringInfo">
+    </div>
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <button type="button" ng-click="btnSave()" permission-btn="btnSave" data-validate-form="formArea"
+                            ng-disabled="program.scoringStatus == '20' || program.scoringStatus == '60' || program.scoringStatus == '50'"
+                            class="btn btn-default">
+                        <i class="fa fa-square-o"></i>{{$l('保存')}}
+                    </button>
+
+                    <button type="button" ng-click="btnQASave()" permission-btn="btnQASave" data-validate-form="formArea"
+                            ng-show="program.createdBy != flags.userId && program.createdBy != undefined"
+                            ng-disabled="(program.factoryAuditFlag != 'N' || program.scoringStatus != '10') && (program.panelTestFlag != 'N' || program.scoringStatus != '30')"
+                            class="btn btn-default">
+                        <i class="fa fa-square-o"></i>{{$l('保存分数')}}
+                    </button>
+
+                    <button type="button" ng-click="btnSubmit()" permission-btn="btnSubmit"
+                            ng-disabled="program.scoringStatus == '20' || program.scoringStatus == '30' || program.scoringStatus == '60' || program.scoringStatus == '50' || program.nonPriceCalculateFlag != 'Y'"
+                            data-validate-form="formArea"
+                            class="btn btn-default">
+                        <i class="fa fa-square-o"></i>{{$l('提交')}}
+                    </button>
+
+                    <button type="button" ng-click="btnSubmitScore()" permission-btn="btnSubmitScore"
+                            ng-show="program.createdBy != flags.userId && program.createdBy != undefined"
+                            ng-disabled="(program.factoryAuditFlag != 'N' || program.scoringStatus != '10') && (program.panelTestFlag != 'N' || program.scoringStatus != '30')"
+                            data-validate-form="formArea"
+                            class="btn btn-default">
+                        <i class="fa fa-square-o"></i>{{$l('提交分数')}}
+                    </button>
+
+                    <button type="button" ng-click="btnTerminate()" permission-btn="btnTerminate"
+                            data-validate-form="formArea"
+                            ng-disabled="program.scoringStatus != '40' || program.createdBy != flags.userId"
+                            class="btn btn-default">
+                        <i class="fa fa-square-o"></i>{{$l('终止')}}
+                    </button>
+
+                    <button type="button" ng-click="btnMoniterQuotation()" permission-btn="btnMoniterQuotation"
+                            data-validate-form="formArea"
+                            class="btn btn-default">
+                        <i class="fa fa-square-o"></i>{{$l('监控报价')}}
+                    </button>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+
+                <!--工作流集成添加TAB-->
+                <ul ng-if="!urlParams.businessKey" class="nav nav-tabs mt10">
+                    <li role="presentation" class="active" ng-click="tabChange('requestFundsBusiness')">
+                        <a href="#requestFundsBusiness" aria-controls="requestFundsBusiness" role="tab"
+                           data-toggle="tab">{{$l('业务表单')}}</a>
+                    </li>
+                    <li role="presentation" ng-click="tabChange('approvalHistory')">
+                        <a href="#approvalHistory" aria-controls="approvalHistory" role="tab" data-toggle="tab">审批历史</a>
+                    </li>
+                    <li role="presentation" ng-click="tabChange('opinion')">
+                        <a href="#opinion" aria-controls="opinion" role="tab" data-toggle="tab">{{$l('')}}流程图</a>
+                    </li>
+                    <li ng-show="tabAction=='opinion'">
+                        <ul>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #cc0033;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">{{$l('未接收')}}</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #ff6600;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">{{$l('办理中')}}</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #339933;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">{{$l('已办结')}}</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #666666;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">{{$l('预设步骤')}}</span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div ng-show="tabAction== 'requestFundsBusiness'" role="tabpanel" class="tab-pane active"
+                     id="requestFundsBusiness"
+                     style="border: 0;width:100%;height: 100%;overflow-y: auto;">
+
+                    <form name="formArea" class=" mt10 pb5  "
+                          data-des="此节点必需－用于识别输入表单的指令">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <label>{{$l('评分详情')}}</label>
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('评分单号')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="scoringNumber" readonly
+                                       ng-model="program.scoringNumber">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('单据状态')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="scoringStatusMeaning" readonly
+                                       ng-model="program.scoringStatusMeaning">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i
+                                            class="red">*</i>{{$l('报价资料开启单号')}}:</span></label>
+                                <input type="text" disabled class="form-control radius3"
+                                       name="informationCode" required
+                                       ng-model="program.informationCode">
+                                <span class="input-group-btn">
+                                                <button class="btn btn-default" ng-click="selectQuotationInformation()"
+                                                        ng-disabled="readonly == 'Y' || program.supplierConfirmFlag == 'Y'"
+                                                        type="button">
+                                                    <i class="fa fa-search"></i></button></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('项目名称')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="projectName" readonly
+                                       ng-model="program.projectName">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('部门')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="departmentName" readonly
+                                       ng-model="program.departmentName">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('项目品类')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="relevantCatetoryMeaning" readonly
+                                       ng-model="program.relevantCatetoryMeaning">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('项目类型')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="projectCategoryMeaning" readonly
+                                       ng-model="program.projectCategoryMeaning">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('系列名称')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="seriesName" readonly
+                                       ng-model="program.seriesName">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('项目采购金额(元)')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="projectPurchaseAmount" readonly
+                                       ng-model="program.projectPurchaseAmount">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('项目周期')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="projectCycle" readonly
+                                       ng-model="program.projectCycle">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('报价截止时间')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="quotationDeadline" readonly
+                                       ng-model="program.quotationDeadline">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('评分标准')}}:</span></label>
+                                <a class="ellipsis" style="color:blue;display: block;width: 220px;" ng-click="showScoringStander();">
+                                    {{program.scoringStandard}}
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('项目负责人')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="projectLeaderName" readonly
+                                       ng-model="program.projectLeaderName">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('创建时间')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="creationDate" readonly
+                                       ng-model="program.creationDate">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('项目现合作供应商')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="presentCooperationSupplier"
+                                       readonly
+                                       ng-model="program.presentCooperationSupplier">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('感官测试类型')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="sensoryTestTypesMeaning" readonly
+                                       ng-model="program.sensoryTestTypesMeaning">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('第一轮开启时间')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="firstOpenDate" readonly
+                                       ng-model="program.firstOpenDate">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('第二轮开启时间')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="secondOpenDate" readonly
+                                       ng-model="program.secondOpenDate">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('备注说明')}}:</span></label>
+                                <input type="text" class="form-control radius3" name="remark" readonly
+                                       ng-model="program.remark">
+                            </div>
+                        </div>
+                    </form>
+
+
+                    <header class="mb5 mt10" ng-if="factoryAuditReadonly == 'Y'">
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                ng-disabled="program.scoringStatus != '30'"
+                                ng-click="confirmScoreCalculate()">
+                            <i class="fa fa-plus"></i>{{$l('总分确认')}}
+                        </button>
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                ng-disabled="program.scoringStatus != '30'"
+                                ng-click="quotationScoreCalculate()">
+                            <i class="fa fa-plus"></i>{{$l('报价总分计算')}}
+                        </button>
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                ng-disabled="(program.scoringStatus != '10' && program.scoringStatus != '40') || program.supplierConfirmFlag != 'Y'"
+                                ng-click="nonPriceCalculate()">
+                            <i class="fa fa-plus"></i>{{$l('非价格计算')}}
+                        </button>
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                ng-disabled="program.supplierConfirmFlag == 'Y'"
+                                ng-click="supplierInvitationConfirm()">
+                            <i class="fa fa-plus"></i>{{$l('邀请供应商确认')}}
+                        </button>
+                        <div class="clearfix"></div>
+                    </header>
+                    <!--------------------- ./  输入表单  --->
+                    <!--<hr width="100%">-->
+                    <div class="col-xs-12 col-md-12 br h p0" style="margin-right: -1px;">
+                        <ul id="tab" class="nav nav-tabs">
+                            <li class="active" ng-if="factoryAuditReadonly == 'Y'">
+                                <a href="#cost" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>Cost</label></a>
+                            </li>
+                            <li ng-hide="program.sensoryTestTypes == '20' && program.createdBy != flags.userId && program.createdBy != undefined">
+                                <a href="#panelTest" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>Panel test</label></a>
+                            </li>
+                            <li>
+                                <a href="#factoryAudit" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>Factory audit</label></a>
+                            </li>
+                            <li ng-if="factoryAuditReadonly == 'Y'">
+                                <a href="#innovation" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>Innovation</label></a>
+                            </li>
+                            <li ng-if="factoryAuditReadonly == 'Y'">
+                                <a href="#pkgInnovation" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>PKG Innovation</label></a>
+                            </li>
+                            <li ng-if="factoryAuditReadonly == 'Y'">
+                                <a href="#effectiveAccurateFeedback" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>Effective & accurate feedback</label></a>
+                            </li>
+                            <li ng-if="factoryAuditReadonly == 'Y'">
+                                <a href="#paymentTerms" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>Payment terms</label></a>
+                            </li>
+
+                            <li ng-if="factoryAuditReadonly == 'Y'">
+                                <a href="#currentSupplierPerformance" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>Current supplier performance</label></a>
+                            </li>
+
+                            <li ng-if="factoryAuditReadonly == 'Y'">
+                                <a href="#commercialContract" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>Commercial contract</label></a>
+                            </li>
+
+                            <li ng-if="factoryAuditReadonly == 'Y'">
+                                <a href="#supplierSpendProfile" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>Supplier spend profile</label></a>
+                            </li>
+
+                            <li ng-if="factoryAuditReadonly == 'Y'">
+                                <a href="#supplierInvitation" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>{{$l('邀请供应商列表')}}</label></a>
+                            </li>
+
+                            <li ng-if="factoryAuditReadonly == 'Y'">
+                                <a href="#scoringCommon" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>{{$l('评分COMMON')}}</label></a>
+                            </li>
+
+                            <li ng-if="factoryAuditReadonly == 'Y'">
+                                <a href="#nonPriceCalResult" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>{{$l('非价格资料计算结果')}}</label></a>
+                            </li>
+
+                            <li ng-if="factoryAuditReadonly == 'Y'">
+                                <a href="#quatationResult" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>{{$l('报价结果')}}</label></a>
+                            </li>
+                        </ul>
+                        <div id="tabContent" class="tab-content">
+                            <!--Cost-->
+                            <div class=" tab-pane fade in  active" id="cost" ng-if="factoryAuditReadonly == 'Y'">
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>item description</th>
+                                            <th>Forecast Annual Quantity<br>(per launch proposal)</th>
+                                            <th ng-repeat="column in costColumns">{{column.supplierName}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center" ng-repeat="row in costProductQuationDataTable"
+                                            ng-class="{'active':costProductQuationDataTable.selectRow==$index}"
+                                            ng-click="costProductQuationDataTable.selectRow=$index">
+                                            <td style="text-align:center;vertical-align:middle;">{{row.productName}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">
+                                                {{row.annualSalesQuantity}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in costColumns">{{row[column.supplierNumber]}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>item description</th>
+                                            <th ng-repeat="column in costColumns">{{column.supplierName}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center" ng-repeat="row in costProductScoreDataTable"
+                                            ng-class="{'active':costProductScoreDataTable.selectRow==$index}"
+                                            ng-click="costProductScoreDataTable.selectRow=$index">
+                                            <td style="text-align:center;vertical-align:middle;">{{row.productName}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in costColumns">{{row[column.supplierNumber]}}
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">Total Cost
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in costColumns">
+                                                {{costProductTotalCostParamter[column.supplierNumber]}}
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">Total score(lowest
+                                                total<br> cost/supplier cost*100)
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in costColumns">
+                                                {{costProductTotalScoreParamter[column.supplierNumber]}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <!--Panel test-->
+                            <div class="tab-pane fade in" id="panelTest">
+                                <header class="mb5 mt10">
+                                    <button class="btn btn-default btn-xs pull-right"
+                                            ng-disabled="readonlyFlag == 'Y' || program.scoringId == undefined || program.supplierConfirmFlag != 'Y' || panelTestReadonly == 'Y' || panelTestFlag == 'Y'"
+                                            ng-click="btnExportTemplage();">
+                                        <i class="fa fa-file-excel-o"></i>{{$l('导入模板下载')}}
+                                    </button>
+
+                                    <button ng-if="program.supplierConfirmFlag == 'Y'" type="button" class="btn btn-default btn-xs pull-right"
+                                            saaf-xls-import-component
+                                            data-list-options="{{flags.dataListOptions}}"
+                                            data-url="updatePanelTestScoreImport"
+                                            data-info="{scoringId:'{{program.scoringId}}',projectId:'{{program.projectId}}'}"
+                                            data-after-action="returnFlash()"
+                                            data-message="{{flags.dataMessage}}"
+                                            ng-disabled="readonlyFlag == 'Y' || program.scoringId == undefined || program.supplierConfirmFlag != 'Y' || panelTestReadonly == 'Y' || panelTestFlag == 'Y'">
+                                        <i class="fa fa-upload"></i>{{$l('导入')}}
+                                    </button>
+                                    <div class="clearfix"></div>
+                                </header>
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>item description</th>
+                                            <th>Highest Score</th>
+                                            <th>benchmark</th>
+                                            <th ng-repeat="column in panelTestColumns">{{column.supplierName}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!--<tr class="text-center">-->
+                                        <tr class="text-center" ng-repeat="row in productSpecsDataTable"
+                                            ng-class="{'active':productSpecsDataTable.selectRow==$index}"
+                                            ng-click="productSpecsDataTable.selectRow=$index">
+                                            <td style="text-align:center;vertical-align:middle;">{{row.productName}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">{{row.highestScore}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"><input type="number"
+                                                                                                        ng-if="panelTestReadonly == 'N' && panelTestFlag != 'Y'"
+                                                                                                        class="form-control input-xs"
+                                                                                                        ng-model="row.benchmark">
+                                                <span ng-if="panelTestReadonly == 'Y' || panelTestFlag == 'Y'">{{row.benchmark}}</span>
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in panelTestColumns"><input type="number"
+                                                                                              ng-if="panelTestReadonly == 'N' && panelTestFlag != 'Y'"
+                                                                                              class="form-control input-xs"
+                                                                                              ng-model=row[column.supplierNumber]
+                                                                                              ng-change="panelTestChangeEvent(row);">
+                                                <span ng-if="panelTestReadonly == 'Y' || panelTestFlag == 'Y'">{{row[column.supplierNumber]}}</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>item description</th>
+                                            <th>Sales Forecast<br> Amount in LP</th>
+                                            <th>Sales Forecast<br> Participation in LP</th>
+                                            <th>benchmark</th>
+                                            <th ng-repeat="column in panelTestColumns">{{column.supplierName}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!--<tr class="text-center">-->
+                                        <tr class="text-center" ng-repeat="row in productSpecsFixedDataTable"
+                                            ng-class="{'active':productSpecsFixedDataTable.selectRow==$index}"
+                                            ng-click="productSpecsFixedDataTable.selectRow=$index">
+                                            <td style="text-align:center;vertical-align:middle;">{{row.productName}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">
+                                                {{row.annualSalesAmount}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">{{row.participation}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">{{row.benchmark}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in panelTestColumns">{{row[column.supplierNumber]}}
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">Total
+                                                score(weighted<br>
+                                                average based on<br> sales forecast<br> participation in LP)
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">
+                                                {{panelTestTotalParamter.annualSalesAmount}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">
+                                                {{panelTestTotalParamter.participation}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">
+                                                {{panelTestTotalParamter.benchmark}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in panelTestColumns">
+                                                {{panelTestTotalParamter[column.supplierNumber]}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <!--Factory Audit-->
+                            <div class="tab-pane fade in" id="factoryAudit">
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>Description</th>
+                                            <th>Full Score</th>
+                                            <th ng-repeat="column in factoryAuditColumns">{{column.column}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center">
+                                            <td>Based on weighting average of last 2<br> factory audit
+                                                result<br>(Weighting Average = Latest Factory<br> Audit Result * 70% +
+                                                Second-latest<br>
+                                                Factory Audit Result * 30%)
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">6.00
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in factoryAuditColumns"><input type="number"
+                                                                                                 ng-if="readonly != 'Y' && factoryAuditReadonly != 'Y' && program.factoryAuditFlag != 'Y'"
+                                                                                                 class="form-control input-xs"
+                                                                                                 ng-model="column.defaultItem">
+                                                <span ng-if="readonly == 'Y' || factoryAuditReadonly == 'Y' || program.factoryAuditFlag == 'Y'">{{column.defaultItem}}</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!--New connept from supplier-->
+                            <div class="tab-pane fade in" id="innovation">
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>Evaluation committee</th>
+                                            <th>Full Score</th>
+                                            <th ng-repeat="column in newConceptRromSupplierColumns">{{column.column}}
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">new concept
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">5.00
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in newConceptRromSupplierColumns"><input type="number"
+                                                                                                           ng-if="readonly != 'Y'"
+                                                                                                           class="form-control input-xs"
+                                                                                                           ng-model="column.defaultItem"
+                                                                                                           ng-change="newConceptRromSupplierChangeEvent(column);">
+                                                <span ng-if="readonly == 'Y'">{{column.defaultItem}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">Total score
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">5.00
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in newConceptRromSupplierColumns">
+                                                {{column.totalScore}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!--PKG Innovation-->
+                            <div class="tab-pane fade in" id="pkgInnovation">
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>Description</th>
+                                            <th>Full Score</th>
+                                            <th ng-repeat="column in componentSupportColumns">{{column.column}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">Inner
+                                                Package(material,shape)
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">2.00
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in componentSupportColumns"><input type="number"
+                                                                                                     ng-if="readonly != 'Y'"
+                                                                                                     class="form-control input-xs"
+                                                                                                     ng-model="column.innerPackage"
+                                                                                                     ng-change="componentSupportChangeEvent(column);">
+                                                <span ng-if="readonly == 'Y'">{{column.innerPackage}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">Outer Package(design)
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">1.00
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in componentSupportColumns"><input type="number"
+                                                                                                     ng-if="readonly != 'Y'"
+                                                                                                     class="form-control input-xs"
+                                                                                                     ng-model="column.outerPackage"
+                                                                                                     ng-change="componentSupportChangeEvent(column);">
+                                                <span ng-if="readonly == 'Y'">{{column.outerPackage}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">Total score
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">3.00
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in componentSupportColumns">{{column.totalScore}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!--Effective & accurate feedback-->
+                            <div class="tab-pane fade in" id="effectiveAccurateFeedback">
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>Description</th>
+                                            <th>Full Score</th>
+                                            <th ng-repeat="column in effectiveAccurateFeedbackColumns">{{column.column}}
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">3.1 Effective &
+                                                accurate
+                                                feedback
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">2.00
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in effectiveAccurateFeedbackColumns"><input
+                                                    type="number" ng-if="readonly != 'Y'"
+                                                    class="form-control input-xs"
+                                                    ng-model="column.defaultItem">
+                                                <span ng-if="readonly == 'Y'">{{column.defaultItem}}</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!--Payment terms-->
+                            <div class="tab-pane fade in" id="paymentTerms">
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>Description</th>
+                                            <th>Full Score</th>
+                                            <th ng-repeat="column in paymentTermsColumns">{{column.column}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">3.2 Payment terms
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">1.00
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in paymentTermsColumns"><input type="number"
+                                                                                                 ng-if="readonly != 'Y'"
+                                                                                                 class="form-control input-xs"
+                                                                                                 ng-model="column.paymentTerms">
+                                                <span ng-if="readonly == 'Y'">{{column.paymentTerms}}</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!--Current supplier performance-->
+                            <div class="tab-pane fade in" id="currentSupplierPerformance">
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>Description</th>
+                                            <th>Full Score</th>
+                                            <th ng-repeat="column in currentSupplierPerformanceColumns">
+                                                {{column.column}}
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">3.3 Current supplier
+                                                performance
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">1.00
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in currentSupplierPerformanceColumns">
+                                                {{column.defaultItem}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!--Commercial contract-->
+                            <div class="tab-pane fade in" id="commercialContract">
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>Description</th>
+                                            <th>Full Score</th>
+                                            <th ng-repeat="column in commercialContractColumns">{{column.column}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">4.1 Commercial contract
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">6.00
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in commercialContractColumns">{{column.defaultItem}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!--Supplier spend profile-->
+                            <div class="tab-pane fade in" id="supplierSpendProfile">
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>Description</th>
+                                            <th>Full Score</th>
+                                            <th ng-repeat="column in supplierSpendProfileColumns">{{column.column}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">4.2 Supplier spend
+                                                profile
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">3.00
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in supplierSpendProfileColumns">{{column.defaultItem}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!--邀请供应商列表-->
+                            <div class="tab-pane fade in" id="supplierInvitation">
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>{{$l('序号')}}</th>
+                                            <th>{{$l('供应商名称')}}</th>
+                                            <th>{{$l('供应商档案号')}}</th>
+                                            <th>{{$l('关联供应商')}}</th>
+                                            <th>{{$l('新增/退出原因')}}</th>
+                                            <th>{{$l('报价联系人')}}</th>
+                                            <th>{{$l('操作')}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center" ng-repeat="row in supplierInvitationDataTable"
+                                            ng-class="{'active':supplierInvitationDataTable.selectRow==$index}"
+                                            ng-click="supplierInvitationDataTable.selectRow=$index">
+                                            <td>{{$index+1}}</td>
+                                            <td>{{row.supplierName}}
+                                            </td>
+                                            <td>{{row.supplierNumber}}
+                                            </td>
+
+                                            <td>{{row.associateFactoryName}}
+                                            </td>
+
+                                            <td><input class="form-control input-xs"
+                                                       ng-disabled="program.supplierConfirmFlag == 'Y'"
+                                                       ng-model="row.reason">
+                                            </td>
+
+                                            <td>{{row.contactName}}
+                                            </td>
+
+                                            <td>
+                                                <button type="button" title="退出" class="btn btn-danger btn-samll"
+                                                        style="padding: 0px 8px;background-color: #1132ff;"
+                                                        ng-if="row.isQuit != 'Y' && program.supplierConfirmFlag != 'Y'"
+                                                        ng-click="quitSupplierInvitation(row,$index)">
+                                                    {{$l('退出')}}
+                                                </button>
+                                                <button type="button" title="已退出" class="btn btn-danger btn-samll"
+                                                        style="padding: 0px 8px;background-color: #c1c8be;" disabled
+                                                        ng-if="row.isQuit == 'Y'">
+                                                    {{$l('已退出')}}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!--scoring common-->
+                            <div class="tab-pane fade in" id="scoringCommon">
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>{{$l('角色')}}</th>
+                                            <th>{{$l('见证人员')}}</th>
+                                            <th>{{$l('COMMON')}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center" ng-repeat="row in witnessTeamDataTable"
+                                            ng-class="{'active':witnessTeamDataTable.selectRow==$index}"
+                                            ng-click="witnessTeamDataTable.selectRow=$index">
+                                            <td>
+                                                {{row.roleName}}
+                                            </td>
+                                            <td>
+                                                {{row.witnessMemberName}}
+                                            </td>
+                                            <td>
+                                                <textarea class="form-control radius3" rows="3"
+                                                          readonly
+                                                          style="height: auto"
+                                                          name="remark"
+                                                          ng-model="row.remark"/>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!--非价格资料计算结果-->
+                            <div class="tab-pane fade in" id="nonPriceCalResult">
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>Value</th>
+                                            <th>Weighting%</th>
+                                            <th ng-repeat="column in nonPriceCalColumns">{{column.supplierName}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!--<tr class="text-center">-->
+                                        <tr class="text-center" ng-repeat="row in nonPriceCalTable"
+                                            ng-class="{'active':nonPriceCalTable.selectRow==$index}"
+                                            ng-click="nonPriceCalTable.selectRow=$index">
+                                            <td style="text-align:left;vertical-align:middle;"><span><span
+                                                    ng-if="row.lineNumber.length > 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>{{row.lineNumber}}&nbsp;</span>{{row.gradingDivision}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"><span
+                                                    ng-if="row.lineNumber.length > 1 && row.gradingDivision != 'Cost' && (program.sensoryTestTypes != '10' || row.gradingDivision != 'Panel test')">{{row.weight}}%</span>
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in nonPriceCalColumns"><span
+                                                    ng-if="row.gradingDivision != 'Cost' && (program.sensoryTestTypes != '10' || row.gradingDivision != 'Panel test')">{{row[column.supplierNumber]}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:left;vertical-align:middle;">Total
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">
+                                                {{nonPriceCalTotalParamter.weight}}%
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in nonPriceCalColumns">
+                                                {{nonPriceCalTotalParamter[column.supplierNumber]}}
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:left;vertical-align:middle;" colspan="2">Scoring
+                                                Ranking
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in nonPriceCalColumns">
+                                                <span ng-if="nonPriceCalRankParamter[column.supplierNumber] != undefined">第</span>{{nonPriceCalRankParamter[column.supplierNumber]}}<span
+                                                    ng-if="nonPriceCalRankParamter[column.supplierNumber] != undefined">名</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <!--报价结果-->
+                            <div class="tab-pane fade in" id="quatationResult">
+                                <i class="fa "
+                                   aria-hidden="true" style="font-size: 15px;cursor: pointer;">{{$l('一、报价资料开启信息')}}</i>
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>Invited suppliers</th>
+                                            <th ng-repeat="column in supplierInvitationListColumns">
+                                                {{column.supplierName}}
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">1st rount opening("Y"
+                                                or "N")
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in supplierInvitationListColumns">
+                                                {{firstRountParamter[column.supplierNumber]}}
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">2st rount opening("Y"
+                                                or "N")
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in supplierInvitationListColumns">
+                                                {{secondRountParamter[column.supplierNumber]}}
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:center;vertical-align:middle;">Remark(reasons for NOT
+                                                qualified for<br> 2nd round opening,e.g. fail to fulfill the<br>
+                                                requirement on key ingredient /<br>packaging)
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in supplierInvitationListColumns"><textarea
+                                                    type="text" rows="4"
+                                                    class="form-control input-xs"
+                                                    ng-disabled="program.scoringStatus != '30'"
+                                                    ng-model="operationRemarkParamter[column.supplierNumber]"/>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!--TODO-->
+                                <i class="fa "
+                                   aria-hidden="true" style="font-size: 15px;cursor: pointer;">二、Evaluation</i>
+                                <div class="data-table">
+                                    <table
+                                            class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                        <tr class="text-center">
+                                            <th>Value</th>
+                                            <th>Weighting%</th>
+                                            <th ng-repeat="column in nonPriceCalColumns">{{column.supplierName}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!--<tr class="text-center">-->
+                                        <tr class="text-center" ng-repeat="row in nonPriceCalTable"
+                                            ng-class="{'active':nonPriceCalTable.selectRow==$index}"
+                                            ng-click="nonPriceCalTable.selectRow=$index">
+                                            <td style="text-align:left;vertical-align:middle;"><span><span
+                                                    ng-if="row.lineNumber.length > 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>{{row.lineNumber}}&nbsp;</span>{{row.gradingDivision}}
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"><span
+                                                    ng-if="row.lineNumber.length > 1">{{row.weight}}%</span>
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in nonPriceCalColumns">{{row[column.supplierNumber]}}
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:left;vertical-align:middle;">Total
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;">
+                                                100%
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in nonPriceCalColumns">
+                                                {{quotationCalTotalParamter[column.supplierNumber]}}
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="text-align:left;vertical-align:middle;" colspan="2">Scoring
+                                                Ranking
+                                            </td>
+                                            <td style="text-align:center;vertical-align:middle;"
+                                                ng-repeat="column in nonPriceCalColumns">
+                                                <span ng-if="quotationCalRankParamter[column.supplierNumber] != undefined">第</span>{{quotationCalRankParamter[column.supplierNumber]}}<span
+                                                    ng-if="quotationCalRankParamter[column.supplierNumber] != undefined">名</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="tabAction== 'approvalHistory'" role="tabpanel" class="tab-pane"
+                     id="approvalHistory"
+                     style="border: 0;width:100%;height: 100%;overflow-y: auto;">
+                    <div class="pl15 pr15 pr">
+                        <h5><span class="fa  fa-pencil-square-o"></span>{{$l('审批历史')}}</h5>
+                        <div base-data-table="taskTable" id="taskTable"
+                             data-url="processFindHistoricActivities"
+                             data-page-size="20"
+                             data-onload="historicListLoad"
+                             data-auto-request="true"
+                             ng-params="processInstanceParams"
+                             data-legend='[{"value": "taskName","name": "节点名称",style:"width:10%"},
+                                 {"value": "userFullName","name": "处理人",style:"width:16%;"},
+                                 {"value": "his_detail_option","name": "处理结果",style:"width:8%;"},
+                                 {"value": "his_detail_opinion","name": "审批意见",nowrap:false,"maxWidth":"700px"},
+                                 {"value": "startTime","name": "审批开始时间",style:"width:136px;"},
+                                 {"value": "endTime","name": "审批结束时间",style:"width:136px;"}]'>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-if="!urlParams.businessKey" ng-show="tabAction== 'opinion'" role="tabpanel" class="tab-pane "
+                     id="opinion"
+                     style="border: 0;width:100%;height: 100%; overflow: hidden;position: relative;">
+                    <div id="processImg" style="width: 100%;height:100%; overflow: auto;">{{$l('流程图加载中，请稍候...')}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="selectQuotationInformationLov" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" ng-click="close()"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel1">
+                        {{$l('报价资料开启单据选择')}}
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="">
+                        <div class="row">
+                            <div class="form-group col-xs-4 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                        <span class="w110 inline-block tr">{{$l('项目名称')}}</span>
+                                    </label>
+                                    <input type="text" class="form-control radius3"
+                                           ng-model="current.projectName" {{status}}
+                                           data-container="body" data-toggle="popover" data-trigger="manual"
+                                           data-placement="bottom" data-content="请填写产品名称"/>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                        <span class="w110 inline-block tr">{{$l('报价资料单号')}}</span></label>
+                                    <input type="text" class="form-control radius3"
+                                           ng-model="current.informationCode"/>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                        <span class="w110 inline-block tr">{{$l('单据状态')}}</span></label>
+                                    <input type="text" class="form-control radius3" readonly
+                                           ng-model="current.informationStatusName"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-4 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span class="w110 inline-block tr">{{$l('创建时间从')}}</span></label>
+                                    <input type="text" class="form-control radius3 input-xs"
+                                           date-time-picker data-is-today="false" name="creationDateFrom"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-min-View="2" ng-model="current.creationDateFrom" autocomplete="off">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span class="w110 inline-block tr">{{$l('创建时间至')}}</span></label>
+                                    <input type="text" class="form-control radius3 input-xs"
+                                           date-time-picker data-is-today="false" name="creationDateTo"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-min-View="2" ng-model="current.creationDateTo" autocomplete="off">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                        <span class="w110 inline-block tr">{{$l('部门')}}</span></label>
+                                    <input type="text" class="form-control radius3" readonly
+                                           ng-model="current.deptName"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-xs-4 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                        <span class="w110 inline-block tr">{{$l('项目负责人')}}</span></label>
+                                    <input type="text" class="form-control radius3"
+                                           ng-model="current.createdByName"/>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-8">
+                                <button type="button" class="btn btn-primary btn-sm pull-right"
+                                        ng-click="findQuotationInformation()">{{$l('查询')}}
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <fieldset class="currentList mb10" ng-if="isLovSelect=='Y'">
+                            <legend class="text-brand-primary">{{$l('当前挑选')}}</legend>
+                            <ul>
+                                <li>
+                                    <label>
+                                        {{params.radioValue}}
+                                    </label>
+                                </li>
+                            </ul>
+                        </fieldset>
+
+                        <div class="data-table">
+                            <table saaf-table="lovDataTable"
+                                   class="table table-bordered table-hover table-condensed"
+                                   data-url="findPonInformationInfoLov"
+                                   data-params="current"
+                                   data-checked-type="radio"
+                                   data-auto-get-data="true"
+                                   data-page-rows="10">
+                                <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                <tr class="text-center">
+                                    <th style="width: 10%;">{{$l('选择')}}</th>
+                                    <th>{{$l('报价资料开启单号')}}</th>
+                                    <th>{{$l('项目名称')}}</th>
+                                    <th>{{$l('单据状态')}}</th>
+                                    <th>{{$l('创建时间')}}</th>
+                                    <th>{{$l('项目负责人')}}</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-show="lovDataTable.data">
+                                <tr class="text-center" ng-repeat="row in lovDataTable.data"
+                                    ng-click="selectRow(row,lovDataTable.data)"
+                                    ng-class="{'active':lovDataTable.data.selectRow==$index}"
+                                    ng-click="lovDataTable.data.selectRow=$index;
+                                        lovDataTable.data.selectRowData =row;">
+
+                                    <td class="w50">
+                                        <input type="radio" name="isEffective" value="2" ng-model="row.isSelect"
+                                               ng-checked="row.isSelect=='Y'"></td>
+                                    <td>{{row.informationCode}}
+                                    </td>
+                                    <td>{{row.projectName}}</td>
+                                    <td>{{row.informationStatusName}}</td>
+                                    <td>{{row.creationDate}}</td>
+                                    <td>
+                                        {{row.createdByName}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            <!-- 分页-->
+                            <div saaf-table-tfoot="lovDataTable" ng-show="lovDataTable.data.length>0"></div>
+                            <div>
+                                <button type="button" ng-class="{'mt10': paging.total }" class="btn btn-default btn-sm "
+                                        ng-click="cancel()" data-dismiss="modal">{{$l('取消选择')}}
+                                </button>
+                                <button type="button" ng-class="{'mt10': paging.total }" class="btn btn-primary btn-sm "
+                                        ng-click="selectScoringStandardReturn()" data-dismiss="modal">{{$l('确定')}}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

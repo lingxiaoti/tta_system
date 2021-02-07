@@ -1,0 +1,29 @@
+<div ng-controller="loginCtrl">
+	<div class="loginBg">
+		<div class="login-main" ng-show="!isPortalLogin">
+			<div class="login-contain">
+				<div class="login-logo">
+					<img src="./img/au1/1897logo.png" alt="">
+				</div>
+				<form class="login-form" method="post" autocomplete="off" name="loginForm">
+					<div class="p15">
+						<h4 class="pt10 pb10">请登录</h4>
+						<div class="mb20"><input type="text" class="form-control" placeholder="{{ $l('请输入用户名')}}"
+												 ng-model="params.username" required></div>
+						<div class="mb10"><input type="password" class="form-control" placeholder="请输入密码"
+												 ng-model="params.password" required  maxlength="30"></div>
+						<div class="box   mb20">
+<!--							<label class="autoLogin"><input type="checkbox"><span ng-bind=" $l('自动登录')"></span></label>-->
+
+						</div>
+						<div>
+							<a href="javascript:" ng-disabled="loginFlag" ng-click="loginSubmit(loginForm.$invalid)" class="btn  btn-primary btn-block">
+								<span ng-bind=" $l('登录')">登录</span></a>
+						</div>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

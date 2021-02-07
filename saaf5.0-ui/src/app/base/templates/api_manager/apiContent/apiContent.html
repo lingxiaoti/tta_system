@@ -1,0 +1,296 @@
+<div ng-controller="apiContentCtrl" ng-init="init()">
+    <form class="form bg-white" name="apiContentForm"
+          data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" >
+                    <button   class="btn btn-default" permission-btn="" data-validate-form="apiContentForm" ng-click="btnSave(apiContentForm.$invalid)">
+                        <i class="fa fa-save" aria-hidden="true"></i> <span ng-bind="$l('保存')"></span>
+                    </button>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)" >
+                        <i class="fa fa-square-o"></i> <span ng-bind="$l('数据全屏')"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+
+                <div class=" mt10 pb5  "
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <label>{{$l('API信息')}}</label>
+                    </header>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn" ><span   class="w100"><i class="red">*</i>项目名称</span></label>
+                            <div class=" input-group input-group-xs col col-md-12">
+                                <input type="text" class="form-control radius3" ng-model="apiContent.centerName" name="centerName"
+                                       disabled required>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="getProject()" type="button"><i
+                                            class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span  class="w100"><i class="red">*</i>模块名称</span></label>
+                            <div class=" input-group input-group-xs col col-md-12">
+                                <input type="text" class="form-control radius3" ng-model="apiContent.modelName" disabled name="modelName"
+                                       required>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="getModule()" type="button"
+                                            ng-disabled="apiContent.centerCode==null"><i
+                                            class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100"><i class="red">*</i>接口名称</span></label>
+
+                            <input type="text" class="form-control radius3" required name="interfaceName"
+                                   ng-model="apiContent.interfaceName">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span    class="w100"><i class="red">*</i>请求类型</span></label>
+                            <select class="form-control radius3" name="apiContentRequestMode" required
+                                    ng-model="apiContent.requestMode"
+                                    ng-options="method.value as method.key for method in methodArr">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span    class="w100"><i class="red">*</i>状态</span></label>
+                            <select  class="form-control radius3" ng-model="apiContent.apiStatus" name="apiStatusMeaning" required
+                                    saaf-select-tex="apiContent.apiStatusMeaning">
+                                <option></option>
+                                <option saaf-select-lookupcode="API_STATUS"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100"><i class="red">*</i>开发人员</span></label>
+                            <input type="text" class="form-control radius3" required name="developer"
+                                   ng-model="apiContent.developer">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100"><i class="red">*</i>URL</span></label>
+
+                            <input type="text" name="api" class="form-control radius3" required name="urlAddress"
+                                   ng-model="apiContent.urlAddress">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-12">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span    class="w100"><i class="red">*</i>描述</span></label>
+                            <textarea name="description" class="form-control radius3" ng-model="apiContent.apiDesc" name="apiDesc"
+                                      style="height:60px;"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!--------------------- ./  输入表单  --->
+                <hr width="100%">
+               <div class="p15">
+                   <div class="col-xs-12 col-md-12 br h p0" style="margin-right: -1px;">
+                       <ul id="tab" class="nav nav-tabs">
+                           <li class="active">
+                               <a href="#params" data-toggle="tab" ng-bind="$l('参数')"></a>
+                           </li>
+                           <li>
+                               <a href="#returnValue" data-toggle="tab" ng-bind="$l('返回值')"></a>
+                           </li>
+
+                       </ul>
+                       <div id="tabContent" class="tab-content">
+                           <div class="tab-pane fade in active" id="params">
+                               <div class="row">
+                                   <div class="col col-xs-6 col-md-6">
+                                       <h5 class="m10" ng-bind="$l('参数')"></h5>
+                                    <textarea class="form-control radius3" style="height: 400px;"
+                                              ng-model="apiContent.requestParam"></textarea>
+                                   </div>
+                                   <div class="col col-xs-6 col-md-6">
+                                       <h5 class="m10" ng-bind="$l('参数字典')">{{}}</h5>
+                                    <textarea class="form-control radius3" style="height: 400px;"
+                                              ng-model="apiContent.requestParamDict"></textarea>
+                                   </div>
+                               </div>
+                           </div>
+                           <div class="tab-pane fade" id="returnValue">
+                               <div class="row">
+                                   <div class="col col-xs-6 col-md-6">
+                                       <h5 class="m10" ng-bind="$l('返回值')">{{$l('')}}</h5>
+                                    <textarea class="form-control radius3" style="height: 400px;"
+                                              ng-model="apiContent.responseParam"></textarea>
+                                   </div>
+                                   <div class="col col-xs-6 col-md-6">
+                                       <h5 class="m10" ng-bind="$l('返回值字典')">{{$l('')}}</h5>
+                                    <textarea class="form-control radius3" style="height: 400px;"
+                                              ng-model="apiContent.responseParamDict"></textarea>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+            </div>
+        </div>
+    </form>
+
+    <form class="ngValid" name="projectForm" ng-submit="confirmProject(projectForm.$invalid)">
+        <div class="modal fade" id="peojectModal" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" ng-bind="$l('项目列表')">
+                        </h4>
+                    </div>
+
+                    <div class="modal-body ">
+                        <div class="data-table">
+                            <table saaf-table="projectTable"
+                                   data-url="baseApiCenterHFind"
+                                   data-params="projectParams"
+                                   data-page-rows="10"
+                                   class="table table-hover table-condensed" style="border: 1px solid #ddd;">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th></th>
+                                    <th ng-bind="$l('序号')"></th>
+                                    <th ng-bind="$l('项目名称')"></th>
+                                    <th ng-bind="$l('项目编号')"></th>
+                                </tr>
+                                </thead>
+                                <tbody ng-show="projectTable.data.length<1">
+                                <tr>
+                                    <td style="height: 200px" colspan="4"></td>
+                                </tr>
+                                </tbody>
+                                <tbody ng-show="projectTable.data.length>0">
+                                <tr class="text-center" ng-repeat="item in projectTable.data"
+                                    ng-class="{'active':projectTable.data.selectRow==$index}"
+                                    ng-click="projectTable.data.selectRow=$index">
+                                    <td><input type="radio" name="project"
+                                               ng-checked="projectTable.data.selectRow==$index" required></td>
+                                    <td ng-bind="(projectTable.curIndex-1)*projectTable.pageSize+$index+1">1</td>
+                                    <td>{{item.centerName}}</td>
+                                    <td>{{item.centerCode}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div saaf-table-tfoot="projectTable" ng-show="projectTable.data.length>0"></div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true" ng-bind="$l('取消')">{{}}
+                            </button>
+                            <button type="submit" class="btn btn-primary mr10" ng-bind="$l('提交')"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+    </form>
+
+
+
+
+    <form class="ngValid" name="moduleForm" ng-submit="confirmModule(moduleForm.$invalid)">
+        <div class="modal fade" id="moduleModal" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" ng-bind="$l('模块列表')">
+                            {{}}
+                        </h4>
+                    </div>
+
+                    <div class="modal-body ">
+                        <div class="data-table">
+                            <table saaf-table="moduleTable"
+                                   data-url="baseApiCenterLFind"
+                                   data-params="moduleParams"
+                                   data-page-rows="10"
+                                   data-auto-get-data="false"
+                                   class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th></th>
+                                    <th ng-bind="$l('序号')">{{}}</th>
+                                    <th ng-bind="$l('模块名称')">{{}}</th>
+                                    <th ng-bind="$l('模块编号')">{{}}</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-show="moduleTable.data.length<1">
+                                <tr>
+                                    <td style="height: 200px" colspan="5"></td>
+                                </tr>
+                                </tbody>
+                                <tbody ng-show="moduleTable.data.length>0">
+                                <tr class="text-center" ng-repeat="item in moduleTable.data"
+                                    ng-class="{'active':moduleTable.data.selectRow==$index}"
+                                    ng-click="moduleTable.data.selectRow=$index">
+                                    <td><input type="radio" name="module"
+                                               ng-checked="moduleTable.data.selectRow==$index" required></td>
+                                    <td ng-bind="(moduleTable.curIndex-1)*moduleTable.pageSize+$index+1">1</td>
+                                    <td>{{item.modelName}}</td>
+                                    <td>{{item.modelCode}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div saaf-table-tfoot="moduleTable" ng-show="moduleTable.data.length>0"></div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true" ng-bind="$l('取消')">
+                            </button>
+                            <button type="submit" class="btn btn-primary mr10" ng-bind="$l('提交')"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+    </form>
+</div>

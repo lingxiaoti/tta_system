@@ -1,0 +1,142 @@
+<div class="report-data-box">
+    <div style="">
+        <div class="" ng-nicescroll="" id="nicescroll_{{ id }}" nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2'}"
+              >
+            <table class="  nicescroll-height report-data {{ myClass}}" id="data_table_main_{{ id }}">
+                <thead>
+                <tr>
+                    <th style="width: 40px;" ng-if="checkedType">
+                        <span ng-if="checkedType==='radio'">选择</span>
+                        <input ng-if="checkedType==='checkbox'" ng-checked="selectedAll" type="checkbox"
+                               ng-click="checkedAll($event)">
+                    </th>
+                    <th style="width: 60px;" ng-if="showIndex">序号</th>
+                    <!--  <th ng-click="clickSortBy(dataList.x)" data-legend="">
+                          <span ng-bind="$l(dataList.x.name)"></span>
+                          <span class="fa "
+                                ng-class="{'fa-sort':!dataList.x.sort,'fa-sort-desc':dataList.x.sort ==='desc','fa-sort-asc':dataList.x.sort ==='asc'}"></span>
+                      </th>-->
+                    <th ng-repeat="tr in dataList.legend"
+                        data-field-name="{{tr.value}}"
+                      >
+                       <span   ng-click="clickSortBy(tr)" style="cursor: pointer;"> <span style="white-space: pre" ng-bind="$l(tr.name)"></span>
+                        <span ng-if="tr.unitTh">({{ tr.unitTh}})</span>
+                        <span class="fa"
+                              ng-class="{'fa-sort':!tr.sort,'fa-sort-desc':tr.sort ==='desc','fa-sort-asc':tr.sort ==='asc'}"></span></span>
+                    </th>
+                    <th ng-if="funcColumn.length >0">
+                        操作
+                    </th>
+                </tr>
+                </thead>
+                <tbody ng-style="tableStyle" ng-nicescroll="" ng-if="dataList.data.length">
+                <tr ng-repeat=" item in dataList.data track by $index "
+                    ng-click="rowClick($index,$event)"
+                    data-index="{{ $index }}"
+                    style="{{ setRowStyle(item[rowColor.value])}}"
+                    ng-class="{active:($index + ((pageNumber-1) * paging.pageSize))===rowIndex}">
+                    <td style="width: 40px;"  ng-if="checkedType"  ng-click="rowChecked($index,$event)" >
+                        <input id="{{ _grid + item[keys.key]}}" ng-checked="item.checked" type="checkbox"
+                               ng-click="check(item,$event)" name="keys"
+                               ng-if="checkedType==='checkbox' || checkedType==='check'">
+                        <input id="{{_grid+ item[keys.key]}}" type="radio" name="key"
+                               ng-value="item[keys.key]" ng-model="currentRadio.radioValue"
+                               ng-if="checkedType==='radio'">
+                    </td>
+                    <td  style="width: 60px;" ng-if="showIndex"><span ng-bind="$index + ((pageNumber-1) * paging.pageSize) + 1"></span></td>
+                    <td ng-repeat="td in dataList.legend track by $index"
+                        data-field-name="{{td.value}}" ng-style="autoFormatStyle(item[td.value],td.style)"
+                    >
+                        <a href="javascript:" class="report-td" title="{{ item[td.value] }}"
+                           ng-if="td.callback"
+                           ng-click="callback(td.callback,item, td.value)" ng-bind-html="formatField(item,td)">
+                        </a>
+                        <span class="report-td" title="{{ item[td.value] }}"
+                              ng-if="!td.callback"
+                              ng-bind-html="formatField(item,td)">
+                        </span>
+
+                    </td>
+                    <td ng-if="funcColumn.length >0">
+                        <a ng-repeat="icon in funcColumn" type="button"
+                           ng-click="callback(icon.callback,item,$index)" style="cursor: pointer;white-space: nowrap;">
+                            <i ng-class="icon.icon" class="fa "></i>{{icon.text || icon.value}}
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot ng-if="showTotal" class="tfoot">
+                <tr>
+                    <td>合计</td>
+                    <td ng-repeat="td in dataList.legend track by $index">
+                        {{ total[td.value] }}
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <!-- 分页-->
+    <div class="pl10 pr10 z-index-100">
+        <div class="export-btn">
+            <div class="toExcel" ng-if="xlsName">
+                <ul>
+                    <li ng-click="tableToExcel(li,$event)" ng-repeat="li in exportInfo.list" ng-if="showExportListBtn">
+                        <i class="fa fa-download"></i>
+                        <span ng-if="li === 1">导出前{{ exportInfo.pageRows }}条</span>
+                        <span ng-if="li > 1 && li < exportInfo.list.length">第{{ ((li-1) * exportInfo.pageRows) + 1  }}至{{ li * exportInfo.pageRows }}条</span>
+                        <span ng-if=" li === exportInfo.list.length">第{{ ((li-1) * exportInfo.pageRows) + 1  }}至全部</span>
+                    </li>
+                    <li ng-click="tableToExcel(1)" ng-if="!showExportListBtn">
+                        <i class="fa fa-download"></i>导出数据
+                    </li>
+                </ul>
+                <!--<span class="triangle"></span>-->
+            </div>
+            <a id="dlink" style="display:none;" data-des="导出按钮专用标签"></a>
+        </div>
+        <div paging page="paging.index" class=" {{ pagingClass }}" ng-class="{tc: !xlsName}" ng-if="pagingShow"
+             page-size="paging.pageSize"
+             total="paging.total"
+             show-prev-next="true"
+             hide-if-empty="true"
+             paging-action="paging.search(page)">
+        </div>
+
+    </div>
+    <div ng-show="!autoRequest && !dataList.data && !loading.show " class="p15 tc text-brand-primary">
+        请查询数据
+    </div>
+    <div ng-show="(dataList.count===0 && dataList.data.length===0)&& !loading.error && !loading.show" class="p15 tc red">
+        没有数据
+    </div>
+    <div class="p30 tc " ng-if="loading.show  " ng-class="{red:loading.error,green:!loading.error}">
+        <img src="img/loading1.gif" style="width: 20px; height: 20px;" class="mr10" ng-if="!loading.error"> {{
+        loading.msg}}
+        <a href="javascript:" ng-click="paging.search()" ng-show="loading.error">重试</a>
+    </div>
+    <div data-des="导出数据的表格" style="display: none;" id="export_{{ id }}">
+        <table>
+            <thead>
+            <tr>
+                <th>
+                    {{ exportDataList.x.name }}
+                </th>
+                <th ng-repeat="tr in exportDataList.legend" ng-if="tr.value !== exportDataList.x.value">
+                    {{ tr.name}}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat=" item in exportDataList.data ">
+                <td ng-repeat="td in exportDataList.legend | filter:exportDataList.x.value">
+                    {{ item[exportDataList.x.value]}}
+                </td>
+                <td ng-repeat="td in exportDataList.legend " ng-if="td.value !== exportDataList.x.value">
+                    {{ item[td.value] }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

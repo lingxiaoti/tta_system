@@ -1,0 +1,12 @@
+.file-upload .upload-box {
+  position: relative;
+}
+.file-upload .upload {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: -30000px;
+}
+/*# sourceMappingURL=file-upload.css.map */

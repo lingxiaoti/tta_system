@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"></meta>
+    <title>Title</title>
+
+</head>
+<body>
+<div data-des="此节点必需－用户计算滚动区域高度" id="ttaDeptFeeLFindReportScroll" >
+    <div class="nicescroll-height  bg-white " data-des="此节点必需-滚动内容及指令"   nice-option="{{niceOpction}}">
+        <!--头信息-->
+        <div id="ttaDeptFeeLFindReportPrint" style="width: 99%;">
+            <div sytle= "width: 100%;padding: 0 !important; "
+                 style="    text-align: center;font-size: 15pt;font-weight: bold;margin-top: 20px;">
+                <label> ${ttaDeptFeeReportHead.proposalYear?if_exists}<span>贸易条款之补充协议</span></label>
+            </div>
+            <div class="col-xs-12 col-md-12 p0"
+                 style="    text-align: left;font-size: 10pt;font-weight: bold;margin-top: 20px;">
+                <label><span>${partyA?if_exists}</span>${ttaDeptFeeReportHead.partyA?if_exists}</label>
+            </div>
+            <div class="col-xs-12 col-md-12 p0"
+                 style="    text-align: left;font-size: 10pt;font-weight: bold;">
+                <label><span>乙方：</span>${ttaDeptFeeReportHead.vendorName?if_exists}</label>
+            </div>
+            <div class="col-xs-12 col-md-12 p0"
+                 style="text-align: left;font-size: 10pt;margin-top: 15px;margin-bottom: 10px;">
+                <label style=" "><span>甲乙双方签订了</span>${ttaDeptFeeReportHead.proposalYear?if_exists}<span>年《业务合同书》，针对其附件二《贸易条款》，双方经过协商一致，同意在附件二《贸易条款》基础上，对收费标准进行以下细化及补充:</span></label>
+            </div>
+            <!--头信息结束-->
+            <!--table 开始-->
+            <div class="data-table" id="ttaDeptFeeLFindReportShow">
+                <table style="border: 1px solid #ddd;border-collapse: collapse;border-spacing: 0;display: table;" class="table-bordered table-hover table-condensed"  id="ttaDeptFeeLFindReportTableId"  width="100%">
+                    <tr width="100%">
+                        <th style="border: 1px solid #ddd;padding: 5px;text-align: left;display: table-cell;vertical-align: inherit;font-weight: bold;"></th>
+                        <th style="border: 1px solid #ddd;padding: 5px;text-align: left;display: table-cell;vertical-align: inherit;font-weight: bold;" ng-show="ttaDeptFeeReportHead.deptDesc1">
+                            ${ttaDeptFeeReportHead.deptDesc1?if_exists}
+                        </th>
+                        <th style="border: 1px solid #ddd;padding: 5px;text-align: left;display: table-cell;vertical-align: inherit;font-weight: bold;" ng-show="ttaDeptFeeReportHead.deptDesc2">
+                            ${ttaDeptFeeReportHead.deptDesc2?if_exists}
+                        </th>
+                        <th style="border: 1px solid #ddd;padding: 5px;text-align: left;display: table-cell;vertical-align: inherit;font-weight: bold;" ng-show="ttaDeptFeeReportHead.deptDesc3">
+                            ${ttaDeptFeeReportHead.deptDesc3?if_exists}
+                        </th>
+                        <!--                                                    <th>部门收费标准</th>-->
+                    </tr>
+                    <#if ttaDeptFeeReportTable??>
+                    <#list ttaDeptFeeReportTable as row>
+                    <tr>
+                        <#if row.flag == "true">
+                        <td style="font-size: 12px;background-color: #1e90c2;border: 1px solid #ddd;padding: 5px;" >
+                            ${(row.lineCode + row.itemDescCn)?if_exists}
+                        </td>
+                        <#else>
+                        <td style="font-size: 12px;border: 1px solid #ddd;padding: 5px;">
+                            ${(row.lineCode + row.itemDescCn)?if_exists}
+                        </td>
+                        </#if>
+
+
+                    <#if ttaDeptFeeReportHead.deptDesc1??>
+                    <#if row.flag == "true">
+                    <td style="font-size: 12px;background-color: #1e90c2;border: 1px solid #ddd;padding: 5px;" >${row.unit1?if_exists}
+                    </td>
+                    <#else>
+                    <td style="font-size: 12px;border: 1px solid #ddd;padding: 5px;">${row.unit1?if_exists}
+                    </td>
+                   </#if>
+                   </#if>
+
+                    <#if ttaDeptFeeReportHead.deptDesc2??>
+                    <#if row.flag == "true">
+                    <td  style="    font-size: 12px;;background-color: #1e90c2;border: 1px solid #ddd;padding: 5px;" >${row.unit2?if_exists}
+                    </td>
+                    <#else>
+                    <td  style="    font-size: 12px;border: 1px solid #ddd;padding: 5px;" >${row.unit2?if_exists}
+                    </td>
+                    </#if>
+                    </#if>
+
+                    <#if ttaDeptFeeReportHead.deptDesc3??>
+                    <#if row.flag == "true">
+                    <td style="    font-size: 12px;;background-color: #1e90c2;border: 1px solid #ddd;padding: 5px;" >
+                        ${row.unit3?if_exists}
+                    </td>
+                    <#else>
+                    <td style="    font-size: 12px;border: 1px solid #ddd;padding: 5px;">
+                        ${row.unit3?if_exists}
+                    </td>
+                    </#if>
+                    </#if>
+                        </tr>
+                        </#list>
+                        </#if>
+                </table>
+            </div>
+
+            <div class="col-xs-12 col-md-12 p0"
+                 style="    text-align: left;font-size: 10pt;font-weight: bold;margin-top: 20px;">
+                <label style=" "><span>以上收费按实际执行数量计算,其中促销陈列服务费的实际执行总金额应不少于附件二《贸易条款》载明的金额。<br/>本补充协议一式两份,双方各执一份,具同等法律效力。</span></label>
+            </div>
+
+            <div class="col-xs-12 col-md-12 p0"
+                 style="    text-align: left;font-size: 10pt;font-weight: bold;margin-top: 20px;">
+                <table style="width: 50%;">
+                    <tr>
+                        <td>
+                            <span style=" margin-bottom: 25px;">甲方(盖章)：</span>
+                        </td>
+                        <td>
+                            <label style=" margin-bottom: 25px;">乙方(盖章)：</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label style=" margin-bottom: 25px;">代表：</label>
+                        </td>
+                        <td>
+                            <label style=" margin-bottom: 25px;">代表：</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label style=" ">日期：</label>
+                        </td>
+                        <td>
+                            <label style=" ">日期：</label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .proposalReport {
+        background-color: #1e90c2 ;
+    }
+</style>
+</body>
+</html>

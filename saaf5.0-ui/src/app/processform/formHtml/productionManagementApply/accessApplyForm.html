@@ -1,0 +1,155 @@
+<!-- Created by lijiayao on 2018-08-20 -->
+<div ng-controller="accessApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOaWorkshopEntry"
+         data-api-get="findOaWorkshopEntryById" data-api-del="" data-api-update="updateOaWorkshopEntry">
+        <div class="col-md-12 pt15">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'deptName',label:'申请部门',readonly:true,required:true},
+                        {key:'personName',label:'申请人',readonly:true,required:true},
+                        {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                        {key:'billNo',label:'申请单号',readonly:true},
+                        {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                        {key:'statusStr',label:'状态',readonly:true},
+                        ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'bizDeptName',label:'陪同人部门',required:true,readonly:true},
+                        {key:'bizPersonName',label:'陪同人姓名',required:true,type:'lov',target:'#bizPersonName1',readonly:true,css:'readonly-white'},
+                    ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'migrantsList',label:'外来人员姓名',required:true,maxlength:200,placeholder:' '},
+                        {key:'migrantsCompany',label:'外来人员单位',required:true,maxlength:100,placeholder:' '},
+                        {key:'visitorsNum',label:'来访人数',required:true,validFormat:'number=2',maxlength:11,placeholder:' 请输入大于零的整数',title:'请输入大于零的整数'},
+                    ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100" style="margin-left:-24px"><i class="red">*</i>是否上游供应中心员工</span></label>
+                        <label class="radio-inline" style="margin-left: 30px"><input type="radio" ng-model="formParams.upstreamFlag" name="upstreamFlag" ng-value="'Y'">是</label>
+                        <label class="radio-inline"><input type="radio" ng-model="formParams.upstreamFlag"  name="upstreamFlag" ng-value="'N'">否</label>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><i class="red">*</i>是否有健康证</span></label>
+                        <label class="radio-inline"><input type="radio" ng-model="formParams.healthCertificate"   name="healthCertificate" ng-value="'Y'">是</label>
+                        <label class="radio-inline"><input type="radio" ng-model="formParams.healthCertificate"  name="healthCertificate" ng-value="'N'">否</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'enterTime',label:'进入车间时间',required:true,type:'time','date':'yyyy-mm-dd hh:ii',endDate:'outTime'},
+                        {key:'outTime',label:'离开车间时间',required:true,type:'time','date':'yyyy-mm-dd hh:ii',startDate:'enterTime'},
+                    ]"
+                     ng-model="formParams"
+                ></div>
+                <div class="form-group col-xs-12 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><i class="red">*</i>需进入的区域</span></label>
+                        <div class="checkbox " style="margin: 0">
+                            <label ng-repeat="item in buData"  class="checkbox-inline w160" 
+                                style="margin-left: 0; margin-right: 15px;width: 150px;font-size:12px;color:#555" ng-click="checkOU($event,item)">
+                                <input type="checkbox" name="ouIds"  ng-required="true" ng-disabled="isEdit" 
+                                    ng-checked="item.checked" >{{ item.meaning }}
+                            </label>
+                        </div>
+    
+                        <!-- <div lookup-code="OA_OU" ng-model="addParams.admGiftType"
+                             required
+                             name="transactionActionName" ></div> -->
+    
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'enterAreaName',label:'需进入的区域',required:true,type:'lookCode',lookCode:'ENTRY_AREA_NAME'},
+                    ]"
+                     ng-model="formParams"
+                ></div>
+            </div> -->
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100">其他要求</span></label>
+                        <textarea class="form-control" rows="1" auto-textarea="" ng-model="formParams.otherRequirements" maxlength="500" placeholder="字数限制500"  name="otherRequirements" style="height: auto"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100">申请原因</span></label>
+                        <textarea class="form-control" rows="1" auto-textarea="" ng-model="formParams.applyReason" maxlength="500" placeholder="字数限制500"   name="applyReason" style="height: auto"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+    </div>
+    <!-- <div lov-list="applicant" role="dialog" data-title="请选择陪同部门" id="bizDeptName1" ng-model="code1"  class="  "
+        data-url="orgFindDeptInfo"
+        data-auto-request="false"
+        data-dynamic-params="ljyParams1"
+        data-callback="getDepartment"
+        data-return-value="formParams.bizDeptName"
+        data-return-key="formParams.bizDeptId"
+        data-pagination="{'pageIndex':'1','pageRows':'5'}"
+        data-checked-type="radio"
+        data-keys="{'key':'departmentCode','value':'departmentName',name:'部门名称'}"
+        data-other-column="[{'name':'部门编码','key':'departmentCode'}]"
+        data-show-index="false"
+        data-type="competitor"
+        data-search-key="[{'key':'departmentName','placeholder':'请输入陪同部门名称'}]"
+    >
+    </div> -->
+    <div lov-list="department" role="dialog" data-title="请选择陪同人" id="bizPersonName1" ng-model="code2"  class="  "
+        data-url="findPaginationPersonInfo"
+        data-auto-request="false"
+        data-dynamic-params="ljyParams"
+        data-callback="getDepartment"
+        data-pagination="{'pageIndex':'1','pageRows':'5'}"
+        data-checked-type="radio"
+        data-keys="{'key':'personId','value':'personName',name:'陪同人名称'}"
+        data-other-column="[{'name':'职位名称','key':'positionName'},{'name':'工号','key':'employeeNumber'}]"
+        data-show-index="false"
+        data-type="competitor"
+        data-search-key="[{'key':'personName','placeholder':'请输入陪同人姓名'}]"
+    >
+    </div>
+</div>

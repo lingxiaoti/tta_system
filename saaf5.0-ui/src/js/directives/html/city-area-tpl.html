@@ -1,0 +1,20 @@
+<div class="city-area input-group-xs" style="display: flex; ">
+    <label class="title " ng-if="title"><span class="w100"><i class="red" ng-show="required">*</i>{{ title }}</span></label>
+    <select class="form-control " id="{{ id }}_country" name="{{ id }}_country" ng-required="required" ng-model="__areas.country"
+            ng-change="checkedCountry()" ng-options="option.regionName for option in countryList">
+        <option value="">请选择国家</option>
+    </select>
+    <select  ng-if="selectLevel>1" class="form-control" id="{{ id }}_province" name="{{ id }}_province" ng-required="required" ng-model="__areas.province"
+            ng-change="checkedProvince()" ng-options="option.regionName for option in provinceList">
+        <option value="">请选择省份</option>
+    </select>
+    <select ng-if="selectLevel>2" class="form-control" id="{{ id }}_city" name="{{ id }}_city" ng-required="required" ng-model="__areas.city"
+            ng-change="checkedCity()" ng-options="option.regionName for option in cityList">
+        <option value="">请选择城市</option>
+    </select>
+    <select ng-if="selectLevel>3" class="form-control" id="{{ id }}_district" ng-required="required" name="{{ id }}_district"
+            ng-model="__areas.district" ng-change="checkedDistrict()"
+            ng-options="option.regionName for option in districtList">
+        <option value="">请选择区/县</option>
+    </select>
+</div>

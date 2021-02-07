@@ -1,0 +1,90 @@
+<div ng-controller="proposalSummaryCtrl" class="bigdata">
+	<div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令"  >
+		<div class="bg-gray-white bt">
+			<div class="bg-gray-white p5">
+				<div class="pull-right ml10">
+					<div class="btn-group btn-group-xs ">
+						<button class="btn btn-default" type="button" ng-click="searchDataTable()">
+							<i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+						</button>
+						<!--<button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+							<i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+						</button>-->
+						<button class="btn btn-default" type="button" ng-click="dataExport()" name="fullWindow">
+							<i class="fa fa-upload" aria-hidden="true"></i>导出
+						</button>
+					</div>
+                    <!--<div class="btn-group btn-group-xs " permission-buttons="btnExport">
+					</div>  -->
+				</div>
+
+				<div class="btn-group btn-group-xs ">
+					<button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+						<i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+					</button>
+					<button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+						<i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+			<div class="nicescroll-height  bg-white " ng-nicescroll
+				 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+				<div class=" mt10 pb5 input-form bb oh" input-form
+					 data-des="此节点必需－用于识别输入表单的指令">
+					<!-- 搜索输入框组-->
+					<div search-form
+						 data-legend="[
+                         {key:'deptName',label:'部门名称'},
+                         {key:'endDate',label:'截止日期', type:'time', endDate:'creationDate2'},
+                         {key:'proposalYear',label:'proposal年份',type:'time','date':'yyyy'},
+                        ]"
+						 ng-model="params"
+					></div>
+				</div>
+
+
+
+				<div class="data-table" id="dataDiv" style =" height: auto;overflow:auto;position:relative">
+					<form name="dataForm" id="dataForm">
+						<table class="table table-bordered table-hover table-condensed" id = "dataTableId"
+						>
+							<thead class="bg-gray-white">
+								<tr class="text-center" style="background: #9BC2E6">
+									<th rowspan="2" style="vertical-align: middle;">Department</th>
+									<th rowspan="2" style="vertical-align: middle;">Proposal need buyer sumbit to BIC</th>
+									<th colspan="2" style="vertical-align: middle;">Pending for Buyer Submition</th>
+									<th colspan="{{processNodeList.length}}">Proposal under Internal Process</th>
+									<th rowspan="2" style="vertical-align: middle;">In the pending for Buyer Submition</th>
+									<th rowspan="2" style="vertical-align: middle;">In the pending approved</th>
+									<th rowspan="2" style="vertical-align: middle;">Proposal approved</th>
+									<th rowspan="2" style="vertical-align: middle;">Rate% for In the pending for Buyer Submition</th>
+									<th rowspan="2" style="vertical-align: middle;">Rate% for proposal completion</th>
+								</tr>
+								<tr class="text-center" style="background: #9BC2E6">
+									<th>pending to submit</th>
+									<th>In the preparation</th>
+									<th ng-repeat="row in processNodeList track by $index">{{row.nodeName}}</th>
+								</tr>
+							</thead>
+							<tbody id="tbodyId">
+								<tr name="tr_{{$index}}" class="text-center" ng-repeat="row in processDataList track by $index"
+									ng-class="{'active':processDataList.selectRow==$index}"
+									ng-click="processDataList.selectRow= $index; processDataList.selectRowData = row">
+									<td ng-click="dataList.selectCol = $index;" name="td_{{$index}}"   style="vertical-align: middle;"  ng-repeat="childRow in row"> <!--split_parent_id-->
+										{{childRow.nodeValue}}
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+</div>

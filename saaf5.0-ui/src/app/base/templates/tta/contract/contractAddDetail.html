@@ -1,0 +1,325 @@
+<div ng-controller="contractDetailCtrl" class="bigdata">
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" permission-btn="btnSave"    ng-click="btnSave()" ></button>
+
+                <button class="btn btn-default" permission-btn="btnSubmit"  ng-disabled="status=='C'||status=='D'"   ng-click="btnSubmit()" ></button>
+
+                <button class="btn btn-default" permission-btn="btnDiscard"  ng-disabled="status=='A'||status=='D'"   ng-click="btnDiscard()" ></button>
+
+
+            </div>
+
+
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+            <!--------------------- 输入表单  --->
+
+            <div class=" mt10 pb5  oh"
+                 data-des="此节点必需－用于识别输入表单的指令">
+
+                <form id="contractForm" name="contractForm">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>合同输出拆分与编辑界面</span>
+                    </header>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w110">单据编号：</span></label>
+                            <input data-required-msg="单据编号" id = "contractCode1" type="text" ng-model="params.contractCode"
+                                   disabled   class="form-control radius3">
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>供应商编号：</span>
+                            </label>
+                            <input type="text"  id="vendorNbr1" class="form-control radius3"
+                                   required     ng-model="params.vendorNbr">
+                            <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getVendorNbr()" type="button" >
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>供应商名称：</span>
+                            </label>
+                            <input id="vendorName1" disabled required data-required-msg="请填写供应商名称"
+                                   type="text" class="form-control radius3"
+                                   ng-model="params.vendorName">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"> <i class="red">*</i>单据状态：</span>
+                            </label>
+
+                            <div lookup-code="BILL_STATUS" id="billStatus1" data-required="true" ng-model="params.billStatus"
+                                 disabled  ></div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w110"><i class="red">* </i>Proposal合同编号：</span></label>
+                            <input type="text" id="proposalCode1" class="form-control radius3"
+                                     required      ng-model="params.proposalCode" ng-change="getProposalId()"/>
+                            <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getProposalCode()" type="button" >
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>Proposal年度：</span></label>
+                            <input id="proposalYear1" data-required-msg="Proposal年度" type="text" ng-model="params.proposalYear"
+                                   disabled   required class="form-control radius3">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>Proposal版本号：</span></label>
+                            <input id="proposalVersion1" data-required-msg="Proposal版本号" type="text" ng-model="params.proposalVersion"
+                                   disabled   required class="form-control radius3">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">制单人：</span></label>
+                            <input id="createdName1" data-required-msg="制单人" type="text" ng-model="params.createdName"
+                                   disabled    class="form-control radius3">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w110">是否拆分</span>
+                            </label>
+                            <input id="chk" type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" class=" radius3"   ng-click="showBtn()"
+                                   ng-model="params.isSplit">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">制单日期：</span></label>
+                            <input id="creationDate1" data-required-msg="制单日期" type="text" ng-model="params.creationDate"
+                                   disabled    class="form-control radius3">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">确认日期：</span></label>
+                            <input id="confirmDate1" data-required-msg="确认日期" type="text" ng-model="params.confirmDate"
+                                   disabled    class="form-control radius3">
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <div class="row"></div>
+
+
+                </form>
+            </div>
+
+
+            <div class="col-md-12">
+                <h5><span class="fa fa-cog mr15"></span>Proposal信息
+
+                </h5>
+
+                <div class="data-table" id="prodata">
+
+                </div>
+
+
+
+                    <div>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h5><span class="fa fa-cog mr15"></span>拆分后明细展示</h5>
+                                </td>
+                                <td align="right">
+                                    <div class="btn-group btn-group-xs pull-right" ng-if="true">
+                                        <div class="btn-group btn-group-xs" ng-if="true">
+                                            <button type="button" ng-click="getContractVendor()" class="btn btn-default btn-xs"
+                                                    id="appointSupplier">
+                                                <i class="fa fa-plus">指定供应商</i>
+                                            </button>
+                                            <button type="button" ng-click="splitLine()" class="btn btn-default btn-xs"
+                                                    id="splitSupplier"
+                                            >
+                                                <i class="fa fa-pencil">拆分</i>
+                                            </button>
+                                            <button type="button" ng-click="deleteRow()" class="btn btn-default btn-xs"
+                                                    id="delSupplier">
+                                                <i class="fa fa-trash">删除</i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+
+
+                    </div>
+                <div class="data-table" id="contractData">
+
+                </div>
+
+
+
+
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <div lov-list="cityLov" role="dialog" data-title="选择供应商信息" id="prandcontractCode" ng-model="current.em"
+         data-url="supplierFindLov"
+         data-dynamic-params='{"contractCode": ""}'
+         data-callback="selectcontractCodeReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+         data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                          {'key':'supplierName','placeholder':'供应商名称'}]"
+            >
+    </div>
+
+    <div lov-list="cityLov" role="dialog" data-title="选择供应商信息" id="contractCode" ng-model="current.em"
+         data-url="supplierFindLov"
+         data-dynamic-params='{"contractCode": ""}'
+         data-callback="contractCodeReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+         data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                          {'key':'supplierName','placeholder':'供应商名称'}]"
+    >
+    </div>
+
+    <div lov-list="cityLov" role="dialog" data-title="选择供应商信息" id="contractVendor" ng-model="current.em"
+         data-url="supplierFindLov"
+         data-dynamic-params='{"contractCode": ""}'
+         data-callback="selectVendor"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+         data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                          {'key':'supplierName','placeholder':'供应商名称'}]"
+    >
+    </div>
+
+
+    <div lov-list="cityLov" role="dialog" data-title="Proposal信息" id="latentcontractCode" ng-model="current.em"
+         data-url="proposalFindLov"
+         data-dynamic-params='{"status": "C"}'
+         data-callback="selectLatentcontractReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'orderNbr','value':'orderNbr','name':'Proposal单号'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'Proposal年度','key':'proposalYear'},{'name':'Proposal版本号','key':'versionCode'}]"
+         data-search-key="[{'key':'proposalYear','placeholder':'Proposal年度'},
+                          {'key':'orderNbr','placeholder':'Proposal单号'}]"
+            >
+    </div>
+
+
+
+
+
+
+
+</div>

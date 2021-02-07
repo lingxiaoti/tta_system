@@ -1,0 +1,156 @@
+<div ng-controller="replenishmentBaseCtrl" class="gridtable">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+      <!--------------------- 按钮--->
+      <div class="bg-gray-white bt">
+        <div class="bg-gray-white p5">
+          <div class="pull-right ml10">
+            <div class="btn-group btn-group-xs ">
+              <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                <i class="fa fa-search" aria-hidden="true"></i>搜索
+              </button>
+              <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                <i class="fa fa-undo" aria-hidden="true"></i>重置
+              </button>
+            </div>
+          </div>
+          
+          <div class="pull-right ml10">
+
+              <div class="btn-group btn-group-xs ">
+                  <button class="btn btn-default" type="button" ng-click="downloadTem()">
+                    <i  aria-hidden="true"></i>下载模板
+                  </button>
+                </div>
+
+              <div class="btn-group btn-group-xs ">
+                <!-- <button class="btn btn-default" type="button" ng-click="fileopen()">
+                  <i class="fa fa-file-excel-o" style="font-size: 12px;"></i>导入
+                </button> -->
+
+                <button type="button" class="btn btn-default" saaf-xls-import-component
+                              data-list-options="{
+                                warehouseCode:{headName:'DC',require:true},
+                                supplierCode:{headName:'供应商编码',require:true},
+                                productCode:{headName:'货号',require:true},
+                                storeWay:{headName:'存货方式',require:true},
+                                exploRevDate:{headName:'易燃易爆收货日',require:true},
+                                supDelDate:{headName:'供应链送货LT',require:true},
+                                orderFreq:{headName:'订货频率',require:true},
+                                orderDate:{headName:'订货日',require:true},
+                                warRevDate:{headName:'仓库收货日',require:true},
+                              }"
+                            data-info="{}"
+                            data-url="importWarehouse2" data-after-action="search()"
+                            data-message="导入将清空原有数据；全部必填" >
+                          <i class="fa fa-upload"></i>导入
+                      </button>
+
+                <div class="btn-group btn-group-xs" permission-buttons="btnExport"></div>
+              </div>
+            </div>	
+              
+  
+          <div class="btn-group btn-group-xs ">
+            <button type="button" class="btn btn-primary" ng-click="fullWindow($event)"><i
+                class="fa fa-square-o"></i>数据全屏
+            </button>
+          </div>
+        </div>
+      </div>
+      <!---------------------  / .按钮  --->
+      <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+           nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+          <!--------------------- 输入表单  --->
+          <div class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+  
+  
+            <!-- 搜索输入框组-->
+  
+            <div search-form
+               data-legend="[
+                            {key:'productCode',label:'货号'},
+                            {key:'warehouseCode',label:'DC'},
+                          ]"
+               ng-model="params"
+               style="margin: 10px 0;"
+            ></div>
+  
+          </div>
+  
+          <div class="data-table">
+            <div base-data-table="dataTable"
+  
+               ng-params="params"
+               data-show-index="true"
+               data-callback="[{value:'plmCode',callback:'btnDetail'}]"
+               data-url="findPlmSupWarehouseInfo"
+               data-legend="[
+                {'value':'warehouseCode','name':'DC','style':'text-align: center;'},
+                {'value':'supplierCode','name':'供应商编码','style':'text-align: center;'},
+                {'value':'productCode','name':'货号','style':'text-align: center;'},
+                {'value':'totalShops','name':'总店铺数','style':'text-align: center;'},
+                {'value':'stopShops','name':'停补店铺数','style':'text-align: center;'},
+                {'value':'state','name':'补货状态','style':'text-align: center;'},
+                {'value':'reason','name':'停补原因','style':'text-align: center;'},
+                {'value':'storeWay','name':'存货方式','style':'text-align: center;'},
+                {'value':'isChain','name':'是否冷链','style':'text-align: center;'},
+                {'value':'isExplosive','name':'是否易燃易爆','style':'text-align: center;'},
+                {'value':'exploRevDate','name':'易燃易爆收货日','style':'text-align: center;'},
+                {'value':'supDelDate','name':'供应链送货LT','style':'text-align: center;'},
+                {'value':'orderFreq','name':'订货频率','style':'text-align: center;'},
+                {'value':'orderDate','name':'订货日','style':'text-align: center;'},
+                {'value':'warRevDate','name':'仓库收货日','style':'text-align: center;'},
+                {'value':'sesionProduct','name':'季节性货品','style':'text-align: center;'},
+                {'value':'productReturn','name':'退货属性','style':'text-align: center;'},
+                {'value':'brandnameCn','name':'品牌名称（CN）','style':'text-align: center;'},
+                {'value':'brandnameEn','name':'品牌名称（EN）','style':'text-align: center;'},
+                {'value':'department','name':'部门','style':'text-align: center;'},
+                {'value':'classes','name':'分类','style':'text-align: center;'},
+                {'value':'subClass','name':'子分类','style':'text-align: center;'},
+                {'value':'lastUpdateDate','name':'更新日期','style':'text-align: center;'}
+               ]"
+            ></div>
+          </div>
+  
+        </div>
+      </div>
+    </form>
+
+
+    
+        <div class="modal fade" role="dialog" data-backdrop="static" id="filediv">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <form name="filediv">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                          <h4 class="modal-title" >导入模板
+                          </h4>
+                      </div>
+  
+                      <div class="modal-body">
+                          <!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+  
+                           <div class="input-group input-group-xs">
+                      <label class="input-group-addon bn"><span class="w120"><i class="red">*</i>相关文件</span></label>
+                      <input type="file" nv-file-select="" uploader="ZsFileFileUploader">
+                    </div>
+  
+  
+                          <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+                      </div>
+                             <div class="modal-footer">
+                          <div style="padding: 3px 10px;">
+                              <button type="button" class="btn btn-default btn-sm " validate-form-btn="" ng-click="qd()"
+                                      data-dismiss="modal">确定</button>
+                              <button type="button" ng-class="{'mt10': paging.total }" class="btn btn-default btn-sm "
+                                      data-dismiss="modal" ng-click="qx()">取消</button>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div> 
+          
+  </div>

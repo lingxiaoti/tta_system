@@ -1,0 +1,15 @@
+<div ng-controller="ruleHeaderCtrl">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--header-->
+        <div class="bg-brand-black">
+            <div class="p5">
+                <div class="btn-group btn-group-xs">
+                    <a href="javascript:;" ng-repeat="item in navData" class="mr30 app-tiltle-chiren {{$index==currentNavIndex?'active':''}}" ui-sref="{{item.href}}">{{item.name}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-body m10">
+        <div ui-view=""></div>
+    </div>
+</div>

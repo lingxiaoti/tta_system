@@ -1,0 +1,123 @@
+<div ng-controller="mainCtrl" app-frame="" class="lang-{{  language }}">
+	<div id="aside-left">
+		<div class="bg-brand-black oh" id="user-info">
+			<div class="logo">
+				<img src="./img/logo-white.png" id="logo" />
+			</div>
+		</div>
+		<!--菜单部分 /.-->
+		<div id="aside-menu" class="tab-group" sie-tab-group="">
+			<div class="tab-body">
+				<div class="tab-panel active">
+					<h4><span class="fa fa-list mr10"></span><span ng-bind=" $l('我的菜单')"></span></h4>
+					<div menu-scroll-style="" id="main-scroll">
+						<div class="nicescroll-height" ng-nicescroll="" id="menuscop" nice-option="{cursorcolor: '#ccc',touchbehavior:false,autohidemode:'scroll'}" data-auto-refresh="true">
+							<ul id="main-menu" main-menu="">
+								<li ng-repeat="item in MenuTreeRoot" data-menuid="{{item.menuId}}" data-menutype="{{item.menuType}}">
+									<a href="javascript:"> <i class="{{item.imageLink}} w20 text-center"></i>
+										<i class="fa fa-angle-down pull-right"></i><span class="text" ng-bind="$l(item.menuName)"></span></a> </li>
+							</ul>
+							<!--导航菜单部分-->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- ./ 菜单部分-->
+	</div>
+
+	<div id="aside-right">
+		<!--系统名称 /.-->
+		<div id="app-title" class="text-right bg-brand-black h50 ">
+			<a class="fl text-white" href="javascript:" title="{{ $l('收缩菜单')}}" shrinkage-btn=""><span class="fa fa-outdent "></span></a>
+			<span id="c-app-name" class="fl white ml15" ng-bind="$l('智慧')"> </span>
+     <span class="dropdown"> <a class="app-tiltle-chiren" href="javascript:" data-toggle="dropdown"> <i class="fa fa-flag" aria-hidden="true"></i>&nbsp;<span ng-bind="$l('待办')"></span> <span ng-if="unReadedNeed.count" class="badge-home-top">{{unReadedNeed.count}}</span> </a>
+      <ul style="margin-top: 14px" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+		  <li ng-repeat="row in unReadedNeed.data"><a ng-click="saafMessage.setReaded(row.messagePushId)" target="{{row.messageUrl.indexOf('#/')==0?'_self':'_blank'}}" href="{{row.messageUrl}}">{{row.messageDesc}}</a></li>
+		  <li ng-if="!unReadedNeed.data||unReadedNeed.data.length==0"> <a style="color: #999"> 暂无未处理待办信息</a> </li>
+		  <li class="divider"></li>
+		  <li class="dropdown-submenu"><a href="#/home/SaafNeedBySelf">查看更多待办</a> </li>
+	  </ul> </span>
+     <span class="dropdown"> <a class="app-tiltle-chiren" href="javascript:" data-toggle="dropdown"> <i class="fa  fa-comment" aria-hidden="true"></i>&nbsp; <span ng-bind="$l('通知')"></span><span ng-if="unReadedNotice.count" class="badge-home-top">{{unReadedNotice.count}}</span> </a>
+      <ul style="margin-top: 14px" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+		  <li ng-repeat="row in unReadedNotice.data"><a ng-click="saafMessage.setReaded(row.messagePushId)" href="{{row.messageUrl}}" target="{{row.messageUrl.indexOf('#/')==0?'_self':'_blank'}}">{{row.messageDesc}}</a> </li>
+		  <li ng-if="!unReadedNotice.data||unReadedNotice.data.length==0"> <a style="color: #999"> 暂无未读通知</a> </li>
+		  <li class="divider"></li>
+		  <li class="dropdown-submenu"><a href="#/home/SaafNoticeBySelf">查看更多通知</a> </li>
+	  </ul> </span>
+			<a class="app-tiltle-chiren " data-toggle="modal" data-target="#changePassword" ng-click="passwordForm={}" href=""><i class="fa fa-lock mr5"></i><span ng-bind="$l('密码')"></span></a>
+     <span class="dropdown"> <a class="app-tiltle-chiren" href="javascript:" id="dropdownMenu1" data-toggle="dropdown"> <i class="fa fa-user" aria-hidden="true"></i>&nbsp; <span ng-bind="$l('职责')"></span>：<span ng-bind="$l(currentResp.responsibilityName)"></span><span class=" pl10 fa fa-angle-down"></span></a>
+      <ul style="margin-top: 14px" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+		  <li role="presentation" ng-repeat="row in userRespList" ng-click="saafChangeUserRespon(row)"  >
+			  <a role="menuitem" tabindex="-1" href="javascript:"  >{{row.responsibilityName}}
+			  <span class="fa fa-check-circle fr text-brand-primary" ng-show="currentResp.responsibilityId===row.responsibilityId"></span>
+			  </a>
+
+		  </li>
+	  </ul> </span>
+			<a class="app-tiltle-chiren" href="javascript:" ng-click="logout()"> {{userName}} <i class="fa fa-sign-out"></i>&nbsp;<span ng-bind="$l('退出')"></span></a>
+		</div>
+		<!-- ./ 系统名称-->
+		<div id="main-container" class="tab-group" sie-tab-group="">
+			<div ng-nicescroll="" nice-option="{autohidemode:'cursor',cursorwidth:0}" class="pr">
+				<ul class="tab" id="mainTabList">
+					<li ng-class="{'true':'active'}[mainPageShow()]" ng-click="showMain()"><a href="javascript:void(0)"><span ng-bind="$l('我的主页')"></span></a> </li>
+					<li title="双击或Ctrl+Q关闭" ng-class="{'active':row.active}" class="contextify" ng-repeat="row in saafHeadTab" ng-dblclick="deleteTabs(row,$index)"> <a href="javascript:" ng-click="cutTabs(row)"><span ng-bind="$l(row.name)"></span></a> <i class="iconfont icon-cuowu" ng-click="deleteTabs(row,$index)"></i> </li>
+				</ul>
+			</div>
+			<div class="tab-body ">
+				<div ui-view="" class="w100p" style="position: relative">
+					<iframe ng-show="row.active" ng-repeat="row in saafHeadTab" ng-style="{height:saafWindowHeight-heightForIframe}" style="padding: 5px 5px 1px 5px; width: 100%; height: 100%; border: 0" ng-src="{{ '?t='+timer+'#/' + row.url + '?id='+ row.id  }}"> </iframe>
+					<!--为了ie兼容性，判断是否添加 index.html-->
+					<div ng-show="mainPageShow()" class="w100p  ">
+						<div ng-include="'templates/index/main/mainPage.html'"></div>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="changePassword" data-des="修改密码" data-backdrop="static" tabindex="-1">
+		<div class="modal-dialog " style="width: 300px">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel"><span ng-bind="$l('修改密码')"></span></h4>
+				</div>
+				<form ng-submit="changePassword()" method="post" autocomplete="off">
+					<div class="modal-body">
+						<div class="form-group col-xs-12 col-md-12">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn"> <span><i class="red">*</i><span ng-bind="$l('旧密码')"></span>：</span></label>
+								<input type="text" class="form-control radius3 " required="" ng-minlength="2" name="buttonName" ng-model="passwordForm.oldPassword" placeholder=""  maxlength="30"/>
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-12">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn"> <span><i class="red">*</i><span ng-bind="$l('新密码')"></span>：</span></label>
+								<input type="password" class="form-control radius3" required="" ng-model="passwordForm.newPassword" placeholder=""  maxlength="30"/>
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-12">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn"> <span><i class="red">*</i><span ng-bind="$l('确认密码')"></span> ：</span></label>
+								<input type="password" class="form-control radius3" required="" ng-model="passwordForm.newPassword2" placeholder="" maxlength="30"/>
+							</div>
+						</div>
+					</div>
+					<div class="cb"></div>
+					<div class="modal-footer ">
+						<div style="text-align: center">
+							<button style="" type="button" class="btn btn-default" data-dismiss="modal"><span ng-bind="$l('取消')"></span> </button>
+							<button type="submit" class="btn btn-primary mr10"><span ng-bind="$l('保存')"></span></button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
+</div>

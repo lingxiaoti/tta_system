@@ -1,0 +1,804 @@
+<div ng-controller="saafQuestionnairePublishCtrl" class="gridtable">
+
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <div>     
+            <!--------------------- 按钮--->
+            <div class="bg-gray-white bt">
+                <div class="bg-gray-white p5">
+                    <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                        <button class="btn btn-default" ng-click="dataTable.search()">
+                            <i class="fa fa-search" aria-hidden="true"></i>搜索
+                        </button>
+                        <button class="btn btn-default" ng-click="dataTable.restore()">
+                            <i class="fa fa-repeat"></i>重置
+                        </button>
+                        <button class="btn btn-default" ng-click="add()"><i class="fa fa-plus"></i>新增</button>
+                        <button class="btn btn-default" ng-disabled="dataTable.selectRow==null
+                        || dataTable.data[dataTable.selectRow].status=='publish'
+                        || dataTable.data[dataTable.selectRow].flowStatus==='APPROVING'
+                        || dataTable.data[dataTable.selectRow].flowStatus==='APPROVED'" ng-click="edit()">
+                            <i class="fa fa-pencil"></i>修改
+                        </button>
+
+                        <button type="button" class="btn btn-default"
+                                ng-disabled="dataTable.selectRow==null || dataTable.data[dataTable.selectRow].flowStatus==='APPROVING'
+                                || dataTable.data[dataTable.selectRow].flowStatus==='APPROVED' || dataTable.data[dataTable.selectRow].status=='publish' "
+                                ng-click="approve()">
+                            <i class="fa fa-pencil"></i>发起审批
+                        </button>
+
+                        <button class="btn btn-default" ng-click="goApproveInfo()"
+                                ng-disabled="dataTable.selectRow==null
+                                || dataTable.data[dataTable.selectRow].flowStatus==='NEW'
+                                || dataTable.data[dataTable.selectRow].flowStatus==='RETRACT'
+                                || dataTable.data[dataTable.selectRow].flowStatus==='ABANDON'">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>审批信息
+                        </button>
+
+                        <button class="btn btn-default" ng-click="dataTable.xlsExport()"><i class="fa fa-download"></i>导出
+                        </button>
+                    </div>
+
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!---------------------  / .按钮  --->
+            <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                <div class="nicescroll-height  bg-white " ng-nicescroll
+                     nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                    <form class=" mt10 pb5 input-form bb oh" name="searchForm" id="searchForm" data-des="此节点必需－用于识别输入表单的指令">
+                        <div search-form=""
+                             data-legend="[
+                            {key:'qnTitle',label:'问卷标题'},
+                            {key:'qnCode',label:'问卷编码'},
+                            {key:'VR_SURVEY_STATUS',label:'发布状态'},
+                            {key:'FUNCTIONAL_APPROVAL_STATUS',label:'审批状态'}
+                            ]"  ng-model="params"></div>
+                    </form>
+
+                    <div class="data-table">
+                        <div base-data-table="dataTable"
+                             ng-params="params"
+                             data-show-index="true"
+                             data-url="findSaafQuestionnairePublishList"
+                             data-func-column="[{'text':'发布','callback':'publishSurvey'},{'text':'删除','callback':'delete'},
+                             {'text':'废弃','callback':'abandon'},{'text':'统计','callback':'analysis'}]"
+                             data-legend="[
+                             {'value':'publishCode','name':'发布编码'},
+                             {'value':'qnCode','name':'问卷编码'},
+                             {'value':'qnTitle','name':'问卷标题'},
+                             {'value':'statusName','name':'发布状态'},
+                             {'value':'flowStatusName','name':'审批状态'},
+                             {'value':'qnTypeName','name':'问卷类型'},
+                             {'value':'userFullName','name':'人员'},
+                             {'value':'userFullName','name':'创建人'}
+                             ]">
+                        </div>
+                    </div>
+
+
+                    <!--<div class="data-table">-->
+                        <!--<table saaf-table="dataTable"-->
+                               <!--data-url="findVrQuestionSurveyPublishList"-->
+                               <!--data-params="params"-->
+                               <!--data-page-rows="15"-->
+                               <!--class="table table-bordered table-hover table-condensed">-->
+                            <!--<thead class="bg-gray-white">-->
+                            <!--<tr class="text-center">-->
+                                <!--<th>序号</th>-->
+                                <!--<th>发布编码</th>-->
+                                <!--<th>问卷编码</th>-->
+                                <!--<th>问卷标题</th>-->
+                                <!--<th>发布状态</th>-->
+                                <!--<th>审批状态</th>-->
+                                <!--<th>问卷类型</th>-->
+                                <!--<th>人员</th>-->
+                                <!--<th>创建人</th>-->
+                                <!--<th>操作</th>-->
+                            <!--</tr>-->
+                            <!--</thead>-->
+                            <!--<tbody ng-if="!dataTable.data">-->
+                            <!--<tr>-->
+                                <!--<td style="height: 200px" colspan="20" class="active">暂无数据</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                            <!--<tbody ng-if="dataTable.data">-->
+
+                            <!--<tr class="text-center" ng-repeat="row in dataTable.data"-->
+                                <!--ng-class="{'active':dataTable.selectRow==$index}" ng-click="dataTable.selectRow=$index">-->
+                                <!--<td ng-bind="(dataTable.curIndex-1)*dataTable.pageSize+$index+1" class="w50">1</td>-->
+                                <!--<td><a style="color:#ff5715 ; cursor:pointer" ng-click="searchLine($index)">{{row.publishCode}}</a></td>-->
+                                <!--<td>{{row.qnCode}}</td>-->
+                                <!--<td style="text-align: left;width:150px;">-->
+                                    <!--<div class="ellipsis" style="width:150px;">{{row.qnTitle}}</div>-->
+                                <!--</td>-->
+                                <!--<td>{{row.statusName}}</td>-->
+                                <!--<td>{{row.flowStatusName}}</td>-->
+                                <!--<td>{{row.qnTypeName}}</td>-->
+                                <!--&lt;!&ndash;<td class="w200"><div class="w200 ellipsis"><span ng-repeat="item in row.cityList">{{item.instName}};</span></div></td>&ndash;&gt;-->
+                                <!--<td class="w300" style="text-align: left;"><div class="w300 ellipsis"><span ng-repeat="item in row.userList">{{item.userFullName}};</span></div></td>-->
+                                <!--<td>{{row.userFullName}}</td>-->
+                                <!--<td>-->
+                                    <!--<button type="button" title="发布" class="btn btn-success btn-small" ng-click="publishSurvey(row)"-->
+                                            <!--style="padding: 0px 8px;" ng-disabled="row.flowStatus!='APPROVED'" ng-if="row.status!='publish'">-->
+                                        <!--发布-->
+                                    <!--</button>-->
+                                    <!--<button type="button" title="删除" class="btn btn-danger btn-samll"-->
+                                            <!--style="padding: 0px 8px;background-color: #ff5715;" ng-click="delete(row)"-->
+                                            <!--ng-disabled="row.status=='publish' || row.flowStatus=='APPROVING' || row.flowStatus=='APPROVED' " ng-if="row.status!='publish'">-->
+                                        <!--删除-->
+                                    <!--</button>-->
+                                    <!--<button type="button" title="废弃" class="btn btn-info btn-samll"-->
+                                    <!--style="padding: 0px 8px;" ng-click="abandon(row)" ng-disabled="row.status=='abandon' || row.flowStatus=='APPROVING'">-->
+                                    <!--废弃-->
+                                    <!--</button>-->
+                                    <!--&lt;!&ndash; && row.qnType!='INTERNAL_USER'&ndash;&gt;-->
+                                    <!--<button type="button" title="分享" class="btn btn-default btn-samll"-->
+                                            <!--style="padding: 0px 8px;" ng-click="getQRCode(row)" ng-disabled="row.status!='publish'" ng-if="row.status=='publish' ">-->
+                                        <!--分享-->
+                                    <!--</button>-->
+                                    <!--<button type="button" title="统计" class="btn btn-success btn-samll"-->
+                                            <!--style="padding: 0px 8px;" ng-click="analysis(row)" ng-disabled="row.status!='publish'" ng-if="row.status=='publish'">-->
+                                        <!--统计-->
+                                    <!--</button>-->
+                                <!--</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                        <!--</table>-->
+                        <!--<div saaf-table-tfoot="dataTable"></div>-->
+                    <!--</div>-->
+                    <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="qRCode" data-backdrop="static"
+         data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="stakeholdersModalLabel" aria-hidden="true">
+        <form>
+            <div class="modal-dialog" style="width:60%;margin-top:20px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">分享</h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group  col-md-6">
+                                    <div id="qrcodeInfo"></div>
+                                </div>
+
+                                <div class="form-group  col-md-6">
+                                    <div>
+                                        <span ng-if="statusFlag" style="font-size: 15px;font-weight: 800;">
+                                            对内使用
+                                        </span>
+                                        <span ng-if="!statusFlag" style="font-size: 15px;font-weight: 800;">
+                                            对外使用
+                                        </span>
+                                    </div>
+
+                                    <div>
+                                        <textarea rows="3" id="copy-content" class="form-control radius3" ng-model="publishUrl" readonly></textarea>
+                                        <button type="button" class="btn btn-danger" style="padding:2px 15px;margin-top:10px;" ng-click="copyContent()">复制地址</button>
+                                    </div>
+
+                                    <div class="mt10" >
+                                        <a id="download" download="qrcode.jpg"></a>
+                                        <button type="button" class="btn btn-primary" ng-click="downloadQrcode()">下载二维码</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align: center">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">返回</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="publishInfo" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <form ng-submit="savePublishInfo()">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title">问卷调查发布</h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col-xs-11 col-md-12" ng-if="showTemplateFlag">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">选择模板：</span></label>
+                                        <!--<input type="text" class="form-control radius3" ng-model="publish.qnTitle">-->
+                                        <button type="button" ng-disabled="!allowUpdate" class="btn btn-info"
+                                                style="padding: 3px 5px;" ng-click="selectSurveyTemplateInfo()">
+                                            选择问卷调查模板
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">问卷标题：</span></label>
+                                        <input type="text" class="form-control radius3" ng-model="qnLov.selectRow.qnTitle" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">问卷编码：</span></label>
+                                        <input type="text" class="form-control radius3" ng-model="qnLov.selectRow.qnCode" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">问卷类型：</span></label>
+                                        <select class="form-control radius3" ng-model="qnLov.selectRow.qnType" disabled>
+                                            <!--disabled-->
+                                            <option></option>
+                                            <option saaf-select-lookupcode="SAAF_QN_TYPE"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--<div class="form-group col-xs-11 col-md-6">-->
+                                    <!--<div class="input-group input-group-xs">-->
+                                        <!--<label class="input-group-addon bn"><span class="w100">发布状态：</span></label>-->
+                                        <!--<select class="form-control radius3" ng-model="qnLov.selectRow.status" disabled>-->
+                                            <!--<option></option>-->
+                                            <!--<option saaf-select-lookupcode="SAAF_QN_STATUS"></option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <div class="form-group col-xs-11 col-md-12" ng-show="publish.qnType=='INTERNAL_USER'">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100">人员：</span></label>
+                                        <textarea rows="3" class="form-control radius3" style="height:100%;width: 70%;"
+                                                  ng-model="publish.userNames" readonly></textarea>
+                                        <button type="button" ng-disabled="!allowUpdate" class="btn btn-info"
+                                                style="padding: 3px 5px;margin-left: 10px;margin-top: 15px;" ng-click="selectPersons()">
+                                            选择人员
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i> 开始日期：</span></label>
+                                        <input type="text" class="form-control radius3 input-xs" date-time-picker
+                                               required ng-disabled="!allowUpdate"
+                                               data-date-format="yyyy-mm-dd" data-enddate="{{qnLov.selectRow.endDateActive}}"
+                                               data-min-View="2" ng-model="qnLov.selectRow.startDateActive">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">结束日期：</span></label>
+                                        <input type="text" class="form-control radius3 input-xs" date-time-picker
+                                               data-date-format="yyyy-mm-dd" ng-disabled="!allowUpdate"
+                                               data-stratdate="{{qnLov.selectRow.startDateActive}}"
+                                               data-min-View="2" ng-model="qnLov.selectRow.endDateActive">
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100">备注说明：</span></label>
+                                        <textarea rows="5" class="form-control radius3" style="height:100%;"
+                                                  ng-model="current.description" ng-readonly="!allowUpdate"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    ng-show="allowUpdate">取消
+                            </button>
+                            <button type="submit" id="publishButton" class="btn btn-primary mr10" ng-show="allowUpdate">
+                                保存
+                            </button>
+                            <button type="button" class="btn btn-primary mr10" data-dismiss="modal"
+                                    ng-show="!allowUpdate">返回
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </form>
+    </div>
+
+
+
+    <div lov-list="qnLov" role="dialog"  data-title="请选择问卷模板" id="qnLov" ng-model="current.rp"
+         data-return-value="templateParams"
+         data-url="findSaafTestQuestionnaireLov"
+         data-callback="test"
+         data-return-type="value"
+         data-auto-request = 'true'
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'qnHeadId','value':'qnTitle',name:'标题'}"
+         data-show-index="true"
+         data-type="competitor"
+         data-other-column="[{'name':'问卷编码','key':'qnCode'},{'name':'问卷标题','key':'qnTitle'},{'name':'问卷类型','key':'qnTypeName'}]"
+         data-search-key="{'key':'qnTitle','placeholder':'问卷标题'}"
+            >
+    </div>
+
+
+    <!--<div class="modal fade" id="templateInfo" data-backdrop="static"-->
+         <!--data-keyboard="false" tabindex="-1" role="dialog"-->
+         <!--aria-labelledby="stakeholdersModalLabel" aria-hidden="true">-->
+        <!--&lt;!&ndash;add by luofu&ndash;&gt;-->
+        <!--<div class="data-table">-->
+            <!--<div base-data-table="templateData"-->
+                 <!--ng-params="params"-->
+                 <!--data-show-index="true"-->
+                 <!--data-url="findSaafQuestionnaireList"-->
+                 <!--data-func-column="[{'text':'查看','callback':'checkInfo'},-->
+                             <!--{'text':'编辑','callback':'modifyInfo'},-->
+                             <!--{'text':'删除','callback':'delete'}]"-->
+                 <!--data-legend="[-->
+                             <!--{'value':'qnCode','name':'问卷编码'},-->
+                             <!--{'value':'qnTitle','name':'问卷标题'},-->
+                             <!--{'value':'submitStatus','name':'应用平台'},-->
+                             <!--{'value':'qnPlatformName','name':'开始日期'},-->
+                             <!--{'value':'qnTypeName','name':'问卷类型'}-->
+                             <!--]">-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<form>-->
+            <!--<div class="modal-dialog" style="width:80%;margin-top:20px;">-->
+                <!--<div class="modal-content">-->
+                    <!--<div class="modal-header">-->
+                        <!--<button type="button" class="close" data-dismiss="modal"-->
+                                <!--aria-hidden="true">&times;</button>-->
+                        <!--<h4 class="modal-title">选择问卷调查模板</h4>-->
+                    <!--</div>-->
+                    <!--<div class="modal-body ">-->
+                        <!--<div class="pl30 pr30">-->
+                            <!--<div class="row">-->
+                                <!--<div class="data-table">-->
+                                    <!--<div base-data-table="templateData"-->
+                                         <!--ng-params="params"-->
+                                         <!--data-show-index="true"-->
+                                         <!--data-url="findSaafQuestionnaireList"-->
+                                         <!--data-func-column="[{'text':'查看','callback':'checkInfo'},-->
+                             <!--{'text':'编辑','callback':'modifyInfo'},-->
+                             <!--{'text':'删除','callback':'delete'}]"-->
+                                         <!--data-legend="[-->
+                             <!--{'value':'qnCode','name':'问卷编码'},-->
+                             <!--{'value':'qnTitle','name':'问卷标题'},-->
+                             <!--{'value':'submitStatus','name':'应用平台'},-->
+                             <!--{'value':'qnPlatformName','name':'开始日期'},-->
+                             <!--{'value':'qnTypeName','name':'问卷类型'}-->
+                             <!--]">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="modal-footer ">-->
+                        <!--<div style="text-align: center">-->
+                            <!--<button style="" type="button" class="btn btn-default"-->
+                                    <!--data-dismiss="modal">取消-->
+                            <!--</button>-->
+                            <!--<button ng-click="confrimTemplate()" type="button" class="btn btn-primary mr10">确定</button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--&lt;!&ndash; /.modal-content &ndash;&gt;-->
+            <!--</div>-->
+            <!--&lt;!&ndash; /.modal &ndash;&gt;-->
+        <!--</form>-->
+    <!--</div>-->
+
+    <div class="modal fade" id="userInfo" data-backdrop="static"
+         data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="stakeholdersModalLabel" aria-hidden="true">
+        <!--add by luofu-->
+        <form>
+            <div class="modal-dialog" style="width:100%;margin-top:20px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">选择用户</h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div style="height: 500px;overflow-y: auto;" class="col-xs-3 br">
+                                    <div>
+                                        <ul style="margin-bottom: 10px" class="ztree p10" id="orgTree"></ul>
+                                        <ul z-tree="" class="ztree p10"
+                                            选择问卷调查模板="findUserByInstIdList"
+                                            data-keys='{"name":"instName"}'
+                                            data-watch="true"
+                                            data-simpledata='{"enable":"true","idKey":"instId","pIdKey":"parentInstId"}'>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="form-group  col-md-5" style="border: 1px solid #aeaeae;border-radius: 5px;height: 500px;">
+                                    <div class="row" style="padding:5px 0;">
+                                        <div class="form-group col-md-6">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn" style="font-weight: 900;"><span>用户名称：</span></label>
+                                                <input type="text" class="form-control radius3"
+                                                       ng-model="treeTableParams.userFullName">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-6" style="padding: 0 15px 0 0;">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn" style="font-weight: 900;">
+                                                    <span>职责：</span></label>
+                                                <input type="text" class="form-control radius3" ng-model="treeTableParams.responsibilitynNames" readonly>
+                                                <span class="input-group-btn"><button class="btn btn-default"  saaf-multiole-lov="" saaf-lov-option="{
+                                    	titleName:'职责列表',
+                                        dataUrl:'findRespList',
+                                        params:{cashierStatusName:'CONFIRMED'},   //设置初始化参数
+                                        rowId:'responsibilityId',
+                                        searchLabel1:'职责名称',
+                                        searchColName1:'responsibilityName',
+                                        label1:'职责ID',
+										colName1:'responsibilityId',
+                                        label2:'职责名称',
+                                        colName2:'responsibilityName',
+                                        returnFunction:'lovReturnFunctionResp(selectRowData)'}">选择职责</button></span>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-6">
+                                            <div class="input-group input-group-xs" style="float: right;">
+                                                <button type="button"  class="btn btn-primary"
+                                                        style="padding: 3px 15px;" ng-click="searchUserTable()">
+                                                    搜索
+                                                </button>
+                                                <button type="button"  class="btn btn-success"
+                                                        style="padding: 3px 15px;" ng-click="deleteInstInfo()">
+                                                    重置
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="input-group input-group-xs" style="float: right;">
+                                                <button type="button"  class="btn btn-default"
+                                                        style="padding: 3px 15px;" ng-click="selectAll()">
+                                                    全部 <span class="fa fa-angle-right"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="fixed-table-box row-col-fixed">
+                                        <!-- 表头 start -->
+                                        <div class="fixed-table_header-wraper">
+                                            <table class="fixed-table_header" cellspacing="0" cellpadding="0" border="0">
+                                                <thead>
+                                                <tr class="text-center">
+                                                    <th  style="width:60px;text-align: center;"><div style="width:60px;" class="table-cell">序号</div></th>
+                                                    <th  style="width:180px;text-align: center;"><div style="width:180px;" class="table-cell">用户名称</div></th>
+                                                    <th  style="width:180px;text-align: center;"><div style="width:180px;" class="table-cell">登录名</div></th>
+                                                    <!--<th  style="width:120px;text-align: center;"><div style="width:120px;" class="table-cell">城市</div></th>-->
+                                                </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        <!-- 表头 end -->
+                                        <!-- 表格内容 start -->
+                                        <div class="fixed-table_body-wraper" style="max-height: 388px;">
+                                            <table class="fixed-table_body"  cellspacing="0" cellpadding="0" border="0">
+                                                <tbody>
+                                                <tr class="text-center" ng-click="selUserInfo(item,$index)" ng-repeat="item in userNamesData">
+                                                    <td style="width:60px;text-align: center;"><div style="width:60px;" class="table-cell">{{$index+1}}</div></td>
+                                                    <td style="width:180px;text-align: center;"><div style="width:180px;" class="table-cell">{{item.userFullName}}</div></td>
+                                                    <td style="width:180px;text-align: center;"><div style="width:180px;" class="table-cell">{{item.userName}}</div></td>
+                                                    <!--<td style="width:120px;text-align: center;"><div style="width:120px;" class="table-cell">{{item.instName}}</div></td>-->
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- 表格内容 end -->
+                                    </div>
+
+                                </div>
+                                <div class="form-group col-md-4" style="border: 1px solid #aeaeae;border-radius: 5px;height: 500px;">
+                                    <div style="height:55px;padding:20px 0;">
+                                        <p class="fs16">
+                                            <span>已选择用户</span>
+                                            <button type="button"  class="btn btn-default"
+                                                    style="padding: 3px 15px;" ng-click="deleteAll()">
+                                                <span class="fa fa-angle-left"></span> 重置
+                                            </button>
+                                        </p>
+
+                                    </div>
+                                    <div class="fixed-table-box row-col-fixed">
+                                        <!-- 表头 start -->
+                                        <div class="fixed-table_header-wraper">
+                                            <table class="fixed-table_header" cellspacing="0" cellpadding="0" border="0">
+                                                <thead>
+                                                <tr class="text-center">
+                                                    <th  style="width:60px;text-align: center;"><div style="width:60px;" class="table-cell">序号</div></th>
+                                                    <th  style="width:120px;text-align: center;"><div style="width:120px;" class="table-cell">用户名称</div></th>
+                                                    <th  style="width:120px;text-align: center;"><div style="width:120px;" class="table-cell">登录名</div></th>
+                                                </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        <!-- 表头 end -->
+                                        <!-- 表格内容 start -->
+                                        <div class="fixed-table_body-wraper" style="max-height: 388px;">
+                                            <table class="fixed-table_body"  cellspacing="0" cellpadding="0" border="0">
+                                                <tbody>
+                                                <tr class="text-center"  ng-repeat="item in selUserData" ng-click="reduceUser(item,$index)">
+                                                    <td style="width:60px;text-align: center;"><div style="width:60px;" class="table-cell">{{$index+1}}</div></td>
+                                                    <td style="width:120px;text-align: center;"><div style="width:120px;" class="table-cell">{{item.userFullName}}</div></td>
+                                                    <td style="width:120px;text-align: center;"><div style="width:120px;" class="table-cell">{{item.userName}}</div></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- 表格内容 end -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align: center">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button ng-click="userSaveToTable()" type="button" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal -->
+        </form>
+
+    </div>
+
+    <div class="modal fade" id="statisticsInfo" data-backdrop="static"
+         data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="stakeholdersModalLabel" aria-hidden="true">
+        <form>
+            <div class="modal-dialog" style="width:90%;margin-top:20px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">统计报表</h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group  col-md-12">
+                                    <div class="lineListInfo" ng-repeat="item in lineList">
+                                        <div>
+                                            <p>
+                                                <span style="color:red;" ng-show="item.requireFlag=='Y'">*</span>
+                                                Q{{$index+1}}：{{item.projectTitle}}
+                                            </p>
+                                            <span ng-show="item.projectType=='single_selection'">(选择题)</span>
+                                            <span ng-show="item.projectType=='drop_down_list'">(下拉选择题)</span>
+                                            <span ng-show="item.projectType=='multi_selection'">(多选题)</span>
+                                            <span ng-show="item.projectType=='text'">(填空题)</span>
+                                        </div>
+
+                                        <!--选择题-->
+                                        <table class="table table-bordered table-hover table-condensed">
+                                            <thead class="bg-gray-white">
+                                            <tr class="text-center">
+                                                <th>选项</th>
+                                                <th>回复情况</th>
+                                                <th>查看</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr class="text-center">
+                                                <td class="w80"></td>
+                                                <td></td>
+                                                <td>
+                                                    <button type="button" title="查看" class="btn btn-default btn-small"
+                                                            style="padding: 0px 8px;" ng-click="queryAnswerSheet(row)">查看答卷
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">回答人数：3</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <!--填空题-->
+                                        <table class="table table-bordered table-hover table-condensed">
+                                            <thead class="bg-gray-white">
+                                            <tr class="text-center">
+                                                <th>答案</th>
+                                                <th>查看</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr class="text-center">
+                                                <td></td>
+                                                <td>
+                                                    <button type="button" title="查看" class="btn btn-default btn-small"
+                                                            style="padding: 0px 8px;" ng-click="queryAnswerSheet(row)">查看答卷
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">回答人数：3</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align: center">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">返回</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="addressInfo" data-backdrop="static"
+         data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="stakeholdersModalLabel" aria-hidden="true">
+        <form>
+            <div class="modal-dialog" style="width:90%;margin-top:20px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">答卷详情</h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group  col-md-12">
+                                    <table class="table table-bordered table-hover table-condensed">
+                                        <thead class="bg-gray-white">
+                                        <tr class="text-center">
+                                            <th>答卷编号</th>
+                                            <th>问卷编码</th>
+                                            <th>问卷标题</th>
+                                            <th>答卷人</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="text-center" ng-repeat="row in resultPersonData"
+                                            ng-class="{'active':resultPersonData.selectRow==$index}" ng-click="resultPersonData.selectRow=$index">
+                                            <td class="w80">{{row.resultNum}}</td>
+                                            <td>{{row.qnCode}}</td>
+                                            <td class="w200" style="text-align: left;">
+                                                <div class="w200 ellipsis">{{row.qnTitle}}</div>
+                                            </td>
+                                            <td>{{row.userFullName}}</td>
+                                            <td>
+                                                <button type="button" title="查看" class="btn btn-default btn-small"
+                                                        style="padding: 0px 8px;" ng-click="queryAnswerSheet(row)">查看答卷
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align: center">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">返回</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="answerSheetInfo" data-backdrop="static"
+         data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="stakeholdersModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width:90%;margin-top:20px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title">问卷答卷</h4>
+                </div>
+                <div class="modal-body ">
+                    <div class="pl30 pr30">
+                        <div class="row">
+                            <div class="form-group  col-md-12">
+                                <p class="text-center">
+                                    <strong style="font-size: 24px;">{{headList[0].qnTitle}}</strong>
+                                    <span style="font-size: 14px;padding-left: 10px;">{{headList[0].qnCode}}</span>
+                                </p>
+                                <div  class="lineListInfo" ng-repeat="item in lineList"
+                                      ng-class="{'active':selectRow==$index}"
+                                      ng-click="getSelectRow($index)">
+                                    <div>
+                                        <p><span style="color:red;" ng-show="item.requireFlag=='Y'">*</span>
+                                            Q{{$index+1}}：<span ng-bind-html="item.projectTitle|tohtml"></span>
+
+                                           <span ng-show="item.projectType=='single_selection'">({{item.qnChoiceResult}})</span>
+                                           <span ng-show="item.projectType=='multi_selection'">({{item.qnChoiceResult}})</span>
+
+                                        </p>
+                                        <!--不同题型不同的状态-->
+                                        <p ng-show="item.projectType=='text'" ng-repeat="subItem in item.qnChoiceData">
+                                            <!--输入框使用-->
+                                            <input type="text" style="width: 500px;" class="form-control radius3"
+                                                   ng-model="item.qnChoiceResult" readonly>
+                                        </p>
+
+                                        <p ng-show="item.projectType=='single_selection'" ng-repeat="subItem in item.qnChoiceData">
+                                            <!--单选框使用-->
+                                            <input type="radio" name="{{item.qnLineId}}" disabled ng-checked="subItem.qnChoiceId==item.qnChoiceId">
+                                            {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                        </p>
+                                        <p ng-show="item.projectType=='multi_selection'" ng-repeat="subItem in item.qnChoiceData">
+                                            <!--复选框使用-->
+                                            <input type="checkbox" name="{{item.qnLineId}}" disabled ng-checked="subItem.answerFlag=='Y'">
+                                            {{subItem.qnChoice}}：{{subItem.qnChoiceContent}}
+                                        </p>
+                                        <p ng-show="item.projectType=='drop_down_list'">
+                                            <!--下拉框使用-->
+                                            <select class="form-control radius3" style="width: 500px;" ng-model="item.qnChoiceResult" disabled>
+                                                <option ng-repeat="subItem in item.qnChoiceData" value="{{subItem.qnChoiceContent}}">
+                                                    {{subItem.qnChoiceContent}}
+                                                </option>
+                                            </select>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <div style="text-align: center">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">返回</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+    </div>
+</div>

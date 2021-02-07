@@ -1,0 +1,124 @@
+<div ng-controller="giftApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveGiftApply"
+         data-api-get="findGiftApplyDetailById" data-api-del="" data-api-update="updateGiftApply">
+        <div class="col-md-12 pt15">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                         {key:'deptName',label:'申请部门',readonly:true,required:true},
+                         {key:'personName',label:'申请人',readonly:true,required:true},
+                         {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                        {key:'billNo',label:'申请单号',readonly:true},
+                        {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                        {key:'statusStr',label:'状态',readonly:true},
+                      ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>申请原因</span></label>
+                        <textarea class="form-control" rows="1" auto-textarea="" max-length="500" title="字数限制500" placeholder="字数限制500" ng-model="formParams.collarDesc" required name="collarDesc" style="height: auto"></textarea>
+                        <!--<input number="4" point="2">-->
+                        <!-- <input class="form-control" ng-model="formParams.collarDesc" name="splReason" required/> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12" >
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>礼品列表
+                <div class="btn-group btn-group-xs ml5 pull-right">
+                    <button type="button" class="btn btn-default btn-xs"
+                            ng-show="childData.isEdit"
+                            data-toggle="modal" data-target="#findGif"
+                             ><i class="fa fa-plus">增加</i></button>
+                </div>
+            </h5>
+
+
+        </div>
+
+        <div class="col-md-12" >
+            <!--<table class="table table-bordered table-hover table-condensed">
+                <thead class="bg-gray-white">
+                <tr class="text-center">
+                    <th><span class="pl10"> 办公用品名称</span></th>
+                    <th><i class="red">*</i>数量</th>
+                    <th>备注</th>
+                    <th ng-hide="action=='detail'">操作</th>
+                    <th ng-if="action=='detail'">领用状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="text-center" ng-repeat="row in formParams.items  track by $index">
+                    <td><input type="text" class="form-control input-xs" ng-model="row.giftName"></td>
+
+                    <td><input type="text"  class="form-control radius3 input-xs" ng-model="row.giftNum" number="2" name="giftNum_{{$index}}" required/></td>
+                    <td>
+                        <input type="text"  class="form-control radius3 input-xs" ng-model="row.remark" />
+                    </td>
+                    <td ng-hide="action=='detail'">
+                        <button type="button" class="btn btn-default btn-xs " ng-hide="formParams.items==0||action=='unread'" ng-click="deleteRow('items',$index,row)"><i class="fa fa-trash-o fa-lg"></i>删除</button>
+                    </td>
+                    <td ng-if="action=='detail'"  >
+                        <div  lookup-code="OA_SPL_STATUS" ng-model="row.splStatus" class="input-xs"  ></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>-->
+            <div base-data-table-edit="table"
+                data-legend="[
+                    {value:'giftName',name:'礼品名称',target:'#gifNamePop',disabled:true,type:'lov',callback:'setRowIndex'},
+                    {value:'giftPrice',name:'单价',disabled:true},
+                    {value:'giftNum',name:'数量',required:true,validFormat:'number=7',maxlength:'11',placeholder:'请输入大于0的数字'},
+                    {value:'subTotal',name:'小计',disabled:true,operationStr:'*',operationKey:['giftPrice','giftNum'],type:'operation'},
+                    {value:'remark',name:'备注',maxlength:'200',placeholder:' '},
+                ]"
+                data-dynamic-data="giftData"
+                data-form-params-key="items"
+                data-count-key="['subTotal']"
+                ng-model="formParams"
+            ></div>
+        </div>
+        <div class="col-md-12 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+    </div>
+    <div lov-list="findGif" role="dialog" data-title="请选择礼品" id="findGif" ng-model="code1"
+             data-url="findOfficeAdmGiftPagination"
+             data-params="{'admGiftType':2,'admGiftStatus':0}"
+             data-pagination="{'pageIndex':'1','pageRows':'5'}"
+             data-checked-type="checkbox"
+             data-keys="{'key':'admGiftId','value':'skuName',name:'礼品名称'}"
+             data-show-index="false"
+             data-other-column="[
+                  {'name':'单价','key':'admGiftPrice'},
+                 ]"
+             data-search-key="[{'key':'skuName','placeholder':'请输入礼品名称'}]"
+             data-callback="setRowInput"
+        >
+        </div>
+        <div lov-list="findGif" role="dialog" data-title="请选择礼品" id="gifNamePop" ng-model="code1"
+             data-url="findOfficeAdmGiftPagination"
+             data-params="{'admGiftType':2,'admGiftStatus':0}"
+             data-pagination="{'pageIndex':'1','pageRows':'5'}"
+             data-keys="{'key':'admGiftId','value':'skuName',name:'礼品名称'}"
+             data-show-index="false"
+             data-other-column="[
+                  {'name':'单价','key':'admGiftPrice'},
+                 ]"
+             data-search-key="[{'key':'skuName','placeholder':'请输入礼品名称'}]"
+             data-callback="setRowName"
+        >
+        </div>
+</div>

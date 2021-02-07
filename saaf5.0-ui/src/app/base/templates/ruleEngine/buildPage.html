@@ -1,0 +1,158 @@
+<div ng-controller="buildPageCtrl">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <div class="bg-white h" main-scroll-style>
+            <div class="col-xs-6 col-md-2 br h p0" style="margin-right: -1px;">
+                <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                        <div class="data-table">
+                            <table saaf-table="businessTable" data-url="queryBusinessLine" data-params="businessParams" data-page-rows="-1" class="table bb table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th>业务类型</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-show="businessTable.data.length<1">
+                                <tr>
+                                    <td colspan="1">
+                                        <input class="form-control" placeholder="搜索业务线…" ng-keyup="searchKeyupBusiness($event)" ng-model="businessParams.var_like_ruleBusinessLineName">
+                                    </td>
+                                </tr>
+                                <tr><td colspan="1">暂无数据</td></tr>
+                                </tbody>
+                                <tbody ng-show="businessTable.data.length>0">
+                                <tr>
+                                    <td colspan="1">
+                                        <input class="form-control" placeholder="搜索业务线…" ng-keyup="searchKeyupBusiness($event)" ng-model="businessParams.var_like_ruleBusinessLineName">
+                                    </td>
+                                </tr>
+                                <tr class="text-center" ng-repeat="item in businessTable.data"
+                                    ng-class="{'active':businessTable.data.selectRow==item.ruleBusinessLineId}">
+                                    <td class="text-left" ng-click="businessTable.data.selectRow=item.ruleBusinessLineId;
+                                                selectBusiness(item)">
+                                        <span for="radio{{item.ruleBusinessLineId}}" style="text-align: left">{{item.ruleBusinessLineName}}</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-2 br h p0" style="margin-right: -1px;" ng-show="templateListStatus">
+                <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                        <div class="data-table">
+                            <table saaf-table="templateTable" data-url="queryModel" data-params="templateParams" data-page-rows="-1" class="table bb table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th>模板列表</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-show="templateTable.data.length<1">
+                                <tr>
+                                    <td colspan="1">
+                                        <input class="form-control" placeholder="搜索模板…" ng-keyup="searchKeyupModel($event)" ng-model="templateParams.var_like_modelName">
+                                    </td>
+                                </tr>
+                                <tr><td colspan="1">暂无数据</td></tr>
+                                </tbody>
+                                <tbody ng-show="templateTable.data.length>0">
+                                <tr>
+                                    <td colspan="1">
+                                        <input class="form-control" placeholder="搜索模板…" ng-keyup="searchKeyupModel($event)" ng-model="templateParams.var_like_modelName">
+                                    </td>
+                                </tr>
+                                <tr class="text-center" ng-repeat="item in templateTable.data"
+                                    ng-class="{'active':templateTable.data.selectRow==$index}">
+                                    <td class="text-left" ng-click="templateTable.data.selectRow=$index;changeModel(item)">
+                                        <span style="text-align: left">{{item.modelName}}</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="ruleData" class="col-xs-6 col-md-8 br h p0" style="margin-right: -1px;" ng-show="pageContextStatus">
+                <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                        <form name="buildPageForm" ng-submit="submitPage(buildPageForm.$invalid)">
+                            <div class="col-md-12 mt20" ng-repeat="pageData in pageDataArr">
+                                <strong>{{pageData.groupNameCn}}</strong>
+                                <hr class="col-md-12 mt5">
+                                <div class="col-md-12 mb10" ng-repeat="children in pageData.children">
+                                    <div class="col-md-3 text-center"><i class="red">*</i><span>{{children.groupNameCn}}</span></div>
+                                    <div class="col-md-9 p0">
+                                        <ul class="p0">
+                                            <li class="mr15" style="list-style: none;float: left" ng-repeat="childrens in children.children">
+                                                <div ng-if="childrens.groupNameViewType=='selectOneChoise'"><input  value="{{childrens.groupCode}}" ng-click="showModal(childrens)" name={{childrens.groupParentCode}} type="radio" required> {{childrens.groupNameCn}}</div>
+                                                <div ng-if="childrens.groupNameViewType=='intput'" class="box">
+                                                    <div class="ml10" style="position: relative;width: 160px;top: -3px;">
+                                                        <input type="text" class="form-control input-sm" placeholder="{{childrens.groupNameCn}}" required></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <hr class="col-md-12 mt5">
+                                <div class="tc">
+                                    <button type="submit" class="btn btn-primary" ng-if="$index==pageDataArr.length-1">确认提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+         data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        {{modalTit}}
+                    </h4>
+                </div>
+                <div class="modal-body ">
+                    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                        <div class="nicescroll-height  bg-white " ng-nicescroll
+                             nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                            <div class="data-table">
+                                <table class="table bb table-hover table-condensed">
+                                    <thead class="bg-gray-white">
+                                        <tr class="text-center">
+                                            <th>操作</th>
+                                            <th>序号</th>
+                                            <th>影片名称</th>
+                                        </tr>
+                                    </thead>
+                                    <tr ng-repeat="item in modalTable">
+                                        <td class="text-center"><input type="checkbox" ng-model="item.chx"></td>
+                                        <td class="text-center">{{(currentPage-1)*pageSize+($index+1)}}</td>
+                                        <td>{{item.filmName}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer ">
+                    <div style="text-align:center">
+                        <button style="" type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">取消</button>
+                        <button type="submit" id="saveButton" class="btn btn-primary mr10">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.modal -->
+</div>

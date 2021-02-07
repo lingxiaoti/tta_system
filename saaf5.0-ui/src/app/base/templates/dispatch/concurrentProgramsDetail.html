@@ -1,0 +1,570 @@
+<div ng-controller="concurrentProgramsDetailCtrl" ng-init="init()">
+    <div class="form bg-white"    inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <button   class="btn btn-default" validate-form-btn="formArea" ng-click="saveConcurrentPrograms(formArea.$invalid)">
+                        <i class="fa fa-save" aria-hidden="true"></i>保存
+                    </button>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>数据全屏
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+
+                <form name="formArea" class=" mt10 pb5  "
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <label>并发程序信息</label>
+                    </header>
+                    <div resp-change="" class="none"></div>
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i
+                                    class="red">*</i>Job名称</span></label>
+                            <input type="text" class="form-control radius3" name="programJobName" ng-model="program.jobName"
+                                   placeholder="" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i
+                                    class="red">*</i>系统平台</span></label>
+
+                            <div lookup-code="SCHEDULED_SYSTEM" ng-model="program.system" name="programSystem" required></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i
+                                    class="red">*</i>业务模块</span></label>
+
+                            <div lookup-code="SCHEDULED_SYSTEM_MODULE" name="programModule" ng-model="program.module" required></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i
+                                    class="red">*</i>Job类型</span></label>
+
+                            <div lookup-code="TASK_TYPE" name="programJobType" ng-model="program.jobType" required></div>
+                        </div>
+                    </div>
+
+                    <div ng-if="program.jobType=='WEBSERVICE'"
+                         class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i
+                                    class="red">*</i>可执行方法</span></label>
+
+
+                            <div lookup-code="HTTP_METHOD_TYPE" name="programMethod" ng-model="program.method" required></div>
+                        </div>
+                    </div>
+
+                    <!--java类型的方法-->
+                    <div ng-if="program.jobType=='JAVA'"
+                         class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i
+                                    class="red">*</i>可执行方法</span></label>
+                            <input type="text" class="form-control radius3" name="programMethod"
+                                   ng-model="program.method" placeholder="" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i
+                                    class="red">*</i>可执行名称</span></label>
+                            <input type="text" class="form-control radius3" name="programExecutableName" ng-model="program.executableName"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"> <i
+                                    class="red">*</i>限制单实例运行</span></label>
+                           <div lookup-code="YES_OR_NO" name="programSingleInstance" ng-model="program.singleInstance" required></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">描述</span></label>
+                            <textarea class="form-control radius3" ng-model="program.description"
+                                      style="height:60px;"></textarea>
+                        </div>
+                    </div>
+                </form>
+                <!--------------------- ./  输入表单  --->
+                <hr width="100%">
+                <div class="col-xs-12 col-md-12 br h p0" style="margin-right: -1px;">
+                    <ul id="tab" class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#params" data-toggle="tab"><i class="fa fa-list-alt"></i> <label>并发参数</label></a>
+                        </li>
+                        <li>
+                            <a href="#distribution" data-toggle="tab"><i class="fa fa-puzzle-piece"></i>
+                                <label>分配</label></a>
+                        </li>
+                    </ul>
+                    <div id="tabContent" class="tab-content">
+                        <!--并发参数标签页-->
+                        <div class="tab-pane fade in active" id="params">
+                            <header class="col-xs-12 mb10 mt20">
+                                <button type="button" class="btn btn-default btn-xs pull-right" ng-click="addParam()"
+                                        ng-disabled="!isAddParams"><i class="fa fa-plus"></i>新增
+                                </button>
+                            </header>
+                            <div class="">
+                                <table saaf-table="dataTable" data-url="jobParamFind"
+                                       data-params="searchParams"
+                                       data-auto-get-data="false"
+                                       data-page-rows="8"
+                                       class="table  table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white">
+                                    <tr class="text-center">
+                                        <th>序号</th>
+                                        <th>参数名称</th>
+                                        <th>参数类型</th>
+                                        <th>参数位置</th>
+                                        <th>说明</th>
+                                        <th>是否必填</th>
+                                        <th>是否启用</th>
+                                        <th>默认值</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody ng-if="dataTable.data.length<1">
+                                    <tr>
+                                        <td style="height: 200px" colspan="9" class="active"></td>
+                                    </tr>
+                                    </tbody>
+                                    <tbody ng-if="dataTable.data.length>0">
+                                    <tr class="text-center" ng-repeat="row in dataTable.data"
+                                        ng-class="{'active':dataTable.data.selectRow==$index}"
+                                        ng-click="dataTable.data.selectRow=$index">
+                                        <td ng-bind="(dataTable.curIndex-1)*dataTable.pageSize+$index+1">1</td>
+                                        <td>{{row.paramName}}</td>
+                                        <td>{{row.paramTypeMeaning}}</td>
+                                        <td>{{row.paramRegion}}</td>
+                                        <td>{{row.description}}</td>
+                                        <td>{{row.isRequired=='true' ? '是':'否'}}</td>
+                                        <td>{{row.isEnabled=='true' ? '是':'否'}}</td>
+                                        <td>{{row.defaultValue}}</td>
+                                        <td>
+                                            <div class="pos">
+                                                <button type="button" style="border:0;background: none;"
+                                                        ng-click="edit(row)"><i style="left: 0;color: #3498db;"
+                                                                                class="fa fa-pencil"></i></button>
+                                                <button type="button" style="border:0;background: none;"
+                                                        ng-click="remove(row)"><i style="left: 32px;"
+                                                                                  class="fa fa-trash"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div saaf-table-tfoot="dataTable"></div>
+                            </div>
+                        </div>
+                        <!--分配标签页-->
+                        <div class="tab-pane fade" id="distribution">
+                            <div class="col-xs-12">
+                                <!--------------------- ./  输入表单  --->
+                                <div class="col-xs-6 ">
+                                    <header class="col-xs-12 mb10 mt20">
+                                        <i class="fa fa-cog" aria-hidden="true"></i>
+                                        <span>组织分配</span>
+
+                                        <button type="button" ng-click="getOrgData()"
+                                                class="btn btn-success btn-xs ml20" ng-disabled="!isAddParams">
+                                            <i class="fa fa-plus"></i>分配组织
+                                        </button>
+                                    </header>
+
+                                    <!--------------------- ./  数据　　  --->
+                                    <div class="col-xs-12 ">
+                                        <table saaf-table="queryJobInstTree"
+                                               data-url="queryJobInstTree"
+                                               data-params="paramsInstTree"
+                                               data-page-rows="5"
+                                               data-auto-get-data="false"
+                                               class="table table-bordered table-hover table-condensed">
+                                            <thead class="bg-gray-white">
+                                            <tr class="text-center">
+                                                <th>序号</th>
+                                                <th>组织名称</th>
+
+                                            </tr>
+                                            </thead>
+
+                                            <tbody ng-show="(!queryJobInstTree.data)||(queryJobInstTree.data.length==0)">
+                                            <tr class="active">
+                                                <th style="height: 150px" colspan="7">暂无数据</th>
+                                            </tr>
+                                            <tbody ng-show="queryJobInstTree.data">
+                                            <tr class="text-center" ng-repeat="row in queryJobInstTree.data"
+                                                ng-class="{'active':queryJobInstTree.data.selectRow==$index}"
+                                                ng-click="queryJobInstTree.data.selectRow=$index">
+                                                <td ng-bind="$index+1"
+                                                    style="width: 50px;text-align: center">1
+                                                </td>
+                                                <td>{{row.orgName}}
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 ">
+                                    <header class="col-xs-6 mb10 mt20">
+                                        <i class="fa fa-cog" aria-hidden="true"></i>
+                                        <span>职责分配</span>
+
+                                        <button type="button" ng-click="getDutyData()"
+                                                class="btn btn-success btn-xs ml20" ng-disabled="!isAddParams">
+                                            <i class="fa fa-plus"></i>添加职责
+                                        </button>
+                                    </header>
+
+
+                                    <!--------------------- ./  数据　　  --->
+                                    <div class="col-xs-12 p0">
+                                        <table saaf-table="queryJobRespList"
+                                               data-url="queryJobRespList"
+                                               data-params="paramsResp"
+                                               data-has-page-index="false"
+                                               data-auto-get-data="false"
+                                               data-page-rows="5"
+                                               class="table table-bordered table-hover table-condensed">
+                                            <thead class="bg-gray-white">
+                                            <tr class="text-center">
+                                                <th>序号</th>
+                                                <th>职责名称</th>
+                                                <th>删除</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody ng-show="(!queryJobRespList.data)||(queryJobRespList.data.length==0)">
+                                            <tr class="active">
+                                                <th style="height: 150px" colspan="4">暂无数据</th>
+                                            </tr>
+                                            </tbody>
+                                            <tbody ng-show="queryJobRespList.data">
+                                            <tr class="text-center" ng-repeat="row in queryJobRespList.data"
+                                                ng-class="{'active':queryJobRespList.data.selectRow==$index}"
+                                                ng-click="queryJobRespList.data.selectRow=$index">
+                                                <td ng-bind="$index+1"
+                                                    style="width: 50px;text-align: center">1
+                                                </td>
+                                                <!--<td >{{row.userFullName}}</td>-->
+                                                <td>{{row.responsibilityName}}</td>
+                                                <td>
+                                                    <button type="button"
+                                                            class="btn btn-success btn-xs"
+                                                            ng-click="deleteRes(row.jobRespId)">
+                                                        <i class="fa fa-trash fa-lg"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!--------------------- ./  数据　　  --->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form class="ngValid" name="paramsForm" ng-submit="confirmParams(paramsForm.$invalid)">
+        <div class="modal fade" id="paramsModal" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            {{modalTitle}}
+                        </h4>
+                    </div>
+
+                    <div class="modal-body ">
+                        <div class="pl30 pr30 row">
+                            <div class="form-group col-xs-11 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class=""><i class="red">*</i>参数名称</span></label> <input
+                                        type="text" class="form-control radius3" name="actorName"
+                                        required ng-model="params.paramName">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-11 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class=""><i class="red">*</i>参数类型</span></label>
+                                    <select type="text" class="form-control radius3" required
+                                            ng-model="params.paramType">
+                                        <option></option>
+                                        <option saaf-select-lookupcode="PARAM_TYPE"></option>
+                                    </select>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-11 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class=""><i class="red">*</i>参数位置</span></label>
+                                    <select type="text" class="form-control radius3" required
+                                            ng-if="program.jobType=='WEBSERVICE'" ng-model="params.paramRegion">
+                                        <option></option>
+                                        <option saaf-select-lookupcode="PARAMETER_COLUMN_REGION"></option>
+                                    </select>
+
+                                    <select type="text" class="form-control radius3" required
+                                            ng-if="program.jobType=='PACKAGE'" ng-model="params.paramRegion">
+                                        <option></option>
+                                        <option value="IN">IN</option>
+                                        <option value="OUT">OUT</option>
+                                        <option value="DB">DB</option>
+                                    </select>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-11 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="">是否必填</span></label>
+                                    <input type="checkbox" class="radius3" ng-model="params.isRequired"
+                                           ng-true-value="'true'" ng-false-value="'false'"
+                                           ng-checked="params.isRequired=='true'">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-11 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="">是否启用</span></label>
+                                    <input type="checkbox" class="radius3" ng-model="params.isEnabled"
+                                           ng-true-value="'true'" ng-false-value="'false'"
+                                           ng-checked="params.isEnabled=='true'">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-11 col-md-12">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="">默认值</span></label>
+                                    <textarea class=" radius3  form-control"
+                                              ng-model="params.defaultValue" style="height: 100px"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-11 col-md-12">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="">描述</span></label>
+                                    <textarea class=" radius3  form-control"
+                                              ng-model="params.description" style="height: 100px"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true">取消
+                            </button>
+                            <button type="submit" class="btn btn-primary mr10">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+    </form>
+
+    <!--    ********************** 组织树弹出框    弹出框  start   *******************      -->
+    <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="lovOrderModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-lg" style="margin-top: 30px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel1">分配组织</h4>
+                </div>
+                <div class="modal-body" id="memberLov1">
+
+                    <!--------------------- ./  数据　　  --->
+
+                    <div class="row">
+                        <div class="col-xs-6 col-md-6 br bl" style="margin-right: -1px;height: 500px ;overflow-y: auto;"
+                             　
+                             data-des="此节点必需－用户计算滚动区域高度">
+
+                            <div style="overflow-y: auto"
+
+                                 data-des="此节点必需-滚动内容及指令">
+                                <div>
+                                    <h5>选择所需组织</h5>
+                                    <ul z-tree="" class="ztree p10" id="menuTree"
+                                        data-url="orgList"
+                                        data-params='{}'
+                                        data-page-index="1"
+                                        data-chkbox-type="{'Y': 's', 'N': 's'}"
+                                        data-page-rows="99999"
+                                        data-watch="true"
+                                        data-check="true"
+                                        data-edit='{"enable":false,"showRemoveBtn":false,"showRenameBtn":false}'
+                                        data-keys='{"name":"orgName"}'
+                                        data-simpledata='{"enable":true,"idKey":"orgId","pIdKey":"parentOrgId"}'>
+                                    </ul>
+
+                                    <!--<ul sie-ztree="orgTree" style="margin-bottom: 10px;" class="ztree pt10 pb10" id="orgTree"-->
+                                    <!--data-url="orgList"-->
+                                    <!--data-params="{{  }}"-->
+                                    <!--data-simpledata='{"enable":"true","idKey":"orgId","pIdKey":"parentOrgId","rootPId":{{rootParentId}} }'-->
+                                    <!--data-keys='{"name":"orgName"}'-->
+                                    <!--data-page-rows="10000"-->
+                                    <!--data-expand-node="true"-->
+                                    <!--data-node-click="treeClick"-->
+                                    <!--data-edit="true"-->
+                                    <!--data-callback-beforedrop="updateLevel"-->
+                                    <!--&gt;-->
+                                    <!--</ul>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-md-6 bl h">
+
+                            <button type="button" class="btn btn-danger pull-right btn-xs ml20"
+                                    ng-click="saveInstTree()">保存
+                            </button>
+                            <div style="height: 500px ;overflow-y: auto;">
+                                <div style=""
+                                     data-des="此节点必需-滚动内容及指令">
+                                    <h5>已分配组织
+                                    </h5>
+                                    <ul z-tree="" class="ztree h" id="existing"
+                                        data-keys='{"name":"orgName"}'
+                                        data-edit='{"enable":true,"showRemoveBtn":false,"showRenameBtn":false}'
+                                        data-simpledata='{"enable":true,"idKey":"orgId","pIdKey":"parentOrgId"}'>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--------------------- ./  数据　end　  --->
+            </div>
+        </div>
+    </div>
+    <!--&lt;!&ndash;    **********************     弹出框  end   *******************      &ndash;&gt;-->
+    <!--&lt;!&ndash;    ********************** 新增职责    弹出框  start   *******************      &ndash;&gt;-->
+    <div class="modal fade" id="lovDutyModal" tabindex="-1" role="dialog" aria-labelledby="lovDutyModal"
+         aria-hidden="true">
+        <div class="modal-dialog" style="margin-top: 30px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel4">新增职责</h4>
+                </div>
+                <div class="modal-body" id="memberLov4">
+                    <!--------------------- ./  数据　　  --->
+                    <form class="row form-item-box" ng-submit="findRemainderJobResp.getData()">
+                        <div class="form-group col-xs-5 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class=" w100">职责名称</span></label>
+                                <input type="text" class="form-control radius3" name="searchColName1"
+                                       ng-model="paramsDuty.responsibilityName">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-2 col-md-2">
+                            <button type="submit" class="btn btn-xs btn-default pull-left">
+                                <i class="fa fa-search" aria-hidden="true"></i><span></span>
+                            </button>
+                        </div>
+
+                    </form>
+                    <div class="data-table">
+                        <!--<div hidden ng-init="paramsDuty={'userId':stateParams.userId}"></div>-->
+                        <table saaf-table="findRemainderJobResp"
+                               data-url="findRemainderJobResp"
+                               data-params="paramsDuty" data-page-rows="10"
+                               data-auto-get-data="false"
+                               class="table table-bordered table-hover table-condensed">
+                            <thead class="bg-gray-white">
+                            <tr class="text-center">
+                                <th class="w30">
+                                    <input type="checkbox" ng-model="findRemainderJobResp.seletAllFlag"
+                                           ng-change="respSelectedAll(findRemainderJobResp.seletAllFlag,findRemainderJobResp.data);">
+                                </th>
+                                <th class="w50">序号</th>
+                                <th>职责名称</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-click="respSelectedAction($event,row.responsibilityId,row)"
+                                ng-repeat="row in findRemainderJobResp.data">
+                                <td>
+                                    <input type="checkbox" ng-checked="respIsSelected(row.responsibilityId)">
+                                </td>
+                                <td ng-bind="(findRemainderJobResp.curIndex-1)*findRemainderJobResp.pageSize+$index+1"
+                                    class="w50">1
+                                </td>
+                                <td>{{row.responsibilityName}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div saaf-table-tfoot="findRemainderJobResp"></div>
+
+                        <div class="modal-footer">
+                            <div style="text-align:center">
+                                <button type="button" class="btn btn-default " data-dismiss="modal"
+                                        ng-click="paramsDuty.responsibilityName=''">取消
+                                </button>
+                                <button type="button" class="btn btn-primary " data-dismiss="modal"
+                                        ng-click="saveResp()">确定
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--------------------- ./  数据　end　  --->
+            </div>
+        </div>
+    </div>
+    <!--    **********************     弹出框  end   *******************      -->
+</div>

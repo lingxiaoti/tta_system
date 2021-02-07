@@ -1,0 +1,394 @@
+<div ng-controller="noNeedToApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="commitCuxBcReimburse"
+         data-api-get="findReimburseDetails" data-api-update="commitCuxBcReimburse" data-api-del="">
+        <div class="col-md-12 pt15 pb30 oh">
+            <h5><span class="fa fa-cog mr15"></span>录入报销头</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="row">
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">报销编号</span></label>
+                        <input type="text" class="form-control radius3" disabled
+                               ng-model="formParams.bcReimburseHId">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">状态</span></label>
+                        <div lookup-code="BATCH_STATUS" class="form-control radius3" disabled
+                             ng-model="formParams.reimburseStatus"></div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">渠道</span></label>
+                        <input type="text" class="form-control radius3" disabled
+                               ng-model="formParams.channelName">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">部门</span></label>
+                        <input type="text" class="form-control radius3" disabled
+                               ng-model="formParams.departmentName">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4" ng-if="userType!=30">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">人员</span></label>
+                        <input type="text" disabled class="form-control radius3"
+                               ng-model="formParams.applyPersonName">
+                        <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" data-target="#userInfo_h"
+                            class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4" ng-if="userType!=30">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">职位</span></label>
+                        <input type="text" disabled class="form-control radius3"
+                               ng-model="formParams.applyPositionName">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">经销商</span></label>
+                        <input type="text" disabled class="form-control radius3"
+                               ng-model="formParams.custAccountName">
+                        <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" data-target="#dealerInfo_h"
+                                    class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <!--<div class="form-group col-xs-4 col-md-4">-->
+                    <!--<div class="input-group input-group-xs">-->
+                        <!--<label class="input-group-addon bn"><span class="w100"><i class="red">*</i>申请编号</span></label>-->
+                        <!--<input type="text" ng-disabled="true" class="form-control radius3" name="bcEncumbranceHId" required-->
+                               <!--ng-model="formParams.bcEncumbranceHId">-->
+                        <!--<span class="input-group-btn ng-scope">-->
+                        <!--<button type="button" data-toggle="modal" data-target="#applyNumber"-->
+                                <!--class="btn btn-default"><i class="fa fa-search"></i></button>-->
+                    <!--</span>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>费用期间</span></label>
+                        <select class="form-control input-xs radius3-4" ng-model="formParams.expensePeriod" name="expensePeriod" required>
+                            <option value="">请选择</option>
+                            <option ng-value="expensePeriod.expensePeriod" ng-repeat="expensePeriod in expensePeriodList">{{expensePeriod.expensePeriod}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>费用科目</span></label>
+                        <input type="text" disabled class="form-control radius3" name="expenseAccountName" required
+                               ng-model="formParams.expenseAccountName">
+                        <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" data-target="#expInfo"
+                                    class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>报销费用类型</span></label>
+                        <div lookup-code="EXPENSE_TYPE" ng-model="formParams.expenseType" data-callback="changeExpenseTypeFun" name="expenseType" required></div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4" ng-if="formParams.bcReimburseHId">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">申请金额</span></label>
+                        <input type="text" disabled class="form-control radius3" name="commitAmount" required
+                               ng-model="formParams.commitAmount">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4" ng-show="action=='detail'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">单据来源</span></label>
+                        <input class="form-control input-xs radius3-4" ng-model="formParams.sourceType">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4" ng-show="action=='detail'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">来源单据编号</span></label>
+                        <input class="form-control input-xs radius3-4" ng-model="formParams.sourceCode " disabled>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-12" ng-if="respId=='690004'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">报销内容</span></label>
+                        <textarea style="height: 50px" class="form-control radius3" ng-model="formParams.bcReimburseHMemo"
+                                  ng-disabled="editDisabled"></textarea>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>需要邮寄纸质单据</span></label>
+                        <label class="radio-inline">
+                            <input type="radio" name="isPostPaperReceipts" required value="Y" ng-model="formParams.isPostPaperReceipts"
+                                   ng-checked="formParams.isPostPaperReceipts=='Y'">是
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="isPostPaperReceipts" required value="N" ng-model="formParams.isPostPaperReceipts"
+                                   ng-checked="formParams.isPostPaperReceipts=='N'">否
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-12" ng-hide="true">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">汇总方式传送应付</span></label>
+                        <label class="radio-inline">
+                            <input type="radio" name="transferApSum" value="Y" ng-model="formParams.transferApSum"
+                                   ng-checked="formParams.transferApSum=='Y'">是
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="transferApSum" value="N" ng-model="formParams.transferApSum"
+                                   ng-checked="formParams.transferApSum=='N'">否
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-12" ng-hide="true">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">汇总方式传送往来账</span></label>
+                        <label class="radio-inline">
+                            <input type="radio" name="transferCaSum" value="Y" ng-model="formParams.transferCaSum"
+                                   ng-checked="formParams.transferCaSum=='Y'">是
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="transferCaSum" value="N" ng-model="formParams.transferCaSum"
+                                   ng-checked="formParams.transferCaSum=='Y'">否
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>备注</span></label>
+                        <textarea style="height: 50px" class="form-control radius3" ng-model="formParams.eventDesc" name="eventDesc" required
+                                  ng-disabled="editDisabled"></textarea>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-12" ng-show="action=='new'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">会签意见</span></label>
+                        <textarea style="height: 50px" class="form-control radius3" ng-model="params.properties.opinion"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 pt15 pb30 oh" ng-show="formParams.bcReimburseHId">
+            <h5>
+                <span class="fa fa-cog mr15"></span>报销行信息
+                <div class="pull-right">
+                    <button type="button" class="btn-xs btn btn-primary" ng-click="createRow()">新增行</button>
+                    <div class="btn btn-primary btn-xs fileDiv" ng-class="{'fileBtn_disable':action!='new' && action!='draft'}">导入报销行
+                        <upload-file resp-id="respId" up-params="{bcReimburseHId:formParams.bcReimburseHId}" curobj="uploadObj" upload-url="bcUploadUrl" upcb="upCallBack"></upload-file>
+                    </div>
+                </div>
+
+
+                <!--<button type="button" class="pull-right btn-xs btn btn-primary mr5" ng-click="importRows()">导入报销行</button>-->
+            </h5>
+            <div class="data-table">
+                <table class="nicescroll-height report-data">
+                    <thead>
+                    <tr>
+                        <th>部门 <i class="red">*</i></th>
+                        <th>报销项目 <i class="red">*</i></th>
+                        <th ng-show="userType!=30">人员</th>
+                        <th>经销商</th>
+                        <th>经销商子库编码</th>
+                        <th>第三方</th>
+                        <th>报销金额 <i class="red">*</i></th>
+                        <th>开始日期 <i class="red">*</i></th>
+                        <th>结束日期 <i class="red">*</i></th>
+                        <th>活动内容</th>
+                        <th>开户银行</th>
+                        <th>银行分行</th>
+                        <th>银行账号</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in formParams.reimburseLineData" ng-click="formParams.selectRowIndex=$index">
+                        <td>
+                            <div class="input-group input-group-xs">
+                                <input type="text" class="form-control radius3" ng-model="item.departmentName" name="departmentName" required disabled>
+                                <span class="input-group-btn input-xs" style="padding: 0;">
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#deptInfo">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-xs">
+                                <input type="text" class="form-control radius3" ng-model="item.expenseItemDesc" disabled>
+                                <span class="input-group-btn input-xs" style="padding: 0;">
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#expenseInfo">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </td>
+                        <td ng-show="userType!=30">
+                            <div class="input-group input-group-xs">
+                                <input type="text" class="form-control radius3" ng-model="item.personName" disabled>
+                                <span class="input-group-btn input-xs" style="padding: 0;">
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#userInfo"
+                                            ng-disabled="!(formParams.expenseType=='10')||!formParams.applyPersonName">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-xs">
+                                <input type="text" class="form-control radius3" ng-model="item.accountName" disabled>
+                                <span class="input-group-btn input-xs" style="padding: 0;">
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#dealerInfo">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group-xs">
+                                <input type="text" class="form-control radius3" ng-model="item.secondaryInventoryName" disabled>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group-xs">
+                                <input type="text" class="form-control radius3" ng-model="item.thirdParty" ng-change="thirdPartyFun()"
+                                       ng-disabled="!(formParams.applyPersonName)||!(formParams.expenseType=='10')">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group-xs">
+                                <input type="number" class="form-control radius3" ng-model="item.reimburseAmount"
+                                       oninput='this.value=this.value.replace(/^[0]+[0-9]*$/gi,"")' name="reimburseAmount" required>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group-xs">
+                                <input class="form-control radius3" ng-model="item.startDate" date-time-picker
+                                       name="startDate" required data-stratdate="{{item.endDate}}" data-min-view="2"
+                                       data-date-format="yyyy-mm-dd">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group-xs">
+                                <input class="form-control radius3" ng-model="item.endDate" date-time-picker
+                                       name="endDate" required data-stratdate="{{item.startDate}}" data-min-view="2"
+                                       data-date-format="yyyy-mm-dd">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group-xs">
+                                <input type="text" class="form-control radius3" ng-model="item.eventDesc">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group-xs">
+                                <input type="text" class="form-control radius3" ng-model="item.bankName">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group-xs">
+                                <input type="text" class="form-control radius3" ng-model="item.bankBranchName">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-xs">
+                                <input type="text" class="form-control radius3" ng-model="item.bankAccount">
+                                <span class="input-group-btn input-xs" style="padding: 0;">
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#bankInfo">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="javascript:" ng-click="deleteRow(item,$index)"><i
+                                    class="fa fa-trash-o fa-lg"></i></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--头 人员-->
+    <div e-user-select role="dialog" data-title="请选择头人员" id="userInfo_h" ng-model="userModel_h"
+         ng-params="{responsibilityId:respId,orgId:orgId,userType:userType}" return-fun="selUserHeaderFun">
+    </div>
+
+    <!--头 经销商-->
+    <div ems-dealer-select data-sel-params="{responsibilityId:respId,orgId:orgId,menuCode:'EMS_FYBX',resourceCode:'20YHKYXZBMSYJXS',channelType:ctrlChannelType}"
+         id="dealerInfo_h" ng-model="dealerModel_h"
+         data-keys="{key:'customerId',value:'customerName'}" data-dir-type="header"
+         data-search-auto="false"
+         callaction="dealerHeaderSelectFun()" emptyaction="dealerHeaderEmptyFun()"></div>
+
+    <!--头 费用科目-->
+    <div ems-exp-subject-select data-sel-params="{responsibilityId:respId,orgId:orgId,userType:userType,channelType:channelType,isReimburseAuth:'M',needEncumbrance:'N',isLeafFlag:'Y'}" id="expInfo" ng-model="expModel"
+         data-keys="{key:'expenseAccountId',value:'expenseAccountName'}"
+         callaction="expSelectFun()" emptyaction="expEmptyFun()"></div>
+
+
+    <!--部门控件-->
+    <div ems-dept-select data-sel-params="{respId:respId,departmentId:formParams.departmentId}" id="deptInfo" ng-model="deptModel"
+         data-keys="{key:'departmentId',value:'departmentName'}" dept-type="row" data-search-auto="true"
+         callaction="selDeptFun()" emptyaction="empDeptFun()"></div>
+
+    <!--费用项目-->
+    <div ems-expense-select data-sel-params="{expenseAccountId:formParams.expenseAccount}"
+         id="expenseInfo" ng-model="expenseItem" data-search-auto="true"
+         data-keys="{key:'bankAccount',value:'bankName'}"
+         callaction="expenseSelectFun()" emptyaction="expenseEmptyFun()"></div>
+
+    <!--人员-->
+    <div e-user-line-select role="dialog" data-title="请选择行人员" id="userInfo" ng-model="userModel" data-search-auto="true"
+         ng-params="{responsibilityId:respId,orgId:orgId,userType:userType,hpersonId:formParams.applyPersonId,departmentId:formParams.departmentId,expenseType:formParams.expenseType}"
+         return-fun="selUserFun">
+    </div>
+
+    <!--经销商-->
+    <div ems-dealer-select data-sel-params="{responsibilityId:respId,orgId:orgId,departmentId:formParams.departmentId,
+    hcustAccountId:formParams.custAccountId,hpersonId:formParams.applyPersonId,menuCode:'EMS_FYBX',resourceCode:'20YHKYXZBMSYJXS'}"
+         id="dealerInfo" ng-model="dealerItem"
+         data-keys="{key:'customerId',value:'customerName'}" data-dir-type="row"
+         data-search-auto="true"
+         callaction="dealerSelectFun()" emptyaction="dealerEmptyFun()"></div>
+
+    <!--银行账号-->
+    <div ems-bank-info-select data-sel-params="{orgId:orgId}"
+         id="bankInfo" ng-model="bankItem"
+         data-keys="{key:'bankAccount',value:'bankName'}"
+         callaction="bankSelectFun()" emptyaction="bankEmptyFun()"></div>
+</div>
+
+<style type="text/css">
+    .fileBtn{    opacity: 0;
+        position: absolute;
+        top: -2px;
+        left: -8px;
+        height: 34px;
+        width: 80px;
+        padding: 5px 0;
+        overflow: hidden;}
+    .fileDiv{
+        cursor: pointer; position: relative;border-radius: 3px;
+        overflow: hidden;display: inline-table;
+    }
+    .fileBtn_disable,.fileBtn_disable:hover{
+        background-color: #85b4dd;
+        border-color: #7cacd4;
+    }
+</style>

@@ -1,0 +1,128 @@
+<div ng-controller="debitApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="debitSaveOrUpdateBorrowApply"
+         data-api-get="findBorrowApplyDetailById" data-api-del="" data-api-update="updateBorrowApply">
+        <div class="col-md-12 pt15">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3"  style="display: none"></div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'deptName',label:'申请部门',readonly:true,required:true},
+                        {key:'personName',label:'借支人',readonly:true,required:true,type:'lov',target:'#personInfoModel',css:'readonly-white'},
+                        {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                        {key:'billNo',label:'申请单号',readonly:true},
+                        {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                        {key:'statusStr',label:'状态',readonly:true},
+                      ]"
+                     ng-model="formParams"
+                ></div>
+
+
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>借款用途</span></label>
+                                <div lookup-code="BORROW_NOTE"  ng-model="formParams.borrowNote" name="borrowNote" required></div>
+                        <!-- <input class="form-control" ng-model="formParams.borrowNote" name="borrowNote" required/> -->
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4"  >
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>归还日期</span></label>
+                        <input type="text" class="form-control radius3 " autocomplete="off" readonly style="background: #ffffff;"
+                               date-time-picker=""
+                               data-start-view="2"
+                               data-date-format="yyyy-mm-dd"
+                               data-min-view="2"
+                               data-stratdate="{{newDate}}"
+                               ng-model="formParams.returnTime" required name="returnTime">
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100">供应商地点</span></label>
+                        <input class="form-control" ng-model="formParams.place" name="place" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100">币种</span></label>
+                        <!--<div lookup-code="MONEY_TYPE" ng-model="formParams.moneyType" name="moneyType" required=""></div>-->
+                        <input class="form-control" name="moneyType" value="人民币" readonly />
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4" >
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>金额</span></label>
+                        <input class="form-control" type="text" number="8"  ng-model="formParams.borrowMoney" ng-blur="borrowMoneyStr()"  name="borrowMoney" placeholder=" " required/>
+                        <div class="input-group-addon">
+                            <div class="w150 oh ellipsis">
+                                {{formParams.borrowMoneyZh}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100">核销金额</span></label>
+                        <input class="form-control" type="text" number="8"  ng-model="formParams.amountApplied"  name="amountApplied" placeholder=" " readonly/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div search-list=""
+                     data-col="4"
+                     ng-model="formParams"
+                     data-legend="[
+                        {key:'brwBname',label:'收款人',required:true,readonly:true,type:'lov',target:'#debitCusBankPaginatioLov',css:'readonly-white'},
+                        {key:'bankName',label:'开户银行',required:true,readonly:true},
+                        {key:'bankNum',label:'银行账号',required:true,readonly:true},
+            ]" ></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>申请原因</span></label>
+                        <textarea class="form-control" rows="1" auto-textarea="" ng-model="formParams.memo" max-length="2000" placeholder="字数限制2000" title="字数限制2000" required name="memo" style="height: auto"></textarea>
+                        <!-- <input class="form-control" ng-model="formParams.memo" name="memo" required/> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+    </div>
+    
+    <div lov-list="debitCusBankPaginatioLov" 
+        id="debitCusBankPaginatioLov" 
+        ng-model="code4"
+        data-url="findPersonCusBankPagination"
+        data-callback="personCusBankCallback"
+        data-cancel-callback="personCusBankCancelCallback"
+        data-dynamic-params="personCusBankPaginatioParams"
+        data-auto-request = 'false'
+        data-title="请选择"
+        data-checked-type="radio"
+        data-return-value="formParams.brwBname"
+        data-return-key="formParams.bankNum"
+        data-search-key="[{'key':'primaryAcctOwnerName_like','placeholder':'收款人'},{'key':'bankAccountNumElectronic_like','placeholder':'银行帐号'}]"
+        data-keys="{'key':'bankAccountNumElectronic','value':'primaryAcctOwnerName','name':'收款人'}"
+        data-other-column="[{'name':'开户银行','key':'bankName'},{'name':'银行帐号',key:'bankAccountNumElectronic'}]" 
+    ></div>
+</div>

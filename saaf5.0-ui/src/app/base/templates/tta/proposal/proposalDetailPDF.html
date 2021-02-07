@@ -1,0 +1,1429 @@
+<div class="bigdata" ng-controller="proposalDetailCtrlPDF">
+    <div data-api-get="proposalFindById"
+         data-api-post="proposalSave"
+         data-api-update="proposalSave"
+         id="processForm">
+    </div>
+    <style type="text/css">
+        th {
+            text-align: center;
+        }
+        /*************anlysis模块 start**************/
+
+
+        @media print {
+            #dataTable input {
+                height: 20px;
+            }
+
+            #dataTable {
+                text-align: center;
+                font: 21px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
+                border: 3px solid #000000 !important;
+            }
+
+            #dataTable > thead > tr > th,
+            #dataTable > tbody > tr > th,
+            #dataTable > tfoot > tr > th,
+            #dataTable > thead > tr > td,
+            #dataTable > tbody > tr > td,
+            #dataTable > tfoot > tr > td {
+                padding: 0px;
+            }
+
+            #analysisDataTableId {
+                text-align: center;
+                font: 15px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
+                border: 3px solid #000000 !important;
+            }
+
+            #analysisDataTableId > tbody > tr > td{
+                text-align: center;
+            }
+
+            #anlysis_new_1 th {
+                border: 0px solid white !important;
+            }
+
+            #anlysis_new_2 th {
+                border: 0px solid white !important;
+            }
+
+            #analysisDataTableId input {
+                height: 20px;
+            }
+
+            #analysisDataTableId th, #analysisDataTableId td {
+                white-space: nowrap;
+            }
+
+            #analysisDataTableId > thead > tr > th,
+            #analysisDataTableId > tbody > tr > th,
+            #analysisDataTableId > tfoot > tr > th,
+            #analysisDataTableId > thead > tr > td,
+            #analysisDataTableId > tbody > tr > td,
+            #analysisDataTableId > tfoot > tr > td {
+                padding: 5px;
+            }
+
+        }
+        /**************anlysis模块 end**********/
+
+
+          /*@media print {
+              @page {
+                  size: A4 portrait; //正向打印
+                  size: A4 landscape; //横向打印
+              }
+              #printTradeId {
+                  width: 188%;
+                  transform: scale(0.53);
+                  -webkit-transform-origin-x: 0;
+                  -webkit-transform-origin-y: 0;
+                  overflow-y: hidden;
+                  overflow-x: hidden;
+              }
+         }*/
+
+        div {
+            font-family: 微软雅黑;
+        }
+
+        .spanBold {
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        .divTable {
+            float: left;
+            width: 49%;
+            min-height: 1065px;
+            border: 1px solid black;
+        }
+
+        .proposalReport {
+            background-color: #1e90c2 !important;
+        }
+
+        .font {
+            font-size: 12px;
+        }
+        .tdWidth {
+            width: 115px;
+        }
+        .thWidthAndHeight{
+            width:35%;
+        }
+
+       /* 如下为设置品牌计划颜色 start*/
+        .brandHeadThColorAndActual {
+            color: #fff;
+            background-color: #808080 !important;
+        }
+
+        .brandHeadThColorAndFuture {
+            color: #fff;
+            background-color: #4F6228 !important;
+        }
+
+        .brandLineInfoColor {
+            color: #fff;
+            background-color:#919191 !important;
+        }
+
+        .brandLineContentBrandInfo {
+            background-color: #BFBFBF !important;
+        }
+
+        .brandLineContentActual {
+            background-color: #EAEAEA !important;
+        }
+        .brandLineContentFuture {
+            background-color: #D8E4BC !important;
+        }
+        /* 如下为设置品牌计划颜色 end*/
+
+        .analysis-row-bg-1 {
+            background-color: #F5FFFA !important;
+        }
+
+        .analysis-row-bg-2 {
+            background-color: #D3FF93 !important
+        }
+
+        .analysis-row-bg-3 {
+            background-color: #D8D8EB !important;
+        }
+        .analysis-row-font-weight {
+            font-weight: bold !important;
+        }
+
+    </style>
+
+    <div data-des="此节点必需－用户计算滚动区域高度" main-scroll-style>
+        <div class="nicescroll-height  bg-white" data-des="此节点必需-滚动内容及指令">
+            <div class="col-xs-12 col-md-12 br p0">
+                <div >
+                 <a style="text-decoration:none" id="printPDFirst" ng-show="printPDFFlag">&nbsp;</a>
+                <a style="text-decoration:none" data-toggle="tab" href="#brandPln" ng-click="tabChangeInfo('brandPln')"><span id="printPDFBrandPln">&nbsp;</span></a>
+                <a style="text-decoration:none" data-toggle="tab" href="#questionnaire" ng-click="tabChangeInfo('questionnaire')"><span id="printPDFQuestionnaire">&nbsp;</span></a>
+                <a style="text-decoration:none" data-toggle="tab" href="#termsNewAnalysis" ng-click="tabChangeInfo('termsNewAnalysis')"><span id="printPDFNewAnalysis">&nbsp;</span></a>
+                <a style="text-decoration:none" data-toggle="tab" href="#termsComparision" ng-click="tabChangeInfo('termsComparision')"><span id="printPDFComparision">&nbsp;</span></a>
+                <a style="text-decoration:none" data-toggle="tab" href="#tradeClause" ng-click="tabChangeInfo('tradeClause')"><span id="printPDFClause">&nbsp;</span ></a>
+                <a style="text-decoration:none" data-toggle="tab" href="#ttaDeptFeeReport" ng-click="tabChangeInfo('ttaDeptFeeReport')"><span id="printPDFDeptFeeReport">&nbsp;</span></a>
+                </div>
+                <div class="tab-content" id="tabContent">
+
+
+
+
+                    <div class="tab-pane fade in active col-md-12" id="brandPln">
+                        <!--------------------- 输入表单  --->
+                        <div class=" mt10 pb5  oh"
+                             data-des="此节点必需－用于识别输入表单的指令">
+
+                            <form id="brandPlnForm" name="brandPlnForm">
+
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"><i class="red">* </i>年度：</span>
+                                        </label>
+
+                                        <input class="form-control radius3" data-date-format="yyyy"
+                                               data-max-view="2" data-min-view="2" data-start-view="2"
+                                               date-time-picker="" disabled ng-model="brandparams.yearCode " required
+                                               type="text">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"><i class="red">* </i>New or Existing：</span></label>
+                                        <input class="form-control radius3" disabled
+                                               ng-model="brandparams.newOrExistingName" required type="text">
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"><i class="red">* </i>供应商名称：</span></label>
+                                        <input class="form-control radius3" disabled
+                                               ng-model="brandparams.vendorName" required type="text">
+                                    </div>
+                                </div>
+
+                                <div class="row"></div>
+
+
+                                <div class="col-md-12">
+                                    <div class="data-table">
+                                        <div style="">
+                                            <div class="" id="allTable">
+                                                <table
+                                                        class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                                    <thead class="bg-gray-white">
+                                                        <tr class="text-center">
+                                                            <th style="color: #fff !important;background-color: #808080 !important;" colspan="3" ng-show="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndActual">{{yearInfo.lastYear}} Actual</th>
+                                                            <th style="color: #fff !important;background-color: #4F6228 !important;" colspan="5"  ng-if="brandparams.newOrExisting != 'New_Vendor' && userData.userType !='45'" class="brandHeadThColorAndFuture">{{yearInfo.year}} Proposal</th>
+                                                            <th style="color: #fff !important;background-color: #4F6228 !important;" colspan="3" ng-if="brandparams.newOrExisting == 'New_Vendor' && userData.userType !='45'" class="brandHeadThColorAndFuture">{{yearInfo.year}} Proposal</th>
+
+                                                            <th style="color: #fff !important;background-color: #4F6228 !important;" colspan="6"  ng-if="brandparams.newOrExisting != 'New_Vendor' && userData.userType =='45'" class="brandHeadThColorAndFuture">{{yearInfo.year}} Proposal</th>
+                                                            <th style="color: #fff !important;background-color: #4F6228 !important;" colspan="4" ng-if="brandparams.newOrExisting == 'New_Vendor' && userData.userType =='45'" class="brandHeadThColorAndFuture">{{yearInfo.year}} Proposal</th>
+                                                            <!--<th colspan="3">{{yearInfo.beforeYear}} Actual</th>-->
+                                                        </tr>
+                                                        <tr class="text-center">
+                                                            <th style="color: #fff !important;background-color: #808080 !important;" ng-show="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndActual">Purchase <br>（PO Record）</th>
+                                                            <th style="color: #fff !important;background-color: #808080 !important;" ng-show="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndActual">Sales</th>
+                                                            <th style="color: #fff !important;background-color: #808080 !important;" ng-show="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndActual">Actual GP%</th>
+
+                                                            <th style="color: #fff !important;background-color: #4F6228 !important;" ng-class="{'thWidthAndHeight':brandparams.newOrExisting == 'New_Vendor'}" class="brandHeadThColorAndFuture">F’cs Purchase <br>（PO Record）</th>
+                                                            <th style="color: #fff !important;background-color: #4F6228 !important;"  ng-show="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndFuture">Purchase <br> Growth%</th>
+                                                            <th style="color: #fff !important;background-color: #4F6228 !important;" ng-class="{'thWidthAndHeight':brandparams.newOrExisting == 'New_Vendor'}" class="brandHeadThColorAndFuture">F’cs Sales</th>
+                                                            <th style="color: #fff !important;background-color: #4F6228 !important;" ng-show="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndFuture">Sales <br> Growth%</th>
+                                                            <th style="color: #fff !important;background-color: #4F6228 !important;width: 100px"  class="brandHeadThColorAndFuture">GP%</th>
+                                                            <th style="color: #fff !important;background-color: #4F6228 !important;" ng-if="userData.userType =='45'" style="width: 100px" class="brandHeadThColorAndFuture">Adjust_GP%</th>
+
+                                                            <!--<th>Purchase（PO Record）</th>
+                                                            <th>Sales</th>
+                                                            <th>Actual GP%</th>-->
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody  ng-style="tableStyle">
+                                                        <tr class="text-center"
+                                                            ng-class="{'active':rpTable.selectRow==$index}"
+                                                            ng-repeat="row in rpTable">
+
+                                                            <td ng-show="brandparams.newOrExisting != 'New_Vendor'">{{row.poRecordSum | number:0}}</td>
+                                                            <td ng-show="brandparams.newOrExisting != 'New_Vendor'">{{row.salesSum | number:0}}</td>
+                                                            <td ng-show="brandparams.newOrExisting != 'New_Vendor'">{{row.actualGp | number:2}}</td>
+
+                                                            <td>{{row.fcsPurchase | number:0}}</td>
+                                                            <td ng-show="brandparams.newOrExisting != 'New_Vendor'">{{row.purchaseGrowth | number:2}}</td>
+                                                            <td>{{row.fcsSales | number:0}}</td>
+                                                            <td ng-show="brandparams.newOrExisting != 'New_Vendor'">{{row.salesGrowth | number:2}}</td>
+                                                            <td>{{row.gp | number:2}}</td>
+                                                            <td ng-if="userData.userType =='45'">
+                                                                <div class="input-group input-group-xs" >
+                                                                    <input class="form-control radius3"
+                                                                    name="AdjusetGp"
+                                                                    ng-disabled="params.status == 'C' || params.isPlnConfirm == 'Y'"
+                                                                    ng-model="brandparams.adjustGp"
+                                                                    to-change-number
+                                                                    reg = "/[%]/g"
+                                                                    placeholder="不超过两位小数"
+                                                                    name="{{'bhgp'+$index}}"
+                                                                    type="text"/>
+                                                                </div>
+                                                            </td>
+
+                                                            <!--<td>{{row.poRecordSum2}}</td>
+                                                            <td>{{row.salesSum2}}</td>
+                                                            <td>{{row.actualGp2}}</td>-->
+
+                                                        </tr>
+                                                    </tbody>
+                                                 </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                        <!--表单结束-->
+                        <form id="brandPlnFormRow" name="brandPlnFormRow">
+                            <div class="col-md-12">
+                            <div style="line-height: 30px">
+                                <label style="margin-left: 10px"><i class="fa fa-list-alt"></i>品牌明细列表</label>
+                            </div>
+                            <div class="data-table">
+                                <div style="">
+                                    <div class="" id="nicescroll_rpTableBrandPlnLB">
+                                        <table  id = "brandTableId" class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                            <thead class="bg-gray-white">
+                                            <tr class="text-center">
+                                                <th style="color: #fff !important;background-color:#919191 !important;" colspan="6" class="brandLineInfoColor"></th>
+
+                                                <th style="color: #fff !important;background-color: #808080 !important;" colspan="5" ng-if="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndActual">{{yearInfo.lastYear}} Actual</th>
+
+                                                <th style="color: #fff !important;background-color: #4F6228 !important;" colspan="5" ng-if="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndFuture">{{yearInfo.year}} Proposal</th>
+                                                <th style="color: #fff !important;background-color: #4F6228 !important;" colspan="3" ng-if="brandparams.newOrExisting == 'New_Vendor'" class="brandHeadThColorAndFuture">{{yearInfo.year}} Proposal</th>
+                                               <!-- <th colspan="3">{{yearInfo.beforeYear}} Actual</th>-->
+                                            </tr>
+                                            <tr class="text-center">
+                                                <th style="color: #fff !important;background-color:#919191 !important;" class="brandLineInfoColor">Brand Details</th>
+                                                <th style="color: #fff !important;background-color:#919191 !important;" class="brandLineInfoColor">Group</th>
+                                                <th style="color: #fff !important;background-color:#919191 !important;" class="brandLineInfoColor">Dept Code</th>
+                                                <th style="color: #fff !important;background-color:#919191 !important;" class="brandLineInfoColor">DEPT_DESC</th>
+                                                <th style="color: #fff !important;background-color:#919191 !important;" class="brandLineInfoColor">BRAND_CN</th>
+                                                <th style="color: #fff !important;background-color:#919191 !important;" class="brandLineInfoColor">BRAND_EN</th>
+
+                                                <th ng-if="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndActual" style="color: #fff !important;background-color: #808080 !important;">Purchase <br>（PO Record）</th>
+                                                <th ng-if="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndActual" style="color: #fff !important;background-color: #808080 !important;">Sales</th>
+                                                <th ng-if="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndActual" style="color: #fff !important;background-color: #808080 !important;">Actual GP%</th>
+                                                <!--<th ng-if="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndActual">Brand Plan <br> Adjust%</th>-->
+                                                <th ng-if="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndActual" style="color: #fff !important;background-color: #808080 !important;">Annual Purchase <br> (Annual PO Record)</th>
+                                                <th ng-if="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndActual" style="color: #fff !important;background-color: #808080 !important;">Annual Sales</th>
+
+                                                <th style="color: #fff !important;background-color: #4F6228 !important;" class="brandHeadThColorAndFuture">F’cs Purchase <br>（PO Record）</th>
+                                                <th style="color: #fff !important;background-color: #4F6228 !important;" ng-show="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndFuture">Purchase <br>Growth%</th>
+                                                <th style="color: #fff !important;background-color: #4F6228 !important;" class="brandHeadThColorAndFuture">F’cs Sales</th>
+                                                <th style="color: #fff !important;background-color: #4F6228 !important;" ng-show="brandparams.newOrExisting != 'New_Vendor'" class="brandHeadThColorAndFuture">Sales <br>Growth%</th>
+                                                <th style="color: #fff !important;background-color: #4F6228 !important;" class="brandHeadThColorAndFuture">GP%</th>
+
+                                               <!-- <th>Purchase（PO Record）</th>
+                                                <th>Sales</th>
+                                                <th>Actual GP%</th>-->
+
+
+                                            </tr>
+                                            </thead>
+                                            <tbody  ng-style="tableStyle">
+
+                                            <tr class="text-center"
+                                                ng-class="{'active':brandPlnLDataTable.selectRow==$index}"
+                                                ng-repeat="row in brandPlnLDataTable">
+
+                                                <td style="background-color: #BFBFBF !important;" class="brandLineContentBrandInfo">{{row.brandDetails}}</td>
+                                                <td style="background-color: #BFBFBF !important;" class="brandLineContentBrandInfo">
+                                                    <!--row.groupCode-->
+                                                    <div class="input-group input-group-xs tdWidth"><input
+                                                            class="form-control radius3"
+                                                            disabled
+                                                            ng-model="row.groupDesc"
+                                                            name="{{'bgroupDesc'+$index}}"
+                                                            required
+                                                            type="text"/>
+                                                        <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default"  type="button" ng-disabled="'Existing_Brand' === row.brandDetails || 'Existing Brand' === row.brandDetails || 'C' === params.status  || 'Y' === params.isPlnConfirm">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span></div>
+                                                </td>
+                                                <td style="background-color: #BFBFBF !important;" class="brandLineContentBrandInfo">
+                                                    <div class="input-group input-group-xs tdWidth"><input
+                                                            class="form-control radius3"
+                                                            disabled
+                                                            ng-model="row.deptCode"
+                                                            name="{{'bdeptCode'+$index}}"
+                                                            required
+                                                            type="text"/>
+                                                        <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default"  type="button" ng-disabled="'Existing_Brand' === row.brandDetails || 'Existing Brand' === row.brandDetails || 'C' === params.status  || 'Y' === params.isPlnConfirm ">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span></div>
+                                                </td>
+                                                <td style="background-color: #BFBFBF !important;" class="brandLineContentBrandInfo">{{row.deptDesc}}</td>
+                                                <td style="background-color: #BFBFBF !important;" class="brandLineContentBrandInfo">
+                                                    <div class="input-group input-group-xs tdWidth"><input
+                                                            class="form-control radius3"
+                                                            ng-disabled="'Existing_Brand' === row.brandDetails || 'Existing Brand' === row.brandDetails || 'C' === params.status  || 'Y' === params.isPlnConfirm "
+                                                            ng-model="row.brandCn"
+                                                            name="{{'bbrandCn'+$index}}"
+                                                            required
+                                                            type="text"/>
+                                                    </div>
+                                                </td>
+                                                <td style="background-color: #BFBFBF !important;" class="brandLineContentBrandInfo">
+                                                    <div class="input-group input-group-xs tdWidth"><input
+                                                            class="form-control radius3"
+                                                            ng-disabled="'Existing_Brand' === row.brandDetails || 'Existing Brand' === row.brandDetails || 'C' === params.status  || 'Y' === params.isPlnConfirm"
+                                                            ng-model="row.brandEn"
+                                                            name="{{'bbrandEn'+$index}}"
+                                                            required
+                                                            type="text"/>
+                                                    </div>
+                                                </td>
+                                                <!--------------------------------->
+
+                                                <!--暂时注释:2019.8.23 往年信息的标签-->
+                                                <!--<td>{{row.poRecord}}</td>-->
+                                                <td style="background-color: #EAEAEA !important;" ng-if="brandparams.newOrExisting != 'New_Vendor'" class="brandLineContentActual">
+                                                    <div class="input-group input-group-xs" style="width: 100px"><input
+                                                            class="form-control radius3"
+
+                                                            ng-disabled="'Existing_Brand' === row.brandDetails || 'Existing Brand' === row.brandDetails || 'C' === params.status  || 'Y' === params.isPlnConfirm"
+                                                            ng-model="row.poRecord"
+                                                            to-change-number
+                                                            type="text"/>
+                                                    </div>
+                                                </td>
+                                                <td style="background-color: #EAEAEA !important;" style="background-color: #EAEAEA !important;" ng-if="brandparams.newOrExisting != 'New_Vendor'" class="brandLineContentActual">
+                                                    <div class="input-group input-group-xs" style="width: 100px"><input
+                                                            class="form-control radius3"
+
+                                                            ng-disabled="'Existing_Brand' === row.brandDetails || 'Existing Brand' === row.brandDetails || 'C' === params.status  || 'Y' === params.isPlnConfirm"
+                                                            ng-model="row.sales"
+                                                            to-change-number
+                                                            type="text"/>
+                                                    </div>
+                                                </td>
+                                                <!--<td>{{row.actualGp}}</td>-->
+                                                <td style="background-color: #EAEAEA !important;" ng-if="brandparams.newOrExisting != 'New_Vendor'" class="brandLineContentActual">
+                                                    <div class="input-group input-group-xs" style="width: 100px"><input
+                                                            class="form-control radius3"
+
+                                                            ng-disabled="'Existing_Brand' === row.brandDetails || 'Existing Brand' === row.brandDetails || 'C' === params.status  || 'Y' === params.isPlnConfirm"
+                                                            ng-model="row.actualGp"
+                                                            to-change-number
+                                                            reg = "/[%]/g"
+                                                            type="text"/>
+                                                    </div>
+                                                </td>
+                                                <td style="background-color: #EAEAEA !important;" ng-if="brandparams.newOrExisting != 'New_Vendor'" class="brandLineContentActual">
+                                                    <div class="input-group input-group-xs" style="width: 100px"><input
+                                                            class="form-control radius3"
+
+                                                            ng-disabled="'Existing_Brand' === row.brandDetails || 'Existing Brand' === row.brandDetails "
+                                                            ng-model="row.annualPurchase"
+                                                            to-change-number
+                                                            type="text"/>
+                                                    </div>
+                                                </td>
+                                                <td style="background-color: #EAEAEA !important;" ng-if="brandparams.newOrExisting != 'New_Vendor'" class="brandLineContentActual">
+                                                    <div class="input-group input-group-xs" style="width: 100px"><input
+                                                            class="form-control radius3"
+
+                                                            ng-disabled="'Existing_Brand' === row.brandDetails || 'Existing Brand' === row.brandDetails "
+                                                            ng-model="row.annualSales"
+                                                            to-change-number
+                                                            type="text"/>
+                                                    </div>
+                                                </td>
+                                                <!--往年信息标签结束-->
+
+                                                <!---------------------------------------------------->
+
+                                                <td style="background-color: #D8E4BC !important;" class="brandLineContentFuture">
+                                                    <div class="input-group input-group-xs"><input
+                                                            class="form-control radius3"
+
+                                                            ng-disabled="params.status == 'C' || params.isPlnConfirm == 'Y' || 'Y' == row.fcsPurchaseCon"
+                                                            ng-model="row.fcsPurchase"
+                                                            to-change-number
+                                                            name="{{'bfcsPurchase'+$index}}"
+
+                                                            type="text"/>
+                                                    </div>
+                                                </td>
+                                                <td style="background-color: #D8E4BC !important;" ng-show="brandparams.newOrExisting != 'New_Vendor'" class="brandLineContentFuture">
+                                                    <div class="input-group input-group-xs">
+                                                        <input class="form-control radius3" name="purchaseGrowth"
+                                                               ng-disabled="params.status == 'C' || params.isPlnConfirm == 'Y' || 'Y' == row.purchaseGrowthCon"
+                                                               ng-model="row.purchaseGrowth"
+                                                               to-change-number
+                                                               reg = "/[%]/g"
+                                                               placeholder="不超过两位小数"
+                                                               type="text"/>
+                                                    </div>
+                                                </td>
+                                                <td style="background-color: #D8E4BC !important;" class="brandLineContentFuture">
+                                                    <div class="input-group input-group-xs" style="width: 100px"><input
+                                                            class="form-control radius3"
+
+                                                            ng-disabled="params.status == 'C' || params.isPlnConfirm == 'Y' || 'Y' == row.fcsSalesCon "
+                                                            ng-model="row.fcsSales"
+                                                            to-change-number
+                                                            name="{{'bfcsSales'+$index}}"
+
+                                                            type="text"/>
+                                                    </div>
+                                                </td>
+                                                <td style="background-color: #D8E4BC !important;"  ng-show="brandparams.newOrExisting != 'New_Vendor'" class="brandLineContentFuture">
+                                                    <div class="input-group input-group-xs" style="width: 100px"><input
+                                                            class="form-control radius3"
+                                                            name="salesGrowth"
+                                                            ng-disabled="params.status == 'C' || params.isPlnConfirm == 'Y' || 'Y' == row.salesGrowthCon"
+                                                            ng-model="row.salesGrowth"
+                                                            to-change-number
+                                                            reg = "/[%]/g"
+                                                            placeholder="不超过两位小数"
+                                                            type="text"/>
+                                                    </div>
+                                                </td>
+                                                <td style="background-color: #D8E4BC !important;" class="brandLineContentFuture">
+                                                    <div class="input-group input-group-xs" style="width: 100px"><input
+                                                            class="form-control radius3"
+                                                            name="gp"
+                                                            ng-disabled="params.status == 'C' || params.isPlnConfirm == 'Y'"
+                                                            ng-model="row.gp"
+                                                            to-change-number
+                                                            reg = "/[%]/g"
+                                                            placeholder="不超过两位小数"
+                                                            name="{{'bgp'+$index}}"
+                                                            required
+                                                            type="text"/>
+                                                    </div>
+                                                </td>
+
+                                               <!-- <td>{{row.poRecord2}}</td>
+                                                <td>{{row.sales2}}</td>
+                                                <td>{{row.actualGp2}}</td>-->
+
+
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        </form>
+
+                    </div>
+                    <!--品牌计划结束 -->
+                    <!--问卷调查 start-->
+                    <div class="tab-pane fade in col-md-12" id="questionnaire">
+                        <!--------------------- 输入表单  --->
+                        <div class=" mt10 pb5  oh"
+                             data-des="此节点必需－用于识别输入表单的指令">
+                            <form id="questionnaireForm" name="questionnaireForm">
+                                <div style="padding:20px 30px;">
+                                    <div class="qnDetail"
+                                         style="padding:20px;border: 1px dashed #ddd;">
+                                        <p class="text-center">
+                                            <stwarehouseIdrong style="font-size: 24px;">问卷调查表</stwarehouseIdrong>
+                                        </p>
+                                        <div id="content" style="overflow: hidden;">
+                                        </div>
+
+                                        <!----------------- 问卷表格 start --------------->
+                                        <div class="row"></div>
+                                        <div ng-show="params.newOrExisting == 'New_Vendor'"  >
+                                            <div>
+                                                <label style="margin-left: 10px"><i class="fa fa-list-alt"></i>上图新品列表(全新产品需要提供产品清单)</label>
+                                            </div>
+                                            <div class="data-table">
+                                                <table class="table table-bordered table-hover table-condensed">
+                                                    <thead class="bg-gray-white">
+                                                    <tr class="text-center">
+                                                        <th>序号</th>
+                                                        <th>SKU Description</th>
+                                                        <th>Cost</th>
+                                                        <th>Retail Price</th>
+                                                        <th>Normal GP%</th>
+                                                        <th>Promo Price</th>
+                                                        <th>Promo GP%</th>
+                                                        <th>描述信息</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr class="text-center" ng-repeat="row in questionDataTable"
+                                                        ng-class="{'active':questionDataTable.selectRow==$index}"
+                                                         >
+
+                                                        <td>
+                                                           {{$index + 1}}
+                                                        </td>
+
+                                                        <td>
+                                                            <input  required="true" name="{{'skuDesc_' + $index}}" class="form-control input-xs"  ng-model="row.skuDesc" type="text"  maxlength="300"  >
+                                                        </td>
+
+                                                        <td>
+                                                            <input name="{{'cost_' + $index}}"  required class="form-control input-xs" ng-model="row.cost" to-change-number type="text">
+                                                        </td>
+
+                                                        <td>
+                                                            <input  name="{{'retailPrice_' + $index}}"  required  class="form-control input-xs" ng-model="row.retailPrice"  to-change-number type="text">
+                                                        </td>
+
+                                                        <td>
+                                                            <input name="{{'normalGp_' + $index}}"   class="form-control input-xs" ng-model="row.normalGp" ng-value="row.normalGp = (row.cost && row.retailPrice) ? ((1 - row.cost/row.retailPrice) * 100).toFixed(2) : '' " disabled>
+                                                        </td>
+
+                                                        <td>
+                                                            <input name="{{'promoPrice_' + $index}}"   required  class="form-control input-xs" ng-model="row.promoPrice" to-change-number type="text">
+                                                        </td>
+
+                                                        <td>
+                                                            <input name="{{'promoGp_' + $index}}"   class="form-control input-xs" ng-model="row.promoGp" disabled ng-value="row.promoGp = params.saleType=='B01' ? (row.cost&&row.promoPrice ? ((1-row.cost/row.promoPrice) * 100).toFixed(2) : '')  : (row.cost && row.retailPrice ?  ((1-row.cost/row.retailPrice) * 100).toFixed(2) : '')" />
+                                                        </td>
+
+                                                        <td  style="width: 33%">
+                                                            <textarea class="form-control input-xs" rows="1" ng-model="row.remark" maxlength="200" placeholder="限制200个字符" style="height: auto"></textarea>
+                                                        </td>
+
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <!----------------- 问卷文件上传start --------------->
+                                                <div class="row"></div>
+                                                <label style="margin-left: 10px"><i class="fa fa-list-alt"></i>附加上传(全新产品需提供产品附件)</label>
+                                                <div base-data-table="fileDataTable"
+                                                     ng-params="fileDataParams"
+                                                     data-keys="{'key':'functionId','value':'functionId','name':'模块id'}"
+                                                     data-show-index="true"
+                                                     data-auto-request="true"
+                                                     data-onload='fileDataTableLoad'
+                                                     data-url="findBaseAttachmentList"
+                                                     data-legend="[
+                                                                     {'value':'createdByUser','name':'上传人'},
+                                                                     {'value':'creationDate','name':'上传时间'},
+                                                                     {'value':'sourceFileName','name':'上传附件名称'},
+                                                                 ]"
+                                                     data-func-column = "[{'icon':'fa fa-download','text':'下载附件','callback':'downFileEvent'}]"
+                                                >
+                                                </div>
+                                                <!----------------- 问卷表格 end --------------->
+                                            </div>
+                                        </div>
+                                        <!----------------- 问卷文件上传end  --------------->
+                                    </div>
+                                </div>
+
+
+                            </form>
+                        </div>
+
+
+                        <!--表单结束-->
+                    </div>
+                    <!--问卷调查 end-->
+
+                    <!-- TTA Terms Comparision (TY vs LY) 开始-->
+                <div class="tab-pane fadeIn col-md-12" id="termsComparision">
+                    <div class=" mt10 pb5 "
+                         data-des="此节点必需－用于识别输入表单的指令">
+                        <div class="data-table" id="ComparisionPrintContentId"  style="width: 99%">
+                            <!--<table class="table table-bordered table-hover table-condensed" >-->
+                            <table class="table-bordered table-hover table-condensed" id="compTableId">
+                                <tr style="background: #428bca !important;">
+                                    <th width="70">OI Type</th>
+                                    <th width="170">Terms(EN)</th>
+                                    <th width="170">Terms(CN)</th>
+                                    <!--
+                                    <th colspan="{{termsComparisionPartList2.bodyData[0].length/2 - 1}}" width="30">Y{{params.proposalYear - 1}}条款(Contract)</th>
+                                    <th colspan="{{termsComparisionPartList2.bodyData[0].length/2}}" width="30">Y{{params.proposalYear}}条款(Proposal)</th>
+                                    -->
+                                    <th colspan="{{termsComparisionPartList2.leftCol}}" width="30">Y{{params.proposalYear - 1}}条款(Contract)</th>
+                                    <th colspan="{{termsComparisionPartList2.rightCol}}" width="30">Y{{params.proposalYear}}条款(Proposal)</th>
+                                    <th width="80">Y{{params.proposalYear - 1}}预估费用<br>(含税)(含加成)</th>
+                                    <th width="80">Y{{params.proposalYear}}预估费用<br>(含税)(含加成)</th>
+                                </tr>
+
+                                <tr ng-repeat="row in termsComparisionPartList1">
+                                    <td>{{row.oiType}}</td>
+                                    <td>{{row.termsEn}}</td>
+                                    <td>{{row.termsCn}}</td>
+                                   <!-- <td colspan="{{termsComparisionPartList2.bodyData[0].length/2 - 1}}"  ng-bind-html="row.lastYearTerms|tohtml" ></td>
+                                    <td colspan="{{termsComparisionPartList2.bodyData[0].length/2}}" ng-bind-html="row.currentYearTerms|tohtml" ></td>-->
+                                    <td colspan="{{termsComparisionPartList2.leftCol}}"  ng-bind-html="row.lastYearTerms|tohtml" ></td>
+                                    <td colspan="{{termsComparisionPartList2.rightCol}}" ng-bind-html="row.currentYearTerms|tohtml" ></td>
+                                    <td style="text-align:right">{{row.lastYearFeeIntas}}</td>
+                                    <td style="text-align:right">{{row.currentYearFeeIntas}}</td>
+                                </tr>
+
+
+                                <tr ng-repeat="row in termsComparisionPartList2.bodyData">
+                                    <!-- part1 table head -->
+                                    <td ng-show="{{$index == 0}}" rowspan="{{termsComparisionPartList2.bodyData.length}}">
+                                        {{termsComparisionPartList2.oiType}}
+                                    </td>
+                                    <td ng-show="{{$index == 0}}" rowspan="{{termsComparisionPartList2.bodyData.length}}">
+                                        {{termsComparisionPartList2.termsEn}}
+                                    </td>
+                                    <!-- part2 table content -->
+                                    <td  ng-repeat="(key2,value2) in row track by key2">{{value2}} </td>
+<!--
+                                    <td ng-repeat="(key3,value3) in (arr[(row[0].length - row.length)]) track by key3" ></td>
+-->
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr ng-repeat="row in termsComparisionPartList3">
+                                    <td>{{row.oiType}}</td>
+                                    <td>{{row.termsEn}}</td>
+                                    <td>{{row.termsCn}}</td>
+                                   <!-- <td colspan="{{termsComparisionPartList2.bodyData[0].length/2 - 1}}"  ng-bind-html="row.lastYearTerms|tohtml" ></td>
+                                    <td colspan="{{termsComparisionPartList2.bodyData[0].length/2}}" ng-bind-html="row.currentYearTerms|tohtml" ></td>-->
+                                    <td colspan="{{termsComparisionPartList2.leftCol}}"  ng-bind-html="row.lastYearTerms|tohtml" ></td>
+                                    <td colspan="{{termsComparisionPartList2.rightCol}}" ng-bind-html="row.currentYearTerms|tohtml" ></td>
+                                    <td style="text-align:right">{{row.lastYearFeeIntas}}</td>
+                                    <td style="text-align:right">{{row.currentYearFeeIntas}}</td>
+                                </tr>
+                            </table>
+                            <div class="pageNext" ng-if="($index+1) != pageCount"></div>
+                        </div>
+                    </div>
+                </div>
+                    <!-- TTA Terms Comparision (TY vs LY) 结束-->
+                    <!-- 贸易条款 开始-->
+                    <div class="tab-pane fade in col-md-12" id="tradeClause">
+                        <div class=" mt10 pb5  oh"
+                             data-des="此节点必需－用于识别输入表单的指令">
+                            <div style="margin: 15px"></div>
+                            <div id="printTradeId">
+                                <div style="text-align: center; font-size: 25px">
+                                    <p style="font-weight:bold">{{params.proposalYear}}&nbsp;Trading & Terms Agreement</p>
+                                    <!--<p style="font-weight:bold">贸易条款</p>-->
+
+                                    <p style="color: #f10707;margin-bottom: 10px;font-weight: bold; font-size: 15px; display: inline;">
+                                        附件二（1） <span id="contractVId">{{contractParams.agreementEdition}}</span>
+                                    </p>
+                                    <p style="font-weight:bold; display: inline; margin: 39%;">贸易条款</p>
+                                </div>
+                                <div class="container" style="display:inline-block;width:76%">
+                                   <!-- <div style="color: #f10707;margin-bottom: 10px;margin-left: -9px;font-weight: bold;">
+                                        附件二（1） <span id="contractVId">{{contractParams.agreementEdition}}</span>
+                                    </div>-->
+                                    <div class="row f13">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <div class="f13" style="display: flex; justify-content: space-between; width: 160px">
+                                                        <div >Log NO.</div>
+                                                        <div >编&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号:</div>
+                                                </div>
+
+                                            </label>
+                                            <div style="border-bottom: 1px solid; width: 12%;display: inline-block;white-space: nowrap;">&nbsp;</div>
+                                        </div>
+                                    </div>
+                                    <div class="row f13 ">
+                                        <!-- <div class="col-md-12"> -->
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn">
+                                                    <!-- <span class="w100">Brand 供货品牌:</span> -->
+                                                    <div class="f13" style="display: flex; justify-content: space-between; width: 160px">
+                                                            <div >Brand</div>
+                                                            <div >供货品牌:</div>
+                                                    </div>
+                                                </label>
+                                                <!--<u>{{contractParams.brandCn}}</u>-->
+                                                <div style="border-bottom: 1px solid; width: 12%;display: inline-block;white-space: nowrap;">{{contractParams.brandCn}}</div>
+
+                                            </div>
+                                        <!-- </div> -->
+                                    </div>
+
+                                    <div class="row f13">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <!-- <span class="w100">Dept. 部门:</span> -->
+                                                <div class="f13" style="display: flex; justify-content: space-between; width: 160px">
+                                                        <div >Dept.</div>
+                                                        <div >部&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;门:</div>
+                                                </div>
+                                            </label>
+                                           <!-- <u>{{contractParams.deptDesc}}</u>-->
+                                            <div style="border-bottom: 1px solid; width: 12%;display: inline-block;white-space: nowrap;">{{contractParams.deptDesc}}</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row f13" style="display: flex;">
+                                        <!-- <div class="col-md-2"> -->
+                                            <div class="input-group input-group-xs" style="width: 22%">
+                                                <label class="input-group-addon bn">
+                                                    <!-- <span class="w100">Buyer 负责人:</span> -->
+                                                    <div class="f13" style="display: flex; justify-content: space-between; width: 160px">
+                                                            <div >Buyer</div>
+                                                            <div >负&nbsp;&nbsp;责&nbsp;&nbsp;人:</div>
+                                                    </div>
+                                                </label>
+                                               <u style="white-space: nowrap">{{contractParams.createdByName}}</u>
+
+                                            </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="col-md-5"> -->
+                                            <div class="input-group input-group-xs" style="width: 32%; text-align: right">
+                                                <label class="input-group-addon bn" style="display: inline;">
+                                                    <span class="w50" style="font-weight: bold; font-size: 13px;">甲方：</span>
+                                                </label>
+                                                <u class="fb">{{companyName}}</u>
+                                            </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="col-md-5"> -->
+                                            <div class="input-group input-group-xs" style="width: 32%; text-align: right">
+                                                <label class="input-group-addon bn" style="display: inline;">
+                                                    <span class="w50"  style="font-weight: bold; font-size: 13px;">乙方：</span>
+                                                </label>
+                                                <u class="fb">{{contractParams.vendorDesc}}</u>
+                                            </div>
+                                        <!-- </div> -->
+                                    </div>
+
+                                    <div class="row f13">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <div class="f13" style="display: flex; justify-content: space-between; width: 160px">
+                                                        <div >Supplier Code</div>
+                                                        <div >供应商编码:</div>
+                                                </div>
+                                            </label>
+                                            <!--<u>{{contractParams.vendorNbr}}</u>-->
+                                            <div ng-if="!contractParams.vendorNbr" style="border-bottom: 1px solid; width: 12%;display: inline-block;white-space: nowrap;">&nbsp;</div>
+                                            <div ng-if="contractParams.vendorNbr" style="border-bottom: 1px solid; width: 12%;display: inline-block;white-space: nowrap;">{{contractParams.vendorNbr}}</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row f13">
+                                        <div class=" input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <div class="f13" style="display: flex; justify-content: space-between; width: 160px">
+                                                    <div ><p ng-if= "params.isCrossYear == 'Y'" style="width: 8px;height: 8px;background-color: #333 !important;display:inline-block;"> </p> <p ng-if= "params.isCrossYear != 'Y'"  style="width: 8px;height: 8px;border: 1px solid #333;display:inline-block;" ng-else></p>  Cross-year</div>
+                                                    <div > 跨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年</div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row f13 fb" style="margin-top: 0px;">
+                                        <!-- <div class="col-md-3"> -->
+                                            <div class="input-group input-group-xs">
+                                                 <span class="spanBold">
+                                                    销售方式:
+                                                 </span>
+                                            </div>
+                                        <!-- </div> -->
+                                    </div>
+                                    <div class="row f13 fb"  id="divSaleWay"  style='display: flex; flex-wrap: wrap; font-size: 13px; padding: 5px;'>
+
+                                    </div>
+                                </div>
+
+                                <!--<div style="display:inline-block; border:1px solid black;width:21%; vertical-align:240%; margin-left: 0.7%;">
+                                    <div style="display: inline-block;width:49%;vertical-align: top; border-right: 1px solid black;">
+                                        <div style="background-color: #eee; text-align: center;font-weight: bold; margin: 2px 0">配送仓库</div>
+                                        <div id="warehouseId" style="text-align: center; padding: 1px !important"></div>
+                                    </div>
+                                    <div style="display: inline-block; width:50%;  margin-left: -1%;">
+                                        <div style="background-color: #eee; text-align: center;font-weight: bold; margin: 1px 0">销售区域</div>
+                                        <div id="areaId"></div>
+                                    </div>
+                                </div>-->
+
+                                <div style="display:inline-block; border:1px solid black;width:24%; vertical-align:107px;margin-left: -2%;">
+                                    <div style="display: inline-block;width:49%;vertical-align: top; border-right: 1px solid black;">
+                                        <div style="background-color: #eee; text-align: center;font-weight: bold; margin: 2px 0">配送仓库</div>
+                                        <div id="warehouseId" style="text-align: center; padding: 3px !important"></div>
+                                    </div>
+                                    <div style="display: inline-block; width:50%;  margin-left: -1%;">
+                                        <div style="background-color: #eee; text-align: center;font-weight: bold; margin: 2px 0">销售区域</div>
+                                        <div id="areaId"></div>
+                                    </div>
+                                </div>
+
+                                <div style="margin: 15px"></div>
+                                <div class="twoTable" style="display: flex">
+
+                                    <div class="data-table" id="printContentTerms1"
+                                        style="overflow-x:auto; overflow-y: auto; width: 49%; height: auto; border: 1px solid black;">
+                                        <!--<table class="table table-bordered table-hover table-condensed" >-->
+                                        <table class="table-bordered table-hover table-condensed" style="height: 100%">
+                                            <tbody id="tableId">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="data-table" id="printContentTerms2"
+                                        style="overflow-x:auto; overflow-y: auto;vertical-align: top; width: 49%; height: auto; border: 1px solid black;">
+                                        <table class="table-bordered table-hover table-condensed" style="height: 100%">
+                                            <tbody id="part3Table">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+                               <!-- background: gold !important;-->
+                                <div style="width: 98%; display:inline-block; margin: 10px 0;">
+                                    <span style="color: red;background-color: gold !important;">{{termRemark}}</span>
+                                </div>
+                                <div style="display: flex; ">
+                                <div style=" width: 49%">
+                                    <div class="input-group input-group-xs">
+                                        <span>甲&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;方：{{companyName}}</span>
+                                    </div>
+                                    <div class="input-group input-group-xs">
+                                        <span>甲方戳章：</span>
+                                    </div>
+                                    <div class="input-group input-group-xs" style="display: flex;justify-content: flex-start;">
+                                        <div>签&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;署：</div>
+                                        <div style="border-bottom: 1px solid #333; width: 200px"></div>
+                                    </div>
+                                    <div class="input-group input-group-xs">
+                                        <span>代表姓名：</span>
+                                    </div>
+                                    <div class="input-group input-group-xs">
+                                        <span>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务：</span>
+                                    </div>
+                                    <div class="input-group input-group-xs">
+                                        <span>日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期：</span>
+                                    </div>
+                                </div>
+                                <div style="width: 49%">
+                                    <div class="input-group input-group-xs">
+                                        <span>乙&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;方：{{contractParams.vendorDesc}}</span>
+                                    </div>
+                                    <div class="input-group input-group-xs">
+                                        <span>乙方戳章：</span>
+                                    </div>
+                                    <div class="input-group input-group-xs" style="display: flex;justify-content: flex-start;">
+                                        <div>签&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;署：</div>
+                                        <div style="border-bottom: 1px solid #333; width: 200px"></div>
+                                    </div>
+                                    <div class="input-group input-group-xs">
+                                        <span>代表姓名：</span>
+                                    </div>
+                                    <div class="input-group input-group-xs">
+                                        <span>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务：</span>
+                                    </div>
+                                    <div class="input-group input-group-xs">
+                                        <span>日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期：</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 贸易条款 结束-->
+                    <!-- 贸易补充协议 开始-->
+                    <div class="tab-pane fade in col-md-12" id="ttaDeptFeeReport">
+                        <div class=" mt10 pb5  oh"    data-des="此节点必需－用于识别输入表单的指令">
+                            <div data-des="此节点必需－用户计算滚动区域高度" id="ttaDeptFeeLFindReportScroll" >
+                                <div class="nicescroll-height  bg-white " data-des="此节点必需-滚动内容及指令"   nice-option="{{niceOpction}}">
+                                    <!--头信息-->
+                                    <div id="ttaDeptFeeLFindReportPrint" style="width: 99%;">
+                                        <div class="col-xs-12 col-md-12 p0"
+                                             style="    text-align: center;font-size: 15pt;font-family: Arial;font-weight: bold;margin-top: 20px;">
+                                            <label>{{ttaDeptFeeReportHead.proposalYear}}<span>贸易条款之补充协议</span></label>
+                                        </div>
+                                        <div class="col-xs-12 col-md-12 p0"
+                                             style="    text-align: left;font-size: 10pt;font-family: Arial;font-weight: bold;margin-top: 20px;">
+                                            <label><span>甲方：</span>{{ttaDeptFeeReportHead.partyA}}</label>
+                                        </div>
+                                        <div class="col-xs-12 col-md-12 p0"
+                                             style="    text-align: left;font-size: 10pt;font-family: Arial;font-weight: bold;">
+                                            <label><span>乙方：</span>{{ttaDeptFeeReportHead.vendorName}}</label>
+                                        </div>
+                                        <div class="col-xs-12 col-md-12 p0"
+                                             style="text-align: left;font-size: 10pt;margin-top: 15px;margin-bottom: 10px;">
+                                            <label style="font: -webkit-control;"><span>甲乙双方签订了</span>{{ttaDeptFeeReportHead.proposalYear}}<span>年《业务合同书》，针对其附件二《贸易条款》，双方经过协商一致，同意在附件二《贸易条款》基础上，对收费标准进行以下细化及补充:</span></label>
+                                        </div>
+                                        <!--头信息结束-->
+                                        <!--table 开始-->
+                                            <div class="data-table" id="ttaDeptFeeLFindReportShow">
+                                            <table class="table-bordered table-hover table-condensed"  id="ttaDeptFeeLFindReportTableId"  width="100%">
+                                                <tr width="100%">
+                                                    <th></th>
+                                                    <th ng-if="ttaDeptFeeReportHead.deptDesc1">
+                                                        {{ttaDeptFeeReportHead.deptDesc1}}
+                                                    </th>
+                                                    <th ng-if="ttaDeptFeeReportHead.deptDesc2">
+                                                        {{ttaDeptFeeReportHead.deptDesc2}}
+                                                    </th>
+                                                    <th ng-if="ttaDeptFeeReportHead.deptDesc3">
+                                                        {{ttaDeptFeeReportHead.deptDesc3}}
+                                                    </th>
+<!--                                                    <th>部门收费标准</th>-->
+                                                </tr>
+                                                <tr ng-class=  "{true: 'report', false: ''}[row.flag]"  ng-repeat="row in ttaDeptFeeReportTable">
+                                                    <td ng-if="row.flag == 'true'" style="    font-size: 12px;" ng-style="{true: 'background-color: #1e90c2 !important ', false: ''}[row.flag]" ng-class="{true: 'proposalReport ', false: ''}[row.flag]">{{row.itemDescCn}}
+                                                    </td>
+                                                    <td ng-if="row.flag == 'false'" style="    font-size: 12px;" ng-class="{true: 'proposalReport ', false: ''}[row.flag]">{{row.lineCode + row.itemDescCn}}
+                                                    </td>
+                                                    <td style="    font-size: 12px;" ng-class="{true: 'proposalReport ', false: ''}[row.flag]"  ng-if="ttaDeptFeeReportHead.deptDesc1" ng-bind-html="row.unit1 | tohtml">
+                                                    </td>
+                                                    <td style="    font-size: 12px;" ng-class="{true: 'proposalReport ', false: ''}[row.flag]" ng-if="ttaDeptFeeReportHead.deptDesc2 " ng-bind-html="row.unit2 | tohtml">
+                                                    </td>
+                                                    <td style="    font-size: 12px;" ng-class="{true: 'proposalReport ', false: ''}[row.flag]" ng-if="ttaDeptFeeReportHead.deptDesc3 " ng-bind-html="row.unit3 | tohtml">
+                                                    </td>
+<!--                                                    <td style="    font-size: 12px;" ng-class="{true: 'proposalReport ', false: ''}[row.flag]"  ng-bind-html="row.unit4 | tohtml">>-->
+<!--                                                    </td>-->
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <div class="col-xs-12 col-md-12 p0"
+                                             style="    text-align: left;font-size: 10pt;font-family: Arial;font-weight: bold;margin-top: 20px;">
+                                            <label style="font: -webkit-control;"><span>以上收费按实际执行数量计算,其中促销陈列服务费的实际执行总金额应不少于附件二《贸易条款》载明的金额。<br>本补充协议一式两份,双方各执一份,具同等法律效力。</span></label>
+                                        </div>
+
+                                        <div class="col-xs-12 col-md-12 p0"
+                                             style="    text-align: left;font-size: 10pt;font-family: Arial;font-weight: bold;margin-top: 20px;">
+                                            <table style="width: 50%;">
+                                                <tr>
+                                                    <td>
+                                                        <label style="font: -webkit-control;margin-bottom: 25px;">甲方戳章：</label>
+                                                    </td>
+                                                    <td>
+                                                        <label style="font: -webkit-control;margin-bottom: 25px;">乙方戳章：</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label style="font: -webkit-control;margin-bottom: 25px;">代表：</label>
+                                                    </td>
+                                                    <td>
+                                                        <label style="font: -webkit-control;margin-bottom: 25px;">代表：</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label style="font: -webkit-control;">日期：</label>
+                                                    </td>
+                                                    <td>
+                                                        <label style="font: -webkit-control;">日期：</label>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--table 结束-->
+                        </div>
+                    </div>
+
+                    <!-- 贸易补充协议结束-->
+                <!--ttaAnalysis测试 开始-->
+                <div class="tab-pane fade in col-md-12" id="termsNewAnalysis">
+                    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                        <div class="nicescroll-height  bg-white" data-des="此节点必需-滚动内容及指令">
+
+                            <div class="data-table">
+
+                                <div style="" id="nicescrolNewAlnlysisMain" main-scroll-style>
+                                    <div class="nicescroll-height"  id="nicescroll_dataTable_test"
+                                    >
+                                        <table id = "analysisDataTableId"
+                                               class=" nicescroll-height table-bordered table-hover">
+                                            <thead>
+                                                <tr id="anlysis_new_1" style="background: white !important;" class="text-center">
+                                                    <th rowspan="2" style="width: 80px; border: 0px solid #ddd" align="left">Batch：</th>
+                                                    <th rowspan="2" style="width: 150px; border: 0px solid #ddd" align="left">{{analysisHeader.batchNumber}}</th>
+                                                    <th colspan="3" rowspan="2" style="border: 0px solid #ddd"></th>
+                                                    <th colspan="3" rowspan="2" style="border: 0px solid #ddd"><font size="5">{{proposalNewYear}} TTA Terms Analysis</font></th>
+                                                    <th rowspan="2" colspan="10"></th>
+                                                    <th style="border-right: 3px solid #000000 !important;"></th>
+                                                </tr>
+
+                                                <tr  id="anlysis_new_2" style="background: white !important;" class="text-center">
+                                                    <th style="border-right: 3px solid #000000 !important;"></th>
+                                                </tr>
+                                            </thead>
+
+                                            <tr  id="anlysis_new_3" style="background:#D8D8EB !important;height: 3px;border-top:3px solid black !important;"  class="text-center" >
+                                                <th colspan="13"></th>
+                                                <th colspan="6" style="border-right: 3px solid #000000 !important;"><font size="1" style="height: 3px">{{proposalNewYear}} TTA versus {{proposalNewYear-1}} TTA</font></th>
+                                            </tr>
+
+                                            <tr id="anlysis_new_4"  style="background:#D8D8EB !important;" class="text-center">
+                                                <th>Supplier code</th>
+                                                <th>Supplier name</th>
+                                                <th>Region</th>
+                                                <th>Class</th>
+                                                <th>Buyer</th>
+                                                <th>Owner Dept</th>
+                                                <th>Trading mode</th>
+                                                <th>Contract<br/>Version</th>
+                                                <th colspan="2">Brand</th>
+                                                <th>New or Existing<br/>(N/E)</th>
+                                                <th>{{proposalNewYear}}Forecast<br/>Purchase(k)</th>
+                                                <th>Purchase<br/>+/-%</th>
+                                                <th>GP% <br/>+/-%</th>
+                                                <th>BEOI% <br/>+/-%</th>
+                                                <th>SROI% <br/>+/-%</th>
+                                                <th>ABOI% <br/>+/-%</th>
+                                                <th>TotalOI%<br/>+/-%</th>
+                                                <th style="border-right: 3px solid #000000 !important;">NM%<br/>+/-%</th>
+                                            </tr>
+                                            <tr id="anlysis_new_5" style="background:lightyellow !important;border-bottom:3px solid black !important;" class="text-center">
+                                                <th align="left">{{analysisHeader.supplierCode}}</th>
+                                                <th align="left">{{analysisHeader.supplierName}}</th>
+                                                <th style="white-space: normal;">{{analysisHeader.region}}</th>
+                                                <th>{{analysisHeader.classs}}</th>
+                                                <th>{{analysisHeader.buyer}}</th>
+                                                <th>{{analysisHeader.ownerDept}}</th>
+                                                <th style="white-space: normal">{{analysisHeader.tradingMode}}</th>
+                                                <th>{{analysisHeader.contractVersion}}</th>
+                                                <th colspan="2" style="white-space: normal">{{analysisHeader.brand}}</th>
+                                                <th>{{analysisHeader.newOrExisting}}</th>
+                                                <th>{{analysisHeader.forecastPurchase | number:0}}</th>
+                                                <th>{{analysisHeader.purchase | number:2 | changeNumberToPosiNumber}}%</th>
+                                                <th>{{analysisHeader.gp | number:2 | changeNumberToPosiNumber}}%</th>
+                                                <th>{{analysisHeader.beoi | number:2 | changeNumberToPosiNumber}}%</th>
+                                                <th>{{analysisHeader.sroi | number:2 | changeNumberToPosiNumber}}%</th>
+                                                <th>{{analysisHeader.aboi | number:2 | changeNumberToPosiNumber}}%</th>
+                                                <th>{{analysisHeader.totaloi | number:2 | changeNumberToPosiNumber}}%</th>
+                                                <th style="border-right: 3px solid #000000 !important;">{{analysisHeader.nm | number:2 | changeNumberToPosiNumber}}%</th>
+                                            </tr>
+                                            <!--如下行没用到,故注释-->
+                                           <!-- <tr id="anlysistest_6" style="background: white !important;">
+                                                <th style="display:table-cell; vertical-align:middle;border-right: 3px solid #000000 !important;" colspan="19" rowspan="2"  >{{header.remark}}</th>
+                                            </tr>-->
+                                            <tr id="anlysis_new_6" style="background: white !important;border: 3px solid #000000 !important;height: 10px" class="text-center">
+                                                <td colspan="19" style="border-right: 3px solid #000000 !important;"></td>
+                                            </tr>
+                                            <tr id="anlysis_new_7" style="background:#D8D8EB !important; border-top:3px solid black !important;">
+                                                <th  width="300px" style="border-right: 3px solid #000000 !important;display:table-cell; vertical-align:middle;text-align: center" colspan="3" rowspan="3" >
+                                                    <div>
+                                                        <font style="width: 200px">Terms Comparison</font><br/><br/>
+                                                        <font style="width: 200px">('000 RMB, w/ VAT, w/ Markup)</font>
+                                                    </div>
+                                                </th>
+                                                <th colspan="4" style="border-right: 3px solid #000000 !important;">{{proposalNewYear-1}}</th>
+                                                <th colspan="3" style="border-right: 3px solid #000000 !important;">{{proposalNewYear}}</th>
+                                                <th colspan="4" style="border-right: 3px solid #000000 !important;">YOY Comparison</th>
+                                                <th style="display:table-cell; vertical-align:middle;text-align: center;border-right: 3px solid #000000 !important;" colspan="7" rowspan="3">Remark</th>
+                                            </tr>
+                                            <tr id="anlysis_new_8" style="background:#D8D8EB !important;" class="text-center">
+                                                <th rowspan="2">{{proposalNewYear-1}}<br/>TTA</th>
+                                                <th rowspan="2">{{proposalNewYear-1}}<br/>On Top</th>
+                                                <th rowspan="2">{{proposalNewYear-1}}<br/>TTA+On Top</th>
+                                                <th rowspan="2" style="border-right: 3px solid #000000 !important;">{{proposalNewYear-1}}<br/>Actual</th>
+                                                <th rowspan="2">{{proposalNewYear}}<br/>TTA</th>
+                                                <th rowspan="2" >{{proposalNewYear}}<br/>On Top</th>
+                                                <th rowspan="2" style="border-right: 3px solid #000000 !important;">{{proposalNewYear}}<br/>TTA+On Top</th>
+                                                <th colspan="2">{{proposalNewYear}} TTA+On Top vs<br/>{{proposalNewYear-1}} TTA+On Top</th>
+                                                <th colspan="2">{{proposalNewYear}}TTA+OnTop vs<br/>{{proposalNewYear-1}}Act</th>
+                                            </tr>
+                                            <tr id="anlysis_new_9" style="background:#D8D8EB !important;" class="text-center">
+                                                <th>+/-$</th>
+                                                <th>+/-%</th>
+                                                <th>+/-$</th>
+                                                <th>+/-%</th>
+                                            </tr>
+
+                                            <!--ng-style="{'background-color':($index == 0 || $index == 4) ? '#D3FF93 !important':'#F5FFFA !important'}"-->
+                                            <tr id="analysisId_topPart1_{{$index}}" ng-class="{'analysis-row-bg-2':($index == 0 || $index == 4),'analysis-row-bg-1':($index != 0 && $index != 4)}"  style="font-weight: bold" ng-repeat="row in analysisLineTopPart1 track by $index" >
+                                                <td colspan="3" align="left" style="border-right: 3px solid #000000 !important;">{{row.termsComparison}}</td>
+
+                                                <td ng-if="$index == 0 || $index == 4">{{row.formerYearTta | number:2}}%</td>
+                                                <td ng-if="$index == 0 || $index == 4">{{row.formerYearOntop | number:2}}%</td>
+                                                <td ng-if="$index == 0 || $index == 4">{{row.formerYearTtaOntop | number:2}}%</td>
+                                                <td ng-if="$index == 0 || $index == 4" style="border-right: 3px solid #000000 !important;">{{row.formerYearActual | number:2}}%</td>
+                                                <td ng-if="$index == 0 || $index == 4">{{row.currentYearTta | number:2}}%</td>
+                                                <td ng-if="$index == 0 || $index == 4" >{{row.currentYearOntop | number:2}}%</td>
+                                                <td ng-if="$index == 0 || $index == 4" style="border-right: 3px solid #000000 !important;">{{row.currentYearTtaOntop | number:2}}%</td>
+                                                <td ng-if="$index == 0 || $index == 4">{{row.ttaOntopIncreAmt | number:0 | zeroToNa}}</td>
+                                                <td ng-if="$index == 0 || $index == 4">{{row.ttaOntopPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                                <td ng-if="$index == 0 || $index == 4">{{row.ttaOntopActIncreAmt | number:0 | zeroToNa}}</td>
+                                                <td ng-if="$index == 0 || $index == 4" style="border-right: 3px solid #000000 !important;">{{row.ttaOntopActPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+
+                                                <td ng-if="$index > 1 && $index < 4 ">{{row.formerYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index > 1 && $index < 4">{{row.formerYearOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index > 1 && $index < 4">{{row.formerYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index > 1 && $index < 4" style="border-right: 3px solid #000000 !important;">{{row.formerYearActual | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index > 1 && $index < 4">{{row.currentYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index > 1 && $index < 4" >{{row.currentYearOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index > 1 && $index < 4" style="border-right: 3px solid #000000 !important;">{{row.currentYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index > 1 && $index < 4">{{row.ttaOntopIncreAmt | number:0 | changeNumberToPosiNumber | zeroToStriping}}</td>
+                                                <td ng-if="$index > 1 && $index < 4">{{row.ttaOntopPercentGain | number:2 | changeNumberToPosiNumber }}%</td>
+                                                <td ng-if="$index > 1 && $index < 4">{{row.ttaOntopActIncreAmt | number:0 | changeNumberToPosiNumber | zeroToStriping}}</td>
+                                                <td ng-if="$index > 1 && $index < 4" style="border-right: 3px solid #000000 !important;">{{row.ttaOntopActPercentGain | changeNumberToPosiNumber | number:2}}%</td>
+
+                                                <td ng-if="$index == 1">{{row.formerYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 1">
+                                                    <input style="text-align: center; background: white !important;" type="text" class="form-control radius3"
+                                                           maxlength="255" ng-model="row.formerYearOntop" to-change-number >
+                                                </td>
+                                                <td ng-if="$index == 1">{{row.formerYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 1" style="border-right: 3px solid #000000 !important;">{{row.formerYearActual | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 1">{{row.currentYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 1" >
+                                                    <input style="text-align: center; background: white !important;" type="text" class="form-control radius3"
+                                                           maxlength="255" ng-model="row.currentYearOntop" to-change-number >
+                                                </td>
+                                                <td ng-if="$index == 1" style="border-right: 3px solid #000000 !important;">{{row.currentYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 1">{{row.ttaOntopIncreAmt | number:0 | changeNumberToPosiNumber | zeroToStriping}}</td>
+                                                <td ng-if="$index == 1">{{row.ttaOntopPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                                <td ng-if="$index == 1">{{row.ttaOntopActIncreAmt | number:0 | changeNumberToPosiNumber | zeroToStriping}}</td>
+                                                <td ng-if="$index == 1" style="border-right: 3px solid #000000 !important;">{{row.ttaOntopActPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+
+                                                <td ng-if="$index == 0" colspan="7" rowspan="8" style="background:mistyrose !important;border-right: 3px solid #000000 !important;" >
+                                                    <textarea id="premarkp" style="width: 100%;height: 100%;background: #FFFFFF !important" ng-model="analysisHeader.purchaseRemark"></textarea>
+                                                </td>
+                                            </tr>
+
+                                            <tr  style="height: 13px">
+                                                <td colspan="14" style="border: 2px solid #000000 !important;"></td>
+                                            </tr>
+
+                                            <!-- ng-style="{'background-color':($index == 0) ? '#F5FFFA !important':'#D3FF93 !important'}"-->
+                                            <tr id="analysisId_topPart2_{{$index}}" ng-class="{'analysis-row-bg-1': ($index == 0),'analysis-row-bg-2':$index != 0}"  style="font-weight: bold" ng-repeat="rowPart2 in analysisLineTopPart2 track by $index">
+                                                <td colspan="3" align="left" style="border-right: 3px solid #000000 !important;">{{rowPart2.termsComparison}}</td>
+
+                                                <td ng-if="$index == 0">{{rowPart2.formerYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0">{{rowPart2.formerYearOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0">{{rowPart2.formerYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0" style="border-right: 3px solid #000000 !important;">{{rowPart2.formerYearActual | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0">{{rowPart2.currentYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0">{{rowPart2.currentYearOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0" style="border-right: 3px solid #000000 !important;">{{rowPart2.currentYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0">{{rowPart2.ttaOntopIncreAmt | number:0 | changeNumberToPosiNumber | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0">{{rowPart2.ttaOntopPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                                <td ng-if="$index == 0">{{rowPart2.ttaOntopActIncreAmt | number:0 | changeNumberToPosiNumber | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0" style="border-right: 3px solid #000000 !important;">{{rowPart2.ttaOntopActPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+
+                                                <td ng-if="$index == 1">{{rowPart2.formerYearTta | number:2}}%</td>
+                                                <td ng-if="$index == 1">{{rowPart2.formerYearOntop | number:2}}%</td>
+                                                <td ng-if="$index == 1">{{rowPart2.formerYearTtaOntop | number:2}}%</td>
+                                                <td ng-if="$index == 1" style="border-right: 3px solid #000000 !important;">{{rowPart2.formerYearActual | number:2}}%</td>
+                                                <td ng-if="$index == 1">{{rowPart2.currentYearTta | number:2}}%</td>
+                                                <td ng-if="$index == 1">{{rowPart2.currentYearOntop | number:2}}%</td>
+                                                <td ng-if="$index == 1" style="border-right: 3px solid #000000 !important;">{{rowPart2.currentYearTtaOntop | number:2}}%</td>
+                                                <td ng-if="$index == 1">{{rowPart2.ttaOntopIncreAmt | number:0 | zeroToNa}}</td>
+                                                <td ng-if="$index == 1">{{rowPart2.ttaOntopPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                                <td ng-if="$index == 1">{{rowPart2.ttaOntopActIncreAmt | number:0 | zeroToNa}}</td>
+                                                <td ng-if="$index == 1" style="border-right: 3px solid #000000 !important;">{{rowPart2.ttaOntopActPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                            </tr>
+
+                                            <!--BEOI类型的条款-->
+                                            <!-- ng-style="{'background-color': ($index == analysisLineBeoi.length - 1) ? '#D3FF93 !important':'none','font-weight':($index == analysisLineBeoi.length - 1 || $index == analysisLineBeoi.length - 2) ? 'bold':'normal'}"-->
+                                            <tr id="analysisId_beoi_{{$index}}" ng-repeat="beoiRow in analysisLineBeoi track by $index" ng-class="{'analysis-row-bg-2':($index == analysisLineBeoi.length - 1),'analysis-row-font-weight':($index == analysisLineBeoi.length - 1 || $index == analysisLineBeoi.length - 2)}">
+                                                <td ng-if="$index == 0" rowspan="{{analysisLineBeoi.length}}">{{beoiRow.oiType}}</td>
+
+                                                <td ng-if="$index != analysisLineBeoi.length-1 && $index != analysisLineBeoi.length-2" style="text-align: left">{{beoiRow.termsEn}}</td>
+                                                <td ng-if="$index != analysisLineBeoi.length-1 && $index != analysisLineBeoi.length-2" style="border-right: 3px solid #000000 !important;text-align: left;">{{beoiRow.termsCn}}</td>
+                                                <td ng-if="$index == analysisLineBeoi.length-1 || $index == analysisLineBeoi.length-2" colspan="2" style="border-right: 3px solid #000000 !important;text-align: center;">{{beoiRow.termsComparison}}</td>
+
+                                                <td ng-if="$index != analysisLineBeoi.length-2">{{beoiRow.formerYearTta | number:2}}%</td>
+                                                <td ng-if="$index != analysisLineBeoi.length-2">{{beoiRow.formerYearOntop | number:2}}%</td>
+                                                <td ng-if="$index != analysisLineBeoi.length-2">{{beoiRow.formerYearTtaOntop | number:2}}%</td>
+                                                <td ng-if="$index != analysisLineBeoi.length-2" style="border-right: 3px solid #000000 !important;">{{beoiRow.formerYearActual | number:2}}%</td>
+                                                <td ng-if="$index != analysisLineBeoi.length-2">{{beoiRow.currentYearTta | number:2}}%</td>
+                                                <td ng-if="$index != analysisLineBeoi.length-2">{{beoiRow.currentYearOntop | number:2}}%</td>
+                                                <td ng-if="$index != analysisLineBeoi.length-2" style="border-right: 3px solid #000000 !important;">{{beoiRow.currentYearTtaOntop | number:2}}%</td>
+                                                <td ng-if="$index != analysisLineBeoi.length-2">{{beoiRow.ttaOntopIncreAmt | number:0 | zeroToNa}}</td>
+                                                <td ng-if="$index != analysisLineBeoi.length-2">{{beoiRow.ttaOntopPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                                <td ng-if="$index != analysisLineBeoi.length-2">{{beoiRow.ttaOntopActIncreAmt | number:0 | zeroToNa}}</td>
+                                                <td ng-if="$index != analysisLineBeoi.length-2" style="border-right: 3px solid #000000 !important;">{{beoiRow.ttaOntopActPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+
+                                                <td ng-if="$index == analysisLineBeoi.length - 2">{{beoiRow.formerYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == analysisLineBeoi.length - 2">{{beoiRow.formerYearOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == analysisLineBeoi.length - 2">{{beoiRow.formerYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == analysisLineBeoi.length - 2" style="border-right: 3px solid #000000 !important;">{{beoiRow.formerYearActual | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == analysisLineBeoi.length - 2">{{beoiRow.currentYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == analysisLineBeoi.length - 2">{{beoiRow.currentYearOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == analysisLineBeoi.length - 2" style="border-right: 3px solid #000000 !important;">{{beoiRow.currentYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == analysisLineBeoi.length - 2">{{beoiRow.ttaOntopIncreAmt | number:0 | changeNumberToPosiNumber | zeroToStriping}}</td>
+                                                <td ng-if="$index == analysisLineBeoi.length - 2">{{beoiRow.ttaOntopPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                                <td ng-if="$index == analysisLineBeoi.length - 2">{{beoiRow.ttaOntopActIncreAmt | number:0 | changeNumberToPosiNumber | zeroToStriping}}</td>
+                                                <td ng-if="$index == analysisLineBeoi.length - 2" style="border-right: 3px solid #000000 !important;">{{beoiRow.ttaOntopActPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+
+                                                <td ng-if="$index == 0 && (controllTabShow.remarkFlag || params.status == 'C')" colspan="7" rowspan="{{analysisLineBeoi.length + analysisLineSroi.length + analysisLineAboi.length}}" style="border-right: 3px solid !important;">
+                                                    <strong><textarea id='bicremark' style='width: 100%;height: 100%'>{{analysisHeader.bicRemark}}</textarea></strong>
+                                                </td>
+                                                <td ng-if="$index == 0 && (!controllTabShow.remarkFlag && params.status != 'C')" colspan="7" rowspan="{{analysisLineBeoi.length + analysisLineSroi.length + analysisLineAboi.length}}" style="border-right: 3px solid !important;">
+                                                    <strong><textarea id='bicremark' style='width: 100%;height: 100%' ng-model="analysisHeader.bicRemark"></textarea></strong>
+                                                </td>
+                                            </tr>
+
+                                            <!--SROI类型的条款-->
+                                            <!-- ng-style="{'background-color': ($index == analysisLineSroi.length - 1) ? '#D3FF93 !important':'none','font-weight':($index == analysisLineSroi.length - 1 || $index == analysisLineSroi.length - 2) ? 'bold':'normal'}"-->
+                                            <tr id="analysisId_sroi_{{$index}}" ng-repeat="sroiRow in analysisLineSroi track by $index" ng-class="{'analysis-row-bg-2': ($index == analysisLineSroi.length - 1),'analysis-row-font-weight':($index == analysisLineSroi.length - 1 || $index == analysisLineSroi.length - 2)}">
+                                                <td ng-if="$index == 0" rowspan="{{analysisLineSroi.length}}">{{sroiRow.oiType}}</td>
+
+                                                <td ng-if="$index != analysisLineSroi.length-1 && $index != analysisLineSroi.length-2" style="text-align: left">{{sroiRow.termsEn}}</td>
+                                                <td ng-if="$index != analysisLineSroi.length-1 && $index != analysisLineSroi.length-2" style="border-right: 3px solid #000000 !important;text-align: left;white-space: normal">
+                                                    <div style="width: 280px;word-break: break-all;">{{sroiRow.termsCn}}</div>
+                                                </td>
+                                                <td ng-if="$index == analysisLineSroi.length-1 || $index == analysisLineSroi.length-2" colspan="2" style="border-right: 3px solid #000000 !important;text-align: center;">{{sroiRow.termsComparison}}</td>
+
+                                                <td ng-if="$index == analysisLineSroi.length-1">{{sroiRow.formerYearTta | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineSroi.length-1">{{sroiRow.formerYearOntop | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineSroi.length-1">{{sroiRow.formerYearTtaOntop | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineSroi.length-1" style="border-right: 3px solid #000000 !important;:">{{sroiRow.formerYearActual | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineSroi.length-1">{{sroiRow.currentYearTta | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineSroi.length-1">{{sroiRow.currentYearOntop | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineSroi.length-1" style="border-right: 3px solid #000000 !important;">{{sroiRow.currentYearTtaOntop | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineSroi.length-1">{{sroiRow.ttaOntopIncreAmt | number:0 | zeroToNa}}</td>
+                                                <td ng-if="$index == analysisLineSroi.length-1">{{sroiRow.ttaOntopPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                                <td ng-if="$index == analysisLineSroi.length-1">{{sroiRow.ttaOntopActIncreAmt | number:0 | zeroToNa}}</td>
+                                                <td ng-if="$index == analysisLineSroi.length-1" style="border-right: 3px solid #000000 !important;">{{sroiRow.ttaOntopActPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+
+                                                <td ng-if="$index != analysisLineSroi.length-1">{{sroiRow.formerYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineSroi.length-1">{{sroiRow.formerYearOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineSroi.length-1">{{sroiRow.formerYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineSroi.length-1" style="border-right: 3px solid #000000 !important;">{{sroiRow.formerYearActual | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineSroi.length-1">{{sroiRow.currentYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineSroi.length-1">{{sroiRow.currentYearOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineSroi.length-1" style="border-right: 3px solid #000000 !important;">{{sroiRow.currentYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineSroi.length-1">{{sroiRow.ttaOntopIncreAmt | number:0 | changeNumberToPosiNumber |zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineSroi.length-1">{{sroiRow.ttaOntopPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                                <td ng-if="$index != analysisLineSroi.length-1">{{sroiRow.ttaOntopActIncreAmt | number:0 | changeNumberToPosiNumber |zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineSroi.length-1" style="border-right: 3px solid #000000 !important;">{{sroiRow.ttaOntopActPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                            </tr>
+
+                                            <!--ABOI类型的条款-->
+                                            <!-- ng-style="{'background-color': ($index == analysisLineAboi.length - 1) ? '#D3FF93 !important':'none','font-weight':($index == analysisLineAboi.length - 1 || $index == analysisLineAboi.length - 2) ? 'bold':'normal'}"-->
+                                            <tr id="analysisId_aboi_{{$index}}"  ng-repeat="aboiRow in analysisLineAboi track by $index" ng-class="{'analysis-row-bg-2': ($index == analysisLineAboi.length - 1),'analysis-row-font-weight': ($index == analysisLineAboi.length - 1 || $index == analysisLineAboi.length - 2)}" >
+                                                <td ng-if="$index == 0" rowspan="{{analysisLineAboi.length}}">{{aboiRow.oiType}}</td>
+
+                                                <td ng-if="$index != analysisLineAboi.length-1 && $index != analysisLineAboi.length-2" style="text-align: left">{{aboiRow.termsEn}}</td>
+                                                <td ng-if="$index != analysisLineAboi.length-1 && $index != analysisLineAboi.length-2" style="border-right: 3px solid #000000 !important;text-align: left;">{{aboiRow.termsCn}}</td>
+                                                <td ng-if="$index == analysisLineAboi.length-1 || $index == analysisLineAboi.length-2" colspan="2" style="border-right: 3px solid #000000 !important;text-align: center;">{{aboiRow.termsComparison}}</td>
+
+                                                <td ng-if="$index == analysisLineAboi.length-1">{{aboiRow.formerYearTta | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineAboi.length-1">{{aboiRow.formerYearOntop | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineAboi.length-1">{{aboiRow.formerYearTtaOntop | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineAboi.length-1" style="border-right: 3px solid #000000 !important;:">{{aboiRow.formerYearActual | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineAboi.length-1">{{aboiRow.currentYearTta | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineAboi.length-1">{{aboiRow.currentYearOntop | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineAboi.length-1" style="border-right: 3px solid #000000 !important;">{{aboiRow.currentYearTtaOntop | number:2}}%</td>
+                                                <td ng-if="$index == analysisLineAboi.length-1">{{aboiRow.ttaOntopIncreAmt | number:0 | zeroToNa}}</td>
+                                                <td ng-if="$index == analysisLineAboi.length-1">{{aboiRow.ttaOntopPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                                <td ng-if="$index == analysisLineAboi.length-1">{{aboiRow.ttaOntopActIncreAmt | number:0 | zeroToNa}}</td>
+                                                <td ng-if="$index == analysisLineAboi.length-1" style="border-right: 3px solid #000000 !important;">{{aboiRow.ttaOntopActPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+
+                                                <td ng-if="$index != analysisLineAboi.length-1">{{aboiRow.formerYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineAboi.length-1 && $index != analysisLineAboi.length-2">
+                                                    <input type='text' style='width: 100%;text-align: center;'  class='form-control radius3' ng-model="aboiRow.formerYearOntop"
+                                                           to-change-number >
+                                                </td>
+                                                <td ng-if="$index == analysisLineAboi.length-2">{{aboiRow.formerYearOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineAboi.length-1">{{aboiRow.formerYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineAboi.length-1" style="border-right: 3px solid #000000 !important;">{{aboiRow.formerYearActual | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineAboi.length-1">{{aboiRow.currentYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineAboi.length-1 && $index != analysisLineAboi.length-2">
+                                                    <input type='text' style='width: 100%;text-align: center;'  class='form-control radius3' ng-model="aboiRow.currentYearOntop"
+                                                    to-change-number >
+                                                </td>
+                                                <td ng-if="$index == analysisLineAboi.length-2">{{aboiRow.currentYearOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineAboi.length-1" style="border-right: 3px solid #000000 !important;">{{aboiRow.currentYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineAboi.length-1">{{aboiRow.ttaOntopIncreAmt | number:0 | changeNumberToPosiNumber | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineAboi.length-1">{{aboiRow.ttaOntopPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                                <td ng-if="$index != analysisLineAboi.length-1">{{aboiRow.ttaOntopActIncreAmt | number:0 | changeNumberToPosiNumber | zeroToStriping}}</td>
+                                                <td ng-if="$index != analysisLineAboi.length-1" style="border-right: 3px solid #000000 !important;">{{aboiRow.ttaOntopActPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                            </tr>
+
+                                            <!--analysis底部数据-->
+                                            <tr id="analysisId_bottom_{{$index}}" ng-class="{'analysis-row-bg-1':$index == 0,'analysis-row-bg-2':($index != 0 && $index != analysisLineBottomPart.length - 1),'analysis-row-bg-3':$index == analysisLineBottomPart.length - 1}" style="font-weight: bold !important;"  ng-repeat="bottomRow in analysisLineBottomPart track by $index">
+                                                <td colspan="3" align="left" style="border-right: 3px solid #000000 !important;">{{bottomRow.termsComparison}}</td>
+                                                <td ng-if="$index == 0 ">{{bottomRow.formerYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0">{{bottomRow.formerYearOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0">{{bottomRow.formerYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0" style="border-right: 3px solid #000000 !important;">{{bottomRow.formerYearActual | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0">{{bottomRow.currentYearTta | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0" >{{bottomRow.currentYearOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0" style="border-right: 3px solid #000000 !important;">{{bottomRow.currentYearTtaOntop | number:0 | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0">{{bottomRow.ttaOntopIncreAmt | number:0 | changeNumberToPosiNumber | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0">{{bottomRow.ttaOntopPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                                <td ng-if="$index == 0">{{bottomRow.ttaOntopActIncreAmt | number:0 | changeNumberToPosiNumber | zeroToStriping}}</td>
+                                                <td ng-if="$index == 0" style="border-right: 3px solid #000000 !important;">{{bottomRow.ttaOntopActPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+
+                                                <td ng-if="$index != 0">{{bottomRow.formerYearTta | number:2}}%</td>
+                                                <td ng-if="$index != 0">{{bottomRow.formerYearOntop | number:2}}%</td>
+                                                <td ng-if="$index != 0">{{bottomRow.formerYearTtaOntop | number:2}}%</td>
+                                                <td ng-if="$index != 0" style="border-right: 3px solid #000000 !important;">{{bottomRow.formerYearActual | number:2}}%</td>
+                                                <td ng-if="$index != 0">{{bottomRow.currentYearTta | number:2}}%</td>
+                                                <td ng-if="$index != 0" >{{bottomRow.currentYearOntop | number:2}}%</td>
+                                                <td ng-if="$index != 0" style="border-right: 3px solid #000000 !important;">{{bottomRow.currentYearTtaOntop | number:2}}%</td>
+                                                <td ng-if="$index != 0">{{bottomRow.ttaOntopIncreAmt | number:0 | zeroToNa}}</td>
+                                                <td ng-if="$index != 0">{{bottomRow.ttaOntopPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+                                                <td ng-if="$index != 0">{{bottomRow.ttaOntopActIncreAmt | number:0 | zeroToNa}}</td>
+                                                <td ng-if="$index != 0" style="border-right: 3px solid #000000 !important;">{{bottomRow.ttaOntopActPercentGain | number:2 | changeNumberToPosiNumber}}%</td>
+
+                                                <td ng-if="$index == 0 && userData.userType == '45'" style="background:mistyrose !important;border-right: 3px solid !important;" colspan="7" rowspan="3"></td>
+                                                <td ng-if="$index == analysisLineBottomPart.length - 1 && userData.userType == '45'" style="background:mistyrose !important;border-right: 3px solid !important;text-align: left" colspan="7" align="left">{{analysisHeader.benchMark}}</td>
+                                            </tr>
+
+                                            <tr id="analysisId_prepared" style="background:white !important;border-right: 3px solid !important;border-top: 3px solid !important;font-weight: bold" >
+                                                <td  align="left" style="vertical-align: middle; border-bottom:3px solid black !important;">Prepared by BIC:</td>
+                                                <td style="background:white;height: 80px;border-bottom:3px solid black !important;" colspan="8"></td>
+                                                <td style="vertical-align: middle;border-bottom:3px solid black !important;">Approved by:</td>
+                                                <td style="background:white;height: 80px;border-bottom:3px solid black !important;" colspan="12" align="left"></td>
+                                            </tr>
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!--endprint-->
+
+                        </div>
+                    </div>
+
+                </div>
+                <!--ttaAnalysis测试 结束-->
+
+
+            </div>
+            <!-- tabContent -->
+        </div>
+    </div>
+</div>
+</div>
+

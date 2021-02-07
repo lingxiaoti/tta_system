@@ -1,0 +1,231 @@
+<div ng-controller="resourceCtrl" class="bigdata">
+	<div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令"  >
+		<div class="bg-gray-white bt">
+			<div class="bg-gray-white p5">
+				<div class="pull-right ml10">
+					<div class="btn-group btn-group-xs ">
+						<button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+							<i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+						</button>
+						<button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+							<i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+						</button>
+					</div>
+					<div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDel">
+
+					</div>
+
+				</div>
+
+				<div class="btn-group btn-group-xs ">
+					<button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+						<i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+					</button>
+					<button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+						<i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+			<div class="nicescroll-height  bg-white " ng-nicescroll
+				 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+				<div class=" mt10 pb5 input-form bb oh" input-form
+					 data-des="此节点必需－用于识别输入表单的指令">
+
+					<!-- 搜索输入框组-->
+					<div search-form
+						 data-legend="[
+                         {key:'resourceName',label:'资源名称'},
+                         {key:'resourceCode',label:'资源编码'},
+                         {key:'resourceDesc',label:'资源描述'},
+                         {key:'menuName',label:'菜单名称'},
+                         {key:'resourceType',label:'资源类型',type:'lookCode',lookCode:'RESOURCE_TYPE'},
+                         {key:'systemCode',label:'系统编码',type:'lookCode',lookCode:'SYSTEM_CODE'},
+                        ]"
+						 ng-model="params"
+					></div>
+
+				</div>
+
+				<div class="data-table">
+					<div base-data-table="dataTable"
+						 ng-params="params"
+						 data-show-index="true"
+						 data-url="resourceFind"
+						 data-legend="[
+						    	{'value':'resIcon','name':'图标代码','style':'width:80px;'},
+                             {'value':'resourceName','name':'资源名称'},
+                             {'value':'resourceCode','name':'资源编码'},
+                             {'value':'resourceDesc','name':'资源描述'},
+                              {'value':'menuName','name':'菜单名称'},
+                              {'value':'resourceTypeName','name':'资源类型'},
+                              {'value':'systemCode','name':'系统编码'}
+                             ]"
+					></div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal fade" id="addResource" data-des="添加资源" data-backdrop="static" tabindex="-1">
+		<div class="modal-dialog ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close"
+							data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="myModalLabel">
+						添加资源
+					</h4>
+				</div>
+				<form class="ngValid" name="funcMenuForm"  >
+					<div class="modal-body">
+						<div class="form-group col-xs-12 col-md-6" >
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn">
+									<span class="w100"><i class="red">* </i>选择系统</span></label>
+								    <div required name="menuParamsSystemCode" lookup-code="SYSTEM_CODE" ng-model="menuParams.systemCode" data-callback='changeSystemCode' ></div>
+
+							</div>
+						</div>
+
+						<div class="form-group col-xs-12 col-md-6">
+
+							<div class="input-group input-group-xs"  ng-show="isModify">
+								<label class="input-group-addon bn">
+									<span class="w100"><i class="red">*</i>菜单名称</span></label>
+								<input ng-model="addParams.menuName"  required  name="addParamsMenuName" readonly  class="form-control radius3"   ng-if="isModify">
+							</div>
+							<div z-tree-select="menuId" id="menuId" ng-show="!isModify"
+								 data-required-msg="请选择菜单"
+								 data-url='menuList'
+								 ng-params="menuParams"
+								 ng-value="addParams.menuName"
+								 ng-key="addParams.menuId"
+								 data-label="菜单名称"
+								 data-input-readonly="true"
+								 data-required="true"
+								 name="menuId"
+								 data-keys='{"name":"menuName"}'
+								 data-simpledata='{"enable":"true","idKey":"menuId","pIdKey":"menuParentId"}'
+								 　
+							></div>
+						</div>
+						<div class="form-group col-xs-12 col-md-6">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn">
+									<span class="w100"><i class="red">*</i>资源类型</span></label>
+								<div lookup-code="RESOURCE_TYPE" name="addParamsResourceType" ng-model="addParams.resourceType" required ></div>
+							</div>
+						</div>
+						<!--<div class="form-group col-xs-12 col-md-6"
+							 ng-style="{visibility:addParams.resourceType==='10'?'visibility':'hidden'}">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn">
+									<span class="w100"><i class="red">* </i>选择按钮</span></label>
+								<select ng-model="funcData.button" ng-change="selectedBtn()" ng-required="true"
+										ng-options="item.bbdName for item in buttonList" class="form-control radius3" >
+									<option value=""></option>
+
+								</select>
+							</div>
+						</div>-->
+						<div class="form-group col-xs-12 col-md-6"
+							 ng-style="{visibility:addParams.resourceType==='10'?'visibility':'hidden'}">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn">
+									<span class="w100"><i class="red">* </i>选择按钮</span></label>
+								<input data-required-msg="请选择按钮" ng-model="funcData.bbdname" required readonly  class="form-control radius3"  name="funcDataBbdname"  >
+								<span class="input-group-btn" ng-if="!isModify">
+									<button type="button" class="btn btn-default" data-target="#buttonLov" data-toggle="modal"><i class="fa fa-search"></i></button>
+								</span>
+
+
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-6">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn">
+									<span class="w100"><i class="red">*</i>资源名称</span></label>
+								<input type="text" class="form-control radius3" required
+									   name="resourceName" ng-readonly="addParams.resourceType==='10'?true:false"
+									   ng-model="addParams.resourceName">
+
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-6">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn">
+									<span class="w100">图标代码</span></label>
+								<input type="text" class="form-control radius3"
+									   name="buttonUrl"
+									   ng-model="addParams.resIcon">
+								<span btn-font-icon="" id="resIcon" class="input-group-btn"  ng-model="addParams.resIcon"></span>
+
+
+							</div>
+						</div>
+
+						<div class="form-group col-xs-12 col-md-6">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn">
+									<span class="w100"><i class="red">*</i>资源编码</span></label>
+								<input type="text" class="form-control radius3"
+									   name="resourceCode" ng-readonly="addParams.resourceType==='10'?true:false" required
+									   ng-model="addParams.resourceCode">
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-6">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn">
+									<span class="w100">资源描述</span></label>
+								<input type="text" class="form-control radius3"
+									   name="resourceDesc"
+									   ng-model="addParams.resourceDesc">
+							</div>
+						</div>
+
+						<div class="form-group col-xs-12 col-md-12">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn">
+									<span class="w100">按钮URL</span></label>
+								<input type="text" class="form-control radius3"
+									   name="buttonUrl"
+									   ng-model="addParams.buttonUrl">
+
+							</div>
+						</div>
+
+						<div class="cb"></div>
+					</div>
+
+					<div class="modal-footer ">
+						<div style="text-align:center">
+							<button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+							</button>
+							<button ng-click="save(funcMenuForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+						</div>
+					</div>
+				</form>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+	<div lov-list="buttonLov" role="dialog" data-title="选择按钮" id="buttonLov" ng-model="current.buttonLov"
+		 data-url="buttonList"
+		 data-callback="selectedBtn"
+
+		 data-checked-type="radio"
+		 data-keys="{'value':'bbdName',key:'bbdCode',name:'按钮名称'}"
+		 data-show-index="true"
+		 data-other-column="[{key:'bbdCode',name:' 编码'},{key:'resIcon',name:' 报表代码'}]"
+		 data-search-key="{'key':'bbdName','placeholder':'请输按钮名称'}"
+		 data-pagination="{'pageIndex':'1','pageRows':'5'}"
+	>
+	</div>
+
+</div>

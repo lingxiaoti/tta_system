@@ -1,0 +1,188 @@
+<div ng-controller="plmOnlineRouteDetailCtrl" class="bigdata">
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" permission-btn="btnSave"   ng-click="btnSave(plmSupplierQaNonObInfoForm.$invalid)" ng-disabled="headerData.billStatus=='ABANDONED'||headerData.billStatus=='APPROVAL'" data-validate-form="plmSupplierQaNonObInfoForm"></button>
+                <button class="btn btn-default" permission-btn="btnSubmit"   ng-click="btnSubmit(plmSupplierQaNonObInfoForm.$invalid)" ng-disabled = "headerData.billStatus=='Y'||plmOnlineSubrouteDataTable.length===0" data-validate-form="plmSupplierQaNonObInfoForm"></button>
+                <button class="btn btn-default" permission-btn="btnDiscard"   ng-click="btnDiscard()" ng-disabled = "headerData.billStatus=='ABANDONED'||headerData.billStatus=='APPROVAL'"></button>
+                <button class="btn btn-default" permission-btn="reject"   ng-click="reject()" ng-disabled = "headerData.billStatus=='ABANDONED'||headerData.billStatus==='TODO'||headerData.billStatus==='APPROVAL'"></button>
+
+            </div>
+
+
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+            <!--------------------- 输入表单  --->
+
+            <div class=" mt10 pb5  oh"
+                 data-des="此节点必需－用于识别输入表单的指令">
+
+                <form id="plmSupplierQaNonObInfoForm" name="plmSupplierQaNonObInfoForm">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>渠道详情</span>
+                    </header>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">渠道ID</span>
+                            </label>
+
+                            <input type="text" ng-disabled="headerData.billStatus!=='TODO'" class="form-control radius3"
+                                   ng-model="headerData.plmOnlineRouteCode">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">渠道</span>
+                            </label>
+
+                            <input type="text" ng-disabled="headerData.billStatus!=='TODO'" class="form-control radius3"
+                                   ng-model="headerData.plmOnlineRouteName">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>单据状态</span>
+                            </label>
+
+                            <div lookup-code="PLM_ONLINE_ROUTE_STATUS" data-required="true" ng-model="headerData.billStatus"
+                                 required  id="billStatus" ng-disabled="true" name="billStatus">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">备注</span>
+                            </label>
+
+                            <input type="text" ng-disabled="headerData.billStatus!=='TODO'" class="form-control radius3"
+                                   ng-model="headerData.remarks">
+                        </div>
+                    </div>
+
+                    <div class="row"></div>
+
+                </form>
+            </div>
+
+
+            <div class="col-xs-12 col-md-12 br p0">
+
+                <ul id="tab" class="nav nav-tabs">
+
+                    <li class="active">
+                        <a href="#plmOnlineSubrouteTab" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>渠道行</label></a>
+                    </li>
+
+                </ul>
+
+                <div id="tabContent" class="tab-content">
+
+                    <!-- 品牌 -->
+                    <div class="tab-pane fade in active col-md-12" id="plmOnlineSubrouteTab">
+
+                        <div class="data-table">
+                            <table
+                                    class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                <tr class="text-center">
+                                    <th>序号</th>
+                                    <th><i class="red">*</i>渠道ID</th>
+                                    <th><i class="red">*</i>渠道</th>
+                                    <th><i class="red">*</i>区域名称</th>
+                                    <th><i class="red">*</i>创建人</th>
+                                    <th><i class="red">*</i>创建日期</th>
+                                    <th>操作</th>
+
+                                </tr>
+                                </thead>
+                                <tbody id ="plmSupplierQaBrandBody">
+                                <tr class="text-center" ng-repeat="row in plmOnlineSubrouteDataTable"
+                                    ng-class="{'active':plmOnlineSubrouteDataTable.selectRow==$index}"
+                                    ng-click="plmOnlineSubrouteDataTable.selectRow=$index">
+                                    <td>{{$index+1}}</td>
+                                    <td><input class="form-control input-xs" required ng-model="row.plmOnlineRouteCode" ng-disabled="true"
+                                                >
+                                    </td>
+                                    <td>
+                                        <input class="form-control input-xs" required ng-model="row.plmOnlineRouteName" ng-disabled="true"
+                                                >
+                                    </td>
+                                    <td>
+                                        <input class="form-control input-xs" required ng-model="row.subrouteName" ng-disabled="headerData.billStatus!=='TODO'&&plmOnlineSubrouteDataTable[$index].plmOnlineSubrouteId"
+                                        >
+                                    </td>
+
+                                    <td>
+                                        <input class="form-control input-xs" required ng-model="row.creator" ng-disabled="true"
+                                        >
+                                    </td>
+
+                                    <td>
+                                        <input class="form-control input-xs" required ng-model="row.creationDate" ng-disabled="true"
+                                        >
+                                    </td>
+
+                                    <td>
+                                        <div class="btn-group btn-group-xs">
+                                            <button class="btn btn-default" ng-show="headerData.billStatus==='TODO'"  ng-click="deleteSubroute($index)" ><i class="fa fa-adjust">  删除</i></button>
+                                            <button class="btn btn-default" ng-show="headerData.billStatus==='Y'"  ng-click="closeSubroute($index)"  ><i class="fa fa-lock">  失效</i></button>
+                                            <button class="btn btn-default" ng-show="headerData.billStatus==='N'"  ng-click="startSubroute($index)"  ><i class="fa fa-play-circle-o">  生效</i></button>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td ng-click="addSubrouteRow()"  style="font-size: 14px"><i class="fa fa-plus-square-o"></i></td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- tabContent -->
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+</div>

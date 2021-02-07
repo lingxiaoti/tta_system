@@ -1,0 +1,413 @@
+<div ng-controller="setProcessTaskCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <div class="bg-gray-white p5">
+            <div class="btn-group btn-group-xs ">
+                <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                </button>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+
+            <div class="  col-md-3 br bl h100p">
+                <div class="nicescroll-height  bg-white " ng-nicescroll
+                     nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                    <div class="data-table text-center mt10">
+                        <div base-data-table="taskTable"
+                             data-url="processFindTaskConfig" data-show-index='false'
+                             data-click-row="clickTaskRow"
+                             ng-params="taskParams"
+                             data-legend='[
+                        {"value": "taskName","name": "节点名称","style":"text-align: center;"}]'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9" style="overflow-y: auto;height: 100%;">
+
+                <form name="setProcessTaskForm"
+                >
+                    <div resp-change="" class="none"></div>
+                    <!--<h4><i class="fa fa-cog"></i>{{taskTable.selectRow.name}}</h4>-->
+                    <ul class="nav nav-tabs mt10" role="tablist">
+                        <li role="presentation"  ng-show="taskTable.selectRow" ng-class="{'active': tabAction==='dealWith'}" ng-click="tabAction='dealWith'">
+                            <a href="#dealWith" aria-controls="home" role="tab" data-toggle="tab">节点：{{ node.taskName
+                                }}</a>
+                        </li>
+                        <li role="presentation" ng-class="{'active': tabAction==='proImg'}" ng-click="tabAction='proImg'">
+                            <a href="#proImg" aria-controls="profile" role="tab" data-toggle="tab">流程视图</a>
+                        </li>
+                        <div class="pull-right" ng-show="tabAction=='proImg'">
+                            <a class="btn btn-xs btn-primary" ng-click="zoom('zoom')"><i class="fa fa-search-minus"></i>缩小</a>
+                            <a class="btn btn-xs btn-primary" ng-click="zoom('enlarge')"><i class="fa fa-search-plus"></i>放大</a>
+                            <a class="btn btn-xs btn-primary" ng-click="zoom('reduction')"><i class="fa fa-undo"></i>还原</a>
+                        </div>
+
+                    </ul>
+                    <div class="tab-content ">
+                        <div role="tabpanel" class="tab-pane"  ng-class="{'active': tabAction==='dealWith'}"  id="dealWith" ng-show="taskTable.selectRow">
+                            <div class="mt10 pb5 tl"
+                                 data-des="此节点必需－用于识别输入表单的指令">
+                                <div class="row">
+
+                                    <div class="form-group col-xs-12 col-md-6">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">选人任务节点：</span>
+                                            </label>
+                                            <div class="input-group input-group-xs w">
+                                                <input type="text" class="form-control radius3 readonly-white"  readonly data-target="#lovUserTask"  data-toggle="modal"
+                                                       ng-model="show.assignee_taskNames">
+                                                <span class="input-group-btn" data-target="#lovUserTask"  data-toggle="modal">
+                                                   <button class="btn btn-default">
+                                                       <i class="fa fa-search"></i>
+                                                   </button>
+                                               </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-md-6">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">适用所有节点：</span>
+                                            </label>
+                                            <input type="checkbox" ng-model="node.toAll">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-xs-12  col-md-6">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">抄送人：</span>
+                                            </label>
+                                            <div class="input-group input-group-xs w">
+                                                <input type="text" class="form-control radius3 readonly-white" readonly data-target="#lovccIds"  data-toggle="modal"
+                                                       ng-model="show.ccNames">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default" type="button" data-toggle="modal"
+                                                            data-target="#lovccIds">
+                                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12  col-md-6">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">抄送角色：</span>
+                                            </label>
+
+                                            <div class="input-group input-group-xs w">
+                                                <input type="text" class="form-control radius3 readonly-white" readonly  data-toggle="modal"
+                                                       data-target="#lovccRoleKeys"
+                                                       ng-model="show.ccRoleNames">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default" type="button" data-toggle="modal"
+                                                            data-target="#lovccRoleKeys">
+                                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-xs-12 col-md-6" >
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">表单是否编辑：</span>
+                                            </label>
+                                            <label class="radio-inline"><input type="radio" ng-model="node.editStatus"   name="node_mobformType" value="1">是</label>
+                                            <label class="radio-inline"><input type="radio" ng-model="node.editStatus" ng-checked="true" name="node_mobformType" value="0">否</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-md-6" >
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">允许自动跳过：</span>
+                                            </label>
+                                            <label class="radio-inline"><input type="radio" ng-model="node.enableAutoJump"   name="node_enableAutoJump" value="1">是</label>
+                                            <label class="radio-inline"><input type="radio" ng-model="node.enableAutoJump" ng-checked="true" name="node_enableAutoJump" value="0">否</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div  permission-profile="codeBizForm">
+                                    <fieldset class="cb mt15">
+                                        <legend>业务表单配置：</legend>
+                                        <div class="row pt10 pb10">
+                                            <div class="form-group col-xs-12 col-md-6">
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn">
+                                                        <span class="w100">PC端URL：</span>
+                                                    </label>
+                                                    <div lookup-code="OA_FORM_PC" ng-model="node.pcformUrl" ></div>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-xs-12 col-md-6">
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn">
+                                                        <span class="w100">移动端URL：</span>
+                                                    </label>
+                                                    <div lookup-code="OA_FORM_MOBILE" ng-model="node.mobformUrl" ></div>
+
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group col-xs-12 col-md-6">
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn">
+                                                        <span class="w100">PC端数据接口：</span>
+                                                    </label>
+                                                    <input class="form-control radius3" ng-model="node.pcDataUrl">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-xs-12 col-md-6" >
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn">
+                                                        <span class="w100">移动端数据接口：</span>
+                                                    </label>
+                                                    <input class="form-control radius3"  ng-model="node.mobDataUrl">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group col-md-12">
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn">
+                                                        <span class="w100">回调服务地址：</span>
+                                                    </label>
+                                                    <input type="text" class="form-control radius3"
+                                                           ng-model="node.callbackUrl">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group col-xs-12 col-md-6" ng-show="node.mobformType==='editPart'">
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn">
+                                                        <span class="w100">可编辑的参数名：</span>
+                                                    </label>
+                                                    <input class="form-control radius3" placeholder="多个参数请以逗号,隔开" ng-model="node.mobformEditPart">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+
+                                <fieldset class="cb mt15" ng-repeat="item in node.variables"  >
+                                    <legend><a class="btn btn-primary btn-xs mr10" ng-click="addVariables()">
+                                        <i class="fa fa-plus"></i></a>流程变量：</legend>
+                                    <div class="row pt10 pb10">
+                                        <div class="form-group col-xs-12 col-md-6">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn">
+                                                    <span class="w100"><i class="red" ng-show="node.variables.length > 1">*</i>变量名称：</span>
+                                                </label>
+                                                <input class="form-control radius3" ng-required="node.variables.length  > 1" ng-model="item.name" name="variablesName{{ $index }}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-12 col-md-6">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn">
+                                                    <span class="w100">变量类型：</span>
+                                                </label>
+                                                <select class="form-control radius3" ng-model="item.type">
+                                                    <option value="string">字符串</option>
+                                                    <option value="long">长整数</option>
+                                                    <option value="double">双精度浮点型</option>
+                                                    <option value="boolean">布尔值</option>
+                                                    <option value="date">日期</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-12 col-md-12">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn">
+                                                    <span class="w100">变量表达式：</span>
+                                                </label>
+                                                <textarea class="form-control radius3" style="height: 40px;"
+                                                          ng-model="item.value"></textarea>
+                                            </div>
+                                            <div class="pull-right cb pt10" ng-show="$index > 0">
+                                                <a class="btn btn-warning btn-xs" ng-click="delVariables($index)">删除</a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="cb mt15"   ng-repeat="item in node.processers  track by $index" ng-if="taskTable.rowIndex>0">
+                                    <legend><a class="btn btn-primary btn-xs mr10" ng-click="addProcesser()">
+                                        <i class="fa fa-plus"></i></a>审批人：</legend>
+                                    <div class="row pt10 pb10">
+                                        <div class="form-group col-xs-12 col-md-6 ">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn">
+                                                    <span class="w100"><i class="red" ng-show="!item.roleNames && !item.userFullNames">*</i>审批人：</span>
+                                                </label>
+
+                                                <input type="text" class="form-control radius3 readonly-white" readonly ng-click="selectProcesser($index)"
+                                                       ng-model="item.userFullNames" ng-required="!item.roleNames && !item.userFullNames" name="userFullNames_{{$index}}">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default" type="button" ng-click="selectProcesser($index)">
+                                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                                    </button>
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-12 col-md-6 ">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn">
+                                                    <span class="w100"><i class="red" ng-show="!item.roleNames && !item.userFullNames">*</i>审批角色：</span>
+                                                </label>
+
+                                                <input type="text" class="form-control radius3 readonly-white" readonly ng-click="selectProcesserRol($index)"
+                                                       ng-model="item.roleNames" ng-required="!item.roleNames && !item.userFullNames" name="roleNames_{{$index}}">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default" type="button" ng-click="selectProcesserRol($index)">
+                                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                                    </button>
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-12  col-md-6">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn">
+                                                    <span class="w100">优先级：</span>
+                                                </label>
+                                                <input type="text" class="form-control radius3" number="2"
+                                                       name="sortId_{{$index}}"
+                                                       ng-model="item.sortId">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-12  col-md-6">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn">
+                                                    <span class="w100">是否禁用：</span>
+                                                </label>
+
+                                                <label class="radio-inline"><input type="radio" ng-model="item.disabled"   name="node_disabled_{{$index}}" ng-value="1">是</label>
+                                                <label class="radio-inline"><input type="radio" ng-model="item.disabled"   name="node_disabled_{{$index}}" ng-value="0">否</label>
+                                            </div>
+                                            <div class="pull-right cb pt10" ng-show="$index > 0">
+                                                <a class="btn btn-warning btn-xs" ng-click="delProcesser($index)">删除</a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </fieldset>
+
+
+                            </div>
+                            <div class="tc pb15 pt10">
+                                <button type="button" class="btn btn-primary btn-md" ng-click="saveSetProcessTask(setProcessTaskForm.$invalid)" validate-form-btn="setProcessTaskForm">保存</button>
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" style="overflow: auto;" class="tab-pane active" ng-class="{'active': tabAction==='proImg'}" id="proImg">
+                            <div class="text-center">
+                                <!--<img ng-src="{{imgSrc}}" alt="流程视图" style="max-height:250px; max-width: 100%">-->
+                                <div  id="processImg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div lov-list="lovUserTask" id="lovUserTask" data-url="processfindFollowUserTasks" ng-model="current.task"
+         data-title="节点名称"
+         data-return-value="show.assignee_taskNames"
+         data-return-key="node.assignee_taskIds"
+         data-dynamic-params='followUserTasksParams'
+         data-checked-type="checkbox"
+         data-keys="{'key':'id','value':'name','name':'节点名称'}"
+    ></div>
+
+
+
+    <div lov-list="lovccIds" id="lovccIds" data-url="processFindInternalUsers" ng-model="current.cc" data-title="抄送人"
+         data-checked-type="checkbox"
+         data-return-key="node.ccIds"
+         data-return-value="show.ccNames"
+         data-search-key="[{'key':'userFullName','placeholder':'请输入员工姓名'},{'key':'userName','placeholder':'请输入员工账号'}]"
+         data-keys="{'key':'userName','value':'userFullName','name':'账号',hide: 'true'}"
+         data-other-column="[{key:'userName',name:'账号'},{key:'userFullName',name:'员工姓名'}]"
+    ></div>
+
+
+    <div lov-list="lovccRoleKeys" id="lovccRoleKeys" data-url="processFindRoles" ng-model="current.ccroles"
+         data-title="抄送角色"
+         data-checked-type="checkbox"
+         data-return-key="node.ccRoleKeys"
+         data-return-value="show.ccRoleNames"
+         data-keys="{'key':'roleKey','value':'roleName','name':'角色名'}"
+         data-other-column="[{key:'roleKey',name:'角色ID'}]"
+    ></div>
+    <!--<div lov-list="lovUserFind" id="lovUserFind" data-url="userFind" ng-model="current.userFind" data-title="审批人"
+         data-checked-type="checkbox"
+         data-return-key="node.processerIds"
+         data-search-key="[{'key':'userFullName','placeholder':'请输入员工姓名'},{'key':'userName','placeholder':'请输入员工账号'}]"
+         data-keys="{'key':'userName','value':'userName','name':'账号'}"
+         data-other-column="[{key:'userFullName',name:'员工姓名'}]"
+    ></div>
+    <div lov-list="lovprocesserRoleKeys" id="lovprocesserRoleKeys" data-url="processFindRoles" ng-model="current.spjs"
+         data-title="审批角色"
+         data-checked-type="checkbox"
+         data-return-key="node.processerRoleKeys"
+         data-return-value="show.processerRoleNames"
+         data-keys="{'key':'roleKey','value':'roleName','name':'角色名'}"
+         data-other-column="[{key:'roleKey',name:'角色ID'}]"
+    ></div>-->
+    <div lov-list="lovUserFind" id="lovUserFind" data-url="processFindInternalUsers" ng-model="current.userFind"
+         data-title="审批人"
+         data-checked-type="checkbox"
+         data-return-key="node.processerIds"
+         data-return-value="show.processerNames"
+         data-callback="processerCallback"
+         data-cancel-callback="processerCancelCB"
+         data-search-key="[{'key':'userFullName','placeholder':'请输入员工姓名'},{'key':'userName','placeholder':'请输入员工账号'}]"
+         data-keys="{'key':'userName','value':'userFullName','name':'员工姓名',hide:'true'}"
+         data-other-column="[{key:'userName',name:'账号'},{key:'userFullName',name:'员工姓名'}]"
+    ></div>
+    <div lov-list="lovprocesserRoleKeys" id="lovprocesserRoleKeys" data-url="processFindRoles" ng-model="current.spjs"
+         data-title="审批角色"
+         data-checked-type="checkbox"
+         data-return-key="show.processerRoleKeys"
+         data-return-value="show.processerRoleNames"
+         data-callback="processerRoleCallback"
+         data-cancel-callback="processerRoleCB"
+         data-keys="{'key':'roleKey','value':'roleName','name':'角色名'}"
+         data-other-column="[{key:'roleKey',name:'角色ID'}]"
+         data-search-key="[{'key':'searchKey','placeholder':'请角色名'}]"
+    ></div>
+
+
+    <!--<style type="text/css">-->
+        <!--#processImg .GooFlow_work{-->
+            <!--overflow: hidden;-->
+        <!--}-->
+        <!--#processImg .GooFlow_work{-->
+            <!--overflow: scroll;-->
+        <!--}-->
+    <!--</style>-->
+
+
+</div>

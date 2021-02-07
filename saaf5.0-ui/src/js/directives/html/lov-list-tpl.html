@@ -1,0 +1,137 @@
+<div class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content {{ css}}">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">{{title}}
+                    <small> {{ subTitle}}</small>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div style="max-height: 450px;position: relative;overflow-y: auto;">
+
+
+                    <div class="search pb10" ng-show="searchKey">
+                        <form ng-submit="searchBtn()" ng-if="searchKeyList.length>1">
+                            <div class="{{ 'col-sm-' + (12 / (searchKeyList.length + 1))  }}"
+                                 ng-repeat="item in searchKeyList track by $index">
+                                <input type="text" class="form-control input-sm" ng-model="keyword[item.key]"
+                                       onclick="this.select()"
+                                       placeholder="{{item.placeholder || '请输入搜索关键词'}}">
+                            </div>
+                            <div class="{{ 'col-sm-' + (12 / (searchKeyList.length + 1))  }}">
+                                <button type="button" class="btn btn-primary btn-sm" ng-click="searchBtn()">
+                                    <i class="fa fa-search mr5"></i>搜索
+                                </button>
+                            </div>
+                            <div class="cb pt5"></div>
+                        </form>
+                        <form ng-submit="searchBtn()" ng-if="searchKeyList.length===1">
+
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" ng-model="keyword[searchKeyList[0].key]"
+                                       onclick="this.select()"
+                                       placeholder="{{searchKeyList[0].placeholder || '请输入搜索关键词'}}">
+                                <div class="input-group-btn ">
+                                    <button type="button" class="btn btn-primary" ng-click="searchBtn()">
+                                        <i class="fa fa-search mr5"></i>搜索
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <fieldset class="currentList mb10" ng-if="currentList.length>0">
+                        <legend class="text-brand-primary">当前挑选</legend>
+                        <ul>
+                            <li ng-repeat="li in currentList track by $index">
+                                <label for="c-{{ li[keys.key] }}"
+                                       ng-if="checkedType==='checkbox' || checkedType==='check'">
+                                    <input id="c-{{ li[keys.key] }}" ng-checked="li.checked" type="checkbox"
+                                           ng-click="check(li,$event)" name="keys">
+                                    {{li[keys.value]}}
+                                </label>
+
+                                <label for="r-{{ li[keys.key] }}" ng-if="checkedType==='radio'">
+                                    <input id="r-{{ li[keys.key] }}" type="radio" ng-value="li[keys.key]"
+                                           ng-model="currentRadio.radioValue"
+                                           ng-click="radioClk(li,$event)" name="rkey">
+                                    {{li[keys.value]}}
+                                </label>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div ng-show="!autoRequest && !lovDataList && !loading.show " class="p15 tc text-brand-primary">
+                        请查询数据
+                    </div>
+                    <div ng-show="lovDataList.length===0 && !loading.error && !loading.show" class="p15 tc red">
+                        没有数据
+                    </div>
+                    <div class="p30 tc " ng-if="loading.show  " ng-class="{red:loading.error,green:!loading.error}">
+                        <img src="img/loading1.gif" style="width: 20px; height: 20px;" class="mr10"
+                             ng-if="!loading.error"> {{
+                        loading.msg}}
+                        <a href="javascript:" ng-click="paging.search()" ng-show="loading.error">重试</a>
+                    </div>
+
+
+                    <table ng-show="lovDataList.length > 0" class=" table-hover  report-data {{ class}}">
+                        <thead>
+                        <tr>
+                            <th style="width: 10%;">选择</th>
+                            <th style="width: 10%;" ng-if="showIndex">序号</th>
+                            <th ng-if="!keys.hide">{{ keys.name|| title}}</th>
+                            <th ng-repeat="th in otherColumn">{{ th.name }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat=" tr in lovDataList track by $index">
+                            <td>
+                                <input id="{{ lovlist +'_'+ tr[keys.key]}}" ng-checked="tr.checked" type="checkbox"
+                                       ng-click="check(tr,$event)" name="keys"
+                                       ng-if="checkedType==='checkbox' || checkedType==='check'">
+                                <input id="{{ lovlist+'_'+ tr[keys.key]}}" type="radio" ng-click="radioClk(tr,$event)"
+                                       name="key"
+                                       ng-value="tr[keys.key]" ng-model="currentRadio.radioValue"
+                                       ng-if="checkedType==='radio'">
+                            </td>
+                            <td ng-if="showIndex">{{$index + ((pageNumber-1) * paging.pageRows) + 1}}</td>
+                            <td ng-if="!keys.hide"><label for="{{ lovlist +'_'+ tr[keys.key]}}" class="lov-name">{{
+                                tr[keys.value]}} </label></td>
+                            <td ng-repeat="td in otherColumn">
+                                <label for="{{ lovlist + '_' + tr[keys.key]}}" class="lov-name">
+                                    {{ tr[td.key]}}</label></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <!-- 分页-->
+                <div paging page="paging.pageIndex" class="fl"
+                     page-size="paging.pageRows"
+                     total="paging.total"
+                     show-prev-next="true"
+                     hide-if-empty="true"
+                     paging-action="LovSearch(page)">
+                </div>
+
+                <div style="padding: 3px 10px;">
+                    <button type="button" ng-class="{'mt10': paging.total }" class="btn btn-default btn-sm "
+                            ng-click="btnCancel()" data-dismiss="modal">取消选择
+                    </button>
+                    <button type="button" ng-class="{'mt10': paging.total }" class="btn btn-primary btn-sm "
+                            ng-click="callback()" data-dismiss="modal">确定
+                    </button>
+                </div>
+
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+

@@ -1,0 +1,221 @@
+<div class="bigdata" ng-controller="goodsMaintenanceCtrl">
+  
+  <div data-des="此节点必需－用户计算滚动区域高度" main-scroll-style>
+    <div class="nicescroll-height  bg-white" data-des="此节点必需-滚动内容及指令" ng-nicescroll
+          nice-option="{cursorcolor: '#1e90c2',cursorwidth:10,zindex:10,autohidemode:false}">
+      
+      
+      <div class="tab-content" id="GoodsInfoContent">
+        <div id="baseInfBoxId" class="tab-pane fade in active col-md-12" >
+            <div class="bg-gray-white bt mb10">
+              <div class="bg-gray-white p5">
+                <div class="pull-right mr20">
+                  <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default"  permission-btn="btnSave">
+                        <i class="fa fa-plus">保存</i>
+                    </button>
+                  </div>
+                </div>
+      
+                <div class="btn-group btn-group-xs ">
+                  
+                  <button class="btn btn-primary" ng-click="fullWindow($event)">
+                      <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                  </button>
+                 
+                </div>
+      
+              </div>
+            </div>
+          <div class="oh" data-des="此节点必需－用于识别输入表单的指令" id="baseInfo">
+            <form id="baseProcurementFormBox1" name="baseProcurementFormBox1" > 
+              <header class="col-xs-12 mb10">
+                  <i class="fa fa-cog" aria-hidden="true"></i>
+                  <span>基本信息</span>
+              </header>
+            <!-- 页面内容 -->
+              <div> 
+                <div class="data-table">
+                  <div search-form
+                     data-legend="[
+                      {key:'rmsCode',label:'货号:','disabled':true},
+                      {key:'productName',label:'货品名称(CN):','disabled':true},
+                      {key:'productEname',label:'货品名称(EN):','disabled':true},
+                      {key:'barcode',label:'Barcode:','disabled':true},
+                      {key:'groupBrand',label:'Group:','disabled':true},
+                      {key:'department',label:'部门:','disabled':true},
+                      {key:'classes',label:'分类:','disabled':true},
+                      {key:'subClass',label:'子分类:','disabled':true},
+                      {key:'brandnameCn',label:'品牌名称(CN):','disabled':true},
+                      {key:'brandnameEn',label:'品牌名称(EN):','disabled':true},
+                      {key:'productReturn',label:'退货属性:','disabled':true},
+                      {key:'sesionProduct',label:'季节性货品:','disabled':true},
+                      {key:'region',label:'Region:','disabled':true},
+                      {key:'warehouse',label:'仓库:','disabled':true},
+                      {key:'meter',label:'米数:','disabled':true},
+                      {key:'pogCode',label:'POG_code:','disabled':true},
+                      {key:'store',label:'店铺:','disabled':true},
+                      {key:'storeWay',label:'存货方式:','disabled':true},
+                      {key:'supplementStatus',label:'补货状态:','disabled':true},
+                      {key:'stopReason',label:'停补原因:','disabled':true},
+                      {key:'exeDate',label:'失效/生效日期:','disabled':true},
+                      {key:'remarks',label:'备注:','disabled':true}
+                     ]"
+                     ng-model="paramsLine"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="row"></div>
+              <div class="baseInfoContent" style="padding: 15px">
+                <ul class="nav nav-tabs" id="GoodsInfoTab">
+                  <li class="active" ng-click="">
+                    <a data-toggle="tab" ng-href="#warehouseInfo"><i class="fa fa-list-alt"></i>
+                    <label>仓库信息</label></a>
+                  </li>
+                  <li ng-click="">
+                    <a data-toggle="tab" href="#areaInfo"><i class="fa fa-list-alt"></i>
+                    <label>区域信息</label></a>
+                  </li>
+                  <li ng-click="">
+                    <a data-toggle="tab" href="#attachmentInfo"><i class="fa fa-list-alt"></i>
+                    <label>附件</label></a>
+                  </li>
+                  
+                </ul>
+
+                <div class="tab-content" id="GoodsInfoTabContent">
+
+                  <div class="tab-pane fade in active col-md-12" id="warehouseInfo"  style="margin-top: 10px; min-height: 300px;">
+                    <div class="data-table">
+                      <table class="table table-bordered" style="margin-top: 15px">
+                        <thead class="bg-gray-white">
+                          <tr>
+                            <th style="text-align: center;">序号</th>
+                            <th style="text-align: center;">仓库</th>
+                            <th style="text-align: center;">库存数量</th>
+                            <th style="text-align: center;">库存金额</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <tr ng-repeat="(index,item) in params.warehouse">
+                            <td>{{index+1}}</td>
+                            <td>
+                              {{item.invCode}}
+                            </td>
+                            <td>
+                              {{item.qty}}
+                            </td>
+                            <td>
+                              {{item.qtyOnWay}}
+                            </td>
+                          </tr>
+                        </tbody>
+
+                      </table>
+
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade in col-md-12" id="areaInfo"  style="margin-top: 10px;min-height: 300px;">
+
+                    <div class="data-table">
+                      <table class="table table-bordered" style="margin-top: 15px">
+                        <thead class="bg-gray-white">
+                          <tr>
+                            <th style="text-align: center;">序号</th>
+                            <th style="text-align: center;">区域</th>
+                            <th style="text-align: center;">库存数量</th>
+                            <th style="text-align: center;">库存金额</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <tr ng-repeat="(index,item) in params.region">
+                            <td>{{index+1}}</td>
+                            <td>
+                              {{item.invCode}}
+                            </td>
+                            <td>
+                              {{item.qty}}
+                            </td>
+                            <td>
+                              {{item.qtyOnWay}}
+                            </td>
+                          </tr>
+                        </tbody>
+
+                      </table>
+
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade in col-md-12" id="attachmentInfo"  style="margin-top: 10px;min-height: 300px;">
+
+                    <div class="data-table">
+                      <table class="table table-bordered" style="margin-top: 15px">
+                        <thead class="bg-gray-white">
+                          <tr>
+                            <th style="text-align: center;">序号</th>
+                            <th style="text-align: center;">文件名</th>
+                            <th style="text-align: center;">文件大小</th>
+                            <th style="text-align: center;">上传时间</th>
+                            <th style="text-align: center;">备注</th>
+                            <th style="text-align: center;">操作</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <tr ng-repeat="(index,item) in params.file">
+                            <td>{{index+1}}</td>
+                            <td>
+                              <input type="submit"  value="重新上传" ng-if="item.fileUrl" ng-click="UploaderReset(index)">
+                              <input type="file" ng-if="!item.fileUrl" nv-file-select="" uploader="SFileUploader" style="width: 180px; display: inline-block" ng-click="getFileIndex(index)">
+                              <span  ng-if="item.fileUrl" ng-click="previewImg(index)" style="color: cornflowerblue; cursor:pointer">预览</span>
+                              <span ng-if="item.fileUrl" style="display: inline-block; width: 100px;overflow: hidden; text-overflow: ellipsis;vertical-align: middle;text-align: left;">{{item.fileName}}</span>
+                            </td>
+                            <td>
+                              {{item.flags}}
+                            </td>
+                            <td>
+                              {{item.creationDate}}
+                            </td>
+                            <td>
+                              <div class="input-group input-group-xs" style="width: 100%">
+                                <input class="form-control radius3" name="fileRemarks" ng-model="item.fileRemarks" type="text">
+                              </div>
+                            </td>
+                            <td>
+                              <div ng-if="!isOB" class="btn-group btn-group-xst">
+                                <button type="button" class="btn btn-default btn-xs" ng-click="del(index, item)">
+                                  <i class="fa fa-trash-o">删除</i>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr ng-if="orderStatus != '1'">
+                            <td ng-click="addFileInfo()" style="font-size: 14px"><i class="fa fa-plus-square-o" ></i> </td>
+                          </tr>
+                        </tbody>
+
+                      </table>
+
+                    </div>
+
+
+
+
+                  </div>
+
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

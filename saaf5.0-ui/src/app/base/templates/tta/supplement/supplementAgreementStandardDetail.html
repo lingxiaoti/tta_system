@@ -1,0 +1,465 @@
+<style>
+    .longHr {
+        width: 97%;
+        border: 1px solid #3e89c0
+    }
+</style>
+<div ng-controller="supplementAgreementStandardDetailCtrl" class="bigdata">
+    <div id="processForm"
+         data-api-post="ttaSupplementAgreementSave"
+         data-api-get="ttaSupplementAgreementFind"
+         data-api-update="ttaSupplementAgreementSave"
+        >
+    </div>
+    <div class="form bg-white">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default dataMax" type="button" ng-click="btnPrint()" >
+                            <i class="fa fa-print"></i> {{$l('合同查看')}}
+                        </button>
+                        <button data-validate-form="protocolForm" ng-click="btnSave(protocolForm)" class="btn btn-default">
+                            <i class="fa fa-floppy-o" aria-hidden="true"></i>保存
+                        </button>
+                        <button type="button" ng-click="submitApproval()" ng-disabled="project.status !='A'"
+                                permission-btn="submitApproval"
+                                class="btn btn-default" data-validate-form="protocolForm" id="submitApproval">
+                        </button>
+                        <button type="button" ng-click="btnChange()" ng-disabled="project.status !='C'"
+                                permission-btn="btnChange"
+                                class="btn btn-default" data-validate-form="protocolForm" id="supplementChangeId">
+                        </button>
+                        <button type="button" ng-click="btnDiscard()" ng-disabled="project.status !='A'"
+                                permission-btn="btnDiscard"
+                                class="btn btn-default" data-validate-form="protocolForm" id="supplementDiscardId">
+                        </button>
+
+                        <!--<button class="btn btn-default" type="button" ng-click="btnDiscard()" ng-disabled="project.billStatus == 'E'">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('作废')}}
+                        </button>-->
+                    </div>
+                </div>
+                <div class="btn-group btn-group-xs ">
+                <button  type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                    <i class="fa fa-square-o"></i><span ng-bind="$l('全屏')"></span>
+                </button>
+            </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+                <ul ng-if="!urlParams.businessKey" class="nav nav-tabs mt10">
+                    <li role="presentation" class="active" ng-click="tabChange('supplementAgreementStandardDetailBusiness')">
+                        <a href="#supplementDetailBusiness" aria-controls="supplementDetailBusiness" role="tab"
+                           data-toggle="tab">业务表单</a>
+                    </li>
+                    <li role="presentation" ng-click="tabChange('opinion')">
+                        <a href="#opinion" aria-controls="opinion" role="tab" data-toggle="tab">流程图</a>
+                    </li>
+                    <li ng-show="tabAction=='opinion'">
+                        <ul>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #cc0033;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">未接收</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #ff6600;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">办理中</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #339933;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">已办结</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #666666;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">预设步骤</span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <!-----------输入表单--------->
+                <div ng-show="tabAction== 'supplementAgreementStandardDetailBusiness'" role="tabpanel" class="tab-pane active"
+                     id="supplementDetailBusiness"
+                     style="border: 0;width:100%;overflow-y: auto;">
+                    <div class=" mt10 pb5  "
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <form id="protocolForm" name="protocolForm">
+                        <div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">单据编号:</span></label>
+                                    <input type="text" class="form-control radius3" disabled
+                                           name="projectSaStdCode"
+                                           ng-model="project.saStdCode">
+                                    <input type="hidden" class="form-control radius3" ng-model="project.saStdHeaderId"><!--隐藏id-->
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">版本号:</span></label>
+                                    <input type="text" class="form-control radius3" name="projectSaStdVersion" disabled
+                                           ng-model="project.saStdVersion">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100"><i class="red">*</i>供应商编号:</span></label>
+                                    <input type="text" class="form-control radius3" required
+                                           name="projectVendorCode" disabled
+                                           data-required-msg="供应商编号"
+                                           ng-model="project.vendorCode">
+                                    <span class="input-group-btn ng-scope">
+                                            <button class="btn btn-default" ng-click="getVendorCode()" type="button">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">供应商名称:</span></label>
+
+                                    <input type="text" class="form-control radius3"
+                                           name="projectVendorName" disabled
+                                           ng-model="project.vendorName">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100 "><i class="red">*</i>补充协议类型：</span></label>
+                                    <div lookup-code="TTA_SU_AGMENT_TYPE" data-required="true"
+                                         ng-model="project.saTeyp" ng-disabled="true"
+                                         id="projectSaTeyp" name="projectSaTeyp"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3" id="isSkipApproveDiv">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                        <span class="w150">是否需要GM审批</span>
+                                    </label>
+                                    <input class=" radius3" name="isShowFlag" ng-model="isShowFlag" ng-show="false">
+                                    <input class="radius3" name="isSkipApprove" ng-false-value="'N'" id="isSkipApprove" ng-disabled="!isShowFlag"
+                                           ng-model="project.isSkipApprove"
+                                           ng-true-value="'Y'" type="checkbox" ng-change="isSkipApproveFun()">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100"><i class="red">*</i>合同生效起:</span></label>
+                                    <input type="text" required class="form-control radius3 input-xs"
+                                           date-time-picker  name="projectEffectiveStartTime"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-enddate = "{{project.effectiveEndTime}}"
+                                           data-min-view="2" ng-model="project.effectiveStartTime"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100"><i class="red">*</i>合同生效至:</span></label>
+                                    <input type="text" required class="form-control radius3 input-xs"
+                                           date-time-picker  name="projectEffectiveEndTime"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-stratdate="{{project.effectiveStartTime}}"
+                                           data-min-view="2" ng-model="project.effectiveEndTime"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100 ">单据状态：</span></label>
+                                    <div lookup-code="TTA_SUP_AGM_ST_STATUS" ng-model="project.status" ng-disabled="true"></div>
+                                </div>
+                            </div>
+                            <!--data-url='supplementAgreementTemplateList'   -->
+                           <div class="form-group col-xs-4 col-md-3">
+                                <div z-tree-select="supplementAgreementList" id="supplementAgreementList"
+                                     data-required-msg="请选择补充协议模板"
+                                     data-url='supplementAgreementTemplateList'
+                                     ng-params="supplementAgreementParams"
+                                     ng-value="project.tplName"
+                                     ng-key="project.tplId"
+                                     data-label="补充协议模板"
+                                     data-input-readonly="true"
+                                     name="supplementAgreementName"
+                                     data-node-click = "nodeClick"
+                                     data-required="true"
+                                     data-keys='{"name":"tplName"}'
+                                     data-simpledata='{"enable":"true","idKey":"saStdTplDefHeaderId","pIdKey":"parentId"}'
+                                ></div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">制单日期:</span></label>
+                                    <input type="text"  class="form-control radius3 input-xs"
+                                           date-time-picker data-is-today="false" name="projectCreationDate" disabled
+                                           data-date-format="yyyy-MM-dd"
+                                           data-min-view="0"  ng-model="project.creationDate"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">制单人:</span></label>
+                                    <input type="text" class="form-control radius3"
+                                           name="projectCreateByUser" disabled
+                                           ng-model="project.createByUser">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">部门编码:</span></label>
+                                    <input type="text" class="form-control radius3"
+                                           name="deptCode" disabled
+                                           ng-model="project.deptCode">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">部门名称:</span></label>
+                                    <input type="text" class="form-control radius3"
+                                           name="deptName" disabled
+                                           ng-model="project.deptName">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">BIC登记:</span></label>
+                                    <!--data-enddate = "{{project.effectiveEndTime}}"-->
+                                    <input type="text" class="form-control radius3 input-xs"
+                                           date-time-picker  name="projectBicRegister"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-min-view="2" ng-model="project.bicRegister"
+                                           autocomplete="off">
+                                    <!--ng-disabled="userData.userType != '45'"-->
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">财务登记:</span></label>
+                                    <input type="text"  class="form-control radius3 input-xs"
+                                           disabled
+                                           date-time-picker  name="projectFinanceRegister"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-min-view="2" ng-model="project.financeRegister"
+                                           autocomplete="off">
+                                    <!--ng-disabled="userData.userType != '100'"-->
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">法务登记:</span></label>
+                                    <input type="text" class="form-control radius3 input-xs"
+                                           disabled
+                                           date-time-picker  name="projectLegaRegister"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-min-view="2" ng-model="project.legaRegister"
+                                           autocomplete="off">
+                                    <!--ng-disabled="userData.userType != '110'"-->
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span
+                                            class="w100">归档日期:</span></label>
+                                    <input type="text" class="form-control radius3 input-xs"
+                                           disabled
+                                           date-time-picker  name="pigeonholeDate"
+                                           data-date-format="yyyy-mm-dd"
+                                           data-min-view="2" ng-model="project.pigeonholeDate"
+                                           autocomplete="off" ng-disabled="userData.userType != '45' && info.status !='C'">
+                                    <!--ng-disabled="userData.userType != '110'"-->
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                    <div>
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <label>{{$l('匹配Proposal供应商')}}</label>
+                            <div class="pull-right ml10">
+                                <div class="btn-group btn-group-xs ">
+                                    <button class="btn btn-default" type="button" data-toggle="modal"  ng-disabled="false"
+                                            ng-click="getContractVendorProposal()">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>{{$l('选择Proposal')}}
+                                    </button>
+                                    <button class="btn btn-default" type="button" ng-click="btnDelProposalSupplier()" data-toggle="modal"
+                                            ng-disabled="!dataTable.selectRow" >
+                                        <i class="fa fa-search" aria-hidden="true"></i>{{$l('删除')}}
+                                    </button>
+                                </div>
+                            </div>
+                        </header>
+                        <hr class="longHr">
+                        <div class="data-table" style="margin: auto; width: 97%">
+                            <div base-data-table="dataTable"
+                                 ng-params="params"
+                                 data-url="contractProposalVendorFind"
+                                 data-checked-type="checkbox"
+                                 data-auto-request="true"
+                                 data-keys="{'key':'saStdProposalLine'}"
+                                 data-legend="[
+                                 {'value':'proposalOrder','name':'Proposal合同号'},
+                                 {'value':'proposalVersion','name':'版本号'},
+                                 {'value':'proposalYear','name':'年度'},
+                                 {'value':'vendorCode','name':'供应商编号'},
+                                 {'value':'vendorName','name':'供应商名称'}
+                             ]"
+                            ></div>
+                        </div>
+                        <div style="height: 20px"></div>
+                    </div>
+
+                   <div class="mb15 col-xs-12 col-md-12" id="supplementExpandId">
+                       <header class="col-xs-12 mb10">
+                           <i class="fa fa-list-alt" aria-hidden="true"></i>
+                           <label>{{$l('补充协议拓展信息')}}</label>
+                       </header>
+                       <hr class="longHr">
+                       <div id="supplementExpandSubId"></div>
+                   </div>
+                    <div class="mb15" id="supplementAgrementTableId">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-list-alt" aria-hidden="true"></i>
+                            <label>{{$l('补充协议表格信息')}}</label>
+                        </header>
+
+                        <hr class="longHr">
+                        <div class="form-group col-xs-3 col-md-3" >
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w50">行数：</span></label>
+                                <!--<input class="form-control radius3" ng-model="tableInfo.row" name = "row"
+                                       type="text" >-->
+                                <span>{{tableInfo.row}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3 col-md-3" >
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w50">列数：</span></label>
+                                <!--<input class="form-control radius3" ng-model="tableInfo.col" name = "col"
+                                       type="text">-->
+                                <span>{{tableInfo.col}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group  col-xs-6 col-md-6" >
+                            <div class="btn-group btn-group-xs pull-right">
+                                <button type="button" class="btn btn-default btn-xs pull-right" ng-click="btnSaveSaTable()"><i class="fa fa-plus">保存</i></button>
+                            </div>
+                        </div>
+                        <!--表格信息-->
+                        <div class="data-table" style="margin-top: 30px;">
+                            <table
+                                    class="table table-bordered table-hover table-condensed"
+                                    id="dataTableCoId">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th ng-repeat="colHeaderValue in ttaSaTplTabLineHeaderTable track by $index ">{{colHeaderValue}}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-center" ng-repeat="row in tableInfo.table track by $index"
+                                    ng-class="{'active':dataTableCo.selectRow==$index}"
+                                    ng-click="dataTableCo.selectRow=$index">
+                                    <td ng-repeat="col in row track by $index" style="min-width:100px">
+                                        <!--col.pointValue   gridPointValue to-change-number-->
+                                        <input type="text" class="form-control input-xs"
+                                               ng-model="col.gridPointValue" ng-change="rowColChange(col)">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div ng-if="!urlParams.businessKey" ng-show="tabAction== 'opinion'" role="tabpanel" class="tab-pane "
+                     id="opinion"
+                     style="border: 0;width:100%;height: 100%; overflow: hidden;position: relative;">
+                    <div id="processImg" style="width: 100%;height:100%; overflow: auto;">流程图加载中，请稍候...</div>
+                </div>
+
+                <!--头信息选择供应商-->
+                <div lov-list="supplierList" role="dialog" data-title="选择供应商信息" id="supplierCode" ng-model="current.em"
+                     data-url="supplierFindLov"
+                     data-dynamic-params=''
+                     data-callback="selectSupplierReturn"
+                     data-auto-request="true"
+                     data-return-type="key"
+                     data-pagination="{'pageIndex':'1','pageRows':'5'}"
+                     data-checked-type="radio"
+                     data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+                     data-show-index="false"
+                     data-type="competitor"
+                     data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+                     data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                          {'key':'supplierName','placeholder':'供应商名称'}]"
+                >
+                </div>
+
+
+                <div lov-list="supplierList" role="dialog" data-title="选择供应商信息" id="dynamicSupplierCode" ng-model="current.em"
+                     data-url="supplierFindLov"
+                     data-dynamic-params=''
+                     data-callback="dynamicSupplierReturn"
+                     data-auto-request="true"
+                     data-return-type="key"
+                     data-pagination="{'pageIndex':'1','pageRows':'5'}"
+                     data-checked-type="radio"
+                     data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+                     data-show-index="false"
+                     data-type="competitor"
+                     data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+                     data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                          {'key':'supplierName','placeholder':'供应商名称'}]"
+                >
+                </div>
+                
+                <!--选择Proposal-->
+                <div lov-list="proposalSupplierList" role="dialog" data-title="Proposal供应商" id="proposalSupplierLov"
+                     ng-model="current.proposalId"
+                     data-url="contractProposalVendorList"
+                     data-params='{"vendorCode":"{{project.vendorCode}}","effectiveStartTime":"{{project.effectiveStartTime}}","effectiveEndTime":"{{project.effectiveEndTime}}"}'
+                     data-checked-type="radio"
+                     data-callback="setProposalSupplierList"
+                     data-keys="{'key':'proposalId','value':'proposalOrder',name:'poposal合同号'}"
+                     data-show-index="true"
+                     data-other-column="[{'name':'版本号','key':'proposalVersion'},
+                                         {'name':'年度','key':'proposalYear'},
+                                         {'name':'供应商编号','key':'vendorCode'},
+                                         {'name':'供应商名称','key':'vendorName'}]"
+                     data-search-key="[{'key':'proposalOrder','placeholder':'请输入poposal合同号'},
+                                       {'key':'vendorCode','placeholder':'供应商编码'},
+                                       {'key':'vendorName','placeholder':'供应商名称'}]"
+                     data-pagination="{'pageIndex':'1','pageRows':'5'}"
+                >
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

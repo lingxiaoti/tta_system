@@ -1,0 +1,429 @@
+<div ng-controller="reportProcessHeaderDCtrl" class="bigdata">
+    <div id="processForm"
+         data-api-post="saveOrUpdate2TtaReportProcessHeader"
+         data-api-get="findTtaReportProcessHeaderOne"
+         data-api-update="saveOrUpdate2TtaReportProcessHeader">
+    </div>
+
+    <!--------------------- 按钮--->
+    <div ng-if="!urlParams.businessKey" class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+            <div class="btn-group btn-group-xs ml10" id="outputButton">
+                 <button type="button" class="btn btn-default" permission-btn=""  ng-click="submitApproval()" ></button>
+            </div>
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+            <ul ng-if="!urlParams.businessKey" class="nav nav-tabs mt10">
+                <li role="presentation" class="active" ng-click="tabChange('reportProcessHeaderDBusiness')">
+                    <a href="#reportProcessHeaderDBusiness" aria-controls="reportProcessHeaderDBusiness" role="tab"
+                       data-toggle="tab">业务表单</a>
+                </li>
+                <li role="presentation" ng-click="tabChange('opinion')">
+                    <a href="#opinion" aria-controls="opinion" role="tab" data-toggle="tab">流程图</a>
+                </li>
+                <li ng-show="tabAction=='opinion'">
+                    <ul>
+                        <li style="list-style-type: square;float: left;font-size: 20px;color: #cc0033;margin-right: 30px;text-indent: -7px;">
+                            <span style="font-size: 14px;">未接收</span>
+                        </li>
+                        <li style="list-style-type: square;float: left;font-size: 20px;color: #ff6600;margin-right: 30px;text-indent: -7px;">
+                            <span style="font-size: 14px;">办理中</span>
+                        </li>
+                        <li style="list-style-type: square;float: left;font-size: 20px;color: #339933;margin-right: 30px;text-indent: -7px;">
+                            <span style="font-size: 14px;">已办结</span>
+                        </li>
+                        <li style="list-style-type: square;float: left;font-size: 20px;color: #666666;margin-right: 30px;text-indent: -7px;">
+                            <span style="font-size: 14px;">预设步骤</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!--------------------- 输入表单  --->
+            <div ng-show="tabAction== 'reportProcessHeaderDBusiness'" role="tabpanel" class="tab-pane active"
+                 id="reportProcessHeaderDBusiness"
+                 style="border: 0;width:100%;height: 100%;overflow-y: auto;">
+                    <div class=" mt10 pb5  oh"
+                         data-des="此节点必需－用于识别输入表单的指令">
+
+                        <form id="supplierForm" name="supplierForm">
+                            <header class="col-xs-12 mb10">
+                                <i class="fa fa-cog" aria-hidden="true"></i>
+                                <span>流程单据信息</span>
+                            </header>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                        <span class="w100">报表类型</span>
+                                    </label>
+                                    <input type="text" ng-disabled="true" class="form-control radius3"
+                                           ng-model="params.reportType">
+                                </div>
+                            </div>
+                            <!--
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                        <span class="w100"> <i class="red">*</i>是否按月汇总</span>
+                                    </label>
+                                    <div lookup-code="TTA_MONTH_SUMMARY" data-required="true" ng-model="params.isGroupByMonth"
+                                         ng-disabled="true" id="isGroupByMonth" name="isGroupByMonth"></div>
+                                </div>
+                            </div>
+                            -->
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                        <span class="w100">流程单据号</span>
+                                    </label>
+                                    <input type="text" ng-disabled="true" class="form-control radius3"
+                                           ng-model="params.batchCode">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-3">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                        <span class="w100"> <i class="red">*</i>流程状态</span>
+                                    </label>
+
+                                    <div lookup-code="TTA_OI_STATUS" data-required="true" ng-model="params.status"
+                                         ng-disabled="true" id="status" name="status"></div>
+                                </div>
+                            </div>
+                            <div class="row"></div>
+
+
+                        </form>
+                    </div>
+
+
+                    <div class="col-xs-12 col-md-12 br p0">
+                        <ul id="tab" class="nav nav-tabs">
+<!--                            <li class="active" ng-if="params.reportType =='CW'">
+                                <a href="#relSupplier" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>C&W</label></a>
+                            </li>-->
+        <!--                    <li>
+                                <a href="#supplierBrand" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                                    <label>供应商对应品牌信息</label></a>
+                            </li>-->
+
+                        </ul>
+                        <div id="tabContent" class="tab-content">
+
+                            <!-- CW-->
+
+                            <div class="tab-pane fade in active col-md-12" id="cw" ng-show="params.reportType == 'CW'">
+                                <div class="data-table">
+                                    <!-- data-checked-type="checkbox"-->
+                                    <div base-data-table="cwOneTable"
+                                         ng-params="cwParams"
+                                         data-keys="{'key':'cwId','value':'cwId','name':'CWID'}"
+                                         data-show-index="true"
+                                         data-auto-request="false"
+                                         data-url="findTtaCwInfo"
+                                         data-legend="[
+                                    {'value':'groupDesc','name':'GROUP_DESC'},
+                                    {'value':'deptDesc','name':'DEPT_DESC'},
+                                    {'value':'brandCn','name':'品牌_CN'},
+                                    {'value':'itemCode','name':'产品编号'},
+                                    {'value':'cnName','name':'产品名称'},
+                                    {'value':'promotionSection','name':'促销区间'},
+                                    {'value':'promotionLocation','name':'促销位置'},
+                                    {'value':'storesNum','name':'店铺数量'},
+                                    {'value':'content','name':'活动内容'},
+                                     {'value':'priorVendorCode','name':'供应商编号'},
+                                    {'value':'priorVendorName','name':'供应商名称'},
+                                    {'value':'parentVendorCode','name':'拆分前的VENDOR_CODE'},
+                                    {'value':'parentVendorName','name':'拆分前的VENDOR_NAME'},
+                                    {'value':'chargeStandards','name':'收取方式'},
+                                    {'value':'chargeMoney','name':'收费标准'},
+                                    {'value':'chargeUnitName','name':'收费单位'},
+                                    {'value':'noReceiveAmount','name':'应收金额(不含加成)'},
+                                    {'value':'receiveAmount','name':'应收金额(含加成)'},
+                                     {'value':'noAdjustReceiveAmount','name':'调整应收金额(不含加成)'},
+                                     {'value':'adjustReceiveAmount','name':'调整应收金额(含加成)'},
+                                    {'value':'noAdjustAmount','name':'调整实收金额(不含加成)'},
+                                    {'value':'adjustAmount','name':'调整实收金额(含加成)'},
+                                     {'value':'noUnconfirmAmount','name':'需采购确认收取金额(不含加成)'},
+                                    {'value':'unconfirmAmount','name':'需采购确认收取金额(含加成)'},
+                                    {'value':'difference','name':'差异(含加成)'},
+                                    {'value':'collect','name':'TTA/OnTop'},
+                                     {'value':'purchaseName','name':'采购行动'},
+                                    {'value':'exemptionReasonName','name':'豁免原因_1'},
+                                    {'value':'exemptionReason2Name','name':'豁免原因_2'},
+                                    {'value':'remark','name':'备注'},
+                                    {'value':'currentUserName','name':'当前审批人'},
+                                    {'value':'processCode','name':'流程单据号'},
+                                    {'value':'processStatusName','name':'流程状态'},
+                                     {'value':'promotionStartDate','name':'促销开始日期'},
+                                    {'value':'promotionEndDate','name':'促销结束日期'},
+                                    {'value':'debitOrderCode','name':'借记单编号'},
+                                    {'value':'receipts','name':'实收金额'},
+                                    {'value':'adjustByName','name':'调整人'},
+                                    {'value':'batchCode','name':'批次编号'},
+                                     {'value':'cwId','name':'唯一标识'},
+                                    {'value':'timeDimension','name':'周'}
+                                         ]">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--DM start-->
+                            <div class="tab-pane fade in active col-md-12" id="dm" ng-show="params.reportType == 'DM'">
+                                <div class="data-table">
+                                    <!-- data-checked-type="checkbox"-->
+                                    <div base-data-table="dmTable"
+                                         ng-params="cwParams"
+                                         data-keys="{'key':'cwId','value':'cwId','name':'CWID'}"
+                                         data-show-index="true"
+                                         data-auto-request="false"
+                                         data-url="findTtaDmInfo"
+                                         data-legend="[
+                                                {'value':'groupDesc','name':'groupDesc'},
+                                                {'value':'deptDesc','name':'Category（品类）'},
+                                                {'value':'brandCn','name':'品牌'},
+                                                {'value':'itemNbr','name':'产品编号'},
+                                                {'value':'itemCn','name':'中文名称'},
+                                                {'value':'durationPeriod','name':'促销档期'},
+                                                {'value':'dmPage','name':'DM页码'},
+                                                {'value':'locationCode','name':'促销位置'},
+                                                {'value':'effectiveArea','name':'生效区域'},
+                                                {'value':'effectiveAreaCnt','name':'生效区域数'},
+                                                {'value':'mapPosition','name':'图位'},
+                                                {'value':'content','name':'活动内容'},
+                                                {'value':'parentVendorCode','name':'供应商编码'},
+                                                {'value':'parentVendorName','name':'供应商名称'},
+                                                {'value':'chargeStandards','name':'收费标准'},
+                                                {'value':'chargeMoney','name':'计费金额'},
+                                                {'value':'noReceiveAmount','name':'应收金额(不含加成)'},
+                                                {'value':'receiveAmount','name':'应收金额(含加成)'},
+                                                {'value':'noAdjustReceiveAmount','name':'调整应收金额（不含加成）'},
+                                                {'value':'adjustReceiveAmount','name':'调整应收金额（含加成）'},
+                                                {'value':'noAdjustAmount','name':'调整实收金额（不含加成）'},
+                                                {'value':'adjustAmount','name':'调整实收金额（含加成）'},
+                                                {'value':'priorVendorCode','name':'采购确认供应商编码'},
+                                                {'value':'priorVendorName','name':'采购确认供应商名称'},
+                                                {'value':'noUnconfirmAmount','name':'需采购确认收取金额（不含加成）'},
+                                                {'value':'unconfirmAmount','name':'需采购确认收取金额（含加成）'},
+                                                {'value':'difference','name':'差异(含加成)'},
+                                                {'value':'collect','name':'TTA/OnTop'},
+                                                {'value':'purchaseName','name':'采购行动'},
+                                                {'value':'exemptionReasonName','name':'豁免原因_1'},
+                                                {'value':'exemptionReason2Name','name':'豁免原因_2'},
+                                                {'value':'remark','name':'备注'},
+                                                {'value':'startUserName','name':'提交人'},
+                                                {'value':'currentApprovalUser','name':'当前审批人'},
+                                                {'value':'processCode','name':'流程单据号'},
+                                                {'value':'processStatusName','name':'流程状态'},
+                                                {'value':'contractYear','name':'Rate card年份'},
+                                                {'value':'contractTerms','name':'合同条款'},
+                                                {'value':'advanceAmount','name':'marketing cost （不含加成）'},
+                                                {'value':'advanceCode','name':'代垫费用表编号'},
+                                                {'value':'debitOrderCode','name':'借记单编号'},
+                                                {'value':'receipts','name':'ABOI系统实收金额'},
+                                                {'value':'adjustByName','name':'调整人'},
+                                                {'value':'transferOutPersonName','name':'转办人'},
+                                                {'value':'transferInPersonName','name':'被转办人'},
+                                                {'value':'batchCode','name':'批次编号'},
+                                                {'value':'dmId','name':'唯一标识'},
+                                                {'value':'additionRate','name':'加成比例'},
+                                         ]">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--DM end-->
+
+                            <!--OSD start-->
+                            <div class="tab-pane fade in active col-md-12" id="osd" ng-show="params.reportType == 'OSD'">
+                                <div class="data-table">
+                                    <!-- data-checked-type="checkbox"-->
+                                    <div base-data-table="osdTable"
+                                         ng-params="cwParams"
+                                         data-keys="{'key':'osdId','value':'osdId','name':'OSDID'}"
+                                         data-show-index="true"
+                                         data-auto-request="false"
+                                         data-url="findTtaOsdMajorPagination"
+                                         data-legend="[
+                                       { 'value':'groupDesc','name':'GROUP_DESC'},
+                                    {'value':'deptDesc','name':'DEPT_DESC'},
+                                     {'value':'brandCn','name':'品牌_CN'},
+                                      {'value':'itemCode','name':'产品编号'},
+                                    {'value':'cnName','name':'产品名称'},
+                                    {'value':'promotionSection','name':'促销区间'},
+                                     {'value':'promotionLocation','name':'促销位置'},
+                                    {'value':'storesNum','name':'店铺数量'},
+                                    {'value':'content','name':'活动内容'},
+                                     {'value':'priorVendorCode','name':'供应商编号'},
+                                    {'value':'priorVendorName','name':'供应商名称'},
+                                     {'value':'parentVendorCode','name':'拆分前的VENDOR_CODE'},
+                                    {'value':'parentVendorName','name':'拆分前的VENDOR_NAME'},
+                                    {'value':'chargeStandards','name':'收取方式'},
+                                    {'value':'chargeMoney','name':'收费标准'},
+                                    {'value':'chargeUnitName','name':'收费单位'},
+                                    {'value':'noReceiveAmount','name':'应收金额(不含加成)'},
+                                    {'value':'receiveAmount','name':'应收金额(含加成)'},
+                                      {'value':'noAdjustReceiveAmount','name':'调整应收金额(不含加成)'},
+                                     {'value':'adjustReceiveAmount','name':'调整应收金额(含加成)'},
+                                    {'value':'noAdjustAmount','name':'调整实收金额(不含加成)'},
+                                    {'value':'adjustAmount','name':'调整实收金额(含加成)'},
+                                     {'value':'noUnconfirmAmount','name':'需采购确认收取金额(不含加成)'},
+                                    {'value':'unconfirmAmount','name':'需采购确认收取金额(含加成)'},
+                                    {'value':'difference','name':'差异(含加成)'},
+                                    {'value':'collect','name':'TTA/OnTop'},
+                                    {'value':'purchaseName','name':'采购行动'},
+                                    {'value':'exemptionReasonName','name':'豁免原因_1'},
+                                    {'value':'exemptionReason2Name','name':'豁免原因_2'},
+                                     {'value':'remark','name':'备注'},
+                                     {'value':'currentUserName','name':'当前审批人'},
+                                     {'value':'processCode','name':'流程单据号'},
+                                     {'value':'processStatusName','name':'流程状态'},
+                                    {'value':'promotionStartDate','name':'促销开始日期'},
+                                    {'value':'promotionEndDate','name':'促销结束日期'},
+                                    {'value':'debitOrderCode','name':'借记单编号'},
+                                    {'value':'receipts','name':'ABOI系统实收金额'},
+                                    {'value':'adjustByName','name':'调整人'},
+                                    {'value':'osdId','name':'唯一标识'},
+                                    {'value':'batchCode','name':'批次编号'}
+                                         ]">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--OSD end-->
+                            <!--HWB start-->
+                            <div class="tab-pane fade in active col-md-12" id="osd" ng-show="params.reportType == 'HWB'">
+                                <div class="data-table">
+                                    <!-- data-checked-type="checkbox"-->
+                                    <div base-data-table="hwbTable"
+                                         ng-params="cwParams"
+                                         data-keys="{'key':'hwbId','value':'hwbId','name':'HWBID'}"
+                                         data-show-index="true"
+                                         data-auto-request="false"
+                                         data-url="findTtaHwbMajorPagination"
+                                         data-legend="[
+                                     {'value':'batchCode','name':'批次编号'},
+                                     {'value':'processCode','name':'流程单据号'},
+                                     {'value':'processStatusName','name':'流程状态'},
+                                    {'value':'promotionSection','name':'促销区间'},
+                                    {'value':'descriptionCn','name':'Award Description（CN）'},
+                                    {'value':'awardDescription','name':'Award Description on DM & POP（CN）'},
+                                    {'value':'promotionStartDate','name':'促销开始日期'},
+                                    {'value':'promotionEndDate','name':'促销结束日期'},
+                                    {'value':'hwbType','name':'HWB_TYPE'},
+                                    {'value':'groupDesc','name':'GROUP_DESC'},
+                                    {'value':'deptDesc','name':'DEPT_DESC'},
+                                    {'value':'brandCn','name':'品牌'},
+                                    {'value':'content','name':'活动内容'},
+                                    {'value':'priorVendorCode','name':'供应商编号'},
+                                    {'value':'priorVendorName','name':'供应商名称'},
+                                    {'value':'companyStandard','name':'公司标准'},
+                                    {'value':'agreementStandard','name':'协定标准'},
+                                    {'value':'num','name':'数量'},
+                                    {'value':'chargeStandards','name':'收费标准'},
+                                    {'value':'noReceiveAmount','name':'应收金额(不含加成)'},
+                                    {'value':'receiveAmount','name':'应收金额(含加成)'},
+                                    {'value':'collect','name':'TTA/OnTop'},
+                                    {'value':'noUnconfirmAmount','name':'需采购确认收取金额(不含加成)'},
+                                    {'value':'unconfirmAmount','name':'需采购确认收取金额(含加成)'},
+                                    {'value':'difference','name':'差异(含加成)'},
+                                    {'value':'parentVendorCode','name':'拆分前的VENDOR_CODE'},
+                                    {'value':'parentVendorName','name':'拆分前的VENDOR_NAME'},
+                                    {'value':'sourceFileName','name':'文件'},
+                                    {'value':'purchaseName','name':'采购行动'},
+                                    {'value':'exemptionReasonName','name':'豁免原因_1'},
+                                    {'value':'exemptionReason2Name','name':'豁免原因_2'},
+                                    {'value':'debitOrderCode','name':'借记单编号'},
+                                    {'value':'receipts','name':'实收金额'},
+                                    {'value':'remark','name':'备注'}
+                                         ]">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--HWB end-->
+                            <!--NPP start-->
+                            <div class="tab-pane fade in active col-md-12" id="npp" ng-show="params.reportType == 'NPP'">
+                                <div class="data-table">
+                                    <!-- data-checked-type="checkbox"-->
+                                    <div base-data-table="nppTable"
+                                         ng-params="cwParams"
+                                         data-keys="{'key':'nppId','value':'nppId','name':'NPPID'}"
+                                         data-show-index="true"
+                                         data-auto-request="false"
+                                         data-url="findTtaNppInfo"
+                                         data-legend="[
+                                        {'value':'batchCode','name':'批次编号'},
+                                        {'value':'month','name':'Month'},
+                                        {'value':'storeCoun','name':'店铺数量'},
+                                        {'value':'groupDesc','name':'GROUP_DESC'},
+                                        {'value':'deptDesc','name':'DEPT_DESC'},
+                                        {'value':'itemCode','name':'产品编号'},
+                                        {'value':'itemDescCn','name':'产品名称'},
+                                        {'value':'brandCn','name':'品牌_CN'},
+                                        {'value':'brandEn','name':'品牌_EN'},
+                                        {'value':'vendorNbr','name':'供应商编号'},
+                                        {'value':'vendorName','name':'供应商名称'},
+                                        {'value':'activity','name':'活动内容'},
+                                        {'value':'parentVendorCode','name':'拆分前的VENDOR_CODE'},
+                                        {'value':'parentVendorName','name':'拆分前的VENDOR_NAME'},
+                                        {'value':'ctw','name':'Non-CVW/CVW 非寄售经仓/寄售经仓'},
+                                        {'value':'eb','name':'EB /Non-EB 独家产品/非独家产品'},
+                                        {'value':'contractTerms','name':'合同条款'},
+                                        {'value':'collectWayName','name':'收取方式'},
+                                        {'value':'chargeStandards','name':'收费标准'},
+                                        {'value':'chargeUnit','name':'收费单位'},
+                                        {'value':'receiveAmount','name':'应收金额(不含加成)'},
+                                        {'value':'receiveAmountAdd','name':'应收金额(含加成)'},
+                                        {'value':'collectSelect','name':'TTA/OnTop'},
+                                        {'value':'sourceFilename','name':'文件'},
+                                        {'value':'unconfirmAmount','name':'采购确认收取金额(不含加成)'},
+                                        {'value':'unconfirmAmountA','name':'采购确认收取金额(含加成)'},
+                                        {'value':'difference','name':'差异(含加成)'},
+                                        {'value':'purchaseName','name':'采购行动'},
+                                        {'value':'exemptionReasonName','name':'豁免原因_1'},
+                                        {'value':'exemptionReason2Name','name':'豁免原因_2'},
+                                        {'value':'debitOrderCode','name':'借记单编号'},
+                                        {'value':'aboiReceipts','name':'ABOI系统实收金额'},
+                                        {'value':'remark','name':'备注'},
+                                        {'value':'creationDate','name':'创建时间'},
+                                        {'value':'createdByName','name':'创建人'},
+                                        {'value':'lastUpdatedByName','name':'最后更新人'},
+                                        {'value':'lastUpdateDate','name':'最后更新时间'},
+                                        {'value':'transferInPersonName','name':'转办人(转入)'},
+                                        {'value':'transferOutPersonName','name':'转办人(转出)'},
+                                        {'value':'transferLastPersonName','name':'转办人(最后一次转出的人)'},
+                                        {'value':'transferInDate','name':'转办人(转入)时间'},
+                                        {'value':'transferOutDate','name':'转办人(转出)时间'},
+                                        {'value':'transferLastDate','name':'转办人(最后一次转出时间)'},
+                                        {'value':'additionRate','name':'加成比例'}
+                                         ]">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--NPP end-->
+
+                        </div>
+                        <!-- tabContent -->
+                    </div>
+
+            </div>
+            <div ng-if="!urlParams.businessKey" ng-show="tabAction== 'opinion'" role="tabpanel" class="tab-pane "
+                 id="opinion"
+                 style="border: 0;width:100%;height: 100%; overflow: hidden;position: relative;">
+                <div id="processImg" style="width: 100%;height:100%; overflow: auto;">流程图加载中，请稍候...</div>
+            </div>
+        </div>
+    </div>
+
+</div>

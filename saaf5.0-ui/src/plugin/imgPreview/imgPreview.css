@@ -1,0 +1,40 @@
+#imgPreviewBox,
+.imgPreviewBox {
+  display: none;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+}
+#imgPreviewBox img,
+.imgPreviewBox img {
+  transform: scale(0.05);
+  opacity: 0;
+  margin: 3px auto;
+  max-width: 50%;
+  max-height: 50%;
+  box-shadow: #000 0 0 35px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#imgPreviewBox img:hover,
+.imgPreviewBox img:hover {
+  transform: scale(1.2);
+  opacity: 1;
+}
+[img-preview],
+.img-preview {
+  margin: 3px auto;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+[img-preview]:hover,
+.img-preview:hover {
+  transform: scale(1.2);
+}
+/*# sourceMappingURL=imgPreview.css.map */

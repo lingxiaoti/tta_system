@@ -1,0 +1,311 @@
+<div ng-controller="termsAnalysisCtrl" class="bigdata">
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+
+
+
+        </div>
+
+
+
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+
+            <!--startprint-->
+            <div class="data-table">
+
+                <div style="">
+                    <div class="" ng-nicescroll="" id="nicescroll_dataTable" nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2'}"
+                    >
+                        <table id = "dataTable"
+                                class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                            <thead class="bg-gray-white">
+
+                            <tr style="background: white;" class="text-center">
+                                <th style="width: 80px" align="left">version Code:</th>
+                                <th style="width: 150px" align="left">{{header.versionCode}}</th>
+                                <th colspan="4" rowspan="2"></th>
+
+                                <th colspan="7" rowspan="2" ><font size="5">2019 TTA TermsAnalysis</font></th>
+
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+
+                            <tr style="background: white;" class="text-center">
+                                <th align="left">Batch：</th>
+                                <th align="left">{{header.orderNbr}}</th>
+                                <th><button class="btn btn-primary"   ng-click="print()" >PRINT</button></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+
+                            <tr style="background:#D8D8EB 	;height: 3px;border-top:3px solid black;"  class="text-center" >
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th colspan="6"><font size="1" style="height: 3px">2019 TTA VERSUS 2018 TTA</font></th>
+
+                            </tr>
+
+                            <tr style="background:#D8D8EB 	" class="text-center">
+                                <th>Supplier code</th>
+                                <th>Supplier name</th>
+                                <th>Region</th>
+                                <th>Class</th>
+                                <th>Buyer</th>
+                                <th>Owner dept</th>
+                                <th>Trading mode</th>
+                                <th>Contract<br/>Version</th>
+                                <th colspan="2">Brand</th>
+                                <th>New or Existing<br/>(N/E)</th>
+                                <th>2019Forcast<br/>Purchase(k)</th>
+                                <th>Purchase<br/>+/-%</th>
+                                <th>GP% <br/>+/-%</th>
+                                <th>BEOI% <br/>+/-%</th>
+                                <th>SROI% <br/>+/-%</th>
+                                <th>ABOI% <br/>+/-%</th>
+                                <th>TotalOI%<br/>+/-%</th>
+                                <th>NM%<br/>+/-%</th>
+                            </tr>
+                            <tr style="background:lightyellow;border-bottom:3px solid black;" class="text-center">
+                                <th align="left">{{header.SupplierCode}}</th>
+                                <th align="left">{{header.SupplierName}}</th>
+                                <th>{{header.Region}}</th>
+                                <th>{{header.Class}}</th>
+                                <th>{{header.Buyer}}</th>
+                                <th>{{header.OwnerDept}}</th>
+                                <th>{{header.TradingMode}}</th>
+                                <th>{{header.ContractVersion}}</th>
+                                <th colspan="2">{{header.Brand}}</th>
+                                <th>{{header.Ne}}</th>
+                                <th>{{header.fp}}</th>
+                                <th>{{mid.Purchase7}}</th>
+                                <th>{{GPPER7}}</th>
+                                <th>{{header.BEOI}}</th>
+                                <th>{{header.SROI}}</th>
+                                <th>{{header.ABOI}}</th>
+                                <th>{{tail.Purchase7}}</th>
+                                <th>{{tail.netMargin7}}</th>
+                            </tr>
+                            <tr style="background: white;">
+                                <th style="display:table-cell; vertical-align:middle" colspan="19" rowspan="2"  >{{header.remark}}</th>
+                            </tr>
+                            <tr style="background: white;" class="text-center">
+                            </tr>
+                            <tr style="background:#D8D8EB 	;border-top:3px solid black;">
+                                <th width="300px" style="display:table-cell; vertical-align:middle;text-align: center" colspan="3" rowspan="3" >
+                                    <div>
+                                        <font style="width: 200px">Terms Comparison</font><br/><br/>
+                                        <font style="width: 200px">('000 RMS,w/VAI,w/Markup)</font>
+                                    </div>
+                                </th>
+                                <th colspan="2">2018</th>
+                                <th colspan="3">2019</th>
+                                <th colspan="4">YOY Comparison</th>
+                                <th style="display:table-cell; vertical-align:middle;text-align: center" colspan="7" rowspan="3">Remark</th>
+
+                            </tr>
+                            <tr style="background:#D8D8EB 	" class="text-center">
+
+                                <th rowspan="2">2018<br/>TTA</th>
+                                <th rowspan="2">2018<br/>Actual</th>
+                                <th rowspan="2">2019<br/>TTA</th>
+                                <th rowspan="2">2019<br/>On Top</th>
+                                <th rowspan="2">2019<br/>TTA+On Top</th>
+                                <th colspan="2">2019 TTA vs 2018TTA</th>
+                                <th colspan="2">2019TTA+OnTop vs 2018Act</th>
+
+                            </tr>
+                            <tr style="background:#D8D8EB 	" class="text-center">
+                                <th>+/-$</th>
+                                <th>+/-%</th>
+                                <th>+/-$</th>
+                                <th>+/-%</th>
+
+                            </tr>
+                            <tr style="background:#D3FF93">
+                                <th colspan="3" align="left">Markup%</th>
+                                <th>{{mid.Markup1}}</th>
+                                <th>{{mid.Markup2}}</th>
+                                <th>{{mid.Markup3}}</th>
+                                <th>{{mid.Markup4}}</th>
+                                <th>{{mid.Markup5}}</th>
+                                <th>{{mid.Markup6}}</th>
+                                <th>{{mid.Markup7}}</th>
+                                <th>{{mid.Markup8}}</th>
+                                <th>{{mid.Markup9}}</th>
+                                <th colspan="7" rowspan="6" style="background:mistyrose"></th>
+
+                            </tr>
+                            <tr style="background:#D3FF93">
+                                <th colspan="3" align="left">Free Goods$</th>
+                                <th>{{mid.FreeGood1}}</th>
+                                <th>{{mid.FreeGood2}}</th>
+                                <th>{{mid.FreeGood3}}</th>
+                                <th>{{mid.FreeGood4}}</th>
+                                <th>{{mid.FreeGood5}}</th>
+                                <th>{{mid.FreeGood6}}</th>
+                                <th>{{mid.FreeGood7}}</th>
+                                <th>{{mid.FreeGood8}}</th>
+                                <th>{{mid.FreeGood9}}</th>
+                            </tr>
+                            <tr style="background:#F5FFFA">
+                                <th colspan="3" align="left">Purchase$</th>
+                                <th>{{mid.Purchase1}}</th>
+                                <th>{{mid.Purchase2}}</th>
+                                <th>{{mid.Purchase3}}</th>
+                                <th>{{mid.Purchase4}}</th>
+                                <th>{{mid.Purchase5}}</th>
+                                <th>{{mid.Purchase6}}</th>
+                                <th>{{mid.Purchase7}}</th>
+                                <th>{{mid.Purchase8}}</th>
+                                <th>{{mid.Purchase9}}</th>
+                            </tr>
+                            <tr style="background:#F5FFFA" >
+                                <th colspan="3" align="left">Salse$</th>
+                                <th>{{mid.Salse1}}</th>
+                                <th>{{mid.Salse2}}</th>
+                                <th>{{mid.Salse3}}</th>
+                                <th>{{mid.Salse4}}</th>
+                                <th>{{mid.Salse5}}</th>
+                                <th>{{mid.Salse6}}</th>
+                                <th>{{mid.Salse7}}</th>
+                                <th>{{mid.Salse8}}</th>
+                                <th>{{mid.Salse9}}</th>
+                            </tr>
+                            <tr style="background:#F5FFFA" >
+                                <th colspan="3" align="left">GP$</th>
+                                <th>{{mid.GP1}}</th>
+                                <th>{{mid.GP2}}</th>
+                                <th>{{mid.GP3}}</th>
+                                <th>{{mid.GP4}}</th>
+                                <th>{{mid.GP5}}</th>
+                                <th>{{mid.GP6}}</th>
+                                <th>{{mid.GP7}}</th>
+                                <th>{{mid.GP8}}</th>
+                                <th>{{mid.GP9}}</th>
+
+                            </tr>
+                            <tr style="background:#D3FF93">
+                                <th colspan="3" align="left">GP%</th>
+                                <th>{{GPPER1}}</th>
+                                <th>{{GPPER2}}</th>
+                                <th>{{GPPER3}}</th>
+                                <th>{{GPPER4}}</th>
+                                <th>{{GPPER5}}</th>
+                                <th>{{GPPER6}}</th>
+                                <th>{{GPPER7}}</th>
+                                <th>{{GPPER8}}</th>
+                                <th>{{GPPER9}}</th>
+                            </tr>
+
+                            <tr style="background:#F5FFFA">
+                                <th colspan="3" align="left">Total Oi$</th>
+                                <th>{{tail.OI1}}</th>
+                                <th>{{tail.OI2}}</th>
+                                <th>{{tail.OI3}}</th>
+                                <th>{{tail.OI4}}</th>
+                                <th>{{tail.OI5}}</th>
+                                <th>{{tail.OI6}}</th>
+                                <th>{{tail.OI7}}</th>
+                                <th>{{tail.OI8}}</th>
+                                <th>{{tail.OI9}}</th>
+                                <th style="background:mistyrose" colspan="7" rowspan="3"></th>
+                            </tr>
+
+                            <tr style="background:#D3FF93">
+                                <th colspan="3" align="left">Total Oi%(as of Purchase)</th>
+                                <th>{{tail.Purchase1}}</th>
+                                <th>{{tail.Purchase2}}</th>
+                                <th>{{tail.Purchase3}}</th>
+                                <th>{{tail.Purchase4}}</th>
+                                <th>{{tail.Purchase5}}</th>
+                                <th>{{tail.Purchase6}}</th>
+                                <th>{{tail.Purchase7}}</th>
+                                <th>{{tail.Purchase8}}</th>
+                                <th>{{tail.Purchase9}}</th>
+                            </tr>
+
+                            <tr style="background:#D3FF93" >
+                                <th colspan="3" align="left">Total Oi%(as of Sales)</th>
+                                <th>{{tail.Sales1}}</th>
+                                <th>{{tail.Sales2}}</th>
+                                <th>{{tail.Sales3}}</th>
+                                <th>{{tail.Sales4}}</th>
+                                <th>{{tail.Sales5}}</th>
+                                <th>{{tail.Sales6}}</th>
+                                <th>{{tail.Sales7}}</th>
+                                <th>{{tail.Sales8}}</th>
+                                <th>{{tail.Sales9}}</th>
+                            </tr>
+
+                            <tr style="background:#D8D8EB">
+                                <th colspan="3" align="left">Net Margin%(as of sales)</th>
+                                <th>{{tail.netMargin1}}</th>
+                                <th>{{tail.netMargin2}}</th>
+                                <th>{{tail.netMargin3}}</th>
+                                <th>{{tail.netMargin4}}</th>
+                                <th>{{tail.netMargin5}}</th>
+                                <th>{{tail.netMargin6}}</th>
+                                <th>{{tail.netMargin7}}</th>
+                                <th>{{tail.netMargin8}}</th>
+                                <th>{{tail.netMargin9}}</th>
+                            </tr>
+
+                            <tr style="background:white 	;height: 3px;" >
+                                <th  align="left">Prepared by BIC:</th>
+                                <th style="background:white 	;height: 3px;border-bottom:3px solid black;" colspan="6"></th>
+                                <th>Approved by:</th>
+                                <th style="background:white 	;height: 3px;border-bottom:3px solid black;" colspan="9" align="left"></th>
+                            </tr>
+
+
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <!--endprint-->
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+</div>

@@ -1,0 +1,172 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:jms="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.2.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-3.2.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <aop:config proxy-target-class="true"/>
+    <context:annotation-config/>
+    <!--开启注解调度支持 @Async @Scheduled-->
+    <task:annotation-driven executor="permissionUpdateExecutor"/>
+    <context:component-scan base-package="com.yhg.hibernate.core.dao,com.yhg.transaction,com.sie.saaf,com.sie.watsons"/>
+
+    <task:executor
+            id="permissionUpdateExecutor"
+            pool-size="5-20"
+            queue-capacity="10000"
+            keep-alive="3600"
+            rejection-policy="CALLER_RUNS"/>
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:com/sie/saaf/app/config/db_jdbc.properties</value>
+                <!--<value>classpath:com/sie/saaf/app/config/mongodb_cfg.properties</value>-->
+            </list>
+        </property>
+    </bean>
+    <!--<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">-->
+    <bean id="dataSource" destroy-method="close" class="com.sie.saaf.common.util.CustomDriverManagerConnection">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="validationQuery" value="${jdbc.validationQuery}"/>
+        <property name="initialSize" value="${jdbc.initialSize}"/>
+        <property name="maxActive" value="${jdbc.maxActive}"/>
+        <property name="maxIdle" value="${jdbc.maxIdle}"/>
+        <property name="minIdle" value="${jdbc.minIdle}"/>
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan">
+            <list>
+                <value>com.sie.saaf.**.entities</value>
+                <value>com.sie.watsons.base.plmBase.**.entities</value>
+                <value>com.sie.watsons.base.product.**.entities</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.OracleDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <!--<prop key="hibernate.hbm2ddl.auto">update</prop>-->
+                <prop key="javax.persistence.validation.mode">none</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="hibernateTemplete" class="org.springframework.orm.hibernate3.HibernateTemplate">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    <!-- 配置事务的传播特性 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="save*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="call*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="find*" propagation="SUPPORTS"/>
+            <tx:method name="*" propagation="SUPPORTS"/>
+        </tx:attributes>
+    </tx:advice>
+    <!-- 那些类的哪些方法参与事务 -->
+    <aop:config>
+        <aop:pointcut id="businessService" expression="execution(* com.sie.saaf.*.*.model.inter.server.*.*(..))
+                                                    || execution(* com.sie.saaf.*.model.dao.readonly.*.*(..))
+                                                    || execution(* com.sie.saaf.*.model.inter.server.*.*(..))
+                                                    || execution(* com.sie.watsons.*.*.model.inter.server.*.*(..))
+                                                    || execution(* com.sie.watsons.*.model.dao.readonly.*.*(..))
+                                                    || execution(* com.sie.watsons.*.model.inter.server.*.*(..))
+
+                                                    || execution(* com.sie.watsons.*.*.model.dao.readonly.*.*(..))
+                                                    || execution(* com.sie.watsons.*.*.model.inter.server.*.*(..))
+
+                                                    || execution(* com.sie.watsons.*.*.*.model.inter.server.*.*(..))
+                                                    || execution(* com.sie.watsons.*.*.*.model.dao.readonly.*.*(..))
+
+                                                    || execution(* com.sie.watsons.*.*.*.*.model.inter.server.*.*(..))
+                                                    || execution(* com.sie.watsons.*.*.*.*.model.dao.readonly.*.*(..))
+                                                    "/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="businessService" order="0"/>
+    </aop:config>
+
+
+    <bean name="genericObjectPoolConfig" class="org.apache.commons.pool2.impl.GenericObjectPoolConfig">
+        <property name="maxWaitMillis" value="-1"/>
+        <property name="maxTotal" value="1000"/>
+        <property name="minIdle" value="8"/>
+        <property name="maxIdle" value="100"/>
+    </bean>
+
+    <bean id="jedisCluster" class="com.yhg.redis.framework.facotry.JedisClusterFactory">
+        <!--<bean id="jedisCluster" class="com.sie.saaf.common.util.CustomRedisConnection">-->
+        <property name="addressConfig">
+            <value>classpath:com/sie/saaf/app/config/db_redis.properties</value>
+        </property>
+        <property name="addressKeyPrefix" value="address"/>
+        <property name="timeout" value="300000"/>
+        <property name="maxRedirections" value="6"/>
+        <property name="genericObjectPoolConfig" ref="genericObjectPoolConfig"/>
+        <!--测试环境-->
+        <!--<property name="password" value="111111"/>-->
+        <!--uat环境-->
+        <property name="password" value="qcs123"/>
+    </bean>
+
+    <!--  将拦截器包装成Advisor-->
+    <!--<bean id="putCacheAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">-->
+    <!--&lt;!&ndash;  advice属性确定处理bean&ndash;&gt;-->
+    <!--<property name="advice" ref="methodPutCacheInterceptor"/>-->
+    <!--<property name="patterns">-->
+    <!--<list>-->
+    <!--&lt;!&ndash;正则表达式&ndash;&gt;-->
+    <!--<value>com\.au\.sa\.base.*\.model\.inter\.server.*findCache.*</value>-->
+    <!--<value>com\.au\.sa\.base.*\.model\.inter\.server.*queryCache.*</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="delCacheAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">-->
+    <!--<property name="advice" ref="methodUpdateCacheInterceptor"/>-->
+    <!--<property name="patterns">-->
+    <!--<list>-->
+    <!--<value>com\.au\.sa\.base.*\.model\.inter\.server.*saveCache.*</value>-->
+    <!--<value>com\.au\.sa\.base.*\.model\.inter\.server.*updateCache.*</value>-->
+    <!--<value>com\.au\.sa\.base.*\.model\.inter\.server.*deleteCache.*</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--</bean>-->
+
+    <!-- 历史记录配置(可以注释，但请不要随意删除) -->
+    <!--<aop:config>-->
+    <!--<aop:pointcut id="recordkHistoryData" expression="execution(* com.yhg.hibernate.core.dao.*.save*(..)) or execution(* com.yhg.hibernate.core.dao.*.update*(..)) or execution(* com.yhg.hibernate.core.dao.*.delete(..))"/>-->
+    <!--<aop:aspect id="dataUpdateHistoryAspect" ref="aspectBean">-->
+    <!--<aop:after pointcut-ref="recordkHistoryData" method="doAfter"/>-->
+    <!--<aop:around pointcut-ref="recordkHistoryData" method="doAround"/>-->
+    <!--<aop:after-throwing pointcut-ref="recordkHistoryData" method="doThrowing" throwing="ex"/>-->
+    <!--</aop:aspect>-->
+    <!--</aop:config>-->
+    <!--<bean id="aspectBean" class="com.yhg.spring.aop.aspect.DataUpdateHistoryAspect">-->
+    <!--<property name="historyPackagePath" value="com.sie.saaf.history.model.entities"/>-->
+    <!--<constructor-arg name="springConfigFilePath" value="classpath:com.sie.saaf.history/config/spring.hibernate.history.cfg.xml"/>-->
+    <!--</bean>-->
+
+</beans>

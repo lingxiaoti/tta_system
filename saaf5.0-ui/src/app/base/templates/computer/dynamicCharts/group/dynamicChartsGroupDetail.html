@@ -1,0 +1,222 @@
+<div ng-controller="dynamicChartsGroupDetailCtrl" class="gridtable">
+	<div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+		<!--------------------- 按钮--->
+		<div class="bg-gray-white bt">
+			<div class="bg-gray-white p5">
+				<div class="btn-group btn-group-xs pull-right ml10"
+					 id="outputButton">
+					<button  id="headerSave" class="btn btn-default" validate-form-btn="saveForm" type="button" ng-click="save(saveForm.$invalid)"><i class="fa fa-save"></i>保存</button>
+			 		</div>
+				<div class="btn-group btn-group-xs pull-right ml10">
+					<button type="button"   class="btn btn-default" data-toggle="modal" permission-btn="btnNewReport"
+							data-target="#editModal" ng-click="btnNewReport()" ><i class="fa fa-plus"></i>新增报表</button>
+
+					<button class="btn btn-default"  ng-click="delete()" ng-disabled="!dataTable.selectRow">
+						<span class="fa fa-remove"></span> 删除
+					</button>
+				</div>
+				<div class="btn-group btn-group-xs pull-right ml10">
+					<button class="btn btn-default" ng-if="saafPageButtons.modify&&saafPageButtons.add" data-toggle="modal" data-target="#editWebScriptModal"><i class="fa fa-pencil"></i>编辑布局脚本</button>
+					<button type="button" class="btn btn-default" ng-click="preview()"><i class="fa fa-bar-chart"></i>预览</button>
+				</div>
+				<div class="btn-group btn-group-xs ">
+					<button class="btn btn-primary" ng-click="fullWindow($event)" type="button">
+						<i class="fa fa-square-o"></i>数据全屏
+					</button>
+				</div>
+			</div>
+		</div>
+		<!---------------------  / .按钮  --->
+		<div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+			<div class="nicescroll-height  bg-white " ng-nicescroll
+				
+				 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+				<!--------------------- 输入表单  --->
+				<form class=" mt10 pb5 input-form bb oh" input-form ng-submit="save(saveForm.$invalid)" name="saveForm" data-des="此节点必需－用于识别输入表单的指令">
+
+					<div resp-change="" class="col-xs-4 col-md-3 none"></div>
+
+					<div class="form-group col-xs-4 col-md-3">
+						<div class="input-group input-group-xs">
+							<label class="input-group-addon bn"><span class="w100"><i
+									class="red">*</i>动态报表组名称</span></label>
+							<input type="text" class="form-control radius3" ng-model="headerData.menuTabName" name="headerDataMenuTabName"
+								    required>
+						</div>
+					</div>
+					<div class="form-group col-xs-4 col-md-6">
+						<div class="input-group input-group-xs">
+							<label class="input-group-addon bn"><span class="w100">描述</span></label>
+							<input type="text" class="form-control radius3" ng-model="headerData.reportGroupDesc"  name="headerDataReportGroupDesc"/>
+						</div>
+					</div>
+
+				</form>
+				<!--------------------- ./  输入表单  --->
+
+				<!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+				<div class="data-table">
+					<div base-data-table="dataTable"
+						 id="dataTable"
+						 ng-params="params"
+						 ng-data-source="groupData"
+						 data-keys="{key:'reportHeaderId'}"
+						 data-show-index="true"
+						 data-delete-url="dynamicReportGroupDeleteItem"
+						 data-legend="[{value:'reportDesc',name:'报表名称'},{value:'reportHeaderCode',name:'报表编码'},
+						 {value:'pageSize',name:'分页大小'},
+						 {value:'reportType',name:'报表类型',style:'width:15%;'}]"
+					></div>
+				</div>
+				<!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+			</div>
+		</div>
+	</div>
+
+	<!--------------------图表布局脚本弹出框----------------------->
+	<div class="modal fade" id="editWebScriptModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="editWebScriptModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-lg" style="margin-top: 5%;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title pull-left" id="editWebScriptModalLabel">编写布局脚本</h4>
+				</div>
+				<div class="modal-body ">
+					<div class="row">
+						<div class="form-group col-xs-11 col-md-8">
+							<div class="input-group input-group-xs">
+								<label class="input-group-addon bn"></label>
+										<textarea type="text" class="ueditor w" config="_simpleConfig"
+												  ng-model="headerData.webScript" ready="ready"
+												  ng-readonly="!saafPageButtons.add&&!saafPageButtons.modify"></textarea>
+							</div>
+						</div>
+						<div class="form-group col-xs-11 col-md-4">
+							<div class="input-group input-group-xs">
+								<div>
+									<b>说明</b>布局时请选择下表中的“显示区域ID”作为显示区域的ID；
+								</div>
+								<div>
+									<b>例如</b>“显示区域ID”为TABLE_TEST_CODE则表格中显示区域HTML代码为 &lt;td id="TABLE_TEST_CODE"&gt;&lt;/td&gt;
+								</div>
+								<table class="table table-bordered table-hover table-condensed">
+									<thead class="bg-gray-white">
+									<tr class="text-center">
+										<th>显示区域ID</th>
+										<th>动态报表名称</th>
+									</tr>
+									</thead>
+									<tbody ng-show="dataTable.data.length==0">
+									<tr>
+										<td style="height: 200px;text-align: left;color: gray;" colspan="7">无查询结果！</td>
+									</tr>
+									</tbody>
+									<tbody ng-show="dataTable.data">
+									<tr class="text-center" ng-repeat="row in dataTable.data">
+										<td>{{row.reportType}}_{{row.columnName}}</td>
+										<td>{{row.columnTital}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer ">
+					<div style="text-align: center">
+						<button style="" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="submit" id="saveButton" class="btn btn-primary mr10">保存</button>
+						<button type="submit" class="btn btn-primary mr10" ng-click="preview()">保存&预览</button>
+					</div>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+	</div>
+	<!--------------------end图表脚本弹出框----------------------->
+
+	<!--------------------行编辑弹出框----------------------->
+	<div class="modal fade" id="editModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+		<form  name="newLine">
+			<div class="modal-dialog modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="editModalLabel">动态报表选择</h4>
+					</div>
+					<div class="modal-body ">
+						<div class="pl30 pr30">
+							<div class="row">
+								<div class="form-group col-xs-11 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"> <span class="w100"><i class="red ">*</i>动态报表名称</span>
+										</label>
+										<input type="text" class="form-control radius3" ng-model="current.reportDesc" required />
+										<span class="input-group-btn">
+											<button class="btn btn-primary btn-xs fr" data-toggle="modal"
+													data-target="#reportLov"><span class="fa fa-search"></span>
+											</button>
+										</span>
+
+									</div>
+								</div>
+								<!--<div class="form-group col-xs-11 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"> <span class="w100">是否启用</span>
+										</label>
+										<input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" ng-model="current.enabledFlag" />
+									</div>
+								</div>-->
+								<div class="form-group col-xs-11 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"> <span class="w100"><i class="red ">*</i>动态报表类型</span>
+										</label>
+										<div lookup-code="REPORT_TYPE" id="reportType" ng-model="current.reportType" required></div>
+									</div>
+								</div>
+
+								<div class="form-group col-xs-11 col-md-6">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"> <span class="w100"><i class="red "  ng-show="current.reportType==='TABLE'" >*</i>列表显示行数</span>
+										</label>
+										<input type="text" class="form-control radius3" ng-model="current.pageSize"   ng-disabled="current.reportType!='TABLE'"  ng-required="current.reportType==='TABLE'" />
+									</div>
+								</div>
+								<div class="form-group col-xs-11 col-md-12">
+									<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"> <span class="w100">备注</span>
+										</label>
+										<textarea type="text" class="form-control radius3" ng-model="current.description" style="height: 57px"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer ">
+						<div style="text-align: center">
+							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+							<button  validate-form-btn="newLine" ng-click	="saveLine(newLine.$invalid , saveForm.$invalid)"  class="btn btn-primary mr10">保存</button>
+						</div>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal dialog -->
+		</form>
+	</div>
+	<!--------------------end行编辑弹出框----------------------->
+
+	<div lov-list="reportLov" role="dialog" data-title="报表选择" id="reportLov" ng-model="current.report"
+		 data-url="dynamicReportList"
+
+		 data-return-value="current.reportDesc"
+		 data-callback="setReport"
+		 data-checked-type="radio"
+		 data-keys="{'value':'reportDesc',key:'reportHeaderCode',name:'报表名称'}"
+		 data-show-index="true"
+		 data-other-column="[{key:'reportHeaderCode',name:' 报表代码'}]"
+		 data-search-key="{'key':'reportDesc','placeholder':'请输报表名称'}"
+		 data-pagination="{'pageIndex':'1','pageRows':'5'}"
+	>
+	</div>
+</div>

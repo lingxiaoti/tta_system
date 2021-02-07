@@ -1,0 +1,211 @@
+<div ng-controller="productCtrl" class="gridtable">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="search(1)">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>搜索
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>重置
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs" permission-buttons="btnNew,btnModify,btnExport"></div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <!--------------------- 输入表单  --->
+                <div class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+
+                    <!-- 搜索输入框组-->
+                    <div search-form
+                         data-legend="[
+                        {key:'orgName_like',label:'组织'},
+                        {key:'bigCategoryName_like',label:'大类'},
+                        {key:'smallCategoryName_like',label:'小类'},
+                        {key:'modelName_like',label:'型号'}
+                        ]"
+                         ng-model="params"
+                    ></div>
+
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="findProductList"
+                         data-legend="[
+                             {'value':'orgName','name':'组织'},
+                             {'value':'bigCategoryName','name':'大类'},
+                             {'value':'smallCategoryName','name':'小类'},
+                             {'value':'modelName','name':'型号'}
+						 ]"
+                    ></div>
+                </div>
+                <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+            </div>
+        </div>
+    </form>
+
+    <!--弹出框-->
+    <div class="modal fade" id="modiProduct" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        {{modalTitle}}
+                    </h4>
+                </div>
+                <form class="ngValid" name="productForm">
+                    <div class="modal-body ">
+                        <div class="pl30 pr30 row">
+
+
+                            <div class="form-group col-xs-11 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                <span class="w100"><i
+                                        class="red">*</i>组织：</span></label>
+                                    <input type="text" disabled class="form-control radius3"
+                                           name="orgName"
+                                           ng-model="paramsProduct.orgName">
+                                    <span class="input-group-btn">
+                                                <button class="btn btn-default" ng-click="getOrganizationInfo()"
+                                                        type="button">
+                                                    <i class="fa fa-search"></i></button></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span class="w100">大类：</span></label>
+                                    <input type="text" disabled class="form-control radius3" name="bigCategoryName"
+                                           ng-model="paramsProduct.bigCategoryName"/>
+                                    <span class="input-group-btn">
+                                <button class="btn btn-default" ng-click="getBigCatInfo()" type="button"><i
+                                        class="fa fa-search"></i></button>
+                             </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span class="w100">小类：</span></label>
+                                    <input type="text" disabled class="form-control radius3" name="smallCategoryName"
+                                           ng-model="paramsProduct.smallCategoryName"/>
+                                    <span class="input-group-btn">
+                                <button class="btn btn-default" ng-click="getSmallCatInfo()" type="button"><i
+                                        class="fa fa-search"></i></button>
+                             </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-4 col-md-4">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn"><span class="w100">型号：</span></label>
+                                    <input type="text" disabled class="form-control radius3" name="modelName"
+                                           ng-model="paramsProduct.modelName"/>
+                                    <span class="input-group-btn">
+                                <button class="btn btn-default" ng-click="getModelInfo()" type="button"><i
+                                        class="fa fa-search"></i></button>
+                             </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer ">
+                    <div style="text-align:center">
+                        <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                aria-hidden="true">取消
+                        </button>
+                        <button ng-click="btnSave(productForm.$invalid)" validate-form-btn=""
+                                data-validate-form="productForm" class="btn btn-primary mr10">确定
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div lov-list="orgInfo" role="dialog" data-title="组织" id="orgInfo" ng-model="current.em"
+         data-url="organizationFind"
+         data-params='{"deleteFlag":0,"treeType":"业务组织"}'
+         data-callback="selectOrgReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+
+         data-keys="{'key':'orgName','value':'orgName','name':'组织名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'组织编码','key':'orgCode'}]"
+         data-search-key="{'key':'orgName_like','placeholder':'组织名称'}"
+    >
+    </div>
+
+    <div lov-list="findBigCategoryLov" role="dialog" data-title="请选择产品大类" id="findBigCategoryLov" ng-model="current.em"
+         data-url="queryLookupLine"
+         data-params='{ "lookupType":"BIG_CATEGORY","systemCode":"BASE","deleteFlag":0,"description": ""}'
+         data-callback="findLookupLineItemCallBack"
+         data-auto-request="true"
+         data-keys="{'key':'meaning','value':'meaning','name':'大类名称'}"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-show-index="true"
+         data-other-column="[{'name':'大类编码','key':'lookupCode'}]"
+         data-show-index="false"
+         data-search-key="[{'key':'meaning_like','placeholder':'大类名称'},{'key':'lookupCode_like','placeholder':'大类编码'}]"
+    >
+    </div>
+
+    <div lov-list="findSmallCategoryLov" role="dialog" data-title="请选择产品小类" id="findSmallCategoryLov" ng-model="current.em"
+         data-url="queryLookupLine"
+         data-params='{ "lookupType":"PRODUCT_SMALL_CATEGORY","systemCode":"BASE","deleteFlag":0,"description": ""}'
+         data-callback="findLookupLineItemCallBack2"
+         data-auto-request="true"
+         data-keys="{'key':'meaning','value':'meaning','name':'小类名称'}"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-show-index="true"
+         data-other-column="[{'name':'小类编码','key':'lookupCode'}]"
+         data-show-index="false"
+         data-search-key="[{'key':'meaning_like','placeholder':'小类名称'},{'key':'lookupCode_like','placeholder':'小类编码'}]"
+    >
+    </div>
+
+    <div lov-list="findModelLov" role="dialog" data-title="请选择产品型号" id="findModelLov" ng-model="current.em"
+         data-url="queryLookupLine"
+         data-params='{ "lookupType":"PRODUCT_MODEL","systemCode":"BASE","deleteFlag":0,"description": ""}'
+         data-callback="findLookupLineItemCallBack3"
+         data-auto-request="true"
+         data-keys="{'key':'meaning','value':'meaning','name':'型号名称'}"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-show-index="true"
+         data-other-column="[{'name':'型号编码','key':'lookupCode'}]"
+         data-show-index="false"
+         data-search-key="[{'key':'meaning_like','placeholder':'型号名称'},{'key':'lookupCode_like','placeholder':'型号编码'}]"
+    >
+    </div>
+</div>

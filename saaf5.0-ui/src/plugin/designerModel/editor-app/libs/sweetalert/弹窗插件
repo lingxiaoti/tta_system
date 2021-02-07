@@ -1,0 +1,17 @@
+
+api: https://github.com/t4t5/sweetalert
+
+
+
+参数	描述	默认值
+title	提示框标题	-
+text	提示内容	-
+type	提示类型，有：success（成功），error（错误），warning（警告），input（输入）。	-
+showCancelButton	是否显示“取消”按钮。	-
+animation	提示框弹出时的动画效果，如slide-from-top（从顶部滑下）等	-
+html	是否支持html内容。	-
+timer	设置自动关闭提示框时间（毫秒）。	-
+showConfirmButton	是否显示确定按钮。	-
+confirmButtonText	定义确定按钮文本内容。	-
+imageUrl	定义弹出框中的图片地址。
+

@@ -1,0 +1,27 @@
+<div>
+    <div class="input-group input-group-xs">
+        <label class="input-group-addon bn">
+            <span   ng-class="labelCss"> <i class="red" ng-if="required">*</i> {{ selectName}}</span></label>
+        <input type="text" class="form-control radius3 showtree" style="background-color: #fff;" required readonly name="{{ inputName }}"
+               ng-model="ngValue">
+        <label class="input-group-btn">
+            <button class="btn btn-xs btn-default showtree" type="button">
+                <span class="fa fa-search"> </span>
+            </button>
+        </label>
+    </div>
+
+    <div class="ztree-select-box" ng-class="{'none':!showTree}" ng-style="ztreeBox">
+        <ul class="ztree  ztree-select" ng-style="style"
+            data-keys='{"name":"posName"}'
+            data-simpledata='{"enable":"true","idKey":"posId","pIdKey":"parentPosId"}'>
+            <li>加载中...</li>
+        </ul>
+       <div class="ztree-select-button" ng-show="check">
+
+           <button class="btn btn-default btn-xs mr10" ng-click="btnCancel()" type="button" >取消选择</button>
+           <button class="btn btn-primary btn-xs" ng-click="btnEnter()" type="button" >确定</button>
+       </div>
+    </div>
+
+</div>

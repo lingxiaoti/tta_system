@@ -1,0 +1,71 @@
+<div ng-controller="equPonScoringCtrl" class="gridtable">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="search(1)">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs" permission-buttons="btnNew"></div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <!--------------------- 输入表单  --->
+                <div class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+
+
+                    <!-- 搜索输入框组-->
+                    <div search-form
+                         data-legend="[
+                        {key:'projectName_like',label:'项目名称'},
+                        {key:'scoringNumber_like',label:'评分单号'},
+                        {key:'scoringStatus',type:'lookCode',lookCode:'EQU_SCORING_ORDER_STATUS',label:'单据状态:'},
+                        {key:'creationDate_gte',label:'创建时间从',type:'time','date':'yyyy-mm-dd' ,endDate:'creationDate_lt'},
+                        {key:'creationDate_lt',label:'创建时间至',type:'time','date':'yyyy-mm-dd',startDate:'creationDate_gte'},
+                        {key:'deptName',label:'部门',readonly:true}
+                        ]"
+                         ng-model="params"
+                    ></div>
+
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-callback="[{'value':'scoringNumber','callback':'saveOrUpdate'}]"
+                         data-url="findScoringInfo"
+                         data-func-column="[{text:'删除',callback:'deleteScoring'}]"
+                         data-legend="[
+                             {'value':'scoringNumber','name':'评分单号'},
+                             {'value':'projectName','name':'项目名称'},
+                             {'value':'scoringStatusMeaning','name':'单据状态'},
+                             {'value':'creationDate','name':'创建时间','formatDate':'yyyy-MM-dd HH:mm:ss'},
+							 {'value':'projectLeaderName','name':'项目负责人'}
+						 ]"
+                    ></div>
+                </div>
+                <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+            </div>
+        </div>
+    </form>
+</div>

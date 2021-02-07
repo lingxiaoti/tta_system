@@ -1,0 +1,11 @@
+<div class="form-group resp-change" ng-show="isShow || isReload">
+    <div class="input-group input-group-xs ">
+        <label class="input-group-addon bn">
+            <span class="w100">职责</span>
+        </label>
+        <select class="form-control radius3" ng-change="changeResp(true)" ng-model="respId">
+            <option ng-repeat="item in DataList" value="{{ item.responsibilityId}}">{{ item.responsibilityName }}
+            </option>
+        </select>
+    </div>
+</div>

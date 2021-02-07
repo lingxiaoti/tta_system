@@ -1,0 +1,104 @@
+<div ng-controller="plmBrandInfoListCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDiscard,btnExport,btnDel">
+                            <button class="btn btn-default" permission-btn="btnDiscard"   ng-click="btnDiscard()" ng-disabled = "
+                                !dataTable.selectRow||dataTable.selectRow.billStatus=='N'
+                                ||(dataTable.selectRow.billStatus==='BIC_IN_APPROVAL'&&dataTable.selectRow.bic!==userId)||
+                                (dataTable.selectRow.billStatus=='BA_IN_APPROVAL'&&dataTable.selectRow.ba!==userId)||
+                                (dataTable.selectRow.billStatus=='TA_IN_APPROVAL'&&dataTable.selectRow.ta!==userId)">
+                            </button>
+
+                    </div>
+
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default a-black" onclick="window.location.href='app/base/templates/plmBase/exampleFile/plmBrandXlsx.xlsx'" ><i class="fa fa-file-excel-o"></i>下载模板</button>
+                        <button type="button" class="btn btn-default" saaf-xls-import-component
+                                data-list-options="{
+                                                    plmBrandCn:{headName:'品牌中文',require:true},
+                                                    plmBrandEn:{headName:'品牌英文',require:true},
+                                                    plmMotherCompany:{headName:'Mother Company'},
+                                                    plmGroupBrand:{headName:'Group'},
+
+                                                    }" data-info="{}"
+                                data-url="savePlmBrandInfoInfo" data-after-action="dataTable.search(1)"
+                                data-message="导入只追加数据；Mother Company和Group二者必填其一" >
+                            <i class="fa fa-upload"></i>导入
+                        </button>
+                    </div>
+
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <div search-form
+                         data-legend="[
+
+                            {key:'plmGroupBrand_like',label:'GroupBrand'},
+                            {key:'plmMotherCompany_like',label:'MotherCompany'},
+                            {key:'plmBrandCode_like',label:'BrandID'},
+                            {key:'plmBrandCn_like',label:'Brand名称'},
+                            {key:'billStatus_like',label:'Brand状态',type:'lookCode',lookCode:'PLM_BRAND_STATUS'}
+
+                        ]"
+                         ng-model="params"
+                    ></div>
+
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="true"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-callback="[{'value':'plmBrandCn','callback':'btnDetail'}]"
+                         data-url="findPlmBrandInfoInfo"
+                         data-legend="[
+                                 {'value':'plmGroupBrand','name':'Group Brand', style:'text-align:center'},
+                                 {'value':'plmMotherCompany','name':'Mother Company', style:'text-align:center'},
+                                 {'value':'plmBrandCode','name':'品牌ID', style:'text-align:center'},
+                                 {'value':'plmLocalBrandCode','name':'品牌PLM ID', style:'text-align:center'},
+                                 {'value':'plmBrandCn','name':'Brand中文', style:'text-align:center'},
+                                 {'value':'plmBrandEn','name':'Brand英文', style:'text-align:center'},
+                                 {'value':'billStatusName','name':'状态', style:'text-align:center'},
+                                 {'value':'creator','name':'创建人', style:'text-align:center'},
+                                 {'value':'creationDate','name':'创建日期', style:'text-align:center'}
+                         ]"
+                    ></div>
+                    <!--                    {'value':'phoneNumber','name':'手机号码'},-->
+                </div>
+
+            </div>
+
+
+        </div>
+    </form>
+
+
+</div>

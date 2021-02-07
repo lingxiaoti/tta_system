@@ -1,0 +1,4 @@
+<select  class="form-control radius3"   ng-change="change()" ng-disable="isDisabled">
+	<option value="">{{firstText}}</option>
+	<option ng-repeat="item in lookUpData" value="{{item.lookupCode}}" ng-bind="item.description"></option>
+</select>

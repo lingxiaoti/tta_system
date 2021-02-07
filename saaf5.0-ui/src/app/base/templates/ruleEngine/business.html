@@ -1,0 +1,492 @@
+<div ng-controller="businessCtrl" ng-init="init()" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <button class="btn btn-default" ng-click="addRule()" ng-disabled="!btnStatus"><i class="fa fa-plus"
+                                                                                                     aria-hidden="true"></i>新增
+                    </button>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white h" main-scroll-style>
+            <div class="col-xs-3 col-md-2 br h p0" style="margin-right: -1px;z-index: 2;">
+                <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                        <div class="data-table">
+                            <!--<div class="bg-gray-white pl5 pr5 border-line" style="height:30px;line-height: 30px;">业务类型
+                                <a ng-click="addBusinessLine()" class="btn btn-xs btn-default pull-right mt5"><i
+                                        class="fa fa-plus"></i></a></div>
+                            <div class="p5 input-group input-group-xs">
+                                <input class="form-control" placeholder="搜索业务线…" ng-model="businessParams.ruleBusinessLineName">
+                                <span class="input-group-btn"><a class="btn btn-default" ng-click="businessTable.search(1)"><i class="fa fa-search"></i></a></span>
+                            </div>
+                            <div base-data-table="" id="businessTable" data-url="queryBusinessLine"
+                                 ng-params="businessParams"
+                                 data-delete-url="deleteBusinessLine"
+                                 data-legend="[{value: 'ruleBusinessLineName', name:'业务类型名称'}]"
+                                 data-keys="{key: 'ruleBusinessLineId'}"
+                                 data-func-column="[{'icon':'fa fa-remove','callback':'deleteBusinessLine'},{'icon':'fa fa-pencil','callback':'updateBusinessLine'}]"
+                                 data-click-row="businessTableClickRow"
+                            >
+                            </div>-->
+                                  <table id="businessTable" saaf-table="businessTable" data-url="queryBusinessLine" data-params="businessParams" data-page-rows="-1" class="table table-hover table-condensed" style="border: 1px solid #ddd;">
+                                      <thead class="bg-gray-white">
+                                      <tr class="text-center">
+                                          <th colspan="2"></th>
+                                      </tr>
+                                      </thead>
+                                      <tbody ng-show="businessTable.data.length<1">
+                                      <tr class="text-center" ng-click="addBusinessLine()"><td colspan="2"><i class="fa fa-plus"></i></td></tr>
+                                      <tr><td colspan="2">暂无数据</td></tr>
+                                      </tbody>
+                                      <tbody ng-show="businessTable.data.length>0">
+                                      <tr>
+                                          <td colspan="2">
+                                              <input class="form-control" placeholder="搜索业务线…" ng-model="businessParams.var_like_ruleBusinessLineName">
+                                          </td>
+                                      </tr>
+                                      <tr class="text-center" ng-click="addBusinessLine()"><td colspan="2"><i class="fa fa-plus"></i></td></tr>
+                                      <tr class="text-center" ng-repeat="item in businessTable.data | filter:{ruleBusinessLineName:businessParams.var_like_ruleBusinessLineName}"
+                                          ng-class="{'active':businessTable.data.selectRow==item.ruleBusinessLineId}">
+                                          <td class="text-left" ng-click="businessTable.data.selectRow=item.ruleBusinessLineId;
+                                      ruleParams.var_equal_ruleBusinessLineCode=item.ruleBusinessLineCode;
+                                      addSta();
+                                      ruleTable.getData()">
+                                              <span for="radio{{item.ruleBusinessLineId}}" style="text-align: left">{{item.ruleBusinessLineName}}</span>
+                                          </td>
+                                          <td>
+                                              <div class="pos">
+                                                  <button style="border:0;background: none;" ng-click="updateBusinessLine(item)"><i style="left: 0;color: #3498db;" class="fa fa-pencil"></i></button>
+                                                  <button style="border:0;background: none;" ng-click="deleteBusinessLine(item)"><i style="left: 32px;" class="fa fa-trash"></i></button>
+                                              </div>
+                                          </td>
+                                      </tr>
+                                      </tbody>
+                                  </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="ruleData" class="col-xs-9 col-md-10 br h p0">
+                <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度" ng-show="btnStatus">
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                        <div class="data-table">
+                            <!--<div base-data-table="" id="ruleTable" data-url="queryRule"
+                                 data-params="businessParams"
+                                 data-delete-url="deleteRule"
+                                 data-legend="[{value: 'ruleDimName', name:'序号'},
+                                 {value: 'ruleDimCode', name:'维度名称'},
+                                 {value: 'ruleDimDesc', name:'维度编码'},
+                                 {value: 'ruleDimDataType', name:'维度描述'},
+                                 {value: 'ruleViewType', name:'数据类型'},
+                                 {value: 'ruleDimDefaultValue', name:'显示类型'},
+                                 {value: 'ruleDimValueFrom', name:'默认值'},
+                                 {value: 'ruleDimTargetSource', name:'值来源'},
+                                 {value: 'ruleDimReferenceFrom', name:'值目标值'},
+                                 {value: 'ruleDimReferenceCode', name:'参考值来源'}
+                                 ]"
+                                 data-keys="{key: 'ruleDimId'}"
+                                 data-func-column="[{'icon':'fa fa-remove','callback':'remove'},{'icon':'fa fa-pencil','callback':'edit'}]"
+
+                            >
+
+                            </div>-->
+
+                            <table saaf-table="ruleTable"
+                                   data-url="queryRule"
+                                   data-params="ruleParams"
+                                   data-auto-get-data="false"
+                                   data-page-rows="10"
+                                   class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th>序号</th>
+                                    <th>维度名称</th>
+                                    <th>维度编码</th>
+                                    <th>维度描述</th>
+                                    <th>数据类型</th>
+                                    <!--<th>显示类型</th>-->
+                                    <!--<th>默认值</th>-->
+                                    <!--<th>值来源</th>-->
+                                    <th>值目标值</th>
+                                    <!--<th>参考值来源</th>-->
+                                    <!--<th>参考值</th>-->
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-show="!ruleTable.data">
+                                <tr>
+                                    <td style="height: 200px" colspan="11"></td>
+                                </tr>
+                                </tbody>
+                                <tbody ng-show="ruleTable.data">
+                                <tr class="text-center" ng-repeat="item in ruleTable.data"
+                                    ng-class="{'active':ruleTable.data.selectRow==$index}"
+                                    ng-click="ruleTable.data.selectRow=$index;selectRulel(item)">
+                                    <td ng-bind="(ruleTable.curIndex-1)*ruleTable.pageSize+$index+1">1</td>
+                                    <td>{{item.ruleDimName}}</td>
+                                    <td>{{item.ruleDimCode}}</td>
+                                    <td>{{item.ruleDimDesc}}</td>
+                                    <td>{{item.ruleDimDataType}}</td>
+                                    <!--<td>{{item.ruleViewType}}</td>-->
+                                    <!--<td>{{item.ruleDimDefaultValue}}</td>-->
+                                    <!--<td>{{item.ruleDimValueFrom}}</td>-->
+                                    <td>{{item.ruleDimTargetSource}}</td>
+                                    <!--<td>{{item.ruleDimReferenceFrom}}</td>-->
+                                    <!--<td>{{item.ruleDimReferenceCode}}</td>-->
+                                    <td>
+                                        <div class="pos">
+                                            <button style="border:0;background: none;" ng-click="edit(item)"><i
+                                                    style="left: 0;color: #3498db;" class="fa fa-pencil"></i></button>
+                                            <button style="border:0;background: none;" ng-click="remove(item)"><i
+                                                    style="left: 32px;" class="fa fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div saaf-table-tfoot="ruleTable" ng-show="ruleTable.data.length>0"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="businessModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+             data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content modal-md">
+                    <form name="lineTemplateForm" ng-submit="confirmBusiness(lineTemplateForm.$invalid)">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title">
+                                {{businessModalTitle}}
+                            </h4>
+                        </div>
+                        <div class="modal-body ">
+                            <div class="pl50 pr50">
+                                <div class="row">
+                                    <div>
+                                        <div class="form-group col-xs-11 col-md-11">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn"><span
+                                                        class="w100"><i class="red">*</i>业务类型名称：</span></label>
+                                                <input type="text" class="form-control radius3" required
+                                                       ng-model="business.ruleBusinessLineName">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-11 col-md-11">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn"><span
+                                                        class="w100">业务类型编码：</span></label>
+                                                <input type="text" class="form-control radius3" readonly
+                                                       ng-model="business.ruleBusinessLineCode">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-xs-11 col-md-11">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn"><span
+                                                        class="w100"><i class="red">*</i>业务类型分类：</span></label>
+                                                <!--        <select type="text" class="form-control radius3" required
+                                                                ng-model="business.ruleBusinessLineType">
+                                                            <option></option>
+                                                            <option saaf-select-lookupcode="BUSINESS_TYPE"></option>
+                                                        </select>-->
+                                                <div lookup-code="BUSINESS_TYPE"
+                                                     ng-model="business.ruleBusinessLineType" required="true"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-xs-11 col-md-11">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn"><span
+                                                        class="w100"><i class="red">*</i>命中方式：</span></label>
+
+                                                <select type="text" class="form-control radius3" required
+                                                        ng-model="business.ruleBusinessLineMapptype"
+                                                        ng-options="ruleBusinessForMapptype.code as ruleBusinessForMapptype.name for ruleBusinessForMapptype in ruleBusinessLineMapptypeArr">
+                                                    <option></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-11 col-md-11">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn"><span
+                                                        class="w100">业务类型描述：</span></label>
+                                                <textarea type="text" class=" radius3  form-control"
+                                                          ng-model="business.ruleBusinessLineDesc"
+                                                          style="height: 100px"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer ">
+                            <div style="text-align:center">
+                                <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                        aria-hidden="true"
+                                        ng-click="rule={}">取消
+                                </button>
+                                <button type="submit" id="saveButton" class="btn btn-primary mr10">保存</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+
+
+        <form class="ngValid" name="ruleTemplateForm" ng-submit="confirmRule(ruleTemplateForm.$invalid)">
+            <div class="modal fade" id="ruleModal" data-backdrop="static" tabindex="-1">
+                <div class="modal-dialog modal-dialog-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title">
+                                {{ruleModal}}
+                            </h4>
+                        </div>
+                        <div class="modal-body ">
+                            <div class="pl30 pr30">
+
+                                <div class="form-group col-xs-12 col-md-6 col-lg-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w70"><i class="red">*</i>维度名称：</span></label>
+                                        <input type="text" class="form-control radius3" required
+                                               ng-model="rule.ruleDimName">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-12 col-md-6 col-lg-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w70"><i class="red">*</i>维度编码：</span></label>
+                                        <input type="text" class="form-control radius3" required
+                                               ng-model="rule.ruleDimCode" placeholder="输入Java代码中的字段名（英文）">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-12 col-md-6 col-lg-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w70"><i class="red">*</i>返回类型：</span></label>
+
+                                        <select type="text" class="form-control radius3" required
+                                                ng-model="rule.ruleDimDataType"
+                                                ng-options="dataType.ruleDimDataCode as dataType.ruleDimDataType for dataType in ruleDimDataType">
+
+                                            <!--<option saaf-select-lookupcode="DATA_TYPE"></option>-->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!--<div class="form-group col-xs-12 col-md-6 col-lg-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w70">默认值：</span></label>
+                                        <input type="text" class="form-control radius3"
+                                               ng-model="rule.ruleDimDefaultValue">
+                                    </div>
+                                </div>-->
+
+                                <!--<div class="form-group col-xs-12 col-md-6 col-lg-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w70">值来源：</span></label>
+
+                                        &lt;!&ndash;ng-options="valueFrom.code as valueFrom.name for valueFrom in ruleDimValueFromData"&ndash;&gt;
+                                        <select type="text" class="form-control radius3"
+                                                ng-model="rule.ruleDimValueFrom"
+                                                ng-change="changeRuleDimValueFromData(rule.ruleDimValueFrom)">
+                                            <option></option>
+                                            <option saaf-select-lookupcode="DIM_VALUE_FROM"></option>
+                                            &lt;!&ndash;<option value="{{valueFrom.code}}" ng-repeat="valueFrom in ruleDimValueFromData track by $index">{{valueFrom.name}}</option>&ndash;&gt;
+                                        </select>
+                                    </div>
+                                </div>
+-->
+                                <!--<div class="form-group col-xs-12 col-md-6 col-lg-4" ng-if="!ruleDimTargetSourceIsSQL">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w70">值目标：</span></label>
+                                        <input type="text" class="form-control radius3"
+                                               ng-model="rule.ruleDimTargetSource" ng-if="!ruleDimTargetSourceInServer">
+                                        <select class="form-control radius3" ng-model="rule.ruleDimTargetSource"
+                                                ng-options="webServer.webserviceCode as webServer.webserviceName for webServer in webServerArr"
+                                                ng-if="ruleDimTargetSourceInServer">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                </div>-->
+
+                                <div class="form-group col-xs-12 col-md-12 col-lg-4" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w70">值目标：</span></label>
+                                        <textarea class="form-control radius3" style="height: 60px;"
+                                                  ng-model="rule.ruleDimTargetSource"></textarea>
+                                    </div>
+                                </div>
+
+                                <!--<div class="form-group col-xs-12 col-md-6 col-lg-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w70">参考值来源：</span></label>
+                                        <select type="text" class="form-control radius3"
+                                                ng-model="rule.ruleDimReferenceFrom"
+                                                ng-change="ruleDimReferenceFromChange()">
+                                            <option></option>
+                                            <option saaf-select-lookupcode="DIM_VALUE_SOURCES"></option>
+                                            &lt;!&ndash;<option value="{{referenceFrom.lookupCode}}" ng-repeat="referenceFrom in ruleDimReferenceFromData track by $index">{{referenceFrom.meaning}}</option>&ndash;&gt;
+                                        </select>
+                                    </div>
+                                </div>-->
+                                <!--<div class="form-group col-xs-12 col-md-6 col-lg-4" ng-show="ruleDimReferenceFrom">-->
+                                    <!--<div class="input-group input-group-xs" ng-if="rule.ruleDimReferenceFrom=='lookup'">-->
+                                        <!--<label class="input-group-addon bn"><span-->
+                                                <!--class="w70">参考值：</span></label>-->
+                                        <!--<select type="text" class="form-control radius3"-->
+                                                <!--ng-model="rule.ruleDimReferenceCode">-->
+                                            <!--<option></option>-->
+                                            <!--&lt;!&ndash;<option value="{{refernceCode.lookupCode}}" ng-repeat="refernceCode in ruleDimReferenceCodeData track by $index">{{refernceCode.meaning}}</option>&ndash;&gt;-->
+                                            <!--<option saaf-select-lookupcode="DIM_VALUE"></option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                    <!--<div class="input-group input-group-xs"-->
+                                         <!--ng-if="rule.ruleDimReferenceFrom=='webservice'">-->
+                                        <!--<label class="input-group-addon bn"><span-->
+                                                <!--class="w70">参考值：</span></label>-->
+                                        <!--<select type="text" class="form-control radius3"-->
+                                                <!--ng-model="rule.ruleDimReferenceCode"-->
+                                                <!--ng-options="refernceCode.webserviceCode as refernceCode.webserviceName for refernceCode in ruleDimReferenceCodeData">-->
+                                            <!--<option></option>-->
+                                            <!--&lt;!&ndash;<option value="{{refernceCode.webserviceCode}}" ng-repeat="refernceCode in ruleDimReferenceCodeData track by $index">{{refernceCode.webserviceName}}</option>&ndash;&gt;-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                    <!--<div class="input-group input-group-xs"-->
+                                         <!--ng-if="rule.ruleDimReferenceFrom=='valueSet'">-->
+                                        <!--<label class="input-group-addon bn"><span-->
+                                                <!--class="w70">参考值：</span></label>-->
+                                        <!--<div class=" input-group input-group-xs col col-md-12">-->
+                                            <!--<input type="text" class="form-control radius3"-->
+                                                   <!--ng-model="rule.ruleDimReferenceCode" disabled>-->
+                                            <!--<span class="input-group-btn">-->
+                                                    <!--<button class="btn btn-default"-->
+                                                            <!--ng-click="ruleDimReferenceFromChange()" type="button"><i-->
+                                                            <!--class="fa fa-search" aria-hidden="true"></i></button>-->
+                                                <!--</span>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                                <div class="form-group col-xs-12 col-md-6 col-lg-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w70"><i class="red">*</i>生效日期：</span></label>
+                                        <input type="text" date-time-picker required
+                                               data-date-format="yyyy-mm-dd"
+                                               data-enddate="{{rule.effectEndDate}}"
+                                               data-min-View="2" class="form-control radius3" placeholder=""
+                                               ng-model="rule.effectDate">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-12 col-md-6 col-lg-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w70">失效日期：</span></label>
+                                        <input type="text" date-time-picker
+                                               data-date-format="yyyy-mm-dd"
+                                               data-stratdate="{{rule.effectDate}}"
+                                               data-min-View="2" class="form-control radius3" placeholder=""
+                                               ng-model="rule.effectEndDate">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w70">维度描述：</span></label>
+                                        <textarea class="form-control radius3" ng-model="rule.ruleDimDesc"
+                                                  style="height: 50px;"></textarea>
+                                    </div>
+                                </div>
+                                <div class="cb"></div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer ">
+                            <div style="text-align:center">
+                                <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                        aria-hidden="true"
+                                        ng-click="rule={}">取消
+                                </button>
+                                <button type="submit" class="btn btn-primary mr10">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal -->
+            </div>
+        </form>
+
+        <!--<div class="modal fade" id="valueSetHeaderModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"-->
+        <!--data-keyboard="false">-->
+        <!--<div class="modal-dialog">-->
+        <!--<div class="modal-content modal-lg">-->
+        <div class="modal fade" id="valueSetHeaderModal" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            值集类型列表
+                        </h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="form-group input-group-xs">
+                            <div class="row">
+                                <div class="col col-md-6 input-group-xs">
+                                    <input type="text" class="form-control radius3" ng-model="filterValueSetHeaderName"
+                                           placeholder="筛选值名称…">
+                                </div>
+                                <div class="col col-md-6 input-group-xs">
+                                    <input type="text" class="form-control radius3" ng-model="filterValueSetHeaderDes"
+                                           placeholder="筛选值描述…">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true">取消
+                            </button>
+                            <button type="button" ng-click="submitValueSetHeader()" class="btn btn-primary mr10">保存
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.modal -->
+</div>

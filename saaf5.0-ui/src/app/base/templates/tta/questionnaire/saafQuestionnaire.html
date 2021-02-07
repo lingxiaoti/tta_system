@@ -1,0 +1,442 @@
+<div ng-controller="saafQuestionnaireCtrl" class="gridtable">
+
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <div>
+            <!--------------------- 按钮--->
+            <div class="bg-gray-white bt">
+                <div class="bg-gray-white p5">
+                    <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                        <button class="btn btn-default" validate-form-btn="searchForm" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>搜索
+                        </button>
+                        <button class="btn btn-default" ng-click="dataTable.restore()"><i class="fa fa-repeat"></i>重置
+                        </button>
+                        <button class="btn btn-default" ng-click="add()"><i class="fa fa-plus"></i>新增</button>
+                        <button  class="btn btn-default" ng-disabled="dataTable.selectRow==null || dataTable.data[dataTable.selectRow].status=='APPROVING' || dataTable.data[dataTable.selectRow].status=='APPROVED'"
+                                 ng-click="edit()"><i class="fa fa-pencil"></i>修改
+                        </button>
+                        <!--<button type="button" class="btn btn-default"-->
+                                <!--ng-disabled="dataTable.selectRow==null || dataTable.data[dataTable.selectRow].status==='APPROVING'-->
+                                <!--|| dataTable.data[dataTable.selectRow].status==='APPROVED' "-->
+                                <!--ng-click="approve()">-->
+                            <!--<i class="fa fa-pencil"></i>发起审批-->
+                        <!--</button>-->
+                        <!--<button class="btn btn-default" ng-click="goApproveInfo()"-->
+                                <!--ng-disabled="dataTable.data[dataTable.selectRow].status==='NEW'-->
+                                <!--|| dataTable.data[dataTable.selectRow].status==='RETRACT'-->
+                                <!--|| dataTable.data[dataTable.selectRow].status==='ABANDON'-->
+                                <!--|| dataTable.selectRow===undefined">-->
+                            <!--<i class="fa fa-info-circle" aria-hidden="true"></i>审批信息-->
+                        <!--</button>-->
+                        <button class="btn btn-default" ng-click="dataTable.xlsExport()"><i class="fa fa-download"></i>导出
+                        </button>
+                    </div>
+
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!---------------------  / .按钮  --->
+            <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                <div class="nicescroll-height  bg-white " ng-nicescroll
+                     nice-option="{cursorcolor: '#998279',cursorwidth:10}" data-des="此节点必需-滚动内容及指令">
+                    <!--------------------- 输入表单  --->
+                    <form class=" mt10 pb5 input-form bb oh" name="searchForm" id="searchForm" data-des="此节点必需－用于识别输入表单的指令">
+                        <div search-form=""
+
+                             data-legend="[
+                {key:'qnTitle',label:'问卷标题'},
+                {key:'qnCode',label:'问卷编码',},
+                ]"  ng-model="params"></div>
+                        <!-- {key:'status',label:'审批状态',type:'lookCode',lookCode:'FUNCTIONAL_APPROVAL_STATUS'} -->
+                        <!--<div class=" mt10 pb5" data-des="此节点必需－用于识别输入表单的指令">-->
+                            <!--<div class="form-group col-xs-4 col-md-3">-->
+                                <!--<div class="input-group input-group-xs">-->
+                                    <!--<label class="input-group-addon bn"><span-->
+                                            <!--class="pl10">问卷标题：</span></label>-->
+                                    <!--<input type="text" class="form-control radius3" ng-model="params.qnTitle">-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group col-xs-4 col-md-3">-->
+                                <!--<div class="input-group input-group-xs">-->
+                                    <!--<label class="input-group-addon bn"><span-->
+                                            <!--class="w100">问卷编码：</span></label>-->
+                                    <!--<input type="text" class="form-control radius3" ng-model="params.qnCode">-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group col-xs-4 col-md-3">-->
+                                <!--<div class="input-group input-group-xs">-->
+                                    <!--<label class="input-group-addon bn"><span class="w100">审批状态：</span></label>-->
+                                    <!--<select class="form-control radius3" ng-model="params.status">-->
+                                        <!--<option></option>-->
+                                        <!--<option saaf-select-lookupcode="FUNCTIONAL_APPROVAL_STATUS"></option>-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </form>
+                    <!--<hr style="width: 100%">-->
+                    <!--------------------- ./  输入表单  --->
+
+                    <div class="data-table">
+                        <div base-data-table="dataTable"
+                             ng-params="params"
+                             data-show-index="true"
+                             data-url="findSaafQuestionnaireList"
+                             data-func-column="[{'text':'查看','callback':'checkInfo'},
+                             {'text':'编辑','callback':'modifyInfo'},
+                             {'text':'删除','callback':'delete'}]"
+                             data-legend="[
+                             {'value':'qnCode','name':'题库编码'},
+                             {'value':'qnTitle','name':'题库名称'},
+                             {'value':'userFullName','name':'制单人'},
+                             {'value':'creationDate','name':'制单日期'}
+                             ]">
+                            <!--{'value':'qnTypeName','name':'问题库类型'},-->
+                        </div>
+                    </div>
+                    <!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+                    <!--<div class="data-table">-->
+
+                        <!--<table saaf-table="dataTable"-->
+                               <!--data-url="findSaafQuestionnaireList"-->
+                               <!--data-params="params"-->
+                               <!--data-page-rows="15"-->
+                               <!--class="table table-bordered table-hover table-condensed">-->
+                            <!--<thead class="bg-gray-white">-->
+                            <!--<tr class="text-center">-->
+                                <!--<th>序号</th>-->
+                                <!--<th>问卷编码</th>-->
+                                <!--<th>问卷标题</th>-->
+                                <!--<th>审批状态</th>-->
+                                <!--<th>应用平台</th>-->
+                                <!--<th>问卷类型</th>-->
+                                <!--<th>创建人</th>-->
+                                <!--<th>操作{{dataTable}}</th>-->
+                            <!--</tr>-->
+                            <!--</thead>-->
+                            <!--<tbody ng-if="!dataTable.data">-->
+                            <!--<tr>-->
+                                <!--<td style="height: 200px" colspan="20" class="active">暂无数据</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                            <!--<tbody ng-if="dataTable.data">-->
+
+                            <!--<tr class="text-center" ng-repeat="row in dataTable.data"-->
+                                <!--ng-class="{'active':dataTable.selectRow==$index}" ng-click="dataTable.selectRow=$index">-->
+                                <!--<td ng-bind="(dataTable.curIndex-1)*dataTable.pageSize+$index+1" class="w50">1</td>-->
+                                <!--<td><a style="color:#ff5715 ; cursor:pointer" ng-click="searchLine($index)">{{row.qnCode}}</a>-->
+                                <!--</td>-->
+                                <!--<td class="w200" style="text-align: left;">-->
+                                    <!--<div class="w200 ellipsis">{{row.qnTitle}}</div>-->
+                                <!--</td>-->
+                                <!--&lt;!&ndash;<td>{{row.qnStatusName}}</td>&ndash;&gt;-->
+                                <!--<td>{{row.statusName}}</td>-->
+                                <!--<td>{{row.qnPlatform}}</td>-->
+                                <!--<td>{{row.qnTypeName}}</td>-->
+                                <!--<td>{{row.userFullName}}</td>-->
+                                <!--<td>-->
+
+                                    <!--<button type="button" title="查看" class="btn btn-default btn-small"-->
+                                            <!--style="padding: 0px 8px;" ng-click="checkInfo(row)">查看-->
+                                    <!--</button>-->
+                                    <!--<button type="button" title="复制" class="btn btn-default btn-small"-->
+                                            <!--style="padding: 0px 8px;" ng-click="copyInfo(row)">-->
+                                        <!--复制-->
+                                    <!--</button>-->
+                                    <!--<button type="button" title="编辑" class="btn btn-primary btn-small"-->
+                                            <!--style="padding: 0px 8px;"-->
+                                            <!--ng-click="modifyInfo(row)"-->
+                                            <!--ng-disabled="row.status=='APPROVING' || row.status=='APPROVED'">-->
+                                        <!--编辑-->
+                                    <!--</button>-->
+                                    <!--&lt;!&ndash;<button type="button" title="发布" class="btn btn-success btn-small"&ndash;&gt;-->
+                                            <!--&lt;!&ndash;style="padding: 0px 8px;" ng-disabled="row.status!='APPROVED'" ng-click="publishInfo(row)">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;发布&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                                    <!--<button type="button" title="删除" class="btn btn-danger btn-samll"-->
+                                            <!--style="padding: 0px 8px;background-color: #ff5715;" ng-click="delete(row)"-->
+                                            <!--ng-disabled="row.status=='APPROVING' || row.status=='APPROVED'">-->
+                                        <!--删除-->
+                                    <!--</button>-->
+                                    <!--&lt;!&ndash;<button type="button" title="废弃" class="btn btn-info btn-samll"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;style="padding: 0px 8px;" ng-click="abandon(row)" ng-disabled="row.qnStatus=='abandon'">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;废弃&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                                <!--</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                        <!--</table>-->
+                        <!--<div saaf-table-tfoot="dataTable"></div>-->
+                    <!--</div>-->
+                    <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <!--add by luofu-->
+        <form ng-submit="save()">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title">问卷调查头信息编辑</h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+
+                            <div class="row">
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i> 题库名称：</span></label>
+                                        <input type="text" class="form-control radius3" required
+                                               ng-model="current.qnTitle" ng-readonly="!allowUpdate">
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">题库编码：</span></label>
+                                        <input type="text" class="form-control radius3" ng-model="current.qnCode"
+                                               readonly>
+
+                                    </div>
+                                </div>
+                                <!--<div class="form-group col-xs-11 col-md-6">-->
+                                    <!--<div class="input-group input-group-xs">-->
+                                        <!--<label class="input-group-addon bn"><span class="w100"><i class="red">*</i> 应用平台：</span></label>-->
+                                        <!--<select class="form-control radius3" ng-model="current.qnPlatform" required-->
+                                                <!--ng-disabled="!allowUpdate">-->
+                                            <!--<option></option>-->
+                                            <!--<option saaf-select-lookupcode="SAAF_QN_PLATFORM"></option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                                <!--
+                            <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i> 题库类型：</span></label>
+                                        <select class="form-control radius3" ng-model="current.qnType" required
+                                                ng-disabled="!allowUpdate">
+                                            <option></option>
+                                            <option saaf-select-lookupcode="SAAF_QN_TYPE"></option>
+                                        </select>
+                                    </div>
+                                </div>-->
+
+                                <!--<div class="form-group col-xs-11 col-md-6">-->
+                                <!--<div class="input-group input-group-xs">-->
+                                <!--<label class="input-group-addon bn"><span class="w100">问卷状态：</span></label>-->
+                                <!--<select class="form-control radius3" ng-model="current.qnStatus" disabled>-->
+                                <!--<option></option>-->
+                                <!--<option saaf-select-lookupcode="VR_SURVEY_STATUS"></option>-->
+                                <!--</select>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="form-group col-xs-11 col-md-6">-->
+                                    <!--<div class="input-group input-group-xs">-->
+                                        <!--<label class="input-group-addon bn"><span class="w100">审批状态：</span></label>-->
+                                        <!--<select class="form-control radius3" ng-model="current.status" disabled>-->
+                                            <!--<option></option>-->
+                                            <!--<option saaf-select-lookupcode="FUNCTIONAL_APPROVAL_STATUS"></option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="form-group col-xs-11 col-md-6">-->
+                                    <!--<div class="input-group input-group-xs">-->
+                                        <!--<label class="input-group-addon bn"><span class="w100"><i class="red">*</i> 开始日期：</span></label>-->
+                                        <!--<input type="text" class="form-control radius3 input-xs" date-time-picker-->
+                                               <!--required-->
+                                               <!--data-date-format="yyyy-mm-dd" data-enddate="{{current.endDateActive}}"-->
+                                               <!--data-min-View="2" ng-model="current.startDateActive"-->
+                                               <!--ng-disabled="!allowUpdate">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="form-group col-xs-11 col-md-6">-->
+                                    <!--<div class="input-group input-group-xs">-->
+                                        <!--<label class="input-group-addon bn"><span class="w100">结束日期：</span></label>-->
+                                        <!--<input type="text" class="form-control radius3 input-xs" date-time-picker-->
+                                               <!--data-date-format="yyyy-mm-dd"-->
+                                               <!--data-stratdate="{{current.startDateActive}}"-->
+                                               <!--data-min-View="2" ng-model="current.endDateActive"-->
+                                               <!--ng-disabled="!allowUpdate">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="form-group col-xs-11 col-md-6">-->
+                                    <!--<div class="input-group input-group-xs">-->
+                                        <!--<label class="input-group-addon bn"><span class="w100">断点续答：</span></label>-->
+                                        <!--<input type="checkbox" ng-model="current.breakPointAnswer" ng-false-value="'N'"-->
+                                               <!--ng-true-value="'Y'" ng-disabled="!allowUpdate">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="form-group col-xs-11 col-md-6">-->
+                                    <!--<div class="input-group input-group-xs">-->
+                                        <!--<label class="input-group-addon bn"><span class="w100">背景颜色：</span></label>-->
+                                        <!--<input type="text" ng-model="current.bgColor" class="form-control radius3" placeholder="输入格式为(#ffffff)"  ng-disabled="!allowUpdate">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="form-group col-xs-11 col-md-6">-->
+                                    <!--<div class="input-group input-group-xs">-->
+                                        <!--<label class="input-group-addon bn"><span-->
+                                                <!--class="w100">背景图片：</span></label>-->
+                                        <!--<input saaf-img data-img-url="row.accessPath" data-has-up="current.bgImagePath1?true:false"-->
+                                               <!--data-delete-action="deleteImgAction(current,row)"-->
+                                               <!--ng-repeat="row in current.bgImagePath1 | filter:{} ">-->
+                                        <!--<input saaf-img data-max-length="1"-->
+                                               <!--data-add-action="addImgAction(current.bgImagePath1,'','',$returnMessage)">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <div class="form-group col-xs-11 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100">备注说明：</span></label>
+                                        <textarea rows="5" class="form-control radius3" style="height:100%;"
+                                                  ng-model="current.description" ng-readonly="!allowUpdate"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    ng-show="allowUpdate">取消
+                            </button>
+                            <button type="submit" id="saveButton" class="btn btn-primary mr10" ng-show="allowUpdate">
+                                保存
+                            </button>
+                            <button type="button" class="btn btn-primary mr10" data-dismiss="modal"
+                                    ng-show="!allowUpdate">返回
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </form>
+    </div>
+
+    <div class="modal fade" id="publishInfo" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <form ng-submit="savePublishInfo()">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title">问卷调查发布</h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i> 问卷标题：</span></label>
+                                        <input type="text" class="form-control radius3" ng-model="publish.qnTitle" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">问卷编码：</span></label>
+                                        <input type="text" class="form-control radius3" ng-model="publish.qnCode" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">问卷类型：</span></label>
+                                        <select class="form-control radius3" ng-model="publish.qnType" disabled>
+                                            <option></option>
+                                            <option saaf-select-lookupcode="VR_SURVEY_TYPE"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">发布状态：</span></label>
+                                        <select class="form-control radius3" ng-model="publish.status" disabled>
+                                            <option></option>
+                                            <option saaf-select-lookupcode="VR_SURVEY_STATUS"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-6" ng-show="publish.qnType=='INTERNAL_USER'">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100">城市：</span></label>
+                                        <textarea rows="3" class="form-control radius3" style="height:100%;"
+                                                  ng-model="publish.cityNames" readonly></textarea>
+                                        <button type="button" class="btn btn-primary" style="padding: 3px 5px;" ng-click="selectCitys()">
+                                            选择城市
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-6" ng-show="publish.qnType=='INTERNAL_USER'">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100">人员：</span></label>
+                                        <textarea rows="3" class="form-control radius3" style="height:100%;"
+                                                  ng-model="publish.userNames" readonly></textarea>
+                                        <button type="button" class="btn btn-info" style="padding: 3px 5px;" ng-click="selectPersons()">
+                                            选择人员
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i> 开始日期：</span></label>
+                                        <input type="text" class="form-control radius3 input-xs" date-time-picker
+                                               required
+                                               data-date-format="yyyy-mm-dd" data-enddate="{{publish.endDateActive}}"
+                                               data-min-View="2" ng-model="publish.startDateActive">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">结束日期：</span></label>
+                                        <input type="text" class="form-control radius3 input-xs" date-time-picker
+                                               data-date-format="yyyy-mm-dd"
+                                               data-stratdate="{{publish.startDateActive}}"
+                                               data-min-View="2" ng-model="publish.endDateActive">
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-11 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100">备注说明：</span></label>
+                                        <textarea rows="5" class="form-control radius3" style="height:100%;"
+                                                  ng-model="current.description"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    ng-show="allowUpdate">取消
+                            </button>
+                            <button type="submit" id="publishButton" class="btn btn-primary mr10" ng-show="allowUpdate">
+                                保存
+                            </button>
+                            <button type="button" class="btn btn-primary mr10" data-dismiss="modal"
+                                    ng-show="!allowUpdate">返回
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </form>
+    </div>
+
+</div>

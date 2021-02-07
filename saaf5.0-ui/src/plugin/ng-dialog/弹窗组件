@@ -1,0 +1,14 @@
+https://github.com/likeastore/ngDialog#api
+
+
+Usage
+
+You need only to include ngDialog.js, ngDialog.css and ngDialog-theme-default.css (as minimal setup) to your project and then you can start using the ngDialog provider in your directives, controllers and services. Define the className to be the ngDialog-theme-default. For example in controllers:
+
+var app = angular.module('exampleApp', ['ngDialog']);
+
+app.controller('MainCtrl', function ($scope, ngDialog) {
+    $scope.clickToOpen = function () {
+        ngDialog.open({ template: 'popupTmpl.html', className: 'ngdialog-theme-default' });
+    };
+});

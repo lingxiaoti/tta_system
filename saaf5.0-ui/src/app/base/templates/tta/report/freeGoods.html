@@ -1,0 +1,349 @@
+<div ng-controller="freeGoodsCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="fGTable.getData()">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="search()">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <!--<button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>-->
+                      <!-- <button class="btn btn-default" type="button" ng-click="btnModify()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>编辑
+                        </button>-->
+                        <button type="button" class="btn btn-default"   permission-btn="" ng-click="btnSave()" ></button>
+
+                        <button class="btn btn-default" type="button" ng-click="btnExport()">
+                            <i class="fa fa-upload" aria-hidden="true"></i>导出
+                        </button>
+                        <button type="button" class="btn btn-default" permission-btn=""  ng-click="CGPLHF()" ></button>
+                        <button class="btn btn-default" type="button" ng-click="submitApproval()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>提交审批
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="changePerson()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>转交
+                        </button>
+                    </div>
+
+
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white "
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令"><!--ng-nicescroll-->
+                    <div>
+                        <div search-form
+                             data-legend="[
+                            {key:'vendorNbr',label:'供应商编号'},
+                            {key:'vendorName',label:'供应商名称'}
+
+                        ]"
+                             ng-model="params"
+                        ></div>
+                    </div>
+                </div>
+
+                <!--<div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="true"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="freeGoodsFind"
+                         data-legend="[
+                             {'value':'vendorNbr','name':'主供应商编号'},
+                             {'value':'vendorName','name':'主供应商名称'},
+                             {'value':'brand','name':'主供应商品牌'},
+                             {'value':'freeTerms','name':'免费货品_条款'},
+                             {'value':'netPurchase','name':'本年度实际折扣前采购额（含税）'},
+                             {'value':'futerPurchase','name':'本年度预估全年折扣前采购额（含税）'},
+                             {'value':'groupDesc','name':'Group'},
+                             {'value':'receivFreeAmt','name':'本年度应收免费货金额（不含税）'},
+                             {'value':'totalContractAmt','name':'本年度实收免费货金额-合同免费货（不含税）'},
+                             {'value':'totalPromotionAmt','name':'本年度实收免费货金额-促销免费货（不含税）'},
+                             {'value':'totalSackAmt','name':'本年度实收免费货金额-试用装免费货（不含税）'},
+                             {'value':'differAmt','name':'差异'},
+                             {'value':'changePersonName','name':'转交人'}
+                             ]"
+                    ></div>
+                    &lt;!&ndash;{'value':'borrowAdjAmt','name':'本年度其他方式收取金额-货款调整金额（不含税）'},
+                             {'value':'aboiRecevieAmt','name':'本年度其他方式收取金额-ABOI实收金额（不含税）'},
+                             {'value':'caRecevieAmt','name':'本年度其他方式收取金额-CA实收金额（不含税）'},
+                             {'value':'purchaseAct','name':'采购行动'},
+                             &ndash;&gt;
+                </div>-->
+                <div class="col-xs-12 col-md-12" style="margin-right: -1px; height: 100%; ">
+                    <form id="fGReportForm" name="fGReportForm">
+                    <div id ="parentFixedId" style="" main-scroll-style>
+                        <div id ="fixedId" style =" height: auto;overflow:auto;position:relative" class="data-table" id="nicescroll_tta_oi_cw" nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2'}" >
+                            <table saaf-table="fGTable"
+                                   id = "fGTableId"
+                                   data-url="freeGoodsFind"
+                                   data-after-get-data="afterGetData()"
+                                   data-params="params"
+                                   data-checked-type="radio"
+                                   data-auto-get-data="true"
+                                   data-page-rows="20"
+                                   class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th>
+                                        <input  ng-checked="selectedAll" type="checkbox"
+                                                ng-click="checkedAll($event)" >
+                                    </th>
+                                    <th>序号</th>
+                                    <th>Proposal单号</th>
+                                    <th>主供应商编号</th>
+                                    <th>主供应商名称</th>
+                                    <th>主供应商品牌</th>
+                                    <th>免费货品_条款</th>
+                                    <th>本年度实际折扣前采购额（含税）</th>
+                                    <th>本年度预估全年折扣前采购额（含税）</th>
+                                    <th>Group</th>
+                                    <th>本年度应收免费货金额（不含税）</th>
+                                    <th>本年度实收免费货金额-合同免费货（不含税）</th>
+                                    <th>本年度实收免费货金额-促销免费货（不含税）</th>
+                                    <th>本年度实收免费货金额-试用装免费货（不含税）</th>
+                                    <th>货款调整金额（不含税）</th>
+                                    <th>ABOI实收金额（不含税）</th>
+                                    <th>CA实收金额（不含税）</th>
+                                    <th>差异</th>
+                                    <th>转交人</th>
+                                    <th>被转交人</th>
+                                    <th>采购行动</th>
+                                    <th>豁免原因-1</th>
+                                    <th>豁免原因-2</th>
+                                    <th>备注</th>
+                                    <!--<th>提交人</th>
+                                    <th>当前审批人</th>
+                                    <th>流程单据号</th>
+                                    <th>流程状态</th>
+                                    <th>促销开始日期</th>
+                                    <th>促销结束日期</th>
+                                    <th>借记单编号</th>
+                                    <th>ABOI系统实收金额</th>
+                                    <th>调整人</th>
+                                    <th>转办人</th>
+                                    <th>被转办人</th>
+                                    <th>批次编号</th>-->
+                                </tr>
+                                </thead>
+                                <tbody ng-show="fGTable.data">
+                                <tr class="text-center" ng-repeat="row in fGTable.data"
+                                    ng-class="{'active':fGTable.data.selectRow==$index}"
+                                    ng-click="fGTable.data.selectRow=$index;
+                                                         fGTable.data.selectRowData =row;" >
+                                    <td>
+                                        <input id="{{ 'fGTable_'+row.ttaFreeGoodsId}}" ng-checked="row.checked" type="checkbox"
+                                               ng-click="check(row,$event)" name="keys">
+                                    </td>
+                                    <td ng-bind="$index+1" class="w50">1</td>
+                                    <td><span>{{row.proposalOrder}}</span></td>
+                                    <td><span>{{row.vendorNbr}}</span></td>
+                                    <td><span>{{row.vendorName}}</span></td>
+                                    <td><span>{{row.brand}}</span></td>
+                                    <td><span>{{row.freeTerms}}</span></td>
+                                    <td><span>{{row.netPurchase}}</span></td><!--本年度实际折扣前采购额（含税）-->
+                                    <td><span>{{row.futerPurchase}}</span></td><!--本年度预估全年折扣前采购额（含税）-->
+                                    <td><span>{{row.groupDesc}}</span></td>
+                                    <td><span>{{row.receivFreeAmt}}</span></td><!--本年度应收免费货金额（不含税）-->
+                                    <td><span>{{row.totalContractAmt}}</span></td><!--本年度实收免费货金额-合同免费货（不含税）-->
+                                    <td><span>{{row.totalPromotionAmt}}</span></td><!--本年度实收免费货金额-促销免费货（不含税）-->
+                                    <td><span>{{row.totalSackAmt | number:0}}</span></td><!--本年度实收免费货金额-试用装免费货（不含税）-->
+                                    <td><!--货款调整金额（不含税）-->
+                                        <span ng-if="!(userType == '45')">{{row.borrowAdjAmt | number:0}}</span>
+                                        <div class="input-group input-group-xs"   style="width: 100%;" ng-if="userType == '45'">
+                                            <input class="form-control input-xs radius3-4"  name = "{{'borrowAdjAmt' + $index}}"
+                                                   ng-model="row.borrowAdjAmt" to-change-number>
+                                        </div>
+                                    </td>
+                                    <td><span>{{row.aboiRecevieAmt | number:0}}</span></td><!--ABOI实收金额（不含税）-->
+                                    <td><span>{{row.caRecevieAmt | number:0}}</span></td><!--CA实收金额（不含税）-->
+                                    <td><span>{{row.differAmt | number:0}}</span></td><!--差异-->
+                                    <td><span>{{row.changePersonName}}</span></td><!--转交人-->
+                                    <td>
+                                        <!--被转交人-->
+                                        <!--<span>{{row.transferInPersonName}}</span>-->
+                                        <div class="input-group input-group-xs"   style="width: 100%;">
+                                            <input class="form-control input-xs radius3-4"  name = "{{'transferInPersonName' + $index}}"
+                                                   ng-model="row.transferInPersonName" disabled>
+                                        </div>
+                                    </td>
+                                    <td><!--采购行动-->
+                                        <div class="input-group input-group-xs" style="width: 172px;">
+                                            <div class="input-group input-group-xs">
+                                                <!--注释-->
+                                                <!--<div lookup-code="TTA_SIX_ACTION" ng-if="row.type && row.type=='1'"
+                                                     ng-required="row.checked" name="{{'purchase'+$index}}"
+                                                     data-first-text="请选择"
+                                                     data-paramcallback="purchaseFun"
+                                                     data-row="{{fGTable.data.indexOf(row)}}"
+                                                     ng-model="row.purchaseAct"></div>-->
+
+                                                <div lookup-code="TTA_FG_ACTION" ng-if="!(row.type && row.type=='1')"
+                                                     ng-required="row.checked" name="{{'purchase'+$index}}"
+                                                     data-first-text="请选择"
+                                                     data-paramcallback="purchaseFun"
+                                                     data-row="{{fGTable.data.indexOf(row)}}"
+                                                     ng-model="row.purchaseAct"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td title="{{row.exemptionReason1}}"><!--豁免原因_1-->
+                                        <div class="input-group input-group-xs" style="width: 172px;">
+                                            <select class="form-control radius3"
+                                                    ng-change ="exemptionReasonListChangeIn(row,row.exemptionReasonList,row.exemptionReason)"
+                                                    ng-required="row.exemptionReasonList && row.exemptionReasonList.length>0 && row.checked"
+                                                    name="{{'exemptionReason'+$index}}"
+                                                    ng-model  ="row.exemptionReason">
+                                                <option value ="">{{firstText}}</option>
+                                                <option ng-bind="iterm.meaning"
+                                                        ng-repeat="iterm in row.exemptionReasonList"
+                                                        value="{{iterm.lookupCode}}"></option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td title="{{row.exemptionReason2}}"><!--豁免原因_2-->
+                                        <div class="input-group input-group-xs" style="width: 172px;">
+                                            <select class     ="form-control radius3"
+                                                    ng-required="row.exemptionReasonList2 && row.exemptionReasonList2.length>0 && row.checked"
+                                                    name="{{'exemptionReason2'+$index}}"
+                                                    ng-model  ="row.exemptionReason2">
+                                                <option value ="">{{firstText}}</option>
+                                                <option ng-bind="iterm.meaning"
+                                                        ng-repeat="iterm in row.exemptionReasonList2"
+                                                        value="{{iterm.lookupCode}}"></option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td><!--备注-->
+                                        <div class="input-group input-group-xs" style="width: 172px;" >
+                                            <input class="form-control input-xs radius3-4" ng-required="row.purchase=='A01' && row.difference <0 &&  row.checked"
+                                                   ng-model="row.remark" name="{{'remark' + $index}}"
+                                        </div>
+                                    </td>
+                     <!--               <td><span>{{row.startUserName}}</span></td>
+                                    <td><span>{{row.currentUserName}}</span></td>
+                                    <td><span>{{row.promotionStartDate}}</span></td>
+                                    <td><span>{{row.promotionEndDate}}</span></td>-->
+                                </tr>
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                        <div saaf-table-tfoot="fGTable" ng-show="fGTable.data.length>0"></div>
+                    </div>
+                </form>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+    <div lov-list="userLovList" id="userLov" role="dialog" data-title="选择用户" ng-model="code1"
+         data-url="attendanceFeeFindUser"
+         data-dynamic-params='{"userId": ""}'
+         data-callback="selecUserReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'userId','value':'userId','name':'用户id'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'用户账号','key':'userName'},{'name':'用户名','key':'userFullName'}]"
+         data-search-key="[{'key':'userId','placeholder':'用户ID'},
+                           {'key':'userName','placeholder':'用户账号'},
+                          {'key':'userFullName','placeholder':'用户名'}]"
+    >
+    </div>
+
+    <div class="modal fade" id="msgCfgModal" data-des="编辑" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        {{modalTitle}}
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm" ng-submit="btnSave()">
+                    <div class="modal-body">
+
+                        <div class="form-group col-xs-7 col-md-7">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w130">货款调整金额（不含税）</span></label>
+                                <input  type="text" class="form-control radius3" name="borrowAdjAmt"
+                                       maxlength="255" ng-model="addParams.borrowAdjAmt">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-7 col-md-7">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w130">ABOI实收金额（不含税）</span></label>
+                                <input  type="text" class="form-control radius3" name="aboiRecevieAmt"
+                                       maxlength="255" ng-model="addParams.aboiRecevieAmt">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-7 col-md-7">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w130">CA实收金额（不含税）</span></label>
+                                <input  type="text" class="form-control radius3" name="caRecevieAmt"
+                                       maxlength="255" ng-model="addParams.caRecevieAmt">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-7 col-md-7">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w130">采购行动</span></label>
+                                <input  type="text" class="form-control radius3" name="purchaseAct"
+                                       maxlength="255" ng-model="addParams.purchaseAct">
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button type="submit" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+
+
+
+
+
+</div>

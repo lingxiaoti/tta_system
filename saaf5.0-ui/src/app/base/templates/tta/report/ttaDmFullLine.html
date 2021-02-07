@@ -1,0 +1,191 @@
+<div ng-controller="ttaOiBillLineCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                        <button type="button" class="btn btn-default ng-scope"  ng-click="btnDel()">
+                            <i class="fa fa-adjust"></i>删除
+                        </button>
+                        <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify">
+                        </div>
+                    </div>
+                    <!-- 导入、下载模板start -->
+                    <div class="btn-group btn-group-xs" permission-btn-group="btnImport" ng-style="myStyle" id="isSq">
+                        <button  class="btn btn-default  a-black "  onclick="window.location.href='app/base/templates/tta/exampleFlie/ttaDmFullLine.xlsx'" ><i class="fa fa-file-excel-o"></i>下载模板</button>
+
+					<!--
+                        <button type="button" class="btn btn-default" saaf-xls-import-component data-list-options="{
+                                effectiveArea:{headName:'生效地区'},
+                                productCode:{headName:'产品编号'},
+                                productName:{headName:'产品名称'},
+                                dmPage:{headName:'DM_页数'},
+                                locationCode:{headName:'位置编码'},
+                                bmp:{headName:'BMP'},
+                                dmPament:{headName:'DM_方式'},
+                                durationPeriod:{headName:'档期期间'}
+                    }" data-url="saveImportTTADFInfo"
+                                data-info="{date:'{{params.id}}'}"
+                                data-after-action="dataTable.getData()"
+                                data-message="产品编号不可为空，档期时间格式为文本：yyyymm" >
+                            <i class="fa fa-upload"></i>导入
+                        </button>
+                       -->
+                        <button  class="btn btn-default  a-black "   ng-click="daoru()" ><i class="fa fa-upload"></i>导入</button>
+                    </div>
+                    <!-- 导入、下载模板end -->
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+
+
+                <!--------------------- 输入表单  --->
+
+                <div class=" mt10 pb5  oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form id="contractForm" name="contractForm">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>单据头信息</span>
+
+
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110">促销档期：</span></label>
+                                <input  type="text" ng-model="params.durationPeriod"
+                                        class="form-control radius3">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">生效区域：</span></label>
+                                <input  type="text" ng-model="params.effectiveArea"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">产品编号：</span></label>
+                                <input  type="text" ng-model="params.itemNbr"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><!--<p style="color: red;display: inline;">*</p>-->是否生成：</span>
+                                </label>
+                                <div  lookup-code="YES_OR_NO" required name="isCreate" ng-model="params.isCreate"></div>
+                            </div>
+                        </div>
+
+                        <div class="row"></div>
+
+
+                    </form>
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-checked-type="checkbox"
+                         data-auto-request="false"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="findTTADFPagination"
+                         data-keys="{'key':'dmFullLineId','value':'dmFullLineId','name':'主键id'}"
+                         data-legend="[
+                            {'value':'yearMonth','name':'年月'},
+                            {'value':'durationPeriod','name':'促销档期'},
+                            {'value':'dmPage','name':'DM页码'},
+                            {'value':'locationCode','name':'位置'},
+                            {'value':'effectiveArea','name':'生效区域'},
+                            {'value':'effectiveAreaCnt','name':'生效区域数'},
+                            {'value':'acceptUnit','name':'图位'},
+                            {'value':'itemNbr','name':'产品编号'},
+                            {'value':'createdByName','name':'创建人'},
+                            {'value':'creationDate','name':'创建日期'},
+                            {'value':'isCreate','name':'是否已经生成','boolean':'icon'}
+                             ]"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+    <!--excel 上传 start -->
+    <div class="modal fade" id="excelUp" data-des="EXCEL_UP" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="fileImportId">
+                        导入
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">选择文件</span></label>
+                                <input type="file" required accept="*.xlsx"  id="fileUpLoad">
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="uploadSave(funcMenuForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <!--excel 上传 end -->
+
+
+
+</div>

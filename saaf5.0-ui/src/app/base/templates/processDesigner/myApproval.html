@@ -1,0 +1,88 @@
+<div ng-controller="myApprovalCtrl" class="gridtable">
+
+        <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+            <!--------------------- 按钮--->
+            <div class="bg-gray-white bt">
+                <div class="bg-gray-white p5">
+                    <div class="pull-right ">
+                        <div class="btn-group btn-group-xs ml10">
+                            <button class="btn btn-default" type="button" ng-click="myProcessTable.search()">
+                                <i class="fa fa-search" aria-hidden="true"></i>搜索
+                            </button>
+                            <button class="btn btn-default" type="button" ng-click="myProcessTable.restore()">
+                                <i class="fa fa-undo" aria-hidden="true"></i>重置
+                            </button>
+                            <button class="btn btn-default" type="button" ng-click="bntWithdraw()" permission-btn=""
+                                    ng-disabled="!myProcessTable.selectRow || myProcessTable.selectRow.revokeStatus==='0'">
+                                <i class="fa fa-undo" aria-hidden="true"></i>撤回
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div class="btn-group btn-group-xs ">
+                        <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                            <i class="fa fa-chevron-circle-down"></i>高级查询
+                        </button>
+                        <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                            <i class="fa fa-square-o"></i>数据全屏
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!---------------------  / .按钮  --->
+            <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                <div class="nicescroll-height  bg-white " ng-nicescroll
+                     nice-option="{cursorcolor: '#333333',cursorwidth:10,zindex:1}" data-des="此节点必需-滚动内容及指令">
+                    <!--------------------- 输入表单  --->
+                    <form class=" mt10 pb5 input-form bb" input-form data-des="此节点必需－用于识别输入表单的指令">
+                        <div resp-change="" class=" col-xs-6 col-md-4 col-lg-3"></div>
+                        <div search-form
+                             data-legend="[
+                             {ngStart:'applyStartDate',ngEnd:'applyEndDate',label:'申请时间',type:'dateTimeRange'},
+                             {key:'bpm_categoryName',label:'流程分类',type:'ztreeSelect',
+                                  options:{
+                                    url:'processListCategories',
+                                    label:'流程分类',
+                                    simpledata: {enable:true,idKey:'categoryId',pIdKey:'parentId',rootPId:-1},
+                                    keys: {name:'categoryName'},
+                                    height:250,
+                                    returnValue:'categoryName',
+                                    returnKey:'categoryId'
+                                  }
+                             },
+                             {key:'billNo',label:'单据编号'},
+                             {key:'title',label:'流程标题'},
+                             {key:'drafter',label:'流程发起人'},
+                             {key:'communicated',label:'已发消息',type:'lookupCode',lookupCode:'YES_OR_NO'},
+                             {ngStart:'startDate',ngEnd:'endDate',label:'审批时间',type:'dateTimeRange'}
+                        ]"
+                             ng-model="myProcessParams"
+                        ></div>
+                    </form>
+                    <!--------------------- ./  输入表单  --->
+                    <!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+                    <div class="data-table">
+                        <div base-data-table="myProcessTable"
+                             data-url="processFindHistoricTasks" data-show-index='true'
+                             ng-params="myProcessParams"
+
+                             data-callback="[{value:'bpm_title',callback:'clickColumns'}]"
+                             data-legend='[
+                            {"value": "billNo","name": "单据编号"},
+                            {"value": "bpm_title","name": "流程标题"},
+                            {"value": "bpm_categoryName","name": "流程分类"},
+                            {"value": "bpm_userFullName","name": "流程发起人"},
+                            {"value": "bpm_startTime","name": "申请时间"},
+                            {"value": "taskName","name": "审批节点"},
+                            {"value": "bpm_statusName","name": "单据状态"},
+                            {"value": "bpm_communicated","name": "已发消息", boolean:"icon"},
+                            {"value": "endTime","name": "审批时间"},
+                            {"value": "durationDHM","name": "处理时长"}]'>
+                        </div>
+                    </div>
+                    <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+                </div>
+            </div>
+        </div>
+    </div>

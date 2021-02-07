@@ -1,0 +1,118 @@
+<div ng-controller="supplierStatusReportFormCtrl" class="gridtable">
+    <div>
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <div class="btn-group btn-group-xs ml10">
+                        <button class="btn btn-default" type="button" ng-click="search()">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="btnExport()">
+                            <i class="fa fa-upload" aria-hidden="true"></i>导出
+                        </button>
+                    </div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div main-scroll-style data-des="{{$l('此节点必需－用户计算滚动区域高度')}}">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="{{$l('此节点必需-滚动内容及指令')}}">
+
+            <!--------------------- 输入表单  --->
+
+            <form name="addForm" class=" mt10 pb5 bb oh"
+                  data-des="{{$l('此节点必需－用于识别输入表单的指令')}}">
+                <form>
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div>
+                            <label style="margin-left: 10px"><i class="fa fa-list-alt"></i>{{$l('查询结果')}}</label>
+                        </div>
+                        <div class="data-table" ng-nicescroll="" id="nicescroll_userGroupDeptBrand"
+                             nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2'}"
+                        >
+                            <table saaf-table="dataTable"
+                                   data-url="findSupplierStatusReportForm"
+                                   data-checked-type="radio"
+                                   data-auto-get-data="true"
+                                   data-page-rows="10"
+                                   class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th rowspan="2">{{$l('序号')}}</th>
+                                    <th rowspan="2">{{$l('供应商状态')}}</th>
+                                    <th colspan="1">Cosmetic</th>
+                                    <th colspan="5">PC</th>
+                                    <th colspan="1">Skin</th>
+                                    <th colspan="8">GM</th>
+                                    <th colspan="5">Health</th>
+                                </tr>
+                                <tr class="text-center">
+                                    <th>{{$l('彩妆')}}</th>
+                                    <th>{{$l('香水')}}</th>
+                                    <th>{{$l('洗护')}}</th>
+                                    <th>{{$l('纸')}}</th>
+                                    <th>{{$l('棉品')}}</th>
+                                    <th>{{$l('口腔护理')}}</th>
+                                    <th>{{$l('护肤')}}</th>
+                                    <th>{{$l('伞具')}}</th>
+                                    <th>{{$l('美容工具')}}</th>
+                                    <th>{{$l('美容仪器')}}</th>
+                                    <th>{{$l('纺织品')}}</th>
+                                    <th>{{$l('塑料制品')}}</th>
+                                    <th>{{$l('服饰辅助')}}</th>
+                                    <th>{{$l('吸湿剂')}}</th>
+                                    <th>{{$l('3C产品')}}</th>
+                                    <th>{{$l('医疗器械')}}</th>
+                                    <th>{{$l('驱蚊产品')}}</th>
+                                    <th>{{$l('食品')}}</th>
+                                    <th>{{$l('防护用品')}}</th>
+                                    <th>{{$l('足部护理')}}</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-show="dataTable.data">
+                                <tr class="text-center" ng-repeat="row in dataTable.data"
+                                    style="width:125px;height:30px"
+                                    ng-class="{'active':dataTable.data.selectRow==$index}"
+                                    ng-click="dataTable.data.selectRow=$index;
+                                     dataTable.data.selectRowData =row;">
+                                    <!--序号-->
+                                    <td>{{row.sort}}</td>
+                                    <td>{{row.status}}</td>
+                                    <td>{{row.categorySecond1}}</td>
+                                    <td>{{row.categorySecond2}}</td>
+                                    <td>{{row.categorySecond3}}</td>
+                                    <td>{{row.categorySecond4}}</td>
+                                    <td>{{row.categorySecond5}}</td>
+                                    <td>{{row.categorySecond6}}</td>
+                                    <td>{{row.categorySecond7}}</td>
+                                    <td>{{row.categorySecond8}}</td>
+                                    <td>{{row.categorySecond9}}</td>
+                                    <td>{{row.categorySecond10}}</td>
+                                    <td>{{row.categorySecond11}}</td>
+                                    <td>{{row.categorySecond12}}</td>
+                                    <td>{{row.categorySecond13}}</td>
+                                    <td>{{row.categorySecond14}}</td>
+                                    <td>{{row.categorySecond15}}</td>
+                                    <td>{{row.categorySecond16}}</td>
+                                    <td>{{row.categorySecond17}}</td>
+                                    <td>{{row.categorySecond18}}</td>
+                                    <td>{{row.categorySecond19}}</td>
+                                    <td>{{row.categorySecond20}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </form>
+        </div>
+    </div>
+</div>

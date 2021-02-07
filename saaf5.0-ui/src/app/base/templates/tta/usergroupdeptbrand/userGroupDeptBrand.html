@@ -1,0 +1,538 @@
+<div ng-controller="userGroupDeptBrandCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white p5">
+            <div class=" pull-right ml10">
+                <div class="btn-group btn-group-xs ml10" id="outputButton">
+                    <button type="button" class="btn btn-default" permission-btn=""  ng-click="btnNew('1')" ng-disabled="!usersAuthorityTable.data.selectRowData" ></button>
+                    <button type="button" class="btn btn-default" permission-btn=""  ng-click="btnSave('1')" ng-disabled="!usersAuthorityTable2.data.length>0"></button>
+                    <button type="button" class="btn btn-default" permission-btn=""  ng-click="SX('le')" ng-disabled="!usersAuthorityTable2.data.length>0"></button>
+                    <button type="button" class="btn btn-default" permission-btn=""  ng-click="btnPower()" ng-disabled="!usersAuthorityTable2.data.length>0"></button>
+                    <button type="button" class="btn btn-default"  ng-click="btnSearch()" >导入导出</button>
+                </div>
+            </div>
+            <div class=" pull-right ml10" style="    margin-right: 40%;">
+                <div class="btn-group btn-group-xs ml10" id="outputButton2">
+                    <button type="button" class="btn btn-default" permission-btn=""  ng-click="btnSave('2')"></button>
+                </div>
+            </div>
+            <div class="btn-group btn-group-xs ">
+                <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                </button>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white "
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class="col-xs-6 col-md-6 br" style="margin-right: -1px; height: 100%; ">
+
+                    <form class="  m10" ng-submit="usersAuthorityTable.getData()">
+                        <div class=" input-group-xs col-xs-3">
+                            <input type="text" class="form-control " ng-model="usersAuthorityParams.userName"
+                                   placeholder="请输入用户编号">
+                        </div>
+                        <div class=" input-group-xs col-xs-3">
+                            <input type="text" class="form-control " ng-model="usersAuthorityParams.userFullName"
+                                   placeholder="请输入用户名称">
+                        </div>
+                        <div class=" input-group-xs col-xs-3">
+                            <input type="text" class="form-control " ng-model="usersAuthorityParams.departmentName"
+                                   placeholder="请输入部门">
+                        </div>
+                        <div class="input-group input-group-xs col-xs-3 br">
+                            <div class="input-group input-group-xs">
+                                <div lookup-code="BASE_USER_DT" data-first-text="请选择类型"    ng-model="usersAuthorityParams.dataType"></div>
+                            </div>
+                            <span class="input-group-btn">
+                            <button class="btn btn-primary btn-xs "><i
+                                    class="fa fa-search"></i>
+							</button>
+                        </span>
+                        </div>
+
+                    </form>
+                    <div style="">
+                        <div class="data-table" ng-nicescroll="" id="nicescroll_userGroupDeptBrand" nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2'}"
+                                >
+                        <table saaf-table="usersAuthorityTable"
+                               data-url="userFindUsersAuthority"
+                               data-params="usersAuthorityParams"
+                               data-checked-type="radio"
+                               data-auto-get-data="false"
+                               data-page-rows="10"
+                               class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                            <thead class="bg-gray-white">
+                            <tr class="text-center">
+                                <th>序号</th>
+                                <th>用户编号</th>
+                                <th>用户姓名</th>
+                                <th>部门</th>
+                                <th>权限类型</th>
+                                <th>右边数据</th>
+                            </tr>
+                            </thead>
+                            <tbody ng-show="usersAuthorityTable.data">
+                            <tr class="text-center" ng-repeat="row in usersAuthorityTable.data"
+                                ng-class="{'active':usersAuthorityTable.data.selectRow==$index}"
+                                ng-click="usersAuthorityTable.data.selectRow=$index;
+                                     usersAuthorityTable.data.selectRowData =row;"
+                                           >
+
+                                <td ng-bind="$index+1" class="w50">1</td>
+                                <td>{{row.userName}}</td>
+                                <td>{{row.userFullName}}</td>
+                                <td>{{row.departmentName}}</td>
+                                <td>
+                                    <div class="input-group input-group-xs">
+                                        <div lookup-code="BASE_USER_DT" data-first-text="请选择类型"    ng-model="row.dataType"></div>
+                                    </div>
+                                </td>
+                                <td><a href="javascript:" ng-click="usersAuthorityParams2.userId = row.userId;usersAuthorityTable2.getData()">点我</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div saaf-table-tfoot="usersAuthorityTable" ng-show="usersAuthorityTable.data.length>0"></div>
+
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-md-6 br" style="height: 100%; " >
+                    <form class=" input-group input-group-xs mt10 mb10" ng-submit="rightSearch()">
+
+                        <div class=" input-group-xs col-xs-4">
+                            <input type="text" class="form-control " ng-model="usersAuthorityParams2.groupDesc"
+                                   placeholder="GROUP_DESC">
+                        </div>
+
+                        <div class=" input-group-xs col-xs-4">
+                            <input type="text" class="form-control " ng-model="usersAuthorityParams2.brandEn"
+                                   placeholder="BRAND_EN">
+                        </div>
+                        <div class=" input-group-xs col-xs-4">
+                            <input type="text" class="form-control " ng-model="usersAuthorityParams2.deptDesc"
+                                   placeholder="DEPT_DESC">
+                        </div>
+                        <div class=" input-group-xs col-xs-4">
+                            <input type="text" class="form-control " ng-model="usersAuthorityParams2.group"
+                                   placeholder="GROUP">
+                        </div>
+                        <div class=" input-group-xs col-xs-4">
+                            <input type="text" class="form-control " ng-model="usersAuthorityParams2.brandCn"
+                                   placeholder="BRAND_CN">
+                        </div>
+                        <div class="input-group input-group-xs col-xs-4 col-md-4 br">
+                            <input type="text" class="form-control " ng-model="usersAuthorityParams2.dept"
+                                   placeholder="DEPT">
+                            <span class="input-group-btn">
+                            <button class="btn btn-primary btn-xs "><i
+                                    class="fa fa-search"></i>
+							</button>
+                        </span></div>
+                    </form>
+
+                    <div  main-scroll-style-m data-des="此节点必需－用户计算滚动区域高度">
+                        <div class="nicescroll-height" ng-nicescroll id="nicescroll_userGroupDeptBrand2" nice-option="{{niceOpction}}"
+                                >
+                    <div class="data-table">
+                        <table
+                                saaf-table="usersAuthorityTable2"
+                                data-url="userGroupFind"
+                                data-params="usersAuthorityParams2"
+                                data-after-get-data="afterGetData()"
+                                data-auto-get-data="false"
+                                data-page-rows="25"
+                                class="nicescroll-height  table table-bordered table-hover table-condensed">
+                            <thead class="bg-gray-white">
+                            <tr class="text-center">
+                                <th>选择</th>
+                                <th>序号</th>
+                                <th>GROUP</th>
+                                <th>GROUP_DESC</th>
+                                <th ng-show="usersAuthorityTable.data.selectRowData.dataType != '1'">DEPT</th>
+                                <th ng-show="usersAuthorityTable.data.selectRowData.dataType != '1'">DEPT_DESC</th>
+                                <th ng-show="usersAuthorityTable.data.selectRowData.dataType == '3'">BRAND_CN</th>
+                                <th><div style="width: 139px;">生效时间</div></th>
+                                <th><div style="width: 139px;">失效时间</div></th>
+                                <!--<th>操作</th>-->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="text-center" ng-repeat="row in usersAuthorityTable2.data"
+                                ng-class="{'active':usersAuthorityTable2.selectRow==$index}"
+                                ng-click="usersAuthorityTable2.selectRow=$index">
+                                <td>
+                                    <input id="{{ usersAuthorityTable2 +'_'+ row.userId}}" ng-checked="row.checked" type="checkbox"
+                                           ng-click="check(row,$event)" name="keys"
+                                            >
+                                </td>
+                                <td ng-bind="$index+1" class="w50">1</td>
+                                <td>{{row.group}}</td>
+                                <td>{{row.groupDesc}}</td>
+                                <td ng-show="usersAuthorityTable.data.selectRowData.dataType != '1'">{{row.dept }}</td>
+                                <td ng-show="usersAuthorityTable.data.selectRowData.dataType != '1'">{{row.deptDesc}}</td>
+                                <td ng-show="usersAuthorityTable.data.selectRowData.dataType == '3'">{{row.brandCn}}</td>
+                                <td>
+                                    <div class="input-group input-group-xs">
+                                        <input type="text" required class="form-control radius3 input-xs"
+                                               date-time-picker data-is-today="false" name="startTime"
+                                               data-date-format="yyyy-mm-dd"
+                                               data-enddate="{{row.endTime}}"
+                                               data-min-View="2" ng-model="row.startTime"
+                                               autocomplete="off">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group input-group-xs">
+                                        <input type="text" required class="form-control radius3 input-xs"
+                                               date-time-picker data-is-today="false" name="endTime"
+                                               data-date-format="yyyy-mm-dd"  disabled
+                                               data-stratdate="{{row.startTime}}"
+                                               data-min-View="2" ng-model="row.endTime"
+                                               autocomplete="off">
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                            </div>
+                        <div saaf-table-tfoot="usersAuthorityTable2" ng-show="usersAuthorityTable2.data.length>0"></div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addEndTime" data-des="添加失效时间" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog " style="width: 500px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        添加失效时间
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">失效时间</span></label>
+                                <input type="text" required class="form-control radius3 input-xs"
+                                       date-time-picker data-is-today="false" name="endTime"
+                                       data-date-format="yyyy-mm-dd"
+                                       data-min-View="2" ng-model="addParams.endTime"
+                                       autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="save(funcMenuForm.$invalid,'checked')" data-validate-form="funcMenuForm" id="saveButton1" class="btn btn-primary mr10">确定(失效选中)</button>
+                            <button ng-click="save(funcMenuForm.$invalid,'all')" data-validate-form="funcMenuForm" id="saveButton"3 class="btn btn-primary mr10">确定(失效所有)</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+<!--    <div lov-list="userGroupDeptBrandLovList" role="dialog" data-title="用户" id="userGroupDeptBrandLov" ng-model="code1" class="  "-->
+<!--         data-url="itemFind"-->
+<!--         data-params="{findFlag:'userGroupDeptBrand'}"-->
+<!--         data-callback="selecGroupReturn"-->
+<!--         data-pagination="{'pageIndex':'1','pageRows':'5'}"-->
+<!--         data-checked-type="checkbox"-->
+<!--         data-keys="{'key':'valueAll','value':'groupCode',name:'GROUP'}"-->
+<!--         data-show-index="false"-->
+<!--         data-other-column="[-->
+<!--            {'name':'GROUP_DESC','key':'groupDesc'},-->
+<!--            {'name':'DEPT','key':'deptCode'},-->
+<!--            {'name':'DEPT_DESC','key':'deptDesc'},-->
+<!--             {'name':'BRAND_CN','key':'brandCn'}-->
+<!--        ]"-->
+<!--         data-search-key="[-->
+<!--         {'key':'groupCode','placeholder':'GROUP'},-->
+<!--         {'key':'deptCode','placeholder':'DEPT'},-->
+<!--         {'key':'brandCn','placeholder':'BRAND'},-->
+<!--         ]"-->
+<!--    >-->
+<!--    </div>-->
+
+    <div role="dialog" class="modal fade" id="userGroupDeptBrandLov" data-des="新增GROUP" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog" style="min-width: 900px">
+            <!--addModalForm start-->
+            <div class="modal-content" style="min-width: 900px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        请选择
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="userPowerParams.groupCode" class="form-control" placeholder="groupCode">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="userPowerParams.groupDesc" class="form-control" placeholder="groupDesc">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="userPowerParams.brandCn" class="form-control" placeholder="brandCn">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="userPowerParams.deptCode" class="form-control" placeholder="deptCode">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="userPowerParams.deptDesc" class="form-control" placeholder="deptDesc">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary" type="button" ng-click="userPowerTable.search(1)">查询</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="data-table">
+                            <div base-data-table="userPowerTable"
+                                 data-auto-request="true"
+                                 ng-params="userPowerParams"
+                                 data-show-index="true"
+                                 data-url="itemFind"
+                                 data-page-size = "20"
+                                 data-checked-type="checkbox"
+                                 data-keys="{'key':'valueAll'}"
+                                 data-legend="[
+                                     {'value':'groupCode','name':'GROUP_CODE'},
+                                     {'value':'groupDesc','name':'GROUP_DESC'},
+                                     {'value':'deptCode','name':'DEPT_CODE'},
+                                     {'value':'deptDesc','name':'DEPT_DESC'},
+                                     {'value':'brandCn','name':'BRAND_CN'},
+                                    ]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="selecGroupReturn()" class="btn btn-warning btn-sm">
+                        <span class="fa fa-plus"> 确定新增</span></button>
+                    <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal" aria-label="Close"><span
+                            class="fa ">取消</span>
+                    </button>
+                </div>
+            </div>
+            <!--addModalForm end-->
+        </div>
+    </div>
+
+    <div role="dialog" class="modal fade" id="userGroupLov" data-des="新增GROUP" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog" style="min-width: 900px">
+            <!--addModalForm start-->
+            <div class="modal-content" style="min-width: 900px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        请选择
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="userPowerParamsGroup.groupCode" class="form-control" placeholder="groupCode">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="userPowerParamsGroup.groupDesc" class="form-control" placeholder="groupDesc">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary" type="button" ng-click="userPowerGroupTable.search(1)">查询</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="data-table">
+                            <div base-data-table="userPowerGroupTable"
+                                 data-auto-request="true"
+                                 ng-params="userPowerParamsGroup"
+                                 data-show-index="true"
+                                 data-url="itemFind"
+                                 data-page-size = "20"
+                                 data-checked-type="checkbox"
+                                 data-keys="{'key':'groupCode'}"
+                                 data-legend="[
+                                     {'value':'groupCode','name':'GROUP_CODE'},
+                                     {'value':'groupDesc','name':'GROUP_DESC'}
+                                    ]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="selecGroupReturn()" class="btn btn-warning btn-sm">
+                        <span class="fa fa-plus"> 确定新增</span></button>
+                    <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal" aria-label="Close"><span
+                            class="fa ">取消</span>
+                    </button>
+                </div>
+            </div>
+            <!--addModalForm end-->
+        </div>
+    </div>
+
+<!--    <div lov-list="userGroupLovList" role="dialog" data-title="用户" id="userGroupLov" ng-model="code1" class="  "-->
+<!--         data-url="itemFind"-->
+<!--         data-params="{findFlag:'findGroup'}"-->
+<!--         data-callback="selecGroupReturn"-->
+<!--         data-pagination="{'pageIndex':'1','pageRows':'5'}"-->
+<!--         data-checked-type="checkbox"-->
+<!--         data-keys="{'key':'groupCode','value':'groupCode',name:'GROUP'}"-->
+<!--         data-show-index="false"-->
+<!--         data-other-column="[-->
+<!--            {'name':'GROUP_DESC','key':'groupDesc'}-->
+<!--        ]"-->
+<!--         data-search-key="[-->
+<!--         {'key':'groupCode','placeholder':'GROUP'},-->
+<!--         {'key':'groupDesc','placeholder':'GROUP_DESC'}-->
+<!--         ]"-->
+<!--    >-->
+<!--    </div>-->
+
+    <div data-auto-request="true" data-callback="selectUserReturn" data-checked-type="radio"
+         data-other-column="[{key:'userName',name:'账号'},{key:'userFullName',name:'员工姓名'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'userFullName','placeholder':'请输入员工姓名'},{'key':'userName','placeholder':'请输入员工账号'}]"
+         data-show-index="false"
+         data-title="选择权限赋值方"
+         data-type="competitor"
+         data-keys="{'key':'userName','value':'userFullName','name':'账号',hide:'true'}"
+         data-url="processFindInternalUsers"
+         id="nameTtaUserGroupDeptBrandId"
+         lov-list="nameTtaUserGroupDeptBrandLov"
+         ng-model="current.em"
+         role="dialog"
+    >
+    </div>
+
+<!--    <div lov-list="userGroupDeptBrandLovList" role="dialog" data-title="用户" id="userGroupDeptLov" ng-model="code1" class="  "-->
+<!--         data-url="itemFind"-->
+<!--         data-params="{findFlag:'findGroupDept'}"-->
+<!--         data-callback="selecGroupReturn"-->
+<!--         data-pagination="{'pageIndex':'1','pageRows':'5'}"-->
+<!--         data-checked-type="checkbox"-->
+<!--         data-keys="{'key':'valueAll','value':'groupCode',name:'GROUP'}"-->
+<!--         data-show-index="false"-->
+<!--         data-other-column="[-->
+<!--            {'name':'GROUP_DESC','key':'groupDesc'},-->
+<!--            {'name':'DEPT','key':'deptCode'},-->
+<!--            {'name':'DEPT_DESC','key':'deptDesc'}-->
+<!--        ]"-->
+<!--         data-search-key="[-->
+<!--         {'key':'groupCode','placeholder':'GROUP'},-->
+<!--         {'key':'deptCode','placeholder':'DEPT'},-->
+<!--         ]"-->
+<!--    >-->
+<!--    </div>-->
+
+    <div role="dialog" class="modal fade" id="userGroupDeptLov" data-des="新增GROUP" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog" style="min-width: 900px">
+            <!--addModalForm start-->
+            <div class="modal-content" style="min-width: 900px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        请选择
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="userPowerParamsDept.groupCode" class="form-control" placeholder="groupCode">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="userPowerParamsDept.groupDesc" class="form-control" placeholder="groupDesc">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="userPowerParamsDept.deptCode" class="form-control" placeholder="deptCode">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="userPowerParamsDept.deptDesc" class="form-control" placeholder="deptDesc">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-4">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary" type="button" ng-click="userPowerDeptTable.search(1)">查询</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="data-table">
+                            <div base-data-table="userPowerDeptTable"
+                                 data-auto-request="true"
+                                 ng-params="userPowerParamsDept"
+                                 data-show-index="true"
+                                 data-url="itemFind"
+                                 data-page-size = "20"
+                                 data-checked-type="checkbox"
+                                 data-keys="{'key':'valueAll'}"
+                                 data-legend="[
+                                     {'value':'groupCode','name':'GROUP_CODE'},
+                                     {'value':'groupDesc','name':'GROUP_DESC'},
+                                     {'value':'deptCode','name':'DEPT_CODE'},
+                                     {'value':'deptDesc','name':'DEPT_DESC'},
+                                    ]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="selecGroupReturn()" class="btn btn-warning btn-sm">
+                        <span class="fa fa-plus"> 确定新增</span></button>
+                    <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal" aria-label="Close"><span
+                            class="fa ">取消</span>
+                    </button>
+                </div>
+            </div>
+            <!--addModalForm end-->
+        </div>
+    </div>
+
+</div>

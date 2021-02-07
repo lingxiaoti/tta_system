@@ -1,0 +1,197 @@
+<div ng-controller="dealerApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOrUpdateApDetrv"
+         data-api-get="findApDetrvDetailById" data-api-del="" data-api-update="updateApDetrv">
+        <div class="col-md-12 pt15">
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" data-load-callback="respCallback" style="display: none"></div>
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div class="row pb10">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                    {key:'deptName',label:'申请部门',readonly:true,required:true},
+                    {key:'personName',label:'申请人',readonly:true,required:true},
+                    {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                    {key:'billNo',label:'申请单号',readonly:true},
+                    {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                    {key:'statusStr',label:'状态',readonly:true},
+                    {key:'detrvType',label:'转款类型',type:'lookCode',lookCode:'OA_DETRV_TYPE',required:true},
+                  ]"
+                     ng-model="formParams"
+                ></div>
+                <div class="form-group col-xs-6 col-md-4" ng-if="formParams.detrvType==2">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>调拨单号</span></label>
+
+                        <input type="text" class="form-control radius3" name="tranNo"
+                               ng-model="formParams.tranNo" max-length="20" required >
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>申请原因</span></label>
+                        <textarea class="form-control" rows="1" auto-textarea="" max-length="1000" title="字数限制1000" placeholder="字数限制1000" ng-model="formParams.trvReason" required name="trvReason" style="height: auto"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="" >
+                <label><span class="fa fa-cog mr15"></span>转出经销商<span class="red" ng-bind="inputErrors"></span>
+                </label>
+                <button type="button" class="btn btn-default btn-xs pull-right"
+                        ng-click="table.addTableRows()"
+                        ng-show="childData.isEdit"
+                ><i class="fa fa-plus">增加</i></button>
+            </div>
+    
+            <div class="" >
+                <div base-data-table-edit="table"
+                    data-legend="[
+                        {value:'deCode',name:'经销商编码',type:'lov',required:true,disabled:true,target:'#deCode1',callback:'setRowIndex1'},
+                        {value:'deName',name:'经销商名称',disabled:true},
+                        {value:'pSku',name:'转出SKU',type:'lov',disabled:true,target:'#codeLovSkuOne',callback:'setRowIndex3'},
+                        {value:'pSkuName',name:'转出产品',disabled:true},
+                        {value:'pNum',name:'数量(听/盒)',validFormat:'number=2',maxlength:'11',placeholder:'请输入正整数'},
+                        {value:'cashM',name:'增加现金金额',validFormat:'number=8',validOtherFormat:[{key:'integer',value:'10'}]},
+                        {value:'dzcpM',name:'增加等值产品金额',validFormat:'number=8',validOtherFormat:[{key:'integer',value:'10'}]},
+                        {value:'dzxjM',name:'增加等值现金金额',validFormat:'number=8',validOtherFormat:[{key:'integer',value:'10'}]},
+                    ]"
+                        ng-model="formParams"
+                        data-form-params-key="items"
+                        data-show-total="true"
+                        data-count-key="['pNum','cashM','dzcpM','dzxjM']"
+                ></div>
+    
+            </div>
+    
+            <div class="" >
+                <label><span class="fa fa-cog mr15"></span>转入经销商<span class="red" ng-bind="inputErrors"></span>
+                </label>
+                <button type="button" class="btn btn-default btn-xs pull-right"
+                        ng-click="secItems.addTableRows()"
+                        ng-hide="action=='detail'"
+                ><i class="fa fa-plus">增加</i></button>
+            </div>
+    
+            <div class="" >
+                <div base-data-table-edit="secItems"
+                        data-legend="[
+                        {value:'deCode',name:'经销商编码',type:'lov',required:true,disabled:true,target:'#deCode2',callback:'setRowIndex2'},
+                        {value:'deName',name:'经销商名称',disabled:true},
+                        {value:'pSku',name:'转入SKU',type:'lov',disabled:true,target:'#codeLovSkuTwo',callback:'setRowIndex4'},
+                        {value:'pSkuName',name:'转入产品',disabled:true},
+                        {value:'pNum',name:'数量(听/盒)',validFormat:'number=2',maxlength:'11',placeholder:'请输入正整数'},
+                        {value:'cashM',name:'减少现金金额',validFormat:'number=8',validOtherFormat:[{key:'integer',value:'10'}]},
+                        {value:'dzcpM',name:'减少等值产品金额',validFormat:'number=8',validOtherFormat:[{key:'integer',value:'10'}]},
+                        {value:'dzxjM',name:'减少等值现金金额',validFormat:'number=8',validOtherFormat:[{key:'integer',value:'10'}]},
+                    ]"
+                        ng-model="formParams"
+                        data-form-params-key="secItems"
+                        data-show-total="true"
+                        data-count-key="['pNum','cashM','dzcpM','dzxjM']"
+                ></div>
+    
+            </div>
+        </div>
+        <div class="col-md-12 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+        
+    </div>
+    <div lov-list="personCusBankPaginatioLov"
+        id="deCode1" 
+        ng-model="code4"
+        data-url="findCustomerPagination"
+        data-dynamic-params="customerParams"
+        data-callback="setRowInput1"
+        data-cancel-callback="personCusBankCancelCallback"
+        data-auto-request = 'false'
+        data-title="请选择"
+        data-checked-type="radio"
+        data-search-key="[{'key':'customerNumber','placeholder':'经销商编码'},{'key':'customerName','placeholder':'经销商名称'}]"
+        data-keys="{'key':'customerName','value':'customerNumber',hide:true}"
+        data-other-column="[{'name':'经销商编码','key':'customerNumber'},{'name':'经销商名称',key:'customerName'}]"
+    ></div>
+    <div lov-list="personCusBankPaginatioLov" 
+        id="deCode2" 
+        ng-model="code4"
+        data-url="findCustomerPagination"
+        data-dynamic-params="customerParams"
+        data-callback="setRowInput2"
+        data-cancel-callback="personCusBankCancelCallback"
+        data-auto-request = 'false'
+        data-title="请选择"
+        data-checked-type="radio"
+        data-search-key="[{'key':'customerNumber','placeholder':'经销商编码'},{'key':'customerName','placeholder':'经销商名称'}]"
+        data-keys="{'key':'customerName','value':'customerNumber',hide:true}"
+        data-other-column="[{'name':'经销商编码','key':'customerNumber'},{'name':'经销商名称',key:'customerName'}]" 
+    ></div>
+
+    <div lov-list="codeLov"
+         role="dialog"
+         id="codeLovSkuOne"
+         ng-model="code1"
+         data-url="ProductInfoLovByResp"
+         data-callback="setRowInput3"
+         data-auto-request = 'false'
+         data-title="请选择"
+         dynamic-params="warehouseParams"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-keys="{'key':'productId','value':'itemCode',hide:true}"
+         data-show-index="true"
+         data-type="competitor"
+         data-other-column="[{'name':'产品编码',key:'itemCode'},{'name':'产品名称','key':'itemName'}]"
+         data-search-key="[{'key':'itemCode_like','placeholder':'产品编码'},{'key':'itemName_like','placeholder':'产品名称'}]"
+    >
+    </div>
+    <div lov-list="codeLov"
+         role="dialog"
+         data-title="请选择"
+         id="codeLovSkuTwo"
+         ng-model="code1"
+         data-url="ProductInfoLovByResp"
+         dynamic-params="warehouseParams"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-auto-request = 'false'
+         data-keys="{'key':'productId','value':'itemCode',hide:true}"
+         data-show-index="true"
+         data-type="competitor"
+         data-callback="setRowInput4"
+         data-other-column="[{'name':'产品编码',key:'itemCode'},{'name':'产品名称','key':'itemName'}]"
+         data-search-key="[{'key':'itemCode_like','placeholder':'产品编码'},{'key':'itemName_like','placeholder':'产品名称'}]"
+    >
+    </div>
+
+    <!--<div lov-list="applicant" role="dialog" data-title="请选择产品" id="productSku1" ng-model="code1"
+        data-url="findPaginationHrBirth"
+        data-pagination="{'pageIndex':'1','pageRows':'5'}"
+        data-checked-type="radio"
+        data-keys="{'key':'itemName','value':'itemCode',name:'产品SKU'}"
+        data-other-column="[
+                  {'name':'产品名称','key':'itemName'},
+                  {'name':'单位','key':'unit_'},
+                 ]"
+        data-show-index="false"
+        data-search-key="[{'key':'itemName','placeholder':'产品名称'},{'key':'itemCode','placeholder':'产品SKU'}]"
+        data-callback="setRowInput3"
+    ></div>
+    <div lov-list="applicant" role="dialog" data-title="请选择产品" id="productSku2" ng-model="code1"
+        data-url="findPaginationHrBirth"
+        data-pagination="{'pageIndex':'1','pageRows':'5'}"
+        data-checked-type="radio"
+        data-keys="{'key':'itemName','value':'itemCode',name:'产品SKU'}"
+        data-other-column="[
+                  {'name':'产品名称','key':'itemName'},
+                  {'name':'单位','key':'unit_'},
+                 ]"
+        data-show-index="false"
+        data-search-key="[{'key':'itemName','placeholder':'产品名称'},{'key':'itemCode','placeholder':'产品SKU'}]"
+        data-callback="setRowInput4"
+    ></div>-->
+    
+</div>

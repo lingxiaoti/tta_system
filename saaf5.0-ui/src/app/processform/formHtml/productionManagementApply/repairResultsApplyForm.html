@@ -1,0 +1,89 @@
+<!-- Created by lijiayao on 2018-08-21 -->
+<div ng-controller="repairResultsApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOaWorkshopRepair"
+         data-api-get="findOaWorkshopRepairById" data-api-del="" data-api-update="updateOaWorkshopRepairPc">
+        <div class="col-md-12 pt15" id="tab1">
+            <h5><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'deptName',label:'申请部门',disabled:true,required:true},
+                        {key:'personName',label:'申请人',disabled:true,required:true},
+                        {key:'positionName',label:'职位',disabled:true,type:'lov',disabled:true,target:'#positionByPersonModel',required:true},
+                        {key:'billNo',label:'申请单号',disabled:true},
+                        {key:'requestDate',label:'申请时间',type:'time',disabled:true},
+                        {key:'statusStr',label:'状态',disabled:true},
+                        ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'repairAddress',label:'报修点',required:true,type:'lookCode',lookCode:'OA_REPAIR_ADDR',disabled:true},
+                        {key:'repairDept',label:'维修单位',required:true,type:'lookCode',lookCode:'OA_REPAIR_DEPT',disabled:true},
+                    ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>申请原因</span></label>
+                        <textarea class="form-control" rows="3" ng-model="formParams.applyReason" ng-disabled="true" required name="applyReason" style="height: auto"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="input-group input-group-xs noEdit">
+                <label class="input-group-addon bn">
+                    <span class="w100">报修图片上传</span>
+                </label>
+                <input saaf-img="" data-img-url="row.accessPath" data-has-up="false"
+                       data-delete-action="imGdeleteAction(logo1Img,row)"
+                       ng-repeat="row in logo1Img ">
+                <input saaf-img data-max-length="5"
+                       data-add-action="imgAddAction(logo1Img,'','',$returnMessage)">
+            </div>
+        </div>
+        <!-- 报修结果 -->
+        <div id="tab2" class="col-md-12 pt15">         
+            <h5><span class="fa fa-cog mr15"></span>维修结果</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="col-md-12 pt15">
+                <div class="row">
+                    <div search-list
+                        data-col="6"
+                        data-legend="[
+                            {key:'personName2',label:'维修接收人',required:true},
+                            {key:'repairCosts',label:'维修费用',required:true,number:8},
+                            ]"
+                        ng-model="formParams"
+                    ></div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-6 col-md-12">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100"><i class="red">*</i>故障检测结果<br/>（技术员）<br/>及维修途径</span></label>
+                        <textarea class="form-control" rows="3" ng-model="formParams.repairResult" maxlength="500" placeholder="字数限制500" required name="repairResult" style="height: auto"></textarea>
+                        <!-- <input class="form-control" ng-model="formParams.formParams.repairResult" name="repairResult" required/> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div search-list
+                            data-col="6"
+                            data-legend="[
+                            {key:'deviceInfo',label:'设备情况',required:true,type:'lookCode',lookCode:'OA_DEVICE_INFO'},
+                            ]"
+                            ng-model="formParams"
+                    ></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

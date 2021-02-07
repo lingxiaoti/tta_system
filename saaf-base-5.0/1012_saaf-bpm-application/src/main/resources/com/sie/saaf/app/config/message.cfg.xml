@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+	<bean id="messageConfig" class="com.sie.saaf.bpm.configure.MessageConfig">
+		<property name="synchro">
+			<value><![CDATA[Y]]></value>
+		</property>
+		<property name="url">
+			<value><![CDATA[[server]/messageServer/messageService/sendMessage]]></value>
+		</property>
+		<property name="pcJumpUrl">
+			<!--<value><![CDATA[https://10.82.28.85/#/base?returnURL=]]></value>-->
+			<!--<value><![CDATA[http://localhost:63342/saaf5.0-ui/src/index.html#/base/entrance?returnURL=]]></value>-->
+			<!--<value><![CDATA[http://wtccn-vm-sdst/portal/login.aspx]]></value>-->
+			<!--正式环境 start-->
+			<!--<value><![CDATA[http://wtccn-gz-ept/Portal/Login.aspx]]></value>-->
+			<value><![CDATA[http://wtccn-watsonsportal:2020/wui/index.html#/?logintype=1&_key=7qlz7s]]></value>
+			<!--正式环境 end-->
+		</property>
+		<property name="mobJumpUrl">
+			<value><![CDATA[]]></value>
+		</property>
+
+		<!-- 待办 -->
+		<property name="todoTurn">
+			<value>1</value>
+		</property>
+		<property name="todoChannel">
+			<value><![CDATA[EMAIL]]></value>
+		</property>
+		<property name="todoTitle">
+			<value><![CDATA[[Title] 请审批]]></value>
+		</property>
+		<property name="todoContent">
+			<value><![CDATA[[Title] 请审批]]></value>
+		</property>
+
+		<!-- 委托审批 -->
+		<property name="delegateTurn">
+			<value>1</value>
+		</property>
+		<property name="delegateChannel">
+			<value><![CDATA[EMAIL]]></value>
+		</property>
+		<property name="delegateTitle">
+			<value><![CDATA[[Title] 请审批]]></value>
+		</property>
+		<property name="delegateContent">
+			<value><![CDATA[[Title] 请审批]]></value>
+		</property>
+
+		<!-- 审批通过 -->
+		<property name="endTurn">
+			<value>1</value>
+		</property>
+		<property name="endChannel">
+			<value><![CDATA[EMAIL]]></value>
+		</property>
+		<property name="endTitle">
+			<value><![CDATA[[Title] 审批通过]]></value>
+		</property>
+		<property name="endContent">
+			<value><![CDATA[[Title] 审批通过]]></value>
+		</property>
+
+		<!-- 审批驳回 -->
+		<property name="rejectTurn">
+			<value>1</value>
+		</property>
+		<property name="rejectChannel">
+			<value><![CDATA[EMAIL]]></value>
+		</property>
+		<property name="rejectTitle">
+			<value><![CDATA[[Title] 审批驳回]]></value>
+		</property>
+		<property name="rejectContent">
+			<value><![CDATA[[Title] 审批驳回]]></value>
+		</property>
+
+		<!-- 待阅 -->
+		<property name="ccTurn">
+			<value>1</value>
+		</property>
+		<property name="ccChannel">
+			<value><![CDATA[EMAIL]]></value>
+		</property>
+		<property name="ccTitle">
+			<value><![CDATA[[Title] 请查阅]]></value>
+		</property>
+		<property name="ccContent">
+			<value><![CDATA[[Title] 请查阅]]></value>
+		</property>
+
+		<!-- 发起沟通 -->
+		<property name="communicateTurn">
+			<value>1</value>
+		</property>
+		<property name="communicateChannel">
+			<value><![CDATA[EMAIL]]></value>
+		</property>
+		<property name="communicateTitle">
+			<value><![CDATA[[Title] 请查阅]]></value>
+		</property>
+
+		<!-- 催办 -->
+		<property name="urgeTurn">
+			<value>1</value>
+		</property>
+		<property name="urgeChannel">
+			<value><![CDATA[EMAIL]]></value>
+		</property>
+		<property name="urgeTitle">
+			<value><![CDATA[[Title] 请审批]]></value>
+		</property>
+		<property name="urgeContent">
+			<value><![CDATA[[Title] 请审批]]></value>
+		</property>
+
+		<!-- 消息配置 -->
+		<property name="configs">
+			<list>
+				<value><![CDATA[{msgCfgId:"",ouId:261,userName:"OAUser261",password:"12345678",msgType:"SMS"}]]></value>
+				<value><![CDATA[{msgCfgId:"",ouId:261,userName:"OAUser261",password:"12345678",msgType:"WECHAT"}]]></value>
+				<value><![CDATA[{msgCfgId:13,ouId:261,userName:"OAUser261",password:"12345678",msgType:"EMAIL"}]]></value>
+				<value><![CDATA[{msgCfgId:3,ouId:3001,userName:"OAUser261",password:"12345678",msgType:"EMAIL"}]]></value>
+				<value><![CDATA[{msgCfgId:22,ouId:3002,userName:"OAUser261",password:"12345678",msgType:"EMAIL"}]]></value>
+				<value><![CDATA[{msgCfgId:90101,ouId:261,userName:"OAUser261",password:"12345678",msgType:"INMAIL"}]]></value>
+			</list>
+		</property>
+	</bean>
+</beans>

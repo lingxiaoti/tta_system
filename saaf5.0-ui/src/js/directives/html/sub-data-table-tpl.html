@@ -1,0 +1,14 @@
+<div class="sub-data-table" ng-style="tableStyle" ng-show="tableShow">
+	<div class="top-arrows" ng-show="position==='top'"></div>
+	<div  class="p15">
+		<div base-data-table="{{ id }}" id="{{ id }}"
+			 data-auto-request="false"
+			 data-show-index="true"
+			 ng-params="ngParams"
+			 data-url="{{ url }}"
+			 data-page-size="{{ pageSize}}"
+			 data-legend="{{ legend }}"
+		></div>
+	</div>
+	<div class="bottom-arrows" ng-show="position==='bottom'"></div>
+</div>

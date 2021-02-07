@@ -1,0 +1,180 @@
+<div ng-controller="oiReportHeaderCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+            <!--------------------- 按钮--->
+            <div class="bg-gray-white bt">
+                <div class="bg-gray-white p5">
+                    <div class="pull-right">
+                        <div class="btn-group btn-group-xs ">
+                            <button class="btn btn-default" type="button" ng-click="params.respId=ctrlRespId;dataTable.search(1)">
+                                <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                            </button>
+                            <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                                <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                            </button>
+                        </div>
+                        <div class="btn-group btn-group-xs ml10" permission-buttons="btnNew,btnModify,FBOI"></div>
+
+                        <button class="btn btn-default btn-xs" id="confirmTrems" ng-click="FBOI('Y')" ng-if="dataTable.selectRow.confirmStatus == 'N'"
+                                          ng-show="true" type="button" ng-disabled="!dataTable.selectRow" >
+                        <i class="fa fa-check">确认</i>
+                    </button>
+
+                        <button class="btn btn-default btn-xs" id="CancelConfirmTrems"  ng-if="dataTable.selectRow.confirmStatus == 'Y'"
+                                ng-click="FBOI('N')"
+                                ng-show="true" type="button"  ng-disabled="!dataTable.selectRow">
+                            <i class="fa fa-arrows-h">取消确认</i>
+                        </button>
+
+                    </div>
+
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn  btn-warning" ng-click="moreInput($event)">
+                            <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                        </button>
+                        <button class="btn btn-primary" ng-click="fullWindow($event)">
+                            <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!---------------------  / .按钮  --->
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <div search-form
+                         data-legend="[
+                            {key:'batchId',label:'批次号'},
+                            {key:'status',label:'单据状态',type:'lookCode',lookCode:'TTA_OI_STATUS'}
+                        ]"
+                         ng-model="params"
+                    ></div>
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="true"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="oiReportHeaderFind"
+                         data-legend="[
+                             {'value':'batchCode','name':'批次号'},
+                             {'value':'createUserName','name':'制单人'},
+                             {'value':'creationDate','name':'制单日期'},
+                             {'value':'confirmStatus','name':'确认状态','boolean':'icon'},
+                             {'value':'isPublish','name':'是否发布','boolean':'icon'},
+                             {'value':'isPublishByName','name':'发布人'},
+                             {'value':'isPublishDate','name':'发布时间'}
+                         ]"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+    <div lov-list="selectTtaOiCwList" role="dialog" data-title="C&W【新增】" id="selectTtaOiCw" ng-model="current.em"
+         data-url="findPogPagination"
+         data-dynamic-params='{"flag": "CREATE"}'
+         data-callback="selectCwReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'pogSpaceLineId','value':'promotionSection','name':'促销期间'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'是否生成','key':'isCreate'}]"
+         data-search-key="[{'key':'promotionSection','placeholder':'促销期间'},
+                              {'key':'isCreate','placeholder':'是否已经生成'}]"
+    >
+    </div>
+
+    <div lov-list="selectTtaOiOSDList" role="dialog" data-title="OSD【新增】" id="selectTtaOiOSD" ng-model="current.em"
+         data-url="findTtaOsdBaseLinePagination"
+         data-dynamic-params='{"flag": "CREATE"}'
+         data-callback="selectOSDReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'osdBaseLineId','value':'promotionSection','name':'促销期间'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'是否生成','key':'isCreate'}]"
+         data-search-key="[{'key':'promotionSection','placeholder':'促销期间'},
+                              {'key':'isCreate','placeholder':'是否已经生成'}]"
+    >
+    </div>
+
+
+    <!--GP start -->
+        <div class="modal fade" id="selectTtaOiGP" data-des="生成YTD GP% Simulation_sample单据" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close"
+                                data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            生成YTD GP% Simulation_sample单据
+                        </h4>
+                    </div>
+                    <form class="ngValid" name="funcMenuForm"  >
+
+                        <div class="modal-body">
+
+                            <div class="form-group col-xs-9 col-md-9">
+                                <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                        <span class="w100"><i class="red ">*</i>选择日期</span></label>
+                                    <input type="text" class="form-control radius3"
+                                           required date-time-picker="" data-date-format="yyyy-mm"
+                                           data-start-view="3" data-min-view="3" data-max-view="3"
+                                           name="endDate" readonly="readonly"
+                                           ng-model="currentData.endDate " id="endDate">
+                                </div>
+                            </div>
+
+                            <div class="cb"></div>
+                        </div>
+
+                        <div class="modal-footer ">
+                            <div style="text-align:center">
+                                <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                                </button>
+                                <button ng-click="selectGpReturn(funcMenuForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+    <!--GP end -->
+
+
+
+    <div lov-list="selectTtaOiHwbList" role="dialog" data-title="HWB【新增】" id="selectTtaOiHwb" ng-model="current.em"
+         data-url="findHwbPagination"
+         data-dynamic-params='{"flag": "CREATE"}'
+         data-callback="selectHwbReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'pogSpaceLineId','value':'promotionSection','name':'促销期间'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'是否生成','key':'isCreate'}]"
+         data-search-key="[{'key':'promotionSection','placeholder':'促销期间'},
+                              {'key':'isCreate','placeholder':'是否已经生成'}]"
+    >
+    </div>
+
+
+
+</div>

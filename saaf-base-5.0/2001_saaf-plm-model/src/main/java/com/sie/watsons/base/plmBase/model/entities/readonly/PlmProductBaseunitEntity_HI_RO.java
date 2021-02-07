@@ -1,0 +1,106 @@
+package com.sie.watsons.base.plmBase.model.entities.readonly;
+
+import java.util.Date;
+
+import com.alibaba.fastjson.annotation.JSONField;
+
+/**
+ * PlmProductBaseunitEntity_HI_RO Entity Object Tue Feb 11 15:25:18 CST 2020
+ * Auto Generate
+ */
+
+public class PlmProductBaseunitEntity_HI_RO {
+	public static final String Query = "select id,unit_name as unitName,unit_desc as unitDesc from plm_product_baseunit where 1=1";
+	private Integer id;
+	private String unitName;
+	private String unitDesc;
+	private Integer versionNum;
+	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
+	private Date creationDate;
+	private Integer createdBy;
+	private Integer lastUpdatedBy;
+	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
+	private Date lastUpdateDate;
+	private Integer lastUpdateLogin;
+	private Integer operatorUserId;
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setUnitName(String unitName) {
+		this.unitName = unitName;
+	}
+
+	public String getUnitName() {
+		return unitName;
+	}
+
+	public void setUnitDesc(String unitDesc) {
+		this.unitDesc = unitDesc;
+	}
+
+	public String getUnitDesc() {
+		return unitDesc;
+	}
+
+	public void setVersionNum(Integer versionNum) {
+		this.versionNum = versionNum;
+	}
+
+	public Integer getVersionNum() {
+		return versionNum;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreatedBy(Integer createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Integer getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setLastUpdatedBy(Integer lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
+	}
+
+	public Integer getLastUpdatedBy() {
+		return lastUpdatedBy;
+	}
+
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
+	}
+
+	public Date getLastUpdateDate() {
+		return lastUpdateDate;
+	}
+
+	public void setLastUpdateLogin(Integer lastUpdateLogin) {
+		this.lastUpdateLogin = lastUpdateLogin;
+	}
+
+	public Integer getLastUpdateLogin() {
+		return lastUpdateLogin;
+	}
+
+	public void setOperatorUserId(Integer operatorUserId) {
+		this.operatorUserId = operatorUserId;
+	}
+
+	public Integer getOperatorUserId() {
+		return operatorUserId;
+	}
+}

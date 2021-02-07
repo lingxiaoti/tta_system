@@ -1,0 +1,538 @@
+<div class="bigdata" ng-controller="contractTermsCtrl">
+    <div data-api-get="proposalFindById"
+         data-api-post="proposalSave"
+         data-api-update="proposalSave"
+         id="processForm">
+    </div>
+    <style type="text/css">
+        th {
+            text-align: center;
+        }
+        #anlysis_4 th{
+            background:#D8D8EB !important;
+        }
+
+          /*@media print {
+              @page {
+                  size: A4 portrait; //正向打印
+                  size: A4 landscape; //横向打印
+              }
+              #printTradeId {
+                  width: 188%;
+                  transform: scale(0.53);
+                  -webkit-transform-origin-x: 0;
+                  -webkit-transform-origin-y: 0;
+                  overflow-y: hidden;
+                  overflow-x: hidden;
+              }
+         }*/
+
+        div {
+            font-family: 微软雅黑;
+        }
+
+        .spanBold {
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        .divTable {
+            float: left;
+            width: 49%;
+            min-height: 1065px;
+            border: 1px solid black;
+        }
+
+        .proposalReport {
+            background-color: #1e90c2 !important;
+        }
+
+        .font {
+            font-size: 12px;
+        }
+        .tdWidth {
+            width: 115px;
+        }
+        .thWidthAndHeight{
+            width:35%;
+        }
+
+       /* 如下为设置品牌计划颜色 start*/
+        .brandHeadThColorAndActual {
+            color: #fff;
+            background-color: #808080;
+        }
+
+        .brandHeadThColorAndFuture {
+            color: #fff;
+            background-color: #4F6228;
+        }
+
+        .brandLineInfoColor {
+            color: #fff;
+            background-color:#919191;
+        }
+
+        .brandLineContentBrandInfo {
+            background-color: #BFBFBF;
+        }
+
+        .brandLineContentActual {
+            background-color: #EAEAEA;
+        }
+        .brandLineContentFuture {
+            background-color: #D8E4BC;
+        }
+        /* 如下为设置品牌计划颜色 end*/
+    </style>
+
+    <div data-des="此节点必需－用户计算滚动区域高度" main-scroll-style>
+        <div class="nicescroll-height  bg-white" data-des="此节点必需-滚动内容及指令"
+             ng-nicescroll
+             nice-option="{cursorcolor: '#009E96',cursorwidth:10,zindex:10,autohidemode:false}">
+            <!--niceOpction  {{niceOpction}}-->
+            <a style="text-decoration:none" id="printPDFirst" ng-show="printPDFFlag">&nbsp;</a>
+            <div class="col-xs-12 col-md-12 br p0">
+                <ul class="nav nav-tabs" id="tab" ng-show="!isPdfPrint">
+                   <!-- <li class="active" ng-click="tabChangeInfo('tradeClause')">-->
+                    <li class="active">
+                        <a data-toggle="tab" href="#tradeClause"><i class="fa fa-list-alt"></i>
+                            <label>贸易条款</label></a>
+                    </li>
+
+                    <li ng-show="ttaDeptFeeReportTable != null && ttaDeptFeeReportTable.length != 0 && isDmOtherStandard">
+                   <!-- <li ng-click="tabChangeInfo('ttaDeptFeeReport')" ng-show="ttaDeptFeeReportTable != null && ttaDeptFeeReportTable.length != 0 && isDmOtherStandard">-->
+                        <a data-toggle="tab" href="#ttaDeptFeeReport"><i class="fa fa-list-alt"></i>
+                            <label> 贸易协议</label></a>
+                    </li>
+
+                  <!--  <li  ng-if="!urlParams.businessKey"  role="presentation" ng-click="tabChangeInfo('opnProcess')">
+                        <a data-toggle="tab" href="#opnProcess"><i class="fa fa-list-alt"></i>
+                            <label> 流程图</label></a>
+                    </li>-->
+
+                    <!--<li  ng-if="!urlParams.businessKey" ng-show="tabAction=='opnProcess'" style=" width: 280px; margin-left: 30px; margin-top: 7px;">
+                        <ul>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #cc0033;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">未接收</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #ff6600;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">办理中</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #339933;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">已办结</span>
+                            </li>
+                            <li style="list-style-type: square;float: left;font-size: 20px;color: #666666;margin-right: 30px;text-indent: -7px;">
+                                <span style="font-size: 14px;">预设步骤</span>
+                            </li>
+                        </ul>
+                    </li>-->
+                </ul>
+
+                <div class="tab-content" id="tabContent">
+                    <!-- 流程图 start-->
+                    <!--<div  ng-class="['tab-pane', tab.active==2?'active':'']"  id="opnProcess">
+                        <div class=" mt10 pb5 "  data-des="此节点必需－用于识别输入表单的指令">
+                            <div ng-if="!urlParams.businessKey" ng-show="tabAction== 'opnProcess'" role="tabpanel" class="tab-pane "
+                                 style="border: 0;width:100%;height: 750px;margin-top:50px; overflow: hidden;position: relative;">
+                                <div id="processImg" style="width: 100%;height:100%; overflow: auto;">流程图加载中，请稍候...</div>
+                            </div>
+                        </div>
+                    </div>-->
+                    <!-- 流程图 end-->
+
+                    <!-- 贸易条款 开始 class="tab-pane fadeIn col-md-12" -->
+                    <div  ng-class="['tab-pane', tab.active==0?'active':'']"  id="tradeClause">
+                        <div class=" mt10 pb5  oh"
+                             data-des="此节点必需－用于识别输入表单的指令">
+
+                            <div class="bg-gray-white p5" ng-show="!isPdfPrint">
+                                <div class=" pull-right ml10">
+                                    <button name="printButton" class="btn btn-xs btn-primary fa fa-print pull-right"
+                                            ng-click="printTrade()"
+                                            ng-if="action!='new'" type="button">打印
+                                    </button>
+                                    <!--<span>打印次数:{{tradePrintCount}} &nbsp;</span>-->
+                                </div>
+                                <div class="btn-group btn-group-xs ">
+                                    <button class="btn btn-primary dataMax" ng-click="fullWindow($event)" name="fullWindow"><i
+                                            class="fa fa-square-o"></i>数据全屏
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="margin: 15px"></div>
+                            <div id="printTradeId" style="padding-left: 2%;">
+                                <div style="text-align: center; font-size: 25px">
+                                    <p style="font-weight:bold">{{contractParams.proposalYear}}&nbsp;Trading & Terms Agreement</p>
+                                    <!--<p style="font-weight:bold">贸易条款</p>-->
+
+                                    <p style="color: #f10707;margin-bottom: 10px;font-weight: bold; font-size: 15px; display: inline;">
+                                        附件二（1） <span id="contractVId">{{contractParams.agreementEdition}}</span>
+                                    </p>
+                                    <p style="font-weight:bold; display: inline; margin: 39%;">贸易条款</p>
+                                </div>
+                                <div class="container" style="display:inline-block;width:76%">
+                                    <!--<div style="color: #f10707;margin-bottom: 10px;margin-left: -9px;font-weight: bold;">
+                                        附件二（1） <span id="contractVId">{{contractParams.agreementEdition}}</span>
+                                    </div>-->
+                                    <div class="row f13">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <div class="f13" style="display: flex; justify-content: space-between; width: 160px">
+                                                    <div >Log NO.</div>
+                                                    <div >编&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号:</div>
+                                                </div>
+                                            </label>
+                                            <div style="border-bottom: 1px solid; width: 12%;display: inline-block;white-space: nowrap;">&nbsp;</div>
+                                        </div>
+                                    </div>
+                                    <div class="row f13 ">
+                                        <!-- <div class="col-md-12"> -->
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <!-- <span class="w100">Brand 供货品牌:</span> -->
+                                                <div class="f13" style="display: flex; justify-content: space-between; width: 160px">
+                                                    <div >Brand</div>
+                                                    <div >供货品牌:</div>
+                                                </div>
+                                            </label>
+                                            <div style="border-bottom: 1px solid; width: 12%;display: inline-block;white-space: nowrap;">{{contractParams.brandCn}}</div>
+                                        </div>
+                                        <!-- </div> -->
+                                    </div>
+
+                                    <div class="row f13">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <!-- <span class="w100">Dept. 部门:</span> -->
+                                                <div class="f13" style="display: flex; justify-content: space-between; width: 160px">
+                                                    <div >Dept.</div>
+                                                    <div >部&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;门:</div>
+                                                </div>
+                                            </label>
+                                            <div style="border-bottom: 1px solid; width: 12%;display: inline-block;white-space: nowrap;">{{contractParams.deptDesc}}</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row f13" style="display: flex;">
+                                        <!-- <div class="col-md-2"> -->
+                                        <div class="input-group input-group-xs" style="width: 22%">
+                                            <label class="input-group-addon bn">
+                                                <!-- <span class="w100">Buyer 负责人:</span> -->
+                                                <div class="f13" style="display: flex; justify-content: space-between; width: 160px">
+                                                    <div >Buyer</div>
+                                                    <div >负&nbsp;&nbsp;责&nbsp;&nbsp;人:</div>
+                                                </div>
+                                            </label>
+                                            <u style="white-space: nowrap">{{contractParams.createdByName}}</u>
+                                        </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="col-md-5"> -->
+                                        <div class="input-group input-group-xs" style="width: 32%; text-align: right">
+                                            <label class="input-group-addon bn" style="display: inline;">
+                                                <span class="w50" style="font-weight: bold; font-size: 13px;">甲方：</span>
+                                            </label>
+                                            <u class="fb">{{companyConvertFlag ?contractParams.vendorDesc : companyName}}</u>
+                                        </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="col-md-5"> -->
+                                        <div  class="input-group input-group-xs" style="width: 32%; text-align: right">
+                                            <label class="input-group-addon bn" style="display: inline;">
+                                                <span class="w50"  style="font-weight: bold; font-size: 13px;">乙方：</span>
+                                            </label>
+                                            <u class="fb">{{companyConvertFlag ? companyName : contractParams.vendorDesc }}</u>
+                                        </div>
+                                        <!-- </div> -->
+                                    </div>
+
+
+                                    <div class="row f13">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <div class="f13" style="display: flex; justify-content: space-between; width: 160px">
+                                                    <div >Supplier Code</div>
+                                                    <div >供应商编码:</div>
+                                                </div>
+                                            </label>
+                                            <div ng-if="!contractParams.vendorNbr" style="border-bottom: 1px solid; width: 12%;display: inline-block;white-space: nowrap;">&nbsp;</div>
+                                            <div ng-if="contractParams.vendorNbr" style="border-bottom: 1px solid; width: 12%;display: inline-block;white-space: nowrap;">{{contractParams.vendorNbr}}</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row f13">
+                                        <div class=" input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <div class="f13" style="display: flex; justify-content: space-between; width: 160px">
+                                                    <div ><p ng-if= "contractParams.isCrossYear == 'Y'" style="width: 8px;height: 8px;background-color: #333 !important;display:inline-block;"> </p> <p ng-if= "contractParams.isCrossYear != 'Y'"  style="width: 8px;height: 8px;border: 1px solid #333;display:inline-block;" ng-else></p>  Cross-year</div>
+                                                    <div > 跨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年</div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="row f13 fb" style="margin-top: 0px;">
+                                        <!-- <div class="col-md-3"> -->
+                                        <div class="input-group input-group-xs">
+                                                 <span class="spanBold">
+                                                    销售方式:
+                                                 </span>
+                                        </div>
+                                        <!-- </div> -->
+                                    </div>
+                                    <div class="row f13 fb"  id="divSaleWay"  style='display: flex; flex-wrap: wrap; font-size: 13px; padding: 5px;'>
+
+                                    </div>
+
+                                </div>
+
+                                <!--<div style="display:inline-block; border:1px solid black;width:21%; vertical-align:240%; margin-left: 0.7%;">
+                                    <div style="display: inline-block;width:49%;vertical-align: top; border-right: 1px solid black;">
+                                        <div style="background-color: #eee; text-align: center;font-weight: bold; margin: 2px 0">配送仓库</div>
+                                        <div id="warehouseId" style="text-align: center; padding: 1px !important"></div>
+                                    </div>
+                                    <div style="display: inline-block; width:50%;  margin-left: -1%;">
+                                        <div style="background-color: #eee; text-align: center;font-weight: bold; margin: 1px 0">销售区域</div>
+                                        <div id="areaId"></div>
+                                    </div>
+                                </div>-->
+
+                                <div style="display:inline-block; border:1px solid black;width:24%; vertical-align:107px;margin-left: -2%;">
+                                    <div style="display: inline-block;width:49%;vertical-align: top; border-right: 1px solid black;">
+                                        <div style="background-color: #eee; text-align: center;font-weight: bold; margin: 2px 0">配送仓库</div>
+                                        <div id="warehouseId" style="text-align: center; padding: 3px !important"></div>
+                                    </div>
+                                    <div style="display: inline-block; width:50%;  margin-left: -1%;">
+                                        <div style="background-color: #eee; text-align: center;font-weight: bold; margin: 2px 0">销售区域</div>
+                                        <div id="areaId"></div>
+                                    </div>
+                                </div>
+
+                                <div style="margin: 15px"></div>
+                                <div class="twoTable" style="display: flex">
+
+                                    <div class="data-table" id="printContentTerms1"
+                                         style="overflow-x:auto; overflow-y: auto; width: 49%; height: auto; border: 1px solid black;">
+                                        <!--<table class="table table-bordered table-hover table-condensed" >-->
+                                        <table class="table-bordered table-hover table-condensed" style="height: 100%">
+                                            <tbody id="tableId">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="data-table" id="printContentTerms2"
+                                         style="overflow-x:auto; overflow-y: auto;vertical-align: top; width: 49%; height: auto; border: 1px solid black;">
+                                        <table class="table-bordered table-hover table-condensed" style="height: 100%">
+                                            <tbody id="part3Table">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+                                <!-- background: gold !important;-->
+                                <div style="width: 98%; display:inline-block; margin: 10px 0;">
+                                    <span style="color: red;background-color: gold !important;">{{termRemark}}</span>
+                                </div>
+                                <div style="display: flex; ">
+                                    <div style=" width: 49%">
+                                        <div class="input-group input-group-xs">
+                                            <span>甲&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;方：{{companyConvertFlag ? contractParams.vendorDesc : companyName}}</span>
+                                        </div>
+                                        <div class="input-group input-group-xs">
+                                            <span>甲方戳章：</span>
+                                            <!--<span>盖&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;章：</span>-->
+                                        </div>
+                                        <div class="input-group input-group-xs" style="display: flex;justify-content: flex-start;">
+                                            <div>签&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;署：</div>
+                                            <div style="border-bottom: 1px solid #333; width: 200px"></div>
+                                        </div>
+                                        <div class="input-group input-group-xs">
+                                            <span>代表姓名：</span>
+                                        </div>
+                                        <div class="input-group input-group-xs">
+                                            <span>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务：</span>
+                                        </div>
+                                        <div class="input-group input-group-xs">
+                                            <span>日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期：</span>
+                                        </div>
+                                        <div class="input-group input-group-xs" ng-show="orderNo">
+                                            <span>编&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：{{orderNo}}</span>
+                                        </div>
+                                    </div>
+                                    <div style="width: 49%">
+                                        <div class="input-group input-group-xs">
+                                            <span>乙&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;方：<!--{{contractParams.vendorDesc}}-->
+                                                {{companyConvertFlag ? companyName : contractParams.vendorDesc}}
+                                            </span>
+                                        </div>
+                                        <div class="input-group input-group-xs">
+                                           <!-- <span>盖&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;章：</span>-->
+                                            <span>乙方戳章：</span>
+                                        </div>
+                                        <div class="input-group input-group-xs" style="display: flex;justify-content: flex-start;">
+                                            <div>签&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;署：</div>
+                                            <div style="border-bottom: 1px solid #333; width: 200px"></div>
+                                        </div>
+                                        <div class="input-group input-group-xs">
+                                            <span>代表姓名：</span>
+                                        </div>
+                                        <div class="input-group input-group-xs">
+                                            <span>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务：</span>
+                                        </div>
+                                        <div class="input-group input-group-xs">
+                                            <span>日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期：</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 贸易条款 结束-->
+
+                    <!-- 贸易补充协议 开始 class="tab-pane fadeIn col-md-12" -->
+                    <div ng-class="['tab-pane', tab.active==1?'active':'']"  id="ttaDeptFeeReport">
+                        <div class=" mt10 pb5  oh"    data-des="此节点必需－用于识别输入表单的指令">
+
+                            <div class=" pull-right ml10"  ng-show="!isPdfPrint">
+                                <button name="printButton" class="btn btn-xs btn-primary fa fa-print pull-right"
+                                        ng-click="printTtaDeptFeeLFindReport()"
+                                        style="height: 27px;"
+                                        type="button">打印
+                                </button>
+                            </div>
+
+                            <div class="bg-gray-white p5" ng-show="!isPdfPrint">
+                                <div class="btn-group btn-group-xs ">
+                                    <button class="btn btn-primary dataMax" ng-click="fullWindow($event)" name="fullWindow">
+                                        <i  class="fa fa-square-o"></i>数据全屏
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div data-des="此节点必需－用户计算滚动区域高度" id="ttaDeptFeeLFindReportScroll" >
+                                <div class="nicescroll-height  bg-white " data-des="此节点必需-滚动内容及指令"   nice-option="{{niceOpction}}">
+                                    <!--头信息-->
+                                    <div id="ttaDeptFeeLFindReportPrint" style="width: 99%;">
+                                        <div class="col-xs-12 col-md-12 p0"
+                                             style="    text-align: center;font-size: 15pt;font-family: Arial;font-weight: bold;margin-top: 20px;">
+                                            <label>{{ttaDeptFeeReportHead.proposalYear}}<span>贸易条款之补充协议</span></label>
+                                        </div>
+                                        <div class="col-xs-12 col-md-12 p0"
+                                             style="    text-align: left;font-size: 10pt;font-family: Arial;font-weight: bold;margin-top: 20px;">
+                                            <label><span>甲方：</span><!--{{ttaDeptFeeReportHead.partyA}}-->
+                                                {{companyConvertFlag ? ttaDeptFeeReportHead.vendorName: ttaDeptFeeReportHead.partyA}}
+
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-md-12 p0"
+                                             style="    text-align: left;font-size: 10pt;font-family: Arial;font-weight: bold;">
+                                            <label><span>乙方：</span><!--{{ttaDeptFeeReportHead.vendorName}}-->
+                                                {{companyConvertFlag ? ttaDeptFeeReportHead.partyA : ttaDeptFeeReportHead.vendorName}}
+                                            </label>
+                                        </div>
+                                        <div class="col-xs-12 col-md-12 p0"
+                                             style="text-align: left;font-size: 10pt;margin-top: 15px;margin-bottom: 10px;">
+                                            <label style="font: -webkit-control;"><span>甲乙双方签订了</span>{{ttaDeptFeeReportHead.proposalYear}}<span>年《业务合同书》，针对其附件二《贸易条款》，双方经过协商一致，同意在附件二《贸易条款》基础上，对收费标准进行以下细化及补充:</span></label>
+                                        </div>
+                                        <!--头信息结束-->
+                                        <!--table 开始-->
+                                            <div class="data-table" id="ttaDeptFeeLFindReportShow">
+                                            <table class="table-bordered table-hover table-condensed"  id="ttaDeptFeeLFindReportTableId"  width="100%">
+                                                <tr width="100%">
+                                                    <th></th>
+                                                    <th ng-show="ttaDeptFeeReportHead.deptDesc1">
+                                                        {{ttaDeptFeeReportHead.deptDesc1}}
+                                                    </th>
+                                                    <th ng-show="ttaDeptFeeReportHead.deptDesc2">
+                                                        {{ttaDeptFeeReportHead.deptDesc2}}
+                                                    </th>
+                                                    <th ng-show="ttaDeptFeeReportHead.deptDesc3">
+                                                        {{ttaDeptFeeReportHead.deptDesc3}}
+                                                    </th>
+<!--                                                    <th>部门收费标准</th>-->
+                                                </tr>
+                                                <tr ng-class=  "{true: 'report', false: ''}[row.flag]"  ng-repeat="row in ttaDeptFeeReportTable">
+                                                    <td style="    font-size: 12px;" ng-class="{true: 'proposalReport ', false: ''}[row.flag]">{{row.lineCode + row.itemDescCn}}
+                                                    </td>
+                                                    <td style="    font-size: 12px;" ng-class="{true: 'proposalReport ', false: ''}[row.flag]"  ng-show="ttaDeptFeeReportHead.deptDesc1" ng-bind-html="row.unit1 | tohtml">
+                                                    </td>
+                                                    <td style="    font-size: 12px;" ng-class="{true: 'proposalReport ', false: ''}[row.flag]" ng-show="ttaDeptFeeReportHead.deptDesc2 " ng-bind-html="row.unit2 | tohtml">
+                                                    </td>
+                                                    <td style="    font-size: 12px;" ng-class="{true: 'proposalReport ', false: ''}[row.flag]" ng-show="ttaDeptFeeReportHead.deptDesc3 " ng-bind-html="row.unit3 | tohtml">
+                                                    </td>
+<!--                                                    <td style="    font-size: 12px;" ng-class="{true: 'proposalReport ', false: ''}[row.flag]"  ng-bind-html="row.unit4 | tohtml">>-->
+<!--                                                    </td>-->
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <div class="col-xs-12 col-md-12 p0"
+                                             style="    text-align: left;font-size: 10pt;font-family: Arial;font-weight: bold;margin-top: 20px;">
+                                            <label style="font: -webkit-control;"><span>以上收费按实际执行数量计算,其中促销陈列服务费的实际执行总金额应不少于附件二《贸易条款》载明的金额。<br>本补充协议一式两份,双方各执一份,具同等法律效力。</span></label>
+                                        </div>
+
+                                        <div class="col-xs-12 col-md-12 p0"
+                                             style="    text-align: left;font-size: 10pt;font-family: Arial;font-weight: bold;margin-top: 20px;">
+                                            <table style="width: 50%;">
+                                                <tr>
+                                                    <td>
+                                                        <label style="font: -webkit-control;margin-bottom: 25px;">甲方戳章：</label>
+                                                    </td>
+                                                    <td>
+                                                        <label style="font: -webkit-control;margin-bottom: 25px;">乙方戳章：</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label style="font: -webkit-control;margin-bottom: 25px;">代表：</label>
+                                                    </td>
+                                                    <td>
+                                                        <label style="font: -webkit-control;margin-bottom: 25px;">代表：</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label style="font: -webkit-control;">日期：</label>
+                                                    </td>
+                                                    <td>
+                                                        <label style="font: -webkit-control;">日期：</label>
+                                                    </td>
+                                                </tr>
+
+                                               <tr>
+                                                    <td>
+                                                        <label style="font: -webkit-control;">编号：{{orderNo}}</label>
+                                                    </td>
+                                                    <td>
+                                                        <label style="font: -webkit-control;"></label>
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                          <!-- <div class="input-group input-group-xs" ng-show="orderNo" style="font-weight:normal;margin-top: 1%;">
+                                                <span>编号：{{orderNo}}</span>
+                                            </div>-->
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--table 结束-->
+                        </div>
+                    </div>
+                    <!-- 贸易补充协议结束-->
+
+                </div>
+                <!-- tabContent -->
+            </div>
+        </div>
+    </div>
+
+
+</div>

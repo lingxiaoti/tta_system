@@ -1,0 +1,39 @@
+<div>
+    <div class="input-group input-group-xs" style="margin-bottom:10px;" ng-hide="viewOnly=='true'">
+        <label class="input-group-addon bn"> <span class="w100">附件上传：</span></label>
+        <input type="file" nv-file-select="" uploader="fileUploader" multiple>
+    </div>
+    <div ng-show="fileUploader.isUploading"  class="progress" style="margin-bottom: 10px;">
+        <div class="progress-bar" role="progressbar"
+             ng-style="{ 'width': fileUploader.progress + '%' }"
+             style="width: 0%;">
+        </div>
+    </div>
+    <div class="data-table" style="padding: 0;">
+        <table class="table table-bordered table-hover table-condensed">
+            <thead class="bg-gray-white">
+            <tr class="text-center">
+                <th>附件名称</th>
+                <th>提交人</th>
+                <th>上传时间</th>
+                <th ng-hide="viewOnly=='true'">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in fileData">
+                <td style="width:400px;" title="{{item.fileName}}">
+                    <div style="width: 400px;" class="ellipsis"><a href="{{item.fileAddress}}" target="_blank">{{item.fileName}}</a></div>
+                </td>
+                <td title="{{item.userName}}">{{item.userName}}</td>
+                <td title="{{item.startDateActive}}">{{item.startDateActive}}</td>
+                <td ng-hide="viewOnly=='true'">
+                    <button type="button" ng-click="delFileInfo($index)"
+                            ng-show="viewOnly=='addOnly' && item.uploadId==''">删除</button>
+                    <button type="button" ng-click="delFileInfo($index)"
+                            ng-show="viewOnly!='true' && viewOnly!='addOnly'">删除</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

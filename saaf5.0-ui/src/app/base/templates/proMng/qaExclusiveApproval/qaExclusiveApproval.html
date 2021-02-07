@@ -1,0 +1,1608 @@
+<div class="bigdata" ng-controller="qaExclusiveApprovalCtrl">
+  <div id="processForm"
+        data-api-post="saveProductInfo"
+         data-api-get="FindProductList"
+         data-api-update="saveProductInfo">
+  </div>
+  
+  <div data-des="此节点必需－用户计算滚动区域高度" main-scroll-style>
+    <div class="nicescroll-height  bg-white" data-des="此节点必需-滚动内容及指令" ng-nicescroll
+          nice-option="{cursorcolor: '#1e90c2',cursorwidth:10,zindex:10,autohidemode:false}">
+      
+      <ul class="nav nav-tabs" id="GoodsInfoTab">
+        <li class="active" ng-click="tabChangeInfo('baseInfBoxId')">
+          <a data-toggle="tab" ng-href="#baseInfBoxId"><i class="fa fa-list-alt"></i>
+          <label>基本属性</label></a>
+        </li>
+        <li ng-click="tabChangeInfo('drugInfBoxId')"  ng-if="params.otherInfo == '1'">
+          <a data-toggle="tab" href="#drugInfBoxId"><i class="fa fa-list-alt"></i>
+          <label>药品属性</label></a>
+        </li>
+        <li ng-click="tabChangeInfo('medicalApparatus')"  ng-if="params.otherInfo == '2'">
+          <a data-toggle="tab" href="#medicalApparatus"><i class="fa fa-list-alt"></i>
+          <label>医疗器械</label></a>
+        </li>
+        <!-- <li ng-click="tabChangeInfo('flowChart')">
+          <a data-toggle="tab" href="#flowChart"><i class="fa fa-list-alt"></i>
+          <label>流程图</label></a>
+        </li>
+        <li  ng-show="tabAction=='flowChart'" style=" width: 330px;margin-top: 7px;">
+            <ul>
+                <li style="list-style-type: square;float: left;font-size: 20px;color: #cc0033;margin-right: 30px;text-indent: -7px;">
+                    <span style="font-size: 14px;">未接收</span>
+                </li>
+                <li style="list-style-type: square;float: left;font-size: 20px;color: #ff6600;margin-right: 30px;text-indent: -7px;">
+                    <span style="font-size: 14px;">办理中</span>
+                </li>
+                <li style="list-style-type: square;float: left;font-size: 20px;color: #339933;margin-right: 30px;text-indent: -7px;">
+                    <span style="font-size: 14px;">已办结</span>
+                </li>
+                <li style="list-style-type: square;float: left;font-size: 20px;color: #666666;margin-right: 30px;text-indent: -7px;">
+                    <span style="font-size: 14px;">预设步骤</span>
+                </li>
+            </ul>
+        </li> -->
+      </ul>
+      
+      <div class="tab-content" id="GoodsInfoContent">
+
+        <!-- 基本属性 -->
+        <div id="baseInfBoxId" class="tab-pane fade in active col-md-12" >
+            <div class="bg-gray-white bt mb10">
+              <div class="bg-gray-white p5">
+      
+                <div class="btn-group btn-group-xs ">
+                  
+                  <button class="btn btn-primary" ng-click="fullWindow($event)">
+                      <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                  </button>
+                 
+                </div>
+      
+              </div>
+            </div>
+
+          <div class="oh" data-des="此节点必需－用于识别输入表单的指令" id="baseInfo">
+            <form id="baseProcurementFormBox1" name="baseProcurementFormBox1" > 
+            <!-- 页面内容 -->
+              <div> 
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">PLM编码:</span>
+                    </label>
+                    <input class="form-control radius3" name="plmCode" disabled
+                            ng-model="params.plmCode" type="text">
+                  </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3" ng-if="isOB">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">货品名:</span>
+                    </label>
+                    <input class="form-control radius3" name="obId" disabled
+                            ng-model="params.obId" type="text">
+                  </div>
+                </div>  
+
+                <div class="form-group col-xs-4 col-md-3">
+                    <div class="input-group input-group-xs">
+                      <label class="input-group-addon bn">
+                          <span class="w100">供应商名称:</span>
+                      </label>
+                      <input class="form-control radius3" name="productName" disabled
+                              ng-model="params.productName" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group col-xs-4 col-md-3">
+                    <div class="input-group input-group-xs">
+                      <label class="input-group-addon bn">
+                          <span class="w100">单位规格:</span>
+                      </label>
+                      <input class="form-control radius3" name="productEname" disabled
+                              ng-model="params.productEname" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group col-xs-4 col-md-3">
+                    <div class="input-group input-group-xs">
+                      <label class="input-group-addon bn">
+                          <span class="w100">商品条形码:</span>
+                      </label>
+                      <input class="form-control radius3" name="brandCn" disabled
+                              ng-model="params.brandnameCn" type="text">
+                    </div>
+                  </div>
+                
+                  <div class="form-group col-xs-4 col-md-3">
+                    <div class="input-group input-group-xs">
+                      <label class="input-group-addon bn">
+                          <span class="w100">品牌名称(中文):</span>
+                      </label>
+                      <input class="form-control radius3" name="brandEn" disabled
+                              ng-model="params.brandnameEn" type="text">
+                    </div>
+                  </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">品牌名称(英文):</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_PURCHASE" name="purchaseType" ng-model="params.purchaseType" disabled></div>
+                  </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">保质期天数:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_SALES_CHANNAL" name="markerChannel" ng-model="params.markerChannel" disabled></div>
+                  </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">产地:</span>
+                    </label>
+                    <div class="input-group input-group-xs">
+                      <input class="form-control radius3" ng-model="params.department" disabled   name ="department" type="text"/>
+                      <span class="input-group-btn ng-scope">
+                        <button class="btn btn-default" ng-click="getDepCode()" type="button" disabled>
+                          <i class="fa fa-search"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">多产地:</span>
+                    </label>
+                    <input class="form-control radius3" name="departmentDesc" disabled
+                            ng-model="params.departmentDesc" type="text">
+                            </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">原产国:</span>
+                    </label>
+                    <input class="form-control radius3" name="classes" disabled
+                            ng-model="params.classes" type="text">
+                            </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">商品证照:</span>
+                    </label>
+                    <input class="form-control radius3" name="classDesc" disabled
+                            ng-model="params.classDesc" type="text">
+                            </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">危险品及易燃易爆:</span>
+                    </label>
+                    <input class="form-control radius3" name="subClass" disabled
+                            ng-model="params.subClass" type="text">
+                            </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">蓝帽产品:</span>
+                    </label>
+                    <input class="form-control radius3" name="subclassDesc" disabled
+                            ng-model="params.subclassDesc" type="text">
+                            </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">跨境商品:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_TYPE" name="productType" ng-model="params.productType" disabled></div>
+                    </div>
+                    
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">VC商品:</span>
+                    </label>
+                    <input class="form-control radius3" name="groupBrand" disabled
+                            ng-model="params.groupBrand" type="text">
+                    </div>
+                    
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">特殊要求:</span>
+                    </label>
+                    <input class="form-control radius3" name="motherCompany" disabled
+                            ng-model="params.motherCompany" type="text">
+                    <!-- <div  lookup-code="PLM_PRODUCT_SESION" name="motherCompany" ng-model="params.motherCompany"></div> -->
+                    </div>
+                    
+                </div>
+
+                
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">运输存储:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_ORTHERINFO" name="otherInfo" ng-model="params.otherInfo" disabled></div>
+                    </div>
+                    
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">是否乳制品:</span>
+                    </label>
+                    <!-- <input class="form-control radius3" name="porductShape"
+                            ng-model="params.porductShape" type="text"> -->
+                    <div  lookup-code="PLM_PRODUCT_FORM" name="productShape" ng-model="params.productShape"></div>
+                    </div>
+                    
+                </div>
+
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">有条件审批:</span>
+                    </label>
+                    <!-- <input class="form-control radius3" name="provCondition"  id="provConditionId"
+                            ng-model="params.provCondition" type="text" > -->
+                    <div  lookup-code="PLM_PRODUCT_YESORNO" id="provConditionId" name="provCondition" ng-model="params.provCondition"></div>
+                    </div>
+                </div>
+
+                
+
+
+              </div>
+
+              </div>
+              <div class="row"></div>
+              <div class="baseInfoContent" style="padding: 15px">
+                <ul class="nav nav-tabs" id="GoodsInfoTab">
+                  <li class="active" ng-click="">
+                  <li ng-click="">
+                    <a data-toggle="tab" href="#qualificationDocuments"><i class="fa fa-list-alt"></i>
+                    <label>资质文件</label></a>
+                  </li>
+                  
+                </ul>
+
+                <div class="tab-content" id="GoodsInfoTabContent">
+
+                    
+                  <div class="tab-pane fade active in col-md-12" id="qualificationDocuments" style="min-height: 300px;">
+
+                    <div ng-if='!isOB'>
+                    <div class="form-group col-xs-4 col-md-3" style="margin-top: 10px">
+                      <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><p style="color: red;display: inline;">*</p>资质组ID:</span>
+                        </label>
+                        <input class="form-control radius3" name="qaFileId" required
+                                ng-model="params.qaFileId" type="text">
+                      </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3" style="margin-top: 10px">
+                      <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><p style="color: red;display: inline;">*</p>资质组名称:</span>
+                        </label>
+                        <input class="form-control radius3" name="qaFilename"  required
+                                ng-model="params.qaFilename" type="text">
+                      </div>
+                    </div>
+                    
+
+                      <div class="data-table" ng-if="params.otherInfo == '0'">
+                        <table class="table table-bordered" style="margin-top: 15px">
+                          <thead class="bg-gray-white">
+                            <tr>
+                              <th>序号</th>
+                              <th>资质文件类型</th>
+                              <th><p style="color: red;display: inline;">*</p>资质文件</th>
+                              <th><p style="color: red;display: inline;">*</p>证书编号类型</th>
+                              <th><p style="color: red;display: inline;">*</p>证书编号</th>
+                              <th><p style="color: red;display: inline;">*</p>日期类型</th>
+                              <th><p style="color: red;display: inline;">*</p>日期</th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            <tr ng-repeat="(index,item) in qalist">
+                              <td>{{index+ 1}}</td>
+                              <td>
+                                <div class="form-group">
+                                  <div class="input-group input-group-xs">
+                                    <div  lookup-code="PLM_PRODUCT_HEADQAFILETYE" name="qaFiletype" ng-model="item.qaFiletype" data-callback="qaFiletypeChange" ng-click="getqaFiletypeIndex(index)"></div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <!-- <input type="file" nv-file-select="" uploader="qaFileUploader" style="width: 180px; display: inline-block"  ng-click="getQaFileIndex(index)"> 
+                                <span ng-click="previewImg(index, 'qalist')" style="color: cornflowerblue; cursor:pointer">预览</span> -->
+                                <input type="submit"  value="重新上传" ng-if="item.qaUrl" ng-click="UploaderReset(index, 'qalist')">
+                                <input type="file"  ng-show="!item.qaUrl"  nv-file-select="" uploader="qaFileUploader" style="width: 180px; display: inline-block"   ng-click="getQaFileIndex(index)"> 
+                                <span ng-if="item.qaUrl" ng-click="previewImg(index, 'qalist')" style="color: cornflowerblue; cursor:pointer">预览</span>
+                                <span ng-if="item.qaUrl" style="display: inline-block; width: 100px;overflow: hidden; text-overflow: ellipsis;vertical-align: middle;text-align: left;">{{item.qaFileName}}</span>
+
+                              </td>
+                              <td>
+                                <div class="form-group">
+                                  <div class="input-group input-group-xs">
+                                    <div  lookup-code="PLM_PRODUCT_FILECODETYPE" name="qaCodetype" ng-model="item.qaCodetype" disabled></div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="form-group">
+                                  <div class="input-group input-group-xs">
+                                    <input class="form-control radius3" name="qaCode"
+                                      ng-model="item.qaCode" type="text" number required>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div style="display: flex; justify-content: center;">
+                                  <div class="input-group input-group-xs">
+                                    <div  lookup-code="PLM_PRODUCT_DATETYPE" name="dateType" ng-model="item.dateType" required disabled></div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="form-group">
+                                  <div class="input-group input-group-xs">
+                                    <input class="form-control" required name="setDate"
+                                    date-time-picker="" data-date-format="yyyy-mm-dd"
+                                    maxlength="20" data-min-view="2" 
+                                    ng-model="item.datecurent" >
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+
+                        </table>
+
+                      </div>
+
+                      <div class="data-table" ng-if="params.otherInfo == '1'">
+                          <table class="table table-bordered" style="margin-top: 15px">
+                            <thead class="bg-gray-white">
+                              <tr>
+                                <th>序号</th>
+                                <th>资质文件类型</th>
+                                <th><p style="color: red;display: inline;">*</p>资质文件</th>
+                                <th>证书编号类型</th>
+                                <th>证书编号</th>
+                                <th><p style="color: red;display: inline;">*</p>日期类型</th>
+                                <th><p style="color: red;display: inline;">*</p>日期</th>
+                                <th>操作</th>
+                              </tr>
+                            </thead>
+  
+                            <tbody>
+                              <tr ng-repeat="(index,item) in qalist">
+                                <td>{{index+1}}</td>
+                                <td> 
+                                  <div ng-if="Number(item.qaFiletype)">
+                                    {{item.qaFiletype}}
+                                  </div>
+                                  <div class="input-group input-group-xs" ng-if="!Number(item.qaFiletype)">
+                                    <div lookup-code="PLM_PRODUCT_DRUGFILETYP" name="qaFiletype" ng-model="item.qaFiletype" data-callback="mdQaFiletypeChange" ng-click="getmdqaFiletypeIndex(index)"></div>
+
+                                    <!-- <div lookup-code="PLM_PRODUCT_DRUGFILETYP" name="qaFiletype" ng-model="item.qaFiletype" data-callback="mdQaFiletypeChange(index)"></div> -->
+                                  </div>
+                                </td>
+                                <td>
+                                    <input type="submit"  value="重新上传" ng-if="item.qaUrl" ng-click="UploaderReset(index, 'qalist')">
+                                    <input type="file" nv-file-select="" ng-if="!item.qaUrl" uploader="DrugFileUploader" style="width: 180px; display: inline-block" ng-click="getDrugFileIndex(index)">
+                                    <span ng-click="previewImg(index, 'qalist')" ng-if="item.qaUrl" style="color: cornflowerblue; cursor:pointer">预览</span>
+                                    <span ng-if="item.qaUrl" style="display: inline-block; width: 100px;overflow: hidden; text-overflow: ellipsis;vertical-align: middle;text-align: left;">{{item.qaFileName}}</span>
+
+                                  <!-- <input type="file" nv-file-select="" uploader="DrugFileUploader" style="width: 180px; display: inline-block" ng-click="getDrugFileIndex(index)">
+                                  <span ng-click="previewImg(index, 'drugfilelist')" style="color: cornflowerblue; cursor:pointer">预览</span> -->
+                                </td>
+                                <td>
+                                  <div class="input-group input-group-xs">
+                                    <div  lookup-code="PLM_PRODUCT_FILECODETYPE" name="qaCodetype" ng-model="item.qaCodetype" disabled></div>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div class="input-group input-group-xs">
+                                    <input class="form-control radius3" name="qaCode"
+                                    ng-model="item.qaCode" type="text">
+                                  </div>
+                                </td>
+                                <td>
+                                  <div class="input-group input-group-xs">
+                                    <div  lookup-code="PLM_PRODUCT_DATETYPE" required name="dateType" ng-model="item.dateType" disabled></div>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div class="form-group">
+                                    <div class="input-group input-group-xs">
+                                      <input class="form-control" required name="setDate"
+                                      date-time-picker="" data-date-format="yyyy-mm-dd"
+                                      maxlength="20" data-min-view="2" 
+                                      ng-model="item.datecurent" >
+                                    </div>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div  class="btn-group btn-group-xst">
+                                    <button type="button" ng-if="!Number(item.qaFiletype)"
+                                     class="btn btn-default btn-xs" ng-click="del(index, 'qalist')">
+                                      <i class="fa fa-trash-o">删除</i>
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td ng-click="addqualInfo()" style="font-size: 14px"><i class="fa fa-plus-square-o" ></i></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                        <div class="data-table" ng-if="params.otherInfo == '2'">
+                          <table class="table table-bordered" style="margin-top: 15px">
+                              <thead class="bg-gray-white">
+                                <tr>
+                                  <th>序号</th>
+                                  <th>资质文件类型</th>
+                                  <th><p style="color: red;display: inline;">*</p>资质文件</th>
+                                  <th>证书编号类型</th>
+                                  <th>证书编号</th>
+                                  <th><p style="color: red;display: inline;">*</p>日期类型</th>
+                                  <th><p style="color: red;display: inline;">*</p>日期</th>
+                                  <th>操作</th>
+                                </tr>
+                              </thead>
+  
+                              <tbody>
+                                <tr ng-repeat="(index, item) in qalist">
+                                  <td>{{index+1}}</td>
+                                  <td>
+                                    <div ng-if="Number(item.qaFiletype)">
+                                      {{item.qaFiletype}}
+                                    </div>
+                                    <div class="input-group input-group-xs" ng-if="!Number(item.qaFiletype)">
+                                      <div lookup-code="PLM_PRODUCT_MEDICALQAFILE" name="qaFiletype" ng-model="item.qaFiletype" data-callback="meQaFiletypeChange" ng-click="getmeqaFiletypeIndex(index)"></div>
+
+                                      <!-- <div lookup-code="PLM_PRODUCT_MEDICALQAFILE" name="qaFiletype" ng-model="item.qaFiletype" data-callback="meQaFiletypeChange(index)"></div> -->
+                                    </div>
+                                  </td>
+                                  <td>
+                                      <input type="submit"  value="重新上传" ng-if="item.qaUrl" ng-click="UploaderReset(index, 'qalist')">
+                                      <input type="file" ng-if="!item.qaUrl" nv-file-select="" uploader="medFileUploader" style="width: 180px; display: inline-block" ng-click="getMedFileIndex(index)"> 
+                                      <span ng-click="previewImg(index, 'qalist')" ng-if="item.qaUrl" style="color: cornflowerblue; cursor:pointer">预览</span>
+                                      <span ng-if="item.qaUrl" style="display: inline-block; width: 100px;overflow: hidden; text-overflow: ellipsis;vertical-align: middle;text-align: left;">{{item.qaFileName}}</span>
+
+                                    <!-- <input type="file" nv-file-select="" uploader="medFileUploader" style="width: 180px; display: inline-block" ng-click="getMedFileIndex(index)"> 
+                                    <span ng-click="previewImg(index, 'medicalfilelist')" style="color: cornflowerblue; cursor:pointer">预览</span> -->
+                                  </td>
+                                  <td>
+                                      <div class="input-group input-group-xs">
+                                        <div  lookup-code="PLM_PRODUCT_FILECODETYPE" name="qaCodetype" ng-model="item.qaCodetype" disabled></div>
+                                      </div>
+                                  </td>
+                                  <td>
+                                      <div class="input-group input-group-xs">
+                                          <input class="form-control radius3" name="qaCode"
+                                          ng-model="item.qaCode" type="text">
+                                        </div>
+                                  </td>
+                                  <td>
+                                      <div class="input-group input-group-xs">
+                                        <div  lookup-code="PLM_PRODUCT_DATETYPE" required name="dateType" ng-model="item.dateType" disabled></div>
+                                      </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-group">
+                                      <div class="input-group input-group-xs">
+                                        <input class="form-control" required name="setDate" required
+                                        date-time-picker="" data-date-format="yyyy-mm-dd"
+                                        maxlength="20" data-min-view="2" 
+                                        ng-model="item.datecurent" >
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td >
+                                    <div  class="btn-group btn-group-xst">
+                                      <button type="button" ng-if="!Number(item.qaFiletype)" class="btn btn-default btn-xs" ng-click="del(index, 'qalist')">
+                                        <i class="fa fa-trash-o">删除</i>
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td ng-click="addqualInfo()" style="font-size: 14px"><i class="fa fa-plus-square-o" ></i></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                      </div>
+                    </div>
+
+                      <div ng-if='isOB'>
+                          <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+                          </div>
+                          <div class="data-table">
+                              <table
+                                      class="table table-bordered table-hover table-condensed">
+                                  <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                  <tr class="text-center">
+                                      <th>序号</th>
+                                      <th>文件类型</th>
+                                      <th>是否不适用</th>
+                                      <th>文件数量</th>
+                                      <th>驳回原因</th>
+                                      <th>备注</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  <tr class="text-center" ng-repeat="row in productQaFileDataTable"
+                                      ng-class="{'active':productQaFileDataTable.selectRow==$index}"
+                                      ng-click="productQaFileDataTable.selectRow=$index">
+                                      <td>{{$index+1}}</td>
+                                      <td>
+                                          <div class="input-group input-group-xs">
+                                              <input type="text" class="form-control radius3"
+                                                      ng-model="row.fileAlterType" ng-disabled="true">
+                                              <span class="input-group-btn ng-scope">
+                                                    <button type="button" 
+                                                            ng-click="productQaFileUploadShow(row.plmDevelopmentQaSummaryId)" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                              </span>
+                                          </div>
+                                      </td>
+                                      <td><input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                                  ng-model="row.inapplicableSign" disabled>
+                                      </td>
+                                      <td>{{row.fileCount}}
+                                      </td>
+                                      <td>{{row.rejectReason}}
+                                      </td>
+                                      <td><input type="text" style="width: 100%;"
+                                                  ng-model="row.remarks" disabled>
+                                      </td>
+                                  </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                        </div>
+                      
+                  </div>
+
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 药品属性 -->
+        <div id="drugInfBoxId" class="tab-pane fade in col-md-12"  ng-if="params.otherInfo == '1'">
+          <!-- 页面内容 -->
+          
+          <div class="bg-gray-white bt mb10 ">
+            <div class="bg-gray-white p5">
+              <div class="pull-right">
+                <div class="btn-group btn-group-xs">
+                  <button class="btn btn-default" validate-form-btn="baseProcurementFormBox2" ng-click="btnSave()">
+                      <i class="fa fa-save"> 保存</i>
+                  </button>
+                  <button class="btn btn-default" validate-form-btn="baseProcurementFormBox2" ng-click="btnSubmit()">
+                      <i class="fa fa-bullseye"> 提交</i>
+                  </button>
+                  <button class="btn btn-default" validate-form-btn="baseProcurementFormBox2" ng-click="btnDiscard()">
+                      <i class="fa fa-trash"> 作废</i>
+                  </button>
+                </div>
+              </div>
+    
+              <div class="btn-group btn-group-xs ">
+                <button class="btn btn-primary" ng-click="fullWindow($event)">
+                    <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="oh" data-des="此节点必需－用于识别输入表单的指令" id="baseInfo">
+            <form id="baseProcurementFormBox2" name="baseProcurementFormBox2">
+              <div id="drugBaseInfo"> 
+
+                <!-- <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">货品名(中文):</span>
+                    </label>
+                    <input class="form-control radius3" name="productName"
+                            ng-model="paramsDrug.productName" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">货品名(英文):</span>
+                    </label>
+                    <input class="form-control radius3" name="productEname"
+                            ng-model="paramsDrug.productEname" type="text">
+                  </div>
+                  
+                </div> -->
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>医保药品:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_YESORNO" name="drugIns" ng-model="paramsDrug.drugIns" required></div>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>通用名称:</span>
+                    </label>
+                    <input class="form-control radius3" name="commonName"
+                            ng-model="paramsDrug.commonName" type="text" required>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>药品代码:</span>
+                    </label>
+                    <input class="form-control radius3" name="drugCode"
+                            ng-model="paramsDrug.drugCode" type="text" required>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>规格:</span>
+                    </label>
+                    <input class="form-control radius3" name="standard"
+                            ng-model="paramsDrug.standard" type="text" required>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>剂型:</span>
+                    </label>
+                    <input class="form-control radius3" name="drugForm" required
+                            ng-model="paramsDrug.drugForm" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>单位:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_DRUGUNIT" name="unit" ng-model="paramsDrug.unit" required></div>
+
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>生产厂家:</span>
+                    </label>
+                    <input class="form-control radius3" name="producer" required
+                            ng-model="paramsDrug.producer" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>批准文号:</span>
+                    </label>
+                    <input class="form-control radius3" name="symbol" required
+                            ng-model="paramsDrug.symbol" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>储存条件:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_DRUGSTORE" name="storeCondition" required ng-model="paramsDrug.storeCondition"></div>
+                  </div>
+                  
+                </div>
+              
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>批文有效期:</span>
+                    </label>
+                    <input class="form-control radius3" name="symbolDate" required
+                            ng-model="paramsDrug.symbolDate" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                    <div class="input-group input-group-xs">
+                      <label class="input-group-addon bn">
+                          <span class="w100"><p style="color: red;display: inline;">*</p>批文预警天数:</span>
+                      </label>
+                      <input class="form-control radius3" name="symbolDays" required
+                              ng-model="paramsDrug.symbolDays" type="text">
+                    </div>
+                    
+                  </div>
+
+                  <div class="form-group col-xs-4 col-md-3">
+                      <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><p style="color: red;display: inline;">*</p>保质期:</span>
+                        </label>
+                        <input class="form-control radius3" name="protectPeriod" required
+                                ng-model="paramsDrug.protectPeriod" type="text">
+                      </div>
+                      
+                    </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>陈列周期:</span>
+                    </label>
+                    <input class="form-control radius3" name="displayCycle" required
+                            ng-model="paramsDrug.displayCycle" type="text">
+                  </div>
+                  
+                </div>
+
+                
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>陈列预警天数:</span>
+                    </label>
+                    <input class="form-control radius3" name="displayDays" required
+                            ng-model="paramsDrug.displayDays" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>效期预警天数:</span>
+                    </label>
+                    <input class="form-control radius3" name="sxDays" required
+                            ng-model="paramsDrug.sxDays" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>是否批号管理:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_YESORNO" required name="isBatchnumber" ng-model="paramsDrug.isBatchnumber"></div>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                    <div class="input-group input-group-xs">
+                      <label class="input-group-addon bn">
+                          <span class="w100"><p style="color: red;display: inline;">*</p>处方药类别:</span>
+                      </label>
+                      <div  lookup-code="PLM_PRODUCT_DRUGTYPECODE" required name="presType" ng-model="paramsDrug.presType"></div>
+                    </div>
+                  </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>GSP管理级别:</span>
+                    </label>
+                    <input class="form-control radius3" name="gspManage" required
+                            ng-model="paramsDrug.gspManage" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>类别代码:</span>
+                    </label>
+                    <input class="form-control radius3" name="typeCode" required
+                            ng-model="paramsDrug.typeCode" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>类别名称:</span>
+                    </label>
+                    <input class="form-control radius3" name="categoryName" required
+                            ng-model="paramsDrug.categoryName" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>经营类别:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_DRUGSTORE" required name="businessCategory" ng-model="paramsDrug.businessCategory"></div>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>是否处方药品:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_YESORNO" required name="isRx" ng-model="paramsDrug.isRx"></div>
+
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>药监统一编号:</span>
+                    </label>
+                    <input class="form-control radius3" name="drugStandcode" required
+                            ng-model="paramsDrug.drugStandcode" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>药品本位码:</span>
+                    </label>
+                    <input class="form-control radius3" name="drugStandard" required
+                            ng-model="paramsDrug.drugStandard" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>所属经营范围:</span>
+                    </label>
+                    <!-- <input class="form-control radius3" name="rang"
+                            ng-model="paramsDrug.rang" type="text"> -->
+                    <div  lookup-code="PLM_PRODUCT_DRUGRANG" required name="rang" ng-model="paramsDrug.rang"></div>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>质量标准:</span>
+                    </label>
+                    <input class="form-control radius3" name="qaStandard" required
+                            ng-model="paramsDrug.qaStandard" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>批准证明文件及其附件:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_QAFILE" required name="fileInfo" ng-model="paramsDrug.fileInfo"></div>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>包装规格:</span>
+                    </label>
+                    <input class="form-control radius3" name="backageUnit" required
+                            ng-model="paramsDrug.backageUnit" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>药监包装规格:</span>
+                    </label>
+                    <input class="form-control radius3" name="drugUnit" required
+                            ng-model="paramsDrug.drugUnit" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>是否重点养护:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_YESORNO" required name="isProtect" ng-model="paramsDrug.isProtect"></div>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>是否拆零:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_YESORNO" required name="isPull" ng-model="paramsDrug.isPull"></div>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>是否冷藏药品:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_YESORNO" required name="isCold" ng-model="paramsDrug.isCold"></div>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100"><p style="color: red;display: inline;">*</p>是否含麻黄碱:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_YESORNO" required name="isEphedrine" ng-model="paramsDrug.isEphedrine" required></div>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-4 col-md-3">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">产地（中药饮片）:</span>
+                    </label>
+                    <input class="form-control radius3" name="drugPlace"
+                            ng-model="paramsDrug.drugPlace" type="text">
+                  </div>
+                  
+                </div>
+
+              </div>
+              <div class="row"></div>
+              <!-- <div class="baseInfoContent" style="padding: 15px">
+                <ul class="nav nav-tabs" id="GoodsInfoTab">
+                  <li class="active" >
+                    <a data-toggle="tab" ng-href="#medQaFile"><i class="fa fa-list-alt"></i>
+                    <label>药品资质文件</label></a>
+                  </li>
+                </ul>
+
+                <div class="tab-content" id="GoodsInfoTabContent">
+
+                  <div class="tab-pane fade in active col-md-12" id="medQaFile" style="min-height: 300px;">
+
+                    <div class="form-group col-xs-4 col-md-3" style="margin-top: 10px">
+                      <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><p style="color: red;display: inline;">*</p>资质组ID:</span>
+                        </label>
+                        <input class="form-control radius3" name="qaFileId" required
+                                ng-model="params.qaFileId" type="text">
+                      </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3" style="margin-top: 10px">
+                      <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn">
+                            <span class="w100"><p style="color: red;display: inline;">*</p>资质组名称:</span>
+                        </label>
+                        <input class="form-control radius3" name="qaFilename"  required
+                                ng-model="params.qaFilename" type="text">
+                      </div>
+                    </div>
+
+                    <div class="data-table">
+                      <table class="table table-bordered" style="margin-top: 15px">
+                        <thead class="bg-gray-white">
+                          <tr>
+                            <th>序号</th>
+                            <th>资质文件类型</th>
+                            <th><p style="color: red;display: inline;">*</p>资质文件</th>
+                            <th><p style="color: red;display: inline;">*</p>证书编号类型</th>
+                            <th><p style="color: red;display: inline;">*</p>证书编号</th>
+                            <th><p style="color: red;display: inline;">*</p>日期类型</th>
+                            <th><p style="color: red;display: inline;">*</p>日期</th>
+                            <th>操作</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <tr ng-repeat="(index,item) in qalist">
+                            <td>{{index+1}}</td>
+                            <td>
+                              <div ng-if="Number(item.qaFiletype)">
+                                {{item.qaFiletype}}
+                              </div>
+                              <div class="input-group input-group-xs" ng-if="!Number(item.qaFiletype)">
+                                <div lookup-code="PLM_PRODUCT_DRUGFILETYP" name="qaFiletype" ng-model="item.qaFiletype" data-callback="mdQaFiletypeChange" ng-click="getmdqaFiletypeIndex(index)"></div>
+                              </div>
+                            </td>
+                            <td>
+                                <input type="submit"  value="重新上传" ng-if="item.qaUrl" ng-click="UploaderReset(index,'qalist')">
+                                <input type="file" nv-file-select="" ng-if="!item.qaUrl" uploader="DrugFileUploader" style="width: 180px; display: inline-block" ng-click="getDrugFileIndex(index)">
+                                <span ng-click="previewImg(index, 'qalist')" ng-if="item.qaUrl" style="color: cornflowerblue; cursor:pointer">预览</span>
+                                <span ng-if="item.qaUrl" style="display: inline-block; width: 100px;overflow: hidden; text-overflow: ellipsis;vertical-align: middle;">{{item.qaFileName}}</span>
+                            </td>
+                            <td>
+                              <div class="input-group input-group-xs">
+                                <div  lookup-code="PLM_PRODUCT_FILECODETYPE" name="qaCodetype" required ng-model="item.qaCodetype" disabled></div>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="input-group input-group-xs">
+                                <input class="form-control radius3" name="qaCode" required
+                                ng-model="item.qaCode" type="text">
+                              </div>
+                            </td>
+                            <td>
+                              <div class="input-group input-group-xs">
+                                <div  lookup-code="PLM_PRODUCT_DATETYPE" required name="dateType" ng-model="item.dateType" disabled></div>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="form-group">
+                                <div class="input-group input-group-xs">
+                                  <input class="form-control" required name="setDate"
+                                  date-time-picker="" data-date-format="yyyy-mm-dd"
+                                  maxlength="20" data-min-view="2" 
+                                  ng-model="item.datecurent" >
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div  class="btn-group btn-group-xst">
+                                <button type="button" ng-if="!Number(item.qaFiletype)"
+                                 class="btn btn-default btn-xs" ng-click="del(index, 'qalist')">
+                                  <i class="fa fa-trash-o">删除</i>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td ng-click="addqualInfo()" style="font-size: 14px"><i class="fa fa-plus-square-o" ></i></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                </div>
+              </div> -->
+            </form>
+          </div>
+        </div>
+
+        <!-- 医疗器械 -->
+        <div id="medicalApparatus" class="tab-pane fade in col-md-12"  ng-if="params.otherInfo == '2'">
+          <!-- 页面内容 -->
+          <div class="oh" data-des="此节点必需－用于识别输入表单的指令" id="baseInfo">
+            <div class="bg-gray-white bt mb10">
+              <div class="bg-gray-white p5">
+                <div class="pull-right">
+                  <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" validate-form-btn="baseProcurementFormBox3" ng-click="btnSave()">
+                        <i class="fa fa-save"> 保存</i>
+                    </button>
+                    <button class="btn btn-default" validate-form-btn="baseProcurementFormBox3" ng-click="btnSubmit()">
+                        <i class="fa fa-bullseye"> 提交</i>
+                    </button>
+                    <button class="btn btn-default" validate-form-btn="baseProcurementFormBox3" ng-click="btnDiscard()">
+                        <i class="fa fa-trash"> 作废</i>
+                    </button>
+                  </div>
+                </div>
+                <div class="btn-group btn-group-xs ">
+                  <button class="btn btn-primary" ng-click="fullWindow($event)">
+                      <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <form id="baseProcurementFormBox3" name="baseProcurementFormBox3">
+              <div> 
+                <div class="form-group col-xs-3 col-md-4">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w150"><p style="color: red;display: inline;">*</p>名称:</span>
+                    </label>
+                    <input class="form-control radius3" name="name" required
+                            ng-model="paramsMedical.name" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-3 col-md-4">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w150"><p style="color: red;display: inline;">*</p>医疗器械类别:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_MEDICALTYPE" required name="medicalType" ng-model="paramsMedical.medicalType"></div>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-3 col-md-4">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w150"><p style="color: red;display: inline;">*</p>医疗器械目录类别:</span>
+                    </label>
+                    <input class="form-control radius3" name="catalogCategory" required
+                            ng-model="paramsMedical.catalogCategory" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-3 col-md-4">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn" >
+                        <span class="w150"><p style="color: red;display: inline;">*</p>注册证号或者备案凭证编号:</span>
+                    </label>
+                    <input class="form-control radius3" name="registerNo" required
+                            ng-model="paramsMedical.registerNo" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-3 col-md-4">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w150"><p style="color: red;display: inline;">*</p>规格型号:</span>
+                    </label>
+                    <input class="form-control radius3" name="model" required
+                            ng-model="paramsMedical.model" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-3 col-md-4">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w150"><p style="color: red;display: inline;">*</p>储运条件:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_MEDICALTRANS" required name="transCondition" ng-model="paramsMedical.transCondition"></div>
+
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-3 col-md-4">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w150"><p style="color: red;display: inline;">*</p>是否灭菌批号管理:</span>
+                    </label>
+                    <div  lookup-code="PLM_PRODUCT_YESORNO" required name="ifBatchnumber" ng-model="paramsMedical.ifBatchnumber"></div>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-3 col-md-4">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w150"><p style="color: red;display: inline;">*</p>产品有效期:</span>
+                    </label>
+                    <input class="form-control radius3" name="productSxdate" required
+                            ng-model="paramsMedical.productSxdate" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-3 col-md-4">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w150">产品技术要求编号:</span>
+                    </label>
+                    <input class="form-control radius3" name="requireCode"
+                            ng-model="paramsMedical.requireCode" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-3 col-md-4">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w150">唯一标识码:</span>
+                    </label>
+                    <input class="form-control radius3" name="standNo"
+                            ng-model="paramsMedical.standNo" type="text">
+                  </div>
+                  
+                </div>
+
+                <div class="form-group col-xs-3 col-md-4">
+                  <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w150">销售单位:</span>
+                    </label>
+                    <input class="form-control radius3" name="saleUnit"
+                            ng-model="paramsMedical.saleUnit" type="text">
+                  </div>
+                  
+                </div>
+
+              </div>
+              <div class="row"></div>
+              <!-- <div class="baseInfoContent" style="padding: 15px">
+                <ul class="nav nav-tabs" id="GoodsInfoTab">
+                  <li class="active" >
+                    <a data-toggle="tab" ng-href="#medInstFile"><i class="fa fa-list-alt"></i>
+                    <label>医疗器械资质文件</label></a>
+                  </li>
+                </ul>
+
+                <div class="tab-content" id="GoodsInfoTabContent">
+
+                    <div class="tab-pane fade in active col-md-12" id="medInstFile" style="min-height: 300px;">
+
+                        <div class="form-group col-xs-4 col-md-3" style="margin-top: 10px">
+                            <div class="input-group input-group-xs">
+                              <label class="input-group-addon bn">
+                                  <span class="w100"><p style="color: red;display: inline;">*</p>资质组ID:</span>
+                              </label>
+                              <input class="form-control radius3" name="qaFileId" required
+                                      ng-model="params.qaFileId" type="text">
+                            </div>
+                          </div>
+    
+                          <div class="form-group col-xs-4 col-md-3" style="margin-top: 10px">
+                            <div class="input-group input-group-xs">
+                              <label class="input-group-addon bn">
+                                  <span class="w100"><p style="color: red;display: inline;">*</p>资质组名称:</span>
+                              </label>
+                              <input class="form-control radius3" name="qaFilename"  required
+                                      ng-model="params.qaFilename" type="text">
+                            </div>
+                          </div>
+
+                          <div class="data-table">
+                              <table class="table table-bordered" style="margin-top: 15px">
+                                  <thead class="bg-gray-white">
+                                    <tr>
+                                      <th>序号</th>
+                                      <th>资质文件类型</th>
+                                      <th><p style="color: red;display: inline;">*</p>资质文件</th>
+                                      <th><p style="color: red;display: inline;">*</p>证书编号类型</th>
+                                      <th><p style="color: red;display: inline;">*</p>证书编号</th>
+                                      <th><p style="color: red;display: inline;">*</p>日期类型</th>
+                                      <th><p style="color: red;display: inline;">*</p>日期</th>
+                                      <th>操作</th>
+                                    </tr>
+                                  </thead>
+      
+                                  <tbody>
+                                    <tr ng-repeat="(index, item) in qalist">
+                                      <td>{{index+1}}</td>
+                                    
+                                      <td>
+                                        <div ng-if="Number(item.qaFiletype)">
+                                          {{item.qaFiletype}}
+                                        </div>
+                                        <div class="input-group input-group-xs" ng-if="!Number(item.qaFiletype)">
+                                          <div lookup-code="PLM_PRODUCT_MEDICALQAFILE" name="qaFiletype" ng-model="item.qaFiletype" data-callback="meQaFiletypeChange" ng-click="getmeqaFiletypeIndex(index)"></div>
+                                        </div>
+                                      </td>
+                                      <td>
+                                          <input type="submit"  value="重新上传" ng-if="item.qaUrl" ng-click="UploaderReset(index,'qalist')">
+                                          <input type="file" ng-if="!item.qaUrl" nv-file-select="" uploader="medFileUploader" style="width: 180px; display: inline-block" ng-click="getMedFileIndex(index)"> 
+                                          <span ng-click="previewImg(index, 'qalist')" ng-if="item.qaUrl" style="color: cornflowerblue; cursor:pointer">预览</span>
+                                          <span ng-if="item.qaUrl" style="display: inline-block; width: 100px;overflow: hidden; text-overflow: ellipsis;vertical-align: middle;">{{item.qaFileName}}</span>
+                                      </td>
+                                      <td>
+                                          <div class="input-group input-group-xs">
+                                            <div  lookup-code="PLM_PRODUCT_FILECODETYPE" name="qaCodetype" required ng-model="item.qaCodetype" disabled></div>
+                                          </div>
+                                      </td>
+                                      <td>
+                                          <div class="input-group input-group-xs">
+                                              <input class="form-control radius3" name="qaCode"  required
+                                              ng-model="item.qaCode" type="text">
+                                            </div>
+                                      </td>
+                                      <td>
+                                          <div class="input-group input-group-xs">
+                                            <div  lookup-code="PLM_PRODUCT_DATETYPE" required name="dateType" ng-model="item.dateType" disabled></div>
+                                          </div>
+                                      </td>
+                                      <td>
+                                        <div class="form-group">
+                                          <div class="input-group input-group-xs">
+                                            <input class="form-control" required name="setDate" required
+                                            date-time-picker="" data-date-format="yyyy-mm-dd"
+                                            maxlength="20" data-min-view="2" 
+                                            ng-model="item.datecurent" >
+                                          </div>
+                                        </div>
+                                      </td>
+                                      <td >
+                                        <div  class="btn-group btn-group-xst">
+                                          <button type="button" ng-if="!Number(item.qaFiletype)" class="btn btn-default btn-xs" ng-click="del(index, 'qalist')">
+                                            <i class="fa fa-trash-o">删除</i>
+                                          </button>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td ng-click="addqualInfo()" style="font-size: 14px"><i class="fa fa-plus-square-o" ></i></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                          </div>
+                    </div>
+
+                </div>
+              </div> -->
+            </form>
+          </div>
+        </div>
+
+        <!-- 流程图 -->
+        <!-- <div class="tab-pane fadeIn col-md-12" id="flowChart">
+            <div class=" mt10 pb5 "  data-des="此节点必需－用于识别输入表单的指令">
+                <div ng-if="!urlParams.businessKey" ng-show="tabAction== 'flowChart'" role="tabpanel" class="tab-pane "
+                     style="border: 0;width:100%;height: 750px;margin-top:50px; overflow: hidden;position: relative;">
+                    <div id="processImg" style="width: 100%;height:100%; overflow: auto;">流程图加载中，请稍候...</div>
+                </div>
+            </div>
+        </div> -->
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- 弹窗控件 -->
+
+  <!--部门编码选择-->
+  <div data-auto-request="true" data-callback="" data-checked-type="radio"
+       data-dynamic-params='' data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+       data-params="{parentDepartmentId:'{{params.brandDetailDeptId}}'}"
+       data-other-column="[{'name':'部门名称','key':'departmentFullName'}]"
+       data-pagination="{'pageIndex':'1','pageRows':'5'}"
+       data-return-type="key"
+       data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                        {'key':'departmentFullName','placeholder':'部门名称'}]"
+       data-show-index="false"
+       data-title="选择部门信息"
+       data-type="competitor"
+       data-url="findDeptByGroupIdAndDepartmentType"
+       id="brandPlnDeptLov"
+       lov-list="departmentPlnDeptLov"
+       ng-model="current.em"
+       role="dialog"
+  ></div>
+
+  <!--供应商名称选择-->
+  <div data-auto-request="true" data-callback="SupplierNameReturn" data-checked-type="radio"
+       data-dynamic-params='' data-keys="{'key':'userName','value':'userName','name':'供应商名称'}"
+       data-params="{userType:'60'}"
+       data-other-column="[{'name':'供应商ID','key':'userId' },]"
+       data-pagination="{'pageIndex':'1','pageRows':'5'}"
+       data-return-type="key"
+       data-search-key="[{'key':'userName','placeholder':'供应商名称'}]"
+       data-show-index="false"
+       data-title="选择供应商名称"
+       data-type="competitor"
+       data-url="userFind"
+       id="supplierNameMol"
+       lov-list="supplierNamePlnDeptLov"
+       ng-model="current.userName"
+       role="dialog"
+  ></div>
+
+  <!--地点供应商名称选择-->
+  <div data-auto-request="true" data-callback="diDianSupplierNameReturn" data-checked-type="radio"
+       data-dynamic-params='' data-keys="{'key':'userName','value':'userName','name':'供应商名称'}"
+       data-params="{userType:'60'}"
+       data-other-column="[{'name':'供应商ID','key':'userId' },]"
+       data-pagination="{'pageIndex':'1','pageRows':'5'}"
+       data-return-type="key"
+       data-search-key="[{'key':'userName','placeholder':'供应商名称'}]"
+       data-show-index="false"
+       data-title="选择供应商名称"
+       data-type="competitor"
+       data-url="userFind"
+       id="diDianSupplierNameMol"
+       lov-list="supplierNamePlnDeptLov"
+       ng-model="current.userName"
+       role="dialog"
+  ></div>
+
+  <!-- 主商品货号 -->
+  <div data-auto-request="true" data-callback="mainProductNameReturn" data-checked-type="radio"
+       data-dynamic-params='' data-keys="{'key':'plmCode','value':'plmCode','name':'主商品货号'}"
+       data-params="{}"
+       data-other-column="[{'name':'主商品名称','key':'productName' },]"
+       data-pagination="{'pageIndex':'1','pageRows':'5'}"
+       data-return-type="key"
+       data-search-key="[{'key':'plmCode','placeholder':'主商品货号'}]"
+       data-show-index="false"
+       data-title="选择主商品货号"
+       data-type="competitor"
+       data-url="FindProductList"
+       id="mainProductNameMol"
+       lov-list="mainProductPlnDeptLov"
+       ng-model="current.plmCode"
+       role="dialog"
+  ></div>
+
+
+  <!-- 地区控件 -->
+  <div class="modal fade" id="citysModal" data-des="请选择产地" data-backdrop="static">
+      <div class="modal-dialog ">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close"
+                          data-dismiss="modal" aria-hidden="true">
+                      &times;
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel">
+                      请选择产地
+                  </h4>
+              </div>
+              <form class="ngValid" >
+                  <div class="modal-body oh">
+                      <div city-area="businessCity" data-default-country='999' ng-model="citys" class="col-xs-12" data-select-level="3"></div>
+                  </div>
+
+                  <div class="modal-footer ">
+                      <div style="text-align:center">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                          </button>
+                          <button type="button" ng-click="citySave1()" class="btn btn-primary mr10">确定</button>
+                      </div>
+                  </div>
+              </form>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+  </div>
+
+
+    <!-- 资质文件明细弹窗 -->
+    <div class="modal fade" id="fileUpload" tabindex="-1"
+    data-backdrop="static" role="dialog"
+    aria-labelledby="accessoryModalLabel">
+    <div class="modal-dialog modal-lg" style="margin-top: 5%;">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"
+                      ng-click="search()"
+                      aria-hidden="true">&times;
+              </button>
+              <h4 class="modal-title pull-left" id="accessoryModalLabel">资质文件明细</h4>
+          </div>
+          <div class="modal-body">
+              <div class = "row"></div>
+              <div class="data-table">
+                  <table
+                          class="table table-bordered table-hover table-condensed">
+                      <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                      <tr class="text-center">
+                          <th>序号</th>
+                          <th>文件名</th>
+                          <th>上传时间</th>
+                          <th>签字时间</th>
+                          <th>备注</th>
+                          <th>文件状态</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr class="text-center" ng-repeat="row in qaDetailTable"
+                          ng-class="{'active':qaDetailTable.selectRow==$index}"
+                          ng-click="qaDetailTable.selectRow=$index">
+                          <td>{{$index+1}}</td>
+                          <td style="width:400px;" title="{{row.fileName}}">
+                              <div style="width: 400px;" class="ellipsis"><a href="{{row.fileAddress}}" download="{{row.fileName}}" target="_blank">{{row.fileName}}</a></div>
+                          </td>
+                          <td title="{{row.uploadDate}}">{{row.uploadDate}}</td>
+                          <td><input type="text" required class="form-control radius3 input-xs"
+                                      id="signatureTime"
+                                      date-time-picker
+                                      data-date-format="yyyy-mm-dd"
+                                      data-min-View="2" ng-model="row.signatureTime" 
+                                      disabled
+
+                          >
+                          <td><input class="form-control input-xs" ng-model="row.remarks" disabled
+                          >
+                          </td>
+                          <td title="{{row.fileStatusName}}">{{row.fileStatusName}}</td>
+
+                      </tr>
+                      </tbody>
+                  </table>
+              </div>
+
+          </div>
+          <div class="modal-footer ">
+              <div style="text-align: center">
+                  <button style="" type="button" class="btn btn-default"
+                          ng-click="search()"
+                          data-dismiss="modal">取消
+                  </button>
+                  <button type="button" id="saveQaDetail"
+                          ng-click="saveFile()" class="btn btn-primary mr10">保存
+                  </button>
+              </div>
+          </div>
+      </div>
+    </div>
+    </div>
+</div>
+
+<style>
+tr>th{
+  text-align: center;
+}
+
+</style>

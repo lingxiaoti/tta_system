@@ -1,0 +1,14 @@
+management:
+  security:
+    enabled : false
+
+spring:
+  application:
+    name: 3001-saaf-equotation-server
+  cloud:
+    config:
+      uri: http://127.0.0.1:8020/
+      profile: dev
+      label: master
+      username: admin
+      password: admin

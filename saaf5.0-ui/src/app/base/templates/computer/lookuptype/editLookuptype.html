@@ -1,0 +1,187 @@
+<div ng-controller="editLookuptypeCtrl"  class="gridtable">
+    <div>
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <button  type="button" ng-click="btnSave()"  permission-btn="" data-validate-form="addForm" class="btn btn-default" >
+                    </button>
+                </div>
+                <div class="btn-group btn-group-xs ">
+                </div>
+            </div>
+        </div>
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+
+                <form name="addForm" class=" mt10 pb5 bb oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form>
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>快码类型</span>
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100"><i
+                                        class="red">*</i> 快码类型</span></label>
+                                <input type="text" id="lookupType" required class="form-control radius3" name="paramsLookupType" ng-keyup="transitionUpper($even)"
+                                       ng-model="params.lookupType">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">*</i>快码应用层级</span></label>
+                                <select type="text" id="platformCode" class="form-control radius3" required="" name="paramsCustomizationLevel"
+                                        ng-model="params.customizationLevel">
+                                    <option></option>
+                                    <option saaf-select-lookupcode="CUSTOMIZATION_LEVEL"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="pl10"><i class="red">*</i>系统编码</span></label>
+                                <div lookup-code="SYSTEM_CODE" required=""  name="paramsSystemCode" ng-model="params.systemCode" look-disabled="selectDisabled" ng-disabled="selectDisabled"></div>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">说明</span></label>
+                                <input type="text" id="meaning" class="form-control radius3"
+                                       ng-model="params.meaning">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">描述</span></label>
+                                <input type="text" id="description" class="form-control radius3"
+                                       ng-model="params.description">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">父类型</span></label>
+                                <input type="text" ng-disabled="true" class="form-control radius3"
+                                       ng-model="addParam.lookupType">
+                                <span class="input-group-btn ng-scope">
+                                    <button type="button" data-toggle="modal" data-target="#prandSystemCode" ng-disabled="selectDisabled" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row"></div>
+
+
+                        <!--<hr width="100%">-->
+                        <div>
+                            <label style="margin-left: 10px"><i class="fa fa-list-alt"></i>代码详情</label>
+                            <div permission-buttons="btnNew,btnDel" class="btn-group btn-group-xs ml5 pull-right">
+                                <button type="button" class="btn btn-default btn-xs " ng-disabled="dataTable.selectRow==undefined" ng-click="btnDel()"><i class="fa fa-trash-o fa-lg"></i>删除</button>
+                                <button type="button" class="btn btn-default btn-xs" ng-click="btnNew()"><i class="fa fa-plus">增加</i></button>
+                            </div>
+
+                        </div>
+
+                        <div class="data-table">
+                            <!--<th>标识</th>-->
+                            <!--<td><input class="form-control input-xs" ng-model="row.tag"-->
+                                    <!--ng-readonly="!updateCheck&&row.newFlag!='Y'"></td>-->
+                            <!--</td>-->
+                            <table
+                                    class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th>快码值</th>
+                                    <th>快码名称</th>
+                                    <th>是否生效</th>
+
+                                    <th>生效日期</th>
+                                    <th>失效日期</th>
+                                    <th>描述</th>
+                                    <th>父值</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-center" ng-repeat="row in dataTable"
+                                    ng-class="{'active':dataTable.selectRow==$index}"
+                                    ng-click="dataTable.selectRow=$index">
+                                    <td><input class="form-control input-xs" required ng-model="row.lookupCode"
+                                               ng-readonly="!updateCheck&&row.newFlag!='Y'"></td>
+                                    </td>
+                                    <td><input class="form-control input-xs" ng-model="row.meaning"
+                                               ng-readonly="!updateCheck&&row.newFlag!='Y'"></td>
+                                    </td>
+                                    <td><input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                               ng-model="row.enabledFlag" ng-disabled="!updateCheck&&row.newFlag!='Y'">
+                                    </td>
+
+                                    <td><input type="text" required class="form-control radius3 input-xs"
+                                               ng-disabled="!updateCheck&&row.newFlag!='Y'" id="startDataActive"
+                                               date-time-picker
+                                               data-is-today="true"
+                                               data-date-format="yyyy-mm-dd" data-enddate="{{row.endDateActive}}"
+                                               data-min-View="2" ng-model="row.startDateActive"
+                                               ng-readonly="!updateCheck&&row.newFlag!='Y'"></td>
+                                    <td><input type="text" class="form-control radius3 input-xs"
+                                               ng-disabled="!updateCheck&&row.newFlag!='Y'" id="endDateActive"
+                                               date-time-picker
+                                               data-date-format="yyyy-mm-dd" data-stratdate="{{row.startDateActive}}"
+                                               data-min-View="2" ng-model="row.endDateActive"
+                                               ng-readonly="!updateCheck&&row.newFlag!='Y'"></td>
+                                    <td><input class="form-control input-xs" ng-model="row.description"
+                                               ng-readonly="!updateCheck&&row.newFlag!='Y'"></td>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-group-xs">
+                                            <input type="text" class="form-control radius3"
+                                                   ng-model="row.parentMeaning" ng-disabled="true">
+                                            <span class="input-group-btn ng-scope">
+                                                <button type="button" ng-disabled="editParentSwitch" ng-click="showFindParentModel($index)" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!--<div saaf-table-tfoot="dataTable.data"></div>-->
+                        </div>
+                    </form>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div lov-list="subpool" role="dialog" data-title="请选择父类型" id="prandSystemCode" ng-model="code1" class="  "
+         data-url="querylookupType"
+         data-params='{}'
+         data-return-key="params.parentLookupTypeId"
+         data-return-value="addParam.lookupType"
+         data-keys="{'key':'lookupTypeId','value':'lookupType','name':'快码类型'}"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-other-column="[{'name':'描述','key':'description'},{'name':'系统代码','key':'systemCode'}]"
+         data-show-index="false"
+         data-search-key="[{'key':'lookupType_like','placeholder':'快码类型'}]"
+    >
+    </div>
+    <div lov-list="findByParentLov" role="dialog" data-title="请选择父值" id="findByParentModel" ng-model="code2"
+         data-url="findByParent"
+         data-callback="findByParentCallback"
+         data-dynamic-params='{lookupTypeId:params.parentLookupTypeId}'
+         data-keys="{'key':'lookupValuesId','value':'meaning','name':'描述'}"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-other-column="[{'name':'代码','key':'lookupCode'}]"
+         data-show-index="false"
+         data-search-key="[{'key':'lookupType_like','placeholder':'快码类型'}]"
+    >
+    </div>
+</div>

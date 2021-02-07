@@ -1,0 +1,252 @@
+<div ng-controller="editQuestionDetailCtrl"  class="gridtable">
+    <div>
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <button  type="button" ng-click="btnSave()"  permission-btn="" data-validate-form="addForm" class="btn btn-default" >
+                    </button>
+                </div>
+                <div class="btn-group btn-group-xs ">
+                </div>
+            </div>
+        </div>
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+
+                <form name="addForm" class=" mt10 pb5 bb oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form>
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>问卷详情</span>
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100"><i
+                                        class="red">*</i> 题目序号</span></label>
+                                <input  required="true"  type="number" id="serialNumber" required class="form-control radius3" name="serialNumber"
+                                       ng-model="params.serialNumber">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100"><i
+                                        class="red">*</i> 题目中文名称</span></label>
+                                <input  required="true" type="text" id="projectCnTitle" required class="form-control radius3" name="projectCnTitle"
+                                       ng-model="params.projectCnTitle">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">*</i>选项类型</span></label>
+                                <select  required="true" type="text" id="projectType" class="form-control radius3" required="" name="projectType"
+                                        ng-model="params.projectType">
+                                    <option></option>
+                                    <option saaf-select-lookupcode="PROJECT_TYPE"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="pl10"><i class="red">*</i>是否启用</span></label>
+                                <div lookup-code="YES_OR_NO" required="true"  name="isEnable" ng-model="params.isEnable" look-disabled="selectDisabled"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">题目英文名称</span></label>
+                                <textarea type="text" id="projectEnTitle" class="form-control radius3" style="width: 900px; height: 100px;"
+                                          ng-model="params.projectEnTitle"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row"></div>
+
+                        <div>
+                            <label style="margin-left: 10px"><i class="fa fa-list-alt"></i>选项详情</label>
+                            <div permission-buttons="btnNew,btnDel" class="btn-group btn-group-xs ml5 pull-right">
+                                <button type="button" class="btn btn-default btn-xs " ng-disabled="dataTable.selectRow==undefined" ng-click="btnDel()"><i class="fa fa-trash-o fa-lg"></i>删除</button>
+                                <button type="button" class="btn btn-default btn-xs" ng-click="btnNew()"><i class="fa fa-plus">增加</i></button>
+                            </div>
+                        </div>
+
+                        <div class="data-table">
+                            <table class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                    <tr class="text-center">
+                                    <th>排序号</th>
+                                    <th>选项类型</th>
+                                    <th>中文名称</th>
+                                   <!-- <th>英文名称</th>-->
+                                    <th>唯一标识</th>
+                                    <th>是否显示下级题目</th>
+                                    <th>是否启用</th>
+                                    <th>自动计算规则</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-center" ng-repeat="row in dataTable"
+                                    ng-class="{'active':dataTable.selectRow==$index}"
+                                    ng-click="dataTable.selectRow=$index;" ng-dblclick="dbClickShowChild();">
+                                    <td><input class="form-control input-xs" required ng-model="row.serialNumber"
+                                             type="number"   required="true" ></td>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-group-xs">
+                                            <div required="true" lookup-code="CHOICE_TYPE" data-first-text="请选择类型"  ng-change="choiceTypeChange($index,'parent');" ng-model="row.choiceType"></div>
+                                        </div>
+                                    </td>
+                                    <td><input  required="true" class="form-control input-xs" ng-model="row.choiceCnContent"
+                                                ng-disabled="row.choiceCnContentFlag" ></td>
+                                    </td>
+                                <!--    <td><input  required="true"  class="form-control input-xs" ng-model="row.choiceEnContent"
+                                                ng-disabled="row.choiceEnContentFlag" ></td>-->
+                                    <td><input  required="true"  class="form-control input-xs" ng-model="row.choiceEnContent"
+                                                ng-disabled="true" ></td>
+                                    </td>
+                                    <td><input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                               ng-model="row.isShowChild" >
+                                    </td>
+                                    <td><input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                               ng-model="row.isEnable" >
+                                    </td>
+                                  <td>
+                                        <div class="input-group input-group-xs">
+                                            <input type="text" class="form-control radius3"
+                                                   ng-model="row.ruleName" ng-disabled="true">
+                                            <span class="input-group-btn ng-scope">
+                                                <button ng-disabled="row.ruleNameFlag" type="button" ng-click="showFindParentModel($index,'parent')" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 选项下层 start-->
+                        <div>
+                            <label style="margin-left: 10px"><i class="fa fa-list-alt"></i>选项下层</label>
+                           <!-- <div permission-buttons="btnNew,btnDel" class="btn-group btn-group-xs ml5 pull-right">-->
+                            <div class="btn-group btn-group-xs ml5 pull-right">
+                                <button type="button" class="btn btn-default btn-xs"  ng-disabled="dataTable.selectRow==undefined" ng-click="addChild()"><i class="fa fa-plus">增加下层</i></button>
+                                <button type="button" class="btn btn-default btn-xs " ng-disabled="childDataTable.selectRow==undefined" ng-click="delChild()"><i class="fa fa-trash-o fa-lg"></i>删除下层</button>
+                                <button type="button" class="btn btn-default" ng-click="saveChild()"><i class="fa fa-trash-o fa-lg"></i>保存下层</button>
+                            </div>
+
+                            <table class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th>排序号</th>
+                                    <th>选项类型</th>
+                                    <th>中文名称</th>
+                                    <!--<th>英文名称</th>-->
+                                    <th>唯一标识</th>
+                                    <th>是否启用</th>
+                                    <th>控件类型</th>
+                                    <th>快码选项</th>
+                                    <th>自动计算规则</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-center" ng-repeat="row in childDataTable"
+                                    ng-class="{'active':childDataTable.selectRow==$index}"
+                                    ng-click="childDataTable.selectRow=$index">
+                                    <td><input class="form-control input-xs" required ng-model="row.serialNumber"
+                                               type="number"   required="true" ></td>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-group-xs">
+                                            <div required="true" lookup-code="CHOICE_TYPE" data-first-text="请选择类型"  ng-change="choiceTypeChange($index,'child');" ng-model="row.choiceType"></div>
+                                        </div>
+                                    </td>
+                                    <td><input  class="form-control input-xs" ng-model="row.choiceCnContent" ng-disabled="row.choiceCnContentFlag"></td>
+                                    </td>
+                                    <td>
+                                        <!--<input  class="form-control input-xs" ng-model="row.choiceEnContent" ng-disabled="row.choiceEnContentFlag"></td>-->
+                                        <input  class="form-control input-xs" ng-model="row.choiceEnContent" ng-disabled="true"></td>
+                                    </td>
+                                    <td><input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" ng-model="row.isEnable">
+                                    </td>
+
+                                    <td>
+                                        <div class="input-group input-group-xs">
+                                            <div required="true" lookup-code="TTA_CONTROL_TYPE" data-first-text="请选择类型"  ng-change="controlTypeChange($index);" ng-model="row.controlType"></div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="input-group input-group-xs">
+                                            <input type="text" class="form-control radius3"
+                                                   ng-model="row.lookupTypeName" ng-disabled="true">
+                                            <span class="input-group-btn ng-scope">
+                                                <button type="button" ng-click="showFindLookUpModel($index,'child')" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </td>
+
+
+                                    <td>
+                                        <div class="input-group input-group-xs">
+                                            <input type="text" class="form-control radius3"
+                                                   ng-model="row.ruleName" ng-disabled="true">
+                                            <span class="input-group-btn ng-scope">
+                                                <button type="button" ng-disabled="row.ruleNameFlag" ng-click="showFindParentModel($index,'child')" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- 选项下层 end-->
+                    </form>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+   <div lov-list="findByParentLov" role="dialog" data-title="请选择父值" id="findByParentModel" ng-model="code2"
+         data-url="findQueryRulePag"
+         data-callback="findByParentCallback"
+         data-dynamic-params='{businessType:"1"}'
+         data-keys="{'key':'ruleId','value':'ruleName',name:'规则名称'}"
+         data-pagination="{'pageIndex':'1','pageRows':'20'}"
+         data-checked-type="radio"
+         data-show-index="false"
+         data-search-key="[{'key':'ruleName','placeholder':'规则名称'}]"
+    >
+    </div>
+
+
+    <div lov-list="findByLookUpLov" role="dialog" data-title="请选择" id="findByLookUpModel" ng-model="code3"
+         data-url="querylookupType"
+         data-callback="findByLookCallback"
+         data-dynamic-params='{lookupType_like:"TTA_QUESTION_"}'
+         data-keys="{'key':'lookupType','value':'meaning',name:'快码名称'}"
+         data-other-column="[{'name':'快码值','key':'lookupType'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'200'}"
+         data-checked-type="radio"
+         data-show-index="false"
+         data-search-key="[{'key':'lookupType','placeholder':'快码值'}]"
+    >
+    </div>
+
+
+</div>

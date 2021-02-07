@@ -1,0 +1,266 @@
+<div ng-controller="ruleDetailCtrl" class="bigdata">
+    <div>
+        <form name="addModalForm">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white p5">
+            <div class=" pull-right ml10">
+                <div class="btn-group btn-group-xs">
+                    <button data-validate-form="addModalForm" ng-click="btnSave()" class="btn btn-default" id="saveButton">
+                        <i class="fa fa-floppy-o" aria-hidden="true"></i>保存
+                    </button>
+                </div>
+            </div>
+            <div class="btn-group btn-group-xs ">
+                <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                </button>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+                 <div class=" mt10 pb5  oh" data-des="此节点必需－用于识别输入表单的指令">
+                    <input type="hidden"  name="ssoId">
+                        <div class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>{{$l('规则信息')}}</span>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3" ng-class="{'has-error':isShow}">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">*</i>{{$l('规则名称')}} </span>
+                                </label>
+                                <input type="text"  required ng-model="params.ruleName"  class="form-control radius3">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>独家渠道类别</span>
+                                </label>
+                                <div data-required="true" lookup-code="SOLE_RESOUCE_TYPE" required="" ng-disabled="idModify" ng-model="params.soleResouceType" name="soleResouceType"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>独家产品类型</span>
+                                </label>
+                                <div data-required="true" lookup-code="SOLE_PRODUCT_TYPE" required ng-disabled="idModify" ng-model="params.soleProductType" name="soleProductType"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>是否包含电商渠道</span>
+                                </label>
+                                <div data-required="true" lookup-code="YES_OR_NO" required ng-disabled="idModify" ng-model="params.isIncludeEc" name="isIncludeEc"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>是否包含独家渠道例外情形</span>
+                                </label>
+                                <div data-required="true" lookup-code="YES_OR_NO" required ng-disabled="idModify" ng-model="params.isIncludeSpecial" name="isIncludeSpecial"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10">
+                                       <!-- <i class="red">*</i>-->
+                                        备注信息</span>
+                                </label>
+                                <input type="text" class="form-control radius3" ng-model="params.remark" name="remark">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100" class="pl10"><i
+                                            class="red">*</i>是否启用</span>
+                                </label>
+                                <div data-required="true" lookup-code="YES_OR_NO" required ng-model="params.isEnable" name="isEnable"></div>
+                            </div>
+                        </div>
+                        <div class="row"></div>
+                     <!------------------------------------------------start----------------------------------------------->
+                     <div class="col-xs-12 mb10">
+                         <i class="fa fa-cog" aria-hidden="true"></i>
+                         <span>参数模板</span>
+                     </div>
+                     <div  class="col-md-12 tab">
+                         <!-- Nav tabs -->
+                         <ul class="nav nav-tabs" role="tablist">
+                         <li ng-class="[tab.active===$index?'active':'']" ng-repeat="cur in tab.nav" ng-click="tab.click($index)"><a
+                                 href="javascript:void(0)">{{cur}}</a></li>
+                     </ul>
+                         <!-- Tab panes -->
+                         <div class="tab-content">
+                             <!--table start -->
+                             <div ng-class="['tab-pane', tab.active==0?'active':'']" style="width: 100%; margin: 10px 0; height: 30px; display: flex; justify-content: space-between;" >
+                                        <div class="form-group" style="width: 300px">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn">
+                                                    <span class="w80" class="pl10">
+                                                        参数名称</span>
+                                                </label>
+                                                <input type="text" class="form-control radius3" ng-model="ruleParams.paramKey">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group" style="width: 300px">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn">
+                                                    <span class="w80" class="pl10">
+                                                        参数内容</span>
+                                                </label>
+                                                <input type="text" class="form-control radius3" ng-model="ruleParams.paramContent" >
+                                            </div>
+                                        </div>
+    
+                                        <div class="form-group" style="width: 300px">
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn">
+                                                    <span class="w80" class="pl10">
+                                                        备注信息</span>
+                                                </label>
+                                                <input type="text" class="form-control radius3" ng-model="ruleParams.remark" >
+                                            </div>
+                                        </div>
+                                <div class="btn-group btn-group-xs pull-right">
+                                     <button class="btn btn-default" type="button" ng-disabled="!idModify" ng-click="rpTable.search(1)">
+                                         <i class="fa fa-search" aria-hidden="true"></i>搜索
+                                     </button>
+                                    <!-- <div permission-buttons="btnNew,btnDel" class="btn-group btn-group-xs ml5 pull-right">
+                                     </div>-->
+                                   <!--<div permission-buttons="btnNew,btnDel" class="btn-group btn-group-xs ml5 pull-right">-->
+                                          <button type="button" class="btn btn-default btn-xs" ng-click="btnNew()" ng-disabled="!idModify" ><i class="fa fa-plus">新增</i></button>
+                                          <button type="button" class="btn btn-default btn-xs" ng-click="btnDel()" ><i class="fa fa-trash-o fa-lg"></i>删除</button>
+                                   <!--  </div>-->
+                                 </div>
+                             </div>
+
+                             <div ng-class="['tab-pane', tab.active==0?'active':'']" style="overflow-y:auto">
+                                 <div class="data-table">
+                                         <div base-data-table="rpTable" id="rpTable" 
+                                              ng-params="ruleParams"
+                                              data-show-index="true"
+                                              data-auto-request="true"
+                                              data-url="findParams"
+                                              data-paging-show="true"
+                                              data-checked-type="checkbox"
+                                              data-keys="{'key':'ruleParamId'}"
+                                              data-legend="[
+                                     {'value':'paramKey','name':'参数名称'},
+                                     {'value':'paramContent','name':'参数内容'},
+                                     {'value':'remark','name':'备注信息'},
+                                    ]"></div><!--{'value':'isSql','name':'是否sql文本'},-->
+                                 </div>
+                             </div>
+
+                             <div ng-class="['tab-pane', tab.active==1?'active':'']" style="margin: 10px;">
+                                 <div class="mb5">
+                                     <div class="pull-left">
+                                         <button class="btn btn-default btn-xs" type="button"
+                                                 ng-click="btnWordProcess()">
+                                             <i class="fa fa-cloud-upload">导出模板</i>
+                                         </button>
+                                     </div>
+                                 </div>
+
+                             </div>
+                         </div>
+                 </div>
+                <!------------------------------------------------end------------------------------------------------>
+            </div>
+        </div>
+        </div>
+        </form>
+
+        <div role="dialog" class="modal fade" id="nameLov" data-des="新增菜单" data-backdrop="static" tabindex="-1" >
+            <div class="modal-dialog" style="width: 950px; height: 300px">
+                <!--addModalForm start-->
+                <div class="modal-content" >
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            参数信息
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group col-xs-6 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <!-- <label class="input-group-addon bn">
+                                 <span class="w100">参数名称</span></label>-->
+                            <input ng-model="excludeParams.paramKey" class="form-control" placeholder="请输入参数名称">
+                        </div>
+                    </div>
+                        <div class="form-group col-xs-6 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <input ng-model="excludeParams.paramContent" class="form-control" placeholder="请输入参数内容">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <input ng-model="excludeParams.remark" class="form-control" placeholder="请输入备注信息">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-3 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <button class="btn btn-xs btn-primary"  type="button" ng-click="dataTable.search(1)">查询</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="data-table">
+                                <div base-data-table="dataTable"
+                                     data-auto-request="true"
+                                     ng-params="excludeParams"
+                                     data-show-index="true"
+                                     data-url="findNotExistsList"
+                                     data-checked-type="checkbox"
+                                     data-keys="{'key':'paramKey'}"
+                                     data-page-size="6"                 
+                                     data-legend="[
+                                     {'value':'paramKey','name':'参数名称'},
+                                     {'value':'paramContent','name':'参数内容'},
+                                     {'value':'remark','name':'备注信息'},
+                                    ]"><!-- {'value':'isSql','name':'是否sql文本'},-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" ng-click="saveParams()" class="btn btn-warning btn-sm">
+                            <span class="fa fa-plus"> 确定新增</span></button>
+                        <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal" aria-label="Close"><span
+                                class="fa ">取消</span>
+                        </button>
+                    </div>
+
+
+                </div>
+                <!--addModalForm end-->
+            </div>
+        </div>
+
+    </div>
+</div>

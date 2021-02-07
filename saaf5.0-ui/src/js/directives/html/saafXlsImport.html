@@ -1,0 +1,88 @@
+<div class="modal fade" id="saafXlsModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     role="dialog" aria-labelledby="saafXlsModal"
+     aria-hidden="true">
+    <!--add by luofu-->
+    <form ng-submit="upXls()">
+        <div class="modal-dialog modal-dialog-lg" style="margin-top: 20px;margin-bottom: 10px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">excel导入</h4>
+                </div>
+                <div class="modal-body ">
+                    <div ng-show="!dataTable.data" class="row">
+
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">上传判断规则:</span></label>
+                                <textarea class="form-control radius3" style="height: 100px" readonly>{{$attrs.message}}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">选择导入文件:</span></label>
+                                <input id="saafxlsimport" type="file" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="dataTable.data" class="row">
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="pl10">查看选择：</span></label>
+                                <select   ng-init="selectFlag='all'"   class="form-control radius3 " ng-model="selectFlag" ng-change="changeSee()">
+                                    <option value="all">查看全部数据</option>
+                                    <option value="err">仅查看错误数据</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt10">
+                        <div class="col-xs-12">
+                            <div style="overflow:auto" ng-style="{height:dataTable.data.length>0?'350px':'250px'}">
+
+                                <table
+                                        class="table  table-bordered table-hover table-condensed">
+                                    <thead class="bg-gray-white ">
+                                    <tr class="text-center ">
+
+                                        <th ng-repeat="row in dataTable.headNames" ng-class="{'red':row=='错误信息'}"><span
+                                                class="red" ng-show="dataTable.isRequire[$index]">*</span>{{row}}
+                                        </th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody ng-if="!dataTable.data">
+
+                                    <tr>
+                                        <td colspan="100" class="active h200"></td>
+                                    </tr>
+                                    </tbody>
+                                    <tbody ng-show="dataTable.data" id="saaf_xls_import_tbody">
+                                    <!-- <tr ng-repeat="row in dataTable.data">
+                                         <th class="red" title="{{row.ERR_MESSAGE}}">{{row.ERR_MESSAGE}}</th>
+                                         <td>{{$index+1}}</td>
+                                         <td ng-if="name!='ERR_MESSAGE'" ng-repeat="name in dataTable.jsonNames"
+                                             class="table-input-td w200"><input class="form-control" ng-required="dataTable.isRequire[$index]"
+                                                                                ng-model="row[name]"></td>
+                                     </tr>-->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default mr10" data-dismiss="modal">取消
+                        </button>
+                        <button type="submit" class="btn btn-primary ">保存</button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </form>
+</div>

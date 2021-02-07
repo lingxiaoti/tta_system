@@ -1,0 +1,118 @@
+<div ng-controller="quotationInfoCtrl" class="gridtable">
+    <div>
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <div class="btn-group btn-group-xs ml10">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.getData()">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+            <!--------------------- 输入表单  --->
+
+            <form name="addForm" class=" mt10 pb5 bb oh"
+                  data-des="此节点必需－用于识别输入表单的指令">
+
+                <form>
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>{{$l('查询条件')}}</span>
+                    </header>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('报价编号')}}</span></label>
+                            <input type="text" class="form-control radius3" name="quotationNumber"
+                                   ng-model="params.quotationNumber">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('项目名称')}}</span></label>
+                            <input type="text" class="form-control radius3" name="projectName"
+                                   ng-model="params.projectName">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div>
+                            <label style="margin-left: 10px"><i class="fa fa-list-alt"></i>{{$l('查询结果')}}</label>
+                        </div>
+                        <div class="data-table" ng-nicescroll="" id="nicescroll_userGroupDeptBrand"
+                             nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2'}"
+                        >
+                            <table saaf-table="dataTable"
+                                   data-url="findQuotationInfoPagination"
+                                   data-params="params"
+                                   data-checked-type="radio"
+                                   data-auto-get-data="true"
+                                   data-page-rows="10"
+                                   class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white">
+                                <tr class="text-center">
+                                    <th>{{$l('序号')}}</th>
+                                    <th>{{$l('报价编号')}}</th>
+                                    <th>{{$l('项目名称')}}</th>
+                                    <th>{{$l('立项单号')}}</th>
+                                    <th>{{$l('开始时间')}}</th>
+                                    <th>{{$l('报价截止时间')}}</th>
+                                    <th>{{$l('联系人')}}</th>
+                                    <th>{{$l('联系电话')}}</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-show="dataTable.data">
+                                <tr class="text-center" ng-repeat="row in dataTable.data"
+                                    style="width:125px;height:30px"
+                                    ng-class="{'active':dataTable.data.selectRow==$index}"
+                                    ng-click="dataTable.data.selectRow=$index;
+                                     dataTable.data.selectRowData =row;">
+                                    <!--序号-->
+                                    <td ng-bind="$index+1" class="w50">1</td>
+                                    <td><a ng-click="toEditQuotationInfo(row)">{{row.quotationNumber}}</a>
+                                    </td>
+                                    <td>{{row.projectName}}</td>
+                                    <td>
+                                        <a ng-click="toReadOnlyForProjectInfo(row)">{{row.projectNumber}}</a>
+                                    </td>
+                                    <!--开始时间-->
+                                    <td>
+                                        {{row.sendQuotationInvitationDate}}
+                                    </td>
+                                    <!--报价截止时间-->
+                                    <td>
+                                        {{row.quotationDeadline}}
+                                    </td>
+                                    <!--创建人-->
+                                    <td>{{row.userFullName}}</td>
+                                    <td>{{row.phoneNumber}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div saaf-table-tfoot="dataTable" ng-show="dataTable.data.length>0"></div>
+                        </div>
+                    </div>
+                </form>
+            </form>
+        </div>
+    </div>
+</div>

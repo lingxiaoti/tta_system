@@ -1,0 +1,17 @@
+package com.sie.watsons.base.rule.model.dao.readonly;
+
+import com.sie.watsons.base.rule.model.entities.readonly.RuleFileTemplateEntity_HI_RO;
+import com.yhg.hibernate.core.dao.DynamicViewObjectImpl;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+@Component("ruleFileTemplateDAO_HI_RO")
+public class RuleFileTemplateDAO_HI_RO extends DynamicViewObjectImpl<RuleFileTemplateEntity_HI_RO>  {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RuleFileTemplateDAO_HI_RO.class);
+	public RuleFileTemplateDAO_HI_RO() {
+		super();    
+	}       
+
+}

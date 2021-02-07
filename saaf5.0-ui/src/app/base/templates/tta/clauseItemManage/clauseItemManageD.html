@@ -1,0 +1,789 @@
+<div ng-controller="clauseItemManageDCtrl" ng-init="init()" class="gridtable">
+    <div id="processForm"
+         data-api-post="saveOrUpdateTraermsHAll"
+         data-api-get="findTtaTermsFrameHeaderHPagination"
+         data-api-update="saveOrUpdateTraermsHAll">
+    </div>
+    <div class="form bg-white"
+          data-des="此节点必需－内框页面的指令">
+                <!--------------------- 按钮--->
+                <div ng-if="!urlParams.businessKey" class="bg-gray-white bt">
+                    <div class="bg-gray-white p5">
+                        <div class="btn-group btn-group-xs pull-right ml10"  ng-if="true" >
+                            <button type="button" ng-click="btnSave()" ng-show="true" permission-btn="btnSave"
+                                     class="btn btn-default" data-validate-form="clausehForm" id="btnSave">
+                            </button>
+                            <button type="button" ng-click="submitApproval(clauseh)" ng-show="true" permission-btn="submitApproval"
+                                     class="btn btn-default" data-validate-form="clausehForm" id="submitApprovala">
+                            </button>
+                        </div>
+                        <div class="btn-group btn-group-xs ">
+                            <button type="button" class="btn btn-primary" ng-click="fullWindow($event)" >
+                                <i class="fa fa-square-o"></i> <span ng-bind="$l('数据全屏')"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!---------------------  / .按钮  --->
+                <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                    <div class="nicescroll-height  bg-white "
+                        nice-option="{{niceOpction}}"
+                        data-des="此节点必需-滚动内容及指令">
+                        <ul ng-if="!urlParams.businessKey" class="nav nav-tabs mt10">
+                            <li role="presentation" class="active" ng-click="tabChange('clausehManageDBusiness')">
+                                <a href="#clausehManageDBusiness" aria-controls="clausehManageDBusiness" role="tab"
+                                   data-toggle="tab">业务表单</a>
+                            </li>
+                            <li role="presentation" ng-click="tabChange('opinion')">
+                                <a href="#opinion" aria-controls="opinion" role="tab" data-toggle="tab">流程图</a>
+                            </li>
+                            <li ng-show="tabAction=='opinion'">
+                                <ul>
+                                    <li style="list-style-type: square;float: left;font-size: 20px;color: #cc0033;margin-right: 30px;text-indent: -7px;">
+                                        <span style="font-size: 14px;">未接收</span>
+                                    </li>
+                                    <li style="list-style-type: square;float: left;font-size: 20px;color: #ff6600;margin-right: 30px;text-indent: -7px;">
+                                        <span style="font-size: 14px;">办理中</span>
+                                    </li>
+                                    <li style="list-style-type: square;float: left;font-size: 20px;color: #339933;margin-right: 30px;text-indent: -7px;">
+                                        <span style="font-size: 14px;">已办结</span>
+                                    </li>
+                                    <li style="list-style-type: square;float: left;font-size: 20px;color: #666666;margin-right: 30px;text-indent: -7px;">
+                                        <span style="font-size: 14px;">预设步骤</span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <!--------------------- 输入表单  --->
+                        <div ng-show="tabAction== 'clausehManageDBusiness'" role="tabpanel" class="tab-pane active"
+                                id="clausehManageDBusiness"
+                                style="border: 0;width:100%;height: 100%;overflow-y: auto;">
+
+                            <form class=" mt10 pb5  " name="clausehForm" id ="clausehForm"
+                                data-des="此节点必需－用于识别输入表单的指令">
+
+                                <header class="col-xs-12 mb10">
+                                    <i class="fa fa-cog" aria-hidden="true"></i>
+                                    <label>{{$l('条款信息')}}</label>
+                                </header>
+
+                                <div class="form-group col-xs-6 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>年度</span></label>
+                                        <input type="text" class="form-control radius3"
+                                               date-time-picker="" data-date-format="yyyy"
+                                               data-start-view="4" data-min-view="4" data-max-view="4" required readonly
+                                               ng-model="clauseh.year" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-6 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>创建人</span></label>
+                                        <input type="text" required class="form-control radius3" name="createdByName" ng-readonly="true"
+                                               ng-model="clauseh.createdByName">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-6 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>创建日期</span></label>
+                                        <input type="text" disabled class="form-control radius3 input-xs"
+                                               date-time-picker data-is-today="true" name="creationDate"
+                                               data-date-format="yyyy-mm-dd"
+                                               data-min-View="2" ng-model="clauseh.creationDate">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-6 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>审批通过时间</span></label>
+                                        <input type="text"  class="form-control radius3" name="passDate" disabled
+                                               ng-model="clauseh.passDate">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-6 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>版本号</span></label>
+                                        <input type="text"  class="form-control radius3" name="businessVersion" disabled
+                                               ng-model="clauseh.businessVersion">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-6 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>单据状态</span></label>
+                                        <div lookup-code="DS_STATUS" required="true" name="billStatus" disabled  ng-model="clauseh.billStatus" ng-value="DS01"></div>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-6 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>版本生效时间</span></label>
+                                        <input type="text" required class="form-control radius3 input-xs"
+                                               date-time-picker data-is-today="true" name="effectiveDate"
+                                               data-date-format="yyyy-mm-dd"
+                                               data-enddate="{{clauseh.expirationDat}}"
+                                               data-min-View="2" ng-model="clauseh.effectiveDate"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-6 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>版本失效时间</span></label>
+                                        <input type="text" required class="form-control radius3 input-xs"
+                                               date-time-picker data-is-today="false" name="expirationDate"
+                                               data-date-format="yyyy-mm-dd"
+                                               data-stratdate="{{clauseh.effectiveDate}}"
+                                               data-min-View="2" ng-model="clauseh.expirationDate"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"><i class="red">* </i>部门编码</span></label>
+                                        <input type="text" class="form-control radius3" name="deptCode"
+                                               required      ng-model="clauseh.deptCode"  readonly/>
+<!--                                        <span class="input-group-btn ng-scope">
+                                            <button class="btn btn-default" ng-click="getDeptCode()" type="button" >
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>-->
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-4 col-md-3">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"><i class="red">* </i>部门名称</span></label>
+                                        <input data-required-msg="部门名称" type="text" ng-model="clauseh.deptName"
+                                               readonly class="form-control radius3">
+                                    </div>
+                                </div>
+
+                                <!--------------------- ./  输入表单  --->
+                                <hr width="100%">
+                                <!---------------------  / .按钮  --->
+                                <div main-scroll-style id="clausehLeftId" class="col col-md-3 col-xs-3 p0 br" data-des="此节点必需－用户计算滚动区域高度">
+                                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                                         nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                                        <ul sie-ztree="clausehTree" style="margin-bottom: 10px;" class="ztree pt10 pb10" id="clausehTree"
+                                            data-url="{{treeUrl}}"
+                                            data-params="{{treeParams}}"
+                                            data-simpledata='{"enable":"false","idKey":"code","pIdKey":"pCode","rootPId":"0"}'
+                                            data-keys='{"name":"clauseCn"}'
+                                            data-page-rows="10000"
+                                            data-expand-node="true"
+                                            data-edit="false"
+                                            data-node-click="clickNode"
+                                            data-onload="SaveTree"
+                                            data-callback-beforedrop="updateLevel"
+                                                >
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div >
+                                    <div main-scroll-style id="clausehRightId" data-des="此节点必需－用户计算滚动区域高度">
+                                        <div class="nicescroll-height  bg-white " ng-nicescroll
+                                             nice-option="{{niceOpction}}"
+                                             data-des="此节点必需-滚动内容及指令">
+                                            <div>
+                                <div class="form-group col-xs-4 col-md-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>父名称</span></label>
+                                        <input type="text" class="form-control radius3" ng-required="clausehT.orderNo.indexOf('.') != -1" ng-model="clausehT.clauseCnP" ng-readonly="true" name="clauseCnP" >
+                                        <span class="input-group-btn ng-scope">
+                                                <button type="button" ng-click="selectPCode()"
+                                                        class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-4" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>业务类型</span></label>
+                                        <div lookup-code="CLAUSE_B_TYPE" required="true" data-callback="clausehBT" name="businessType" ng-model="clausehT.businessType"></div>
+                                    </div>
+                                </div>
+                                    <div class="form-group  col-xs-4 col-md-4" style="    padding-bottom: 2px;">
+                                        <button type="button" class="btn btn-default btn-xs pull-right"  ng-click="btnDelClauseT()"><i class="fa fa-trash-o fa-lg"></i>删除</button>
+                                        <button type="button" class="btn btn-default btn-xs pull-right" ng-click="btnNewClauseT()"
+                                                ><i class="fa fa-plus">增加</i></button>
+                                    </div>
+                                <div class="form-group col-xs-4 col-md-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>收入方式</span></label>
+                                        <div lookup-code="CLAUSE_INP" ng-required="clauseh.disRequired"  ng-disabled="clauseh.required || clauseh.flag" name="paymentMethod" ng-model="clausehT.paymentMethod"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-4" style="margin-right: 25%;">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>是否生效</span></label>
+                                        <div lookup-code="YN" required="true" name="status" ng-model="clausehT.status"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>排版序号</span></label>
+                                        <input type="text" required class="form-control radius3" name="orderNo"
+                                               ng-model="clausehT.orderNo">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-4" style="margin-right: 25%;">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100">条款编号</span></label>
+                                        <input type="text" ng-disabled = "clausehT.businessType==01"   class="form-control radius3" ng-model="clausehT.clauseCode"  name="clauseCode" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>条款英文名</span></label>
+                                        <input type="text" class="form-control radius3" ng-model="clausehT.clauseEn"  name="clauseEn" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-4" style="margin-right: 25%;">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>条款中文名</span></label>
+                                        <input type="text" class="form-control radius3" ng-model="clausehT.clauseCn"  name="clauseCn" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100">是否底层</span></label>
+                                        <div lookup-code="YN"  name="isLeaf" ng-model="clausehT.isLeaf"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-4" style="margin-right: 25%;">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100"><i class="red">*</i>是否同层显示</span></label>
+                                        <div lookup-code="YN" required="true" name="isHierarchyShow" ng-model="clausehT.isHierarchyShow"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-4" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100">对应历史序号</span></label>
+                                        <input type="text"  ng-disabled="clauseh.flag" class="form-control radius3" name="oldOrderNo"
+                                               ng-model="clausehT.oldOrderNo">
+                                    </div>
+                                </div>
+                                    <div class="form-group col-xs-4 col-md-4" style="margin-right: 25%;">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">类别</span>
+                                            </label>
+                                            <div lookup-code="TERM_CATEGORY" ng-disabled="clauseh.flag" required="true" name="termCategory"  ng-model="clausehT.termCategory">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                <div class="form-group col-xs-4 col-md-4" >
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100">是否全局</span></label>
+                                        <div lookup-code="YN"  ng-disabled="clauseh.flag || clauseh.disRequired" name="isGlobalVariable" data-callback="isGlobalVariable" ng-model="clausehT.isGlobalVariable"></div>
+                                    </div>
+                                </div>
+
+                                    <div class="form-group col-xs-4 col-md-4" style="margin-right: 25%;">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span class="w100">全局值</span></label>
+                                            <input type="text" class="form-control radius3 readonly-white"  name="globalValue" ng-model="clausehT.globalValue" readonly>
+                                            <span class="input-group-btn ng-scope">
+                                                <button type="button" data-toggle="modal" data-target="#globalValue" ng-disabled="clauseh.flag || clausehT.isGlobalVariable !='1' || clauseh.disRequired"
+                                                        class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-4 col-md-4" >
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span class="w100">局部值</span></label>
+                                            <input type="text" class="form-control radius3 readonly-white"  name="clauseIdj" ng-model="clauseTX.clauseIdj" readonly>
+                                            <span class="input-group-btn ng-scope">
+                                                <button type="button"  ng-click="xClauseCall('expressionValue')" ng-disabled="clauseh.flag || clausehT.isGlobalVariable !='0' || clauseh.disRequired"
+                                                    class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+
+                                <div class="form-group col-xs-4 col-md-4">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100">符号</span></label>
+                                        <div lookup-code="CLAUSE_SIGN1" ng-disabled="clauseh.flag || clausehT.isGlobalVariable !='0'"  name="sign" ng-model="clausehT.sign" data-callback="clauseSignGet" ng-trim="true"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-default btn-xs pull-right" ng-click="btnClauseClear()"
+                                            ><i class="fa fa-adjust">清除</i></button>
+                                </div>
+                                <div class="form-group col-xs-12 col-md-12" ng-show="clausehT.isGlobalVariable =='0'">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100">解析</span>
+                                        </label>
+                                        <textarea  disabled
+                                                  class="form-control radius3" ng-model="clausehT.expressionValueText"
+                                                  name="expressionValueText"
+                                                  style="height:60px;">
+                                        </textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span    class="w100">参考表达式</span></label>
+                                        <textarea  disabled ng-required="clausehT.isGlobalVariable"  class="form-control radius3" ng-model="clausehT.expressionValue" name="expressionValue"
+                                                  style="height:60px;"></textarea>
+                                    </div>
+                                </div>
+
+                                    <div class="form-group col-xs-4 col-md-4" >
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">是否全局</span>
+                                            </label>
+                                            <div lookup-code="YN" ng-disabled="clauseh.flag || clauseh.disRequired"  name="isGlobalTta" data-callback="isGlobalVariableTta" ng-model="clausehT.isGlobalTta">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-xs-4 col-md-4" style="margin-right: 25%;">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span class="w100">全局值</span></label>
+                                            <input type="text" class="form-control radius3 readonly-white"  name="globalValueTta" ng-model="clausehT.globalValueTta" readonly>
+                                            <span class="input-group-btn ng-scope">
+                                                <button type="button" data-toggle="modal" data-target="#globalValueTta" ng-disabled="clause.flag || clausehT.isGlobalTta !='1' || clauseh.disRequired"
+                                                        class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+
+                                        <div class="form-group col-xs-4 col-md-4" >
+                                            <div class="input-group input-group-xs">
+                                                <label class="input-group-addon bn"><span class="w100">局部值</span></label>
+                                                <input type="text" class="form-control radius3 readonly-white"  name="clauseIdj" ng-model="clausehTX.clauseIdj" readonly>
+                                                <span class="input-group-btn ng-scope">
+                                                    <button type="button"  ng-click="xClauseCall('expressionValueTta')" ng-disabled="clauseh.flag || clausehT.isGlobalTta !='0' || clauseh.disRequired"
+                                                class="btn btn-default"><i class="fa fa-search"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group col-xs-4 col-md-4">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">符号</span>
+                                            </label>
+                                            <div lookup-code="CLAUSE_SIGN1" ng-disabled="clauseh.flag || clausehT.isGlobalTta !='0' || clauseh.disRequired"   name="sign" ng-model="clausehT.sign" data-callback="clauseSignGetTta" ng-trim="true">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-default btn-xs pull-right" ng-click="btnClauseClearTta()">
+                                            <i class="fa fa-adjust">清除</i>
+                                        </button>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-md-12" ng-show="clausehT.isGlobalTta =='0'">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">解析</span>
+                                            </label>
+                                            <textarea  disabled
+                                                      class="form-control radius3" ng-model="clausehT.expressionValueTtaText"
+                                                      name="expressionValueTtaText"
+                                                      style="height:60px;">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-md-12">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span    class="w100">TTA表达式</span>
+                                            </label>
+                                            <textarea  disabled ng-required="clausehT.isGlobalTta"  class="form-control radius3" ng-model="clausehT.expressionValueTta" name="expressionValueTta" ng-trim="true"
+                                                      style="height:60px;">
+                                            </textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-xs-4 col-md-4" >
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">是否全局</span>
+                                            </label>
+                                            <div lookup-code="YN" ng-disabled="clauseh.flag || clauseh.disRequired"   name="isGlobalFee" data-callback="isGlobalVariableFee" ng-model="clausehT.isGlobalFee">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-xs-4 col-md-4" style="margin-right: 25%;">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span class="w100">全局值</span></label>
+                                            <input type="text" class="form-control radius3 readonly-white"  name="globalValueFee" ng-model="clausehT.globalValueFee" readonly>
+                                            <span class="input-group-btn ng-scope">
+                                                <button type="button" data-toggle="modal" data-target="#globalValueFee" ng-disabled="clauseh.flag || clausehT.isGlobalFee !='1' || clauseh.disRequired"
+                                                        class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group col-xs-4 col-md-4" >
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span class="w100">局部值</span></label>
+                                            <input type="text" class="form-control radius3 readonly-white"  name="clauseIdj" ng-model="clausehTX.clauseIdj" readonly>
+                                            <span class="input-group-btn ng-scope">
+                                                <button type="button"  ng-click="xClauseCall('expressionValueFee')" ng-disabled="clauseh.flag || clausehT.isGlobalFee !='0' || clauseh.disRequired"
+                                                class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-xs-4 col-md-4">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">符号</span>
+                                            </label>
+                                            <div lookup-code="CLAUSE_SIGN1" ng-disabled="clauseh.flag || clausehT.isGlobalFee !='0'"   name="sign" ng-model="clausehT.sign" data-callback="clauseSignGetFee" ng-trim="true">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-default btn-xs pull-right" ng-click="btnClauseClearFee()">
+                                            <i class="fa fa-adjust">清除</i>
+                                        </button>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-md-12" ng-show="clausehT.isGlobalFee =='0'">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">解析</span>
+                                            </label>
+                                            <textarea  disabled
+                                                      class="form-control radius3" ng-model="clausehT.expressionValueFeeText"
+                                                      name="expressionValueFeeText"
+                                                      style="height:60px;">
+                                        </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-md-12" >
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span    class="w100">费用条件表达式</span>
+                                            </label>
+                                                <textarea   ng-required="clausehT.isGlobalFee"  disabled class="form-control radius3" ng-model="clausehT.expressionValueFee" name="expressionValueFee" ng-trim="true"
+                                                          style="height:60px;">
+                                                </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-4 col-md-4">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">是否默认</span>
+                                            </label>
+                                            <div lookup-code="TERMS_OUTPUT_MODEL" ng-disabled="clauseh.flag || clauseh.disRequired"
+                                                 name="isDefault"  ng-required="clausehT.businessType==02"  data-callback="isDefaultFun"
+                                                 ng-model="clausehT.isDefault">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-4 col-md-4" >
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span class="w100">全局值</span></label>
+                                            <input type="text" class="form-control radius3 readonly-white"
+                                                   name="globalValueCon" ng-model="clausehT.globalValueCon" readonly>
+                                            <span class="input-group-btn ng-scope">
+                                                <button type="button" data-toggle="modal" data-target="#globalValueCon"
+                                                        ng-disabled="clauseh.flag || clausehT.isDefault !='3' || clauseh.disRequired"
+                                                        class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                                ng-click="btnClauseClearCon()">
+                                            <i class="fa fa-adjust">清除</i>
+                                        </button>
+                                    </div>
+
+                                    <div class="form-group col-xs-12 col-md-12">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn">
+                                                <span class="w100">条款表达式</span>
+                                            </label>
+                                            <textarea  disabled ng-required="clausehT.isDefault == '3'"
+                                                      class="form-control radius3" ng-model="clausehT.expressionValueCon"
+                                                      name="expressionValueCon" ng-trim="true"
+                                                      style="height:60px;">
+                                            </textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class=" col-xs-12 col-md-12" >
+                                        <div>
+                                            <label style="margin-left: 10px"><i class="fa fa-list-alt"></i>收取方式</label>
+                                            <div permission-buttons="btnNew,btnDel" class="btn-group btn-group-xs ml5 pull-right">
+                                                <button type="button" class="btn btn-default btn-xs " ng-disabled="dataTableCo.selectRow==undefined || clauseh.flag" ng-click="btnDel('L')"><i class="fa fa-trash-o fa-lg"></i>删除</button>
+                                                <button type="button" class="btn btn-default btn-xs" ng-disabled="clauseh.flag" ng-click="btnNew()"><i class="fa fa-plus">增加</i></button>
+                                            </div>
+                                        </div>
+
+                                        <div class="data-table">
+                                            <table
+                                                    class="table table-bordered table-hover table-condensed">
+                                                <thead class="bg-gray-white">
+                                                <tr class="text-center">
+                                                    <th width="12%">单位</th>
+                                                    <th width="10%">标准值</th>
+                                                    <th width="10%">主从</th>
+                                                    <th width="12%">父级</th>
+                                                    <th width="46%">规则</th>
+                                                    <th width="10%">是否启用</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr class="text-center" ng-repeat="row in dataTableCo"
+                                                    ng-class="{'active':dataTableCo.selectRow==$index}"
+                                                    ng-click="dataTableCo.selectRow=$index">
+                                                    <td><input class="form-control input-xs" ng-disabled="clauseh.flag" ng-change="unitValueChange(row)" required ng-model="row.unitValue" name ="{{unitValue+$index}}"></td>
+                                                    <td><input type="text"  ng-disabled="clauseh.flag" class="form-control input-xs" placeholder="不超过两位小数" name="{{standardValue+$index}}" ng-model="row.standardValue" numberd></td>
+                                                    <td>
+                                                        <div class="input-group input-group-xs">
+                                                            <div lookup-code="YES_OR_NO" ng-disabled="clauseh.flag"
+                                                                 required name="{{'isMajor'+$index}}"
+                                                                 data-paramcallback="dataTableCoIsMajor"
+                                                                 data-row="{{dataTableCo.indexOf(row)}}"
+                                                                 ng-model="row.isMajor"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group input-group-xs"
+                                                             style="    width: 100%;">
+                                                            <select class="form-control radius3" id="{{'dataTableCo_'+row.$$hashKey}}"
+                                                                    ng-model="row.parentValue" name="{{'parentValue'+$index}}"
+                                                                    ng-change="unitListChange(row,unitList)"
+                                                                    ng-required="row.isMajor == 'N'"
+                                                                    ng-disabled="row.isMajor == 'Y' || clauseh.flag">
+                                                                <option value="">{{firstText}}</option>
+                                                                <option
+                                                                        ng-repeat="iterm in unitList"
+                                                                        value="{{iterm.unitValue}}">{{iterm.unitValue}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group input-group-xs">
+                                                            <div lookup-code="TTA_TERMS_VALUE_CONTROL" ng-disabled="clauseh.flag"
+                                                                 name="{{'rule'+$index}}" title="{{row.rule}}"
+                                                                 ng-model="row.rule"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group input-group-xs">
+                                                            <div lookup-code="YES_OR_NO" ng-disabled="clauseh.flag" required  name="{{isEnable+$index}}" ng-model="row.isEnable"></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                 </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+
+                        <div ng-if="!urlParams.businessKey" ng-show="tabAction== 'opinion'" role="tabpanel" class="tab-pane "
+                             id="opinion"
+                             style="border: 0;width:100%;height: 100%; overflow: hidden;position: relative;">
+                            <div id="processImg" style="width: 100%;height:100%; overflow: auto;">流程图加载中，请稍候...</div>
+                        </div>
+                    </div>
+                </div>
+
+        <div lov-list = 'globalValue' role="dialog"  id="globalValue" ng-model="clauseT.globalValueA" class=""
+             data-url="findQueryRulePag"
+             data-auto-request="false"
+             data-pagination="{'pageIndex':'1','pageRows':'5'}"
+             data-callback="selectClauseIsGlobal"
+             data-checked-type="radio"
+             data-dynamic-params="{businessType:'2'}"
+             data-keys="{'key':'ruleId','value':'ruleName','name':'规则名称'}"
+             data-other-column="[{'name':'规则SQL',key:'sqlValues'},{'name':'备注',key:'remarks'}]"
+             data-show-index="true"
+             data-search-key="[{'key':'ruleName','placeholder':'规则名称'}]"
+                >
+        </div>
+
+
+        <div lov-list = 'globalValueTta' role="dialog"  id="globalValueTta" ng-model="clauseT.globalValueTtaA" class=""
+             data-url="findQueryRulePag"
+             data-auto-request="false"
+             data-pagination="{'pageIndex':'1','pageRows':'5'}"
+             data-callback="selectClauseIsGlobalTta"
+             data-checked-type="radio"
+             data-dynamic-params="{businessType:'2'}"
+             data-keys="{'key':'ruleId','value':'ruleName','name':'规则名称'}"
+             data-other-column="[{'name':'规则SQL',key:'sqlValues'},{'name':'备注',key:'remarks'}]"
+             data-show-index="true"
+             data-search-key="[{'key':'ruleName','placeholder':'规则名称'}]"
+                >
+        </div>
+
+        <div lov-list='globalValueCon' role="dialog" id="globalValueCon" ng-model="clausehT.globalValueConA" class=""
+             data-url="findQueryRulePag"
+             data-auto-request="false"
+             data-pagination="{'pageIndex':'1','pageRows':'5'}"
+             data-callback="selectClauseIsGlobalCon"
+             data-checked-type="radio"
+             data-dynamic-params="{businessType:'3'}"
+             data-keys="{'key':'ruleId','value':'ruleName','name':'规则名称'}"
+             data-other-column="[{'name':'规则SQL',key:'sqlValues'},{'name':'备注',key:'remarks'}]"
+             data-show-index="true"
+             data-search-key="[{'key':'ruleName','placeholder':'规则名称'}]"
+        >
+        </div>
+
+        <div lov-list = 'globalValueFee' role="dialog"  id="globalValueFee" ng-model="clauseT.globalValueFeeA" class=""
+             data-url="findQueryRulePag"
+             data-auto-request="false"
+             data-pagination="{'pageIndex':'1','pageRows':'5'}"
+             data-callback="selectClauseIsGlobalFee"
+             data-checked-type="radio"
+             data-dynamic-params="{businessType:'2'}"
+             data-keys="{'key':'ruleId','value':'ruleName','name':'规则名称'}"
+             data-other-column="[{'name':'规则SQL',key:'sqlValues'},{'name':'备注',key:'remarks'}]"
+             data-show-index="true"
+             data-search-key="[{'key':'ruleName','placeholder':'规则名称'}]"
+                >
+        </div>
+
+        <div lov-list="selectDepth" role="dialog" data-title="选择部门信息" id="selectDepthId" ng-model="current.em"
+             data-url="findDeptPagination"
+             data-dynamic-params='{"flag": "findDept","departmentType":"20"}'
+             data-callback="selectDeptReturn"
+             data-auto-request="true"
+             data-return-type="key"
+             data-pagination="{'pageIndex':'1','pageRows':'5'}"
+             data-checked-type="radio"
+             data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+             data-show-index="false"
+             data-type="competitor"
+             data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+             data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                          {'key':'departmentName','placeholder':'部门名称'}]"
+        >
+        </div>
+
+        <div class="modal fade" id="addClauseTreej" data-des="选择局部值" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog " style="width: 600px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close"
+                                data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            选择局部值
+                        </h4>
+                    </div>
+                    <form class="ngValid" name="funcMenuForm"  >
+                        <div class="modal-body">
+                            <div class="form-group col-xs-12 col-md-12">
+                                <div style="height: 300px;overflow-y: auto;" class="">
+                                    <ul class="ztree" id="clauseTreeZtree"></ul>
+                                </div>
+                            </div>
+                            <div class="cb"></div>
+                        </div>
+
+                        <div class="modal-footer ">
+                            <div style="text-align:center">
+                                <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                                </button>
+                                <button ng-click="savePart()" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+        <div class="modal fade" id="selectPcodeId" data-des="选择上级" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog " style="width: 600px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close"
+                                data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            选择上级
+                        </h4>
+                    </div>
+                    <form class="ngValid" name="funcMenuForm">
+                        <div class="modal-body">
+                            <div class="form-group col-xs-12 col-md-12">
+                                <div style="height: 300px;overflow-y: auto;" class="">
+                                    <ul class="ztree" id="clauseTreePCodeZtree"></ul>
+                                </div>
+                            </div>
+                            <div class="cb"></div>
+                        </div>
+
+                        <div class="modal-footer ">
+                            <div style="text-align:center">
+                                <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                                </button>
+                                <button ng-click="savePCode()" validate-form-btn="" data-validate-form="funcMenuForm"
+                                        id="saveButton" class="btn btn-primary mr10">确定
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+    </div>
+</div>

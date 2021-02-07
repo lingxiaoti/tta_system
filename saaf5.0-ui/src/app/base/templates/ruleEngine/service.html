@@ -1,0 +1,233 @@
+<div ng-controller="serviceCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10" >
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="serverTable.getData()">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="serverTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="addAction()">
+                            <i class="fa fa-plus" aria-hidden="true"></i>新增</button>
+                    </div>
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button  type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <div search-form
+                         data-legend="[
+                            {key:'actionCode',label:'服务编码'},
+                            {key:'actionName',label:'服务名称'}
+                        ]"
+                         ng-model="params"
+                    ></div>
+
+                </div>
+
+                <div class="data-table">
+                    <table saaf-table="serverTable"
+                           data-url="findRuleActionPage"
+                           data-params="params"
+                           data-page-rows="10"
+                           class="table table-bordered table-hover table-condensed">
+                        <thead class="bg-gray-white">
+                        <tr class="text-center">
+                            <th>序号</th>
+                            <th>服务名称</th>
+                            <th>服务编码</th>
+                            <th>服务URL</th>
+                            <th>动态参数</th>
+                            <th>静态参数</th>
+                            <th>请求方式</th>
+                            <th>服务描述</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!serverTable.data">
+                        <tr>
+                            <td style="height: 200px" colspan="10"> 暂无数据</td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="serverTable.data">
+                        <tr class="text-center" ng-repeat="item in serverTable.data"
+                            ng-class="{'active':serverTable.data.selectRow==$index}"
+                            ng-click="serverTable.data.selectRow=$index">
+                            <td ng-bind="(serverTable.curIndex-1)*serverTable.pageSize+$index+1">1</td>
+                            <td>{{item.actionName}}</td>
+                            <td>{{item.actionCode}}</td>
+                            <td>{{item.actionUrl}}</td>
+                            <td>{{item.actionDynamicParam}}</td>
+                            <td>{{item.actionStaticParam}}</td>
+                            <td>{{item.actionRequestMethod}}</td>
+                            <td>{{item.actionDesc}}</td>
+                            <td>
+                                <div class="pos">
+                                    <button style="border:0;background: none;" type="button" ng-click="editAction(item)"><i style="left: 0;color: #3498db;" class="fa fa-pencil"></i></button>
+                                    <button style="border:0;background: none;" type="button" ng-click="deleteAction(item)"><i style="left: 32px;" class="fa fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div saaf-table-tfoot="serverTable" ng-show="serverTable.data.length>0"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!--    **********************     弹出框  start   *******************      -->
+    <form name="editForm" ng-submit="save()">
+        <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+             role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog " style="margin-top: 30px;width: 80%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            服务编辑
+                        </h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col-xs-12 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">服务编码：</span></label>
+                                        <input type="text" class="form-control radius3" readonly
+                                               ng-model="current.actionCode">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-12 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>服务名称：</span></label>
+                                        <input type="text" class="form-control radius3"  required name="actionName"
+                                               ng-model="current.actionName">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-12 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">动态参数：</span></label>
+                                        <input type="text" class="form-control radius3"
+                                               ng-model="current.actionDynamicParam">
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100">静态参数：</span></label>
+                                        <input type="text" class="form-control radius3"
+                                               ng-model="current.actionStaticParam">
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100 ">使用数学表达式：</span></label>
+                                        <div lookup-code="RULE_ACTION_FORMULA" ng-model="current.actionExecuteFormula" ></div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-md-12" ng-if="current.actionExecuteFormula!='N'&&current.actionExecuteFormula!=''">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100 ">数据公式：</span></label>
+                                        <input type="text" class="form-control radius3"  required name="actionFormula" ng-blur="validatePramInFormula()"
+                                               ng-model="current.actionFormula" placeholder="变量名的形式必须是[变量名],如[积分]*[倍数],变量必须存在于动态或静态变量中">
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-md-6" ng-if="current.actionExecuteFormula!='N'&&current.actionExecuteFormula!=''">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100 ">公式返回变量名：</span></label>
+                                        <input type="text" class="form-control radius3"  required name="actionReturnParam"
+                                               ng-model="current.actionReturnParam">
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-md-6" ng-if="current.actionExecuteFormula!='N'&&current.actionExecuteFormula!=''">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100 ">公式返回类型：</span></label>
+                                        <input type="text" class="form-control radius3"  required name="actionReturnParamType"
+                                               ng-model="current.actionReturnParamType">
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100 "><i class="red">*</i>请求方式：</span></label>
+                                        <select class="form-control radius3" ng-model="current.actionRequestMethod" required ng-disabled="action=='detail'"
+                                                name="district">
+                                            <option value="post" selected>post</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>服务url地址：</span></label>
+                                        <input type="text" class="form-control radius3"  required name="actionUrl"
+                                               ng-model="current.actionUrl">
+                                    </div>
+                                </div>
+                                <div class="row"></div>
+
+                                <div class="form-group col-xs-12 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w100 ">服务描述：</span></label>
+                                        <textarea style="height: 60px" class="form-control radius3" ng-model="current.actionDesc"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: 20px;">
+                        <div style="text-align: center">
+                            <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal"
+                                    aria-label="Close" ng-click=""><span
+                                    class="fa ">取消</span>
+                            </button>
+                            <button type="button" id="saveButton" class="btn btn-primary btn-sm" ng-click="save()"
+                                    validate-form-btn="editForm">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--    **********************     弹出框  end   *******************      -->
+
+    <div lov-list="selectSecretLevel" role="dialog" data-title="请选择自编号" id="selSecretLevel" ng-model="code1" class="  "
+         data-url="findSecretLevel"
+         data-return-key="current.slName"
+         data-return-value="current.secretLevelId"
+         data-keys="{'key':'slName','value':'levelId','name':'密级编码'}"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-other-column="[{'name':'密级名称','key':'slName'}]"
+         data-show-index="false"
+         data-search-key="[{'key':'slName','placeholder':'密级名称'}]"
+    >
+    </div>
+
+</div>

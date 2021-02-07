@@ -1,0 +1,316 @@
+<div ng-controller="ruleCtrl" class="bigdata">
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" permission-btn="btnSave"   ng-click="btnSave(supplierForm.$invalid)" data-validate-form="supplierForm"></button>
+            </div>
+        </div>
+        <div class="btn-group btn-group-xs">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+            <!--------------------- 输入表单  --->
+            <div class=" mt10 pb5  oh" data-des="此节点必需－用于识别输入表单的指令">
+                <div class="row"></div>
+                <div  class="col-md-12 tab">
+
+                </div>
+
+                <div class="col-xs-12 col-md-12 br p0">
+                    <li class="active" style="list-style: none; margin-left: 15px;">
+                        <a href="#relSupplier" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>题目规则设置</label></a>
+                    </li>
+                    <div class="tab-pane fade in active col-md-12" id="relSupplier">
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+                            <div class="btn-group btn-group-xs pull-right" ng-if="true">
+                                <div class="btn-group btn-group-xs" ng-if="true">
+                                    <button class="btn btn-default" type="button" ng-click="queryHeaderRule()">
+                                        <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                                    </button>
+                                    <div permission-buttons="btnNew,btnModify" class="btn-group btn-group-xs ml5 pull-right">
+                                        <!--dataTable.selectRow==undefined-->
+                                        <button type="button" class="btn btn-default btn-xs"  ng-click="btnNew()"><i class="fa fa-plus">增加</i></button>
+                                        <button type="button" class="btn btn-default btn-xs"  ng-disabled="!ruleHeaderDataTable.selectRow"  ng-click="btnModify()" dis><i class="fa fa-plus">修改</i></button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="data-table">
+                            <div base-data-table="ruleHeaderDataTable"
+                                 ng-params="params"
+                                 data-show-index="true"
+                                 data-auto-request="true"
+                                 data-url="findRuleHeaderPagination"
+                                 data-click-row="dbClickCallBack"
+                                 data-legend="[
+                                 {'value':'serialNumber','name':'题目序号'},
+                                 {'value':'projectCnTitle','name':'题目名称'},
+                                 {'value':'choiceCnContent','name':'选项内容'},
+                                 {'value':'resultValue','name':'结果值'},
+                                 {'value':'isEnable','name':'是否生效',boolean:'cn'},
+                             ]">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-xs-12 col-md-12 br p0" style="margin-top: 25px">
+                    <li class="active" style="list-style: none; margin-left: 15px;">
+                        <a href="#relSupplier" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>题目规则行设置</label></a>
+                    </li>
+                    <div class="tab-pane fade in active col-md-12" id="relSupplie">
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+                            <div class="btn-group btn-group-xs pull-right">
+                                <div class="btn-group btn-group-xs">
+                                    <button type="button" class="btn btn-default btn-xs" ng-disabled="!ruleHeaderDataTable.selectRow"   ng-click="btnNewChild()"><i class="fa fa-plus">新增</i></button>
+                                    <button type="button" class="btn btn-default btn-xs" ng-disabled="!ruleListDataTable.selectRow"  ng-click="btnModifyChild()"><i class="fa fa-pencil">修改</i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="data-table">
+                            <div base-data-table="ruleListDataTable"
+                                 data-show-index="true"
+                                 ng-params="params"
+                                 data-url="findRuleLinePagination"
+                                 data-legend="[
+                                 {'value':'serialNumber','name':'题目序号'},
+                                 {'value':'projectCnTitle','name':'题目名称'},
+                                 {'value':'isEnable','name':'是否生效',boolean:'cn'},
+                             ]">
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--tabContent-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- 弹出窗口 start -->
+    <!--父级弹出窗-->
+    <div role="dialog" class="modal fade" id="addRuleHeaderModal" data-des="新增菜单" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <!--addModalForm start-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        选择题项
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group col-xs-6 col-md-6">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>选项内容</span></label>
+                            <input ng-model="excludeParams.choiceCnContent" class="form-control" placeholder="请输入选项内容">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-3 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary" type="button" ng-click="ruleHeaderModalDataTable.search(1)">查询</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="data-table">
+                            <div base-data-table="ruleHeaderModalDataTable"
+                                 data-auto-request="true"
+                                 ng-params="excludeParams"
+                                 data-show-index="true"
+                                 data-url="findCheckRulePagination"
+                                 data-checked-type="checkbox"
+                                 data-keys="{'key':'choiceLineId'}"
+                                 data-legend="[
+                                     {'value':'projectCnTitle','name':'题目'},
+                                     {'value':'choiceCnContent','name':'选项内容'},
+                                    ]"><!-- {'value':'isSql','name':'是否sql文本'},-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="saveQuestionChoiceParams()" class="btn btn-warning btn-sm">
+                        <span class="fa fa-plus"> 确定新增</span></button>
+                    <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal" aria-label="Close"><span
+                            class="fa ">取消</span>
+                    </button>
+                </div>
+            </div>
+            <!--addModalForm end-->
+        </div>
+    </div>
+
+    <!--子级弹出窗-->
+    <div role="dialog" class="modal fade" id="addRuleLineModal" data-des="新增菜单" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <!--addModalForm start-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        选择题项
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group col-xs-6 col-md-6">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>题目内容</span></label>
+                            <input ng-model="childParams.projectCnName" class="form-control" placeholder="请输入题目内容">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-3 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary" type="button" ng-click="ruleLineModalDataTable.search(1)">查询</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="data-table">
+                            <div base-data-table="ruleLineModalDataTable"
+                                 data-auto-request="true"
+                                 ng-params="childParams"
+                                 data-show-index="true"
+                                 data-url="findCheckChildRulePagination"
+                                 data-checked-type="checkbox"
+                                 data-keys="{'key':'qHeaderId'}"
+                                 data-legend="[
+                                     {'value':'projectCnTitle','name':'题目'},
+                                     {'value':'projectTypeName','name':'题型'},
+                                    ]"><!-- {'value':'isSql','name':'是否sql文本'},-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="saveChildParams()" class="btn btn-warning btn-sm">
+                        <span class="fa fa-plus"> 确定新增</span></button>
+                    <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal" aria-label="Close"><span
+                            class="fa ">取消</span>
+                    </button>
+                </div>
+            </div>
+            <!--addModalForm end-->
+        </div>
+    </div>
+
+    <!--上级弹出窗修改Y/N-->
+    <form  name="updateRuleHeaderModalForm"  >
+        <div class="modal fade" id="updateRuleHeaderModal" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            {{$l('功能设置')}}
+                        </h4>
+                    </div>
+                    <div class="modal-body ">
+                        <form  class="pl30 pr30">
+                            <div class="row">
+
+                                <div class="form-group col-xs-12 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"><i class="red">*</i>结果值</span></label>
+                                        <div lookup-code="YES_OR_NO" name="resultValue" ng-model="current.resultValue" required ></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-12 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"><i class="red">*</i>是否生效</span></label>
+                                        <div lookup-code="YES_OR_NO" name="isEnable" ng-model="current.isEnable" required ></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true">{{$l('取消')}}
+                            </button>
+                            <button  ng-click="confirmSave()" validate-form-btn="updateRuleHeaderModalForm" class="btn btn-primary mr10">{{$l('提交')}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!--下级弹出窗修改Y/N-->
+    <form  name="updateRuleLineModalForm"  >
+        <div class="modal fade" id="updateRuleLineModal" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            {{$l('功能设置')}}
+                        </h4>
+                    </div>
+                    <div class="modal-body ">
+                        <form  class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col-xs-12 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn">
+                                            <span class="w100"><i class="red">*</i>是否生效</span></label>
+                                        <div lookup-code="YES_OR_NO" name="isEnable" ng-model="currentLine.isEnable" required ></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true">{{$l('取消')}}
+                            </button>
+                            <button  ng-click="updateChildStatus()" validate-form-btn="updateRuleLineModalForm" class="btn btn-primary mr10">{{$l('提交')}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- 弹出窗口 end -->
+</div>

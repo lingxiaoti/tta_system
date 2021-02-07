@@ -1,0 +1,102 @@
+<div class="modal fade" id="lovOrderModal" tabindex="-1" role="dialog" aria-labelledby="lovOrderModal"
+     aria-hidden="true">
+    <!--add by luofu-->
+    <div class="modal-dialog {{css}}" style="margin-top: 10px;margin-bottom: 10px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    {{!titleName?'选择与搜索':titleName}}
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="row form-item-box" ng-submit="dataTable.getData()" ng-show="searchColName1">
+                    <div class="form-group col-xs-5 col-md-5">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class=" w100">{{searchLabel1}}：</span></label>
+                            <input type="text" class="form-control radius3" name="searchColName1"
+                                   ng-model="params[searchColName1]">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-5 col-md-5" ng-show="searchColName2">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{searchLabel2}}：</span></label>
+                            <input type="text" class="form-control radius3"
+                                   name="searchColName2" ng-model="params[searchColName2]">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-2 col-md-2">
+                        <button type="submit" class="btn btn-xs btn-default pull-left">
+                            <i class="fa fa-search" aria-hidden="true"></i><span></span>
+                        </button>
+                    </div>
+
+                </form>
+                <!--------------------- ./  数据　　  --->
+                <div class="data-table">
+                    <div ng-nicescroll
+                         nice-option="{cursorcolor: '#1e90c2'}">
+                        <table saaf-table="dataTable"
+
+                               data-params="params" data-page-rows="10"
+                               class="table  table-bordered table-hover table-condensed">
+                            <thead class="bg-gray-white">
+                            <tr class="text-center">
+                                <th class="w30"></th>
+                                <th class="w50">序号</th>
+
+                                <th style="min-width:100px">{{label1}}</th>
+                                <th ng-show="label2" style="min-width: 100px">{{label2}}</th>
+                                <th ng-show="label3" style="max-width: 400px">{{label3}}</th>
+
+                            </tr>
+                            </thead>
+                            <tbody ng-if="dataTable.data==null">
+                            <tr>
+                                <th style="height: 300px" colspan="100" class="active">点击搜索按钮查询数据</th>
+                            </tr>
+                            </tbody>
+                            <tbody ng-if="dataTable.data!=null">
+                            <tr ng-repeat="row in dataTable.data"
+                                ng-click="showRadio((dataTable.curIndex-1)*dataTable.pageSize+$index+1)"
+                                ng-dblclick="dbclickAction((dataTable.curIndex-1)*dataTable.pageSize+$index+1)"
+                                ng-class="{'active':selectRadio==((dataTable.curIndex-1)*dataTable.pageSize+$index+1)}">
+                                <td><input type="radio" name="saaflovradio"
+                                           ng-value="(dataTable.curIndex-1)*dataTable.pageSize+$index+1"
+                                           ng-model="selectRadio"></td>
+                                <td ng-bind="(dataTable.curIndex-1)*dataTable.pageSize+$index+1">1</td>
+
+                                <td>{{row[colName1]}}</td>
+                                <td ng-show="label2">{{row[colName2]}}</td>
+                                <td class="" style="max-width: 400px" ng-show="label3"><div style="max-width: 400px" class="ellipsis">{{row[colName3]}}</div></td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <div saaf-table-tfoot="dataTable"></div>
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-default btn-sm" ng-click="cancel()" data-dismiss="modal">取消
+                            </button>
+                            <button type="button" class="btn btn-default btn-sm" ng-click="clearData()" data-dismiss="modal">清除
+                            </button>
+                            <button type="button" class="btn btn-primary btn-sm" ng-click="returnData()">
+                                确定
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+

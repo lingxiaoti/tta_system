@@ -1,0 +1,182 @@
+<div class="bg-white" main-scroll-style data-des="此节点必需－用户计算滚动区域高度" id="printBody" xmlns:vertical-align="http://www.w3.org/1999/xhtml">
+    <div class="nicescroll-height  " ng-nicescroll
+         nice-option="{{niceOpction}}"
+         data-des="此节点必需-滚动内容及指令">
+        <!--打印样式-->
+        <style type="text/css">
+            table {
+                width: 100%;
+                height: 100%;
+            }
+
+            th {
+                text-align: center;
+            }
+
+            @media print {
+                #printBtn {
+                    display: none;
+                }
+
+                .pageNext {
+                    page-break-after: always;
+                }
+            }
+        </style>
+        <div ng-controller="qualificationDescriptionCtrl"
+             style="width: 100%; height: 100%; text-align: center;">
+            <div>
+                &nbsp;
+            </div>
+            <div id="printContent" style="width: 60%; margin: 0 auto; ">
+                <div class="col-xs-12 col-md-12 p0"
+                     style="text-align: left; font-size: 8pt; font-family: Arial; font-weight:bold; ">
+                    <table style="border:solid 0px black; border-collapse:collapse; table-layout: fixed; WORD-BREAK: break-all; WORD-WRAP: break-word;"
+                           border="1" cellspacing="0">
+                        <tr class="text-center">
+                            <td align="center" style="width:20%">{{$l('产品类别')}}</td>
+                            <td align="center" style="width:20%">{{$l('国别')}}</td>
+                            <td align="center" style="width:60%">{{$l('需要的证照')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center" rowspan="8">{{$l('化妆品')}}</td>
+                            <td align="center" rowspan="5">{{$l('境内')}}</td>
+                            <td align="center">{{$l('化妆品生产许可证')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('ISO22716/BRC/GMPc等')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('建筑工程竣工验收报告')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('消防验收证明')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('社会责任报告')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center" rowspan="3">{{$l('境外')}}</td>
+                            <td align="center">{{$l('许可生产化妆品证明')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('ISO22716/BRC/GMPc等')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('社会责任报告')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center" rowspan="8">{{$l('食品')}}</td>
+                            <td align="center" rowspan="5">{{$l('境内')}}</td>
+                            <td align="center">{{$l('食品生产许可证')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('ISO22000/HACCP/BRC/FSSC22000/IFS等')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('建筑工程竣工验收报告')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('消防验收证明')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('社会责任报告')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center" rowspan="3">{{$l('境外')}}</td>
+                            <td align="center">{{$l('')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('ISO22000/HACCP/BRC/FSSC22000/IFS等')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('社会责任报告')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center" rowspan="8">{{$l('医疗器械')}}</td>
+                            <td align="center" rowspan="5">{{$l('境内')}}</td>
+                            <td align="center">{{$l('第一类医疗器械生产备案凭证/医疗器械生产许可证')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('ISO13485/BRC等')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('建筑工程竣工验收报告')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('消防验收证明')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('社会责任报告')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center" rowspan="3">{{$l('境外')}}</td>
+                            <td align="center">{{$l('许可生产医疗器械证明')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('ISO13485/BRC等')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('社会责任报告')}}</td>
+                        </tr>
+
+                        <tr class="text-center">
+                            <td align="center" rowspan="8">{{$l('消毒产品')}}</td>
+                            <td align="center" rowspan="5">{{$l('境内')}}</td>
+                            <td align="center">{{$l('消毒产品生产企业卫生许可证')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('ISO9001/BRC等')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('建筑工程竣工验收报告')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('消防验收证明')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('社会责任报告')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center" rowspan="3">{{$l('境外')}}</td>
+                            <td align="center">{{$l('许可生产消毒产品证明')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('ISO9001/BRC等')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('社会责任报告')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center" rowspan="8">{{$l('杂货类')}}</td>
+                            <td align="center" rowspan="5">{{$l('境内')}}</td>
+                            <td align="center">{{$l('生产许可类证明')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('ISO9001/BRC等')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('建筑工程竣工验收报告')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('消防验收证明')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('社会责任报告')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center" rowspan="3">{{$l('境外')}}</td>
+                            <td align="center">{{$l('生产许可类证明')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('ISO9001/BRC等')}}</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td align="center">{{$l('社会责任报告')}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

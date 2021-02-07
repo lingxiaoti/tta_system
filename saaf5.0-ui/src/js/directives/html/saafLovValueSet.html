@@ -1,0 +1,88 @@
+<div class="modal fade" id="lovValueSetModal" data-backdrop="static" tabindex="-1">
+<div class="modal-dialog modal-dialog-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title">
+                值集列表
+            </h4>
+        </div>
+        <div class="modal-body">
+            <form name="queryForm" ng-submit="submitQueryParams()">
+                <div class="form-group input-group-xs">
+                    <div class="row">
+                        <div class="col col-md-4 input-group-xs" ng-repeat="poa in paramsObjArr">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <i class="red" ng-if="poa.conditionRequired=='Y'">*</i>{{poa.columnTital}}</label>
+                                <!--字符串或数字-->
+                                <input type="text" class="form-control radius3" ng-model="poa.conditionDefaultValue"
+                                       ng-required="poa.conditionRequired=='Y'"
+                                       ng-if="poa.lookupFlag!='Y'&&(poa.columnType=='STRING' || poa.columnType=='NUMBER')">
+                                <!--日期-->
+                                <input type="text" date-time-picker
+                                       data-date-format="yyyy-mm-dd"
+                                       data-min-View="2" class="form-control radius3"
+                                       ng-model="poa.conditionDefaultValue"
+                                       ng-if="poa.lookupFlag!='Y'&&poa.columnType=='DATE'">
+                                <!--快码-->
+                                <select class="form-control radius3" ng-model="poa.conditionDefaultValue" ng-if="poa.lookupFlag=='Y'">
+                                    <option></option>
+                                    <option saaf-select-lookupcode="{{poa.lookupType}}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col col-md-4 input-group-xs">
+                            <div class="btn-group btn-group-xs pull-left ml10"
+                                 id="outputButton">
+                                <button class="btn btn-default" type="submit"><i class="fa fa-search" aria-hidden="true"></i>搜索</button>
+                                <button class="btn btn-default" type="button" ng-click="initQuery()"><i class="fa fa-undo" aria-hidden="true"></i>重置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="data-table">
+                <table saaf-table="dataTable"
+                       data-auto-get-data="true"
+                       data-params="params" data-page-rows="10"
+                       class="table table-bordered table-hover table-condensed">
+                    <thead class="bg-gray-white">
+                    <tr class="text-center">
+                        <th></th>
+                        <th ng-if="valueSetHeader.showSeqFlag=='Y'">序号</th>
+                        <th ng-repeat="vst in valueSetColumn">{{vst.columnTital}}</th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!dataTable.data">
+                    <tr>
+                        <td style="height: 200px" colspan="4"></td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="dataTable.data">
+                    <tr class="text-center" ng-repeat="item in dataTable.data | filter:{column4:filterValueSetName} | filter:{column1:filterValueSetDesc}"
+                        ng-class="{'active':dataTable.data.selectRow==$index}"
+                        ng-click="dataTable.data.selectRow=$index;selectRow(dataTable.data[$index])" ng-init="init(item)">
+                        <td><input type="checkbox" ng-checked="dataTable.data[$index].checked"></td>
+                        <td ng-if="valueSetHeader.showSeqFlag=='Y'" ng-bind="(dataTable.curIndex-1)*dataTable.pageSize+$index+1">1</td>
+                        <td ng-repeat="col in valueSetColumn">{{item['column'+($index+1)]}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div saaf-table-tfoot="dataTable"></div>
+            </div>
+        </div>
+
+        <div class="modal-footer ">
+            <div style="text-align:center">
+                <button style="" type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">取消</button>
+                <button type="button" ng-click="submitValueSet()" class="btn btn-primary mr10">确定</button>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal-content -->
+</div>
+<!-- /.modal -->
+</div>

@@ -1,0 +1,96 @@
+<!-- Created by lijiayao on 2018-08-18 -->
+<div ng-controller="housingSubsidiesApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOrUpdateOaHrHSubsidy"
+         data-api-get="findOaHrHSubsidyDetailById" data-api-del=""  data-api-update="updateOaHrHSubsidy">
+        <div class="col-md-12 pt15">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'deptName',label:'申请部门',readonly:true,required:true},
+                        {key:'personName',label:'申请人',readonly:true,required:true},
+                        {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                        {key:'billNo',label:'申请单号',readonly:true},
+                        {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                        {key:'statusStr',label:'状态',readonly:true},
+                        ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <!-- <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'rqMoney',label:'申请金额',required:true,validFormat:'number=-1'},
+                    ]"
+                     ng-model="formParams"
+                ></div>
+                <div city-area="" id="cityA" ng-model="citys1" data-select-level="4" data-title="原驻地" class="col-xs-12" data-required="true"></div>
+                <div city-area="" id="cityB" ng-model="citys2" data-select-level="4" data-title="调入地" class="col-xs-12" data-required="true"></div>
+            </div> -->
+            <div class="row">
+                <div search-list
+                     data-col="4"
+                     data-legend="[
+                        {key:'rqMoney',label:'申请金额',type:'lookCode',lookCode:'OA_HOUSING_SUBSIDY',required:true},
+                        {key:'befAddress',label:'原驻地',required:true,type:'lov',readonly:true,callback:'scheduleForCtyCallback',css:'readonly-white'},
+                        {key:'nowAddress',label:'调入地',required:true,type:'lov',readonly:true,callback:'scheduleToCtyCallback',css:'readonly-white'},
+                        {key:'tenementAddr',label:'租房地址',required:true,maxlength:500,placeholder:' '},
+                        {key:'tenementStart',label:'租房起始日期',required:true,type:'time',endDate:'tenementEnd'},
+                        {key:'tenementEnd',label:'租房结束日期',required:true,type:'time',startDate:'tenementStart'}
+                    ]"
+                     ng-model="formParams"
+                ></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>申请原因</span></label>
+                        <textarea class="form-control" rows="1" auto-textarea="" ng-model="formParams.resonDesc" maxlength="500" placeholder="字数限制500" required name="resonDesc" style="height: auto"></textarea>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 hook-normal">
+            <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+                 data-file-data="fileData.file"
+                 data-file-filter='{{fileType}}'
+                 data-view-only="fileViewOnly"
+            ></div>
+        </div>
+        
+    </div>
+    <div class="modal fade" id="citysModal" data-des="请选择城市" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" >
+                        请选择城市
+                    </h4>
+                </div>
+                <form name="businessCityForm" id="businessCityForm">
+                    <div class="modal-body oh">
+                        <div city-area="businessCity" ng-model="citys1" class="col-xs-12" data-select-level="3" data-required='true'></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button type="button" ng-click="citySave1()" class="btn btn-primary mr10"
+                                validate-form-btn="businessCityForm">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>

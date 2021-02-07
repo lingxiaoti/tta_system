@@ -1,0 +1,544 @@
+<div ng-controller="ttaOiSummaryLineCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDel,PLSC">
+
+                    </div>
+                    <!-- 导入、下载模板start -->
+                    <div class="btn-group btn-group-xs" permission-btn-group="btnImport" ng-style="myStyle" id="isSq">
+                        <button  class="btn btn-default  a-black "  onclick="window.location.href='app/base/templates/tta/exampleFlie/ttaOiSummaryLine.xlsx'" ><i class="fa fa-file-excel-o"></i>下载模板</button>
+                        <button  class="btn btn-default  a-black "   ng-click="daoru()" ><i class="fa fa-upload"></i>导入</button>
+
+                    </div>
+                    <!-- 导入、下载模板end -->
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+
+
+                <!--------------------- 输入表单  --->
+
+                <div class=" mt10 pb5  oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form id="contractForm" name="contractForm">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>单据头信息</span>
+
+
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110">月份：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       date-time-picker="" data-date-format="yyyy-mm"
+                                       data-start-view="3" data-min-view="3" data-max-view="3"
+                                       ng-model="params.accountMonth" >
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">供应商编号：</span></label>
+                                <input  type="text" ng-model="params.rmsCode"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">供应商名称:</span></label>
+                                <input  type="text" ng-model="params.venderName"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="row"></div>
+
+
+                    </form>
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="false"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="findOISPagination"
+                         data-legend="[
+                                {'value':'accountMonth','name':'年月'},
+                                {'value':'rmsCode','name':'供应商编号'},
+                                {'value':'venderName','name':'供应商名称'},
+                                {'value':'department','name':'部门'},
+                                {'value':'brand','name':'品牌'},
+                                {'value':'venderab','name':'供应商属性'},
+                                {'value':'familyPlaningFlag','name':'计生供应商'},
+                                {'value':'venderType','name':'供应商类型'},
+                                {'value':'purchase','name':'采购额（折扣前）'},
+                                {'value':'goodsreturn','name':'退货额（折扣前）'},
+                                {'value':'netpurchase','name':'净采购额（折扣前）'},
+                                {'value':'dsd','name':'免送额（折扣前）'},
+                                {'value':'purchaseorigin','name':'折扣后进货额'},
+                                {'value':'goodsreturnorigin','name':'折扣后退货额'},
+                                {'value':'netpurchaseorigin','name':'折扣后净采购额'},
+                                {'value':'pypurchase','name':'以前年度的进货额'},
+                                {'value':'pygoodsreturn','name':'以前年度的退货额'},
+                                {'value':'pynetpurchase','name':'以前年度的净采购额(S+T)'},
+                                {'value':'pydsd','name':'以前年度的DSD(免送额)'},
+                                {'value':'tyWivatBtFrP592950','name':'本月采购额计算-一般购货折扣'},
+                                {'value':'tyadjCtaWivatBtFrP592950','name':'本月合同调整-一般购货折扣'},
+                                {'value':'tyadjRcaWivatBtFrP592950','name':'本月对帐调整-一般购货折扣'},
+                                {'value':'lyadjCtaWivatBtFrP592950','name':'以前年度合同调整-一般购货折扣'},
+                                {'value':'lyadjRcaWivatBtFrP592950','name':'以前年度对帐调整-一般购货折扣'},
+                                {'value':'lyadjPraWivatBtFrP592950','name':'以前年度采购额计算/PRG调整/自查调整-一般购货折扣'},
+                                {'value':'totalWivatBtFrP592950','name':'一般购货折扣Total'},
+                                {'value':'totalWovatBtFrP592950','name':'一般购货折扣Total(不含税)'},
+                                {'value':'tyWivatBtEpdP592712','name':'本月采购额计算-（提前付款）购货折扣'},
+                                {'value':'tyadjCtaWivatBtEpdP592712','name':'本月合同调整-（提前付款）购货折扣'},
+                                {'value':'tyadjRcaWivatBtEpdP592712','name':'本月对帐调整-（提前付款）购货折扣'},
+                                {'value':'lyadjCtaWivatBtEpdP592712','name':'以前年度合同调整-（提前付款）购货折扣'},
+                                {'value':'lyadjRcaWivatBtEpdP592712','name':'以前年度对帐调整-（提前付款）购货折扣'},
+                                {'value':'lyadjPraWivatBtEpdP592712','name':'以前年度采购额计算/PRG调整/自查调整-（提前付款）购货折扣'},
+                                {'value':'totalWivatBtEpdP592712','name':'（提前付款）购货折扣Total'},
+                                {'value':'totalWovatBtEpdP592712','name':'（提前付款）购货折扣Total(不含税)'},
+                                {'value':'tyWivatBtPdP592803','name':'本月采购额计算-促销折扣'},
+                                {'value':'tyadjCtaWivatBtPdP592803','name':'本月合同调整-促销折扣'},
+                                {'value':'tyadjRcaWivatBtPdP592803','name':'本月对帐调整-促销折扣'},
+                                {'value':'lyadjCtaWivatBtPdP592803','name':'以前年度合同调整-促销折扣'},
+                                {'value':'lyadjRcaWivatBtPdP592803','name':'以前年度对帐调整-促销折扣'},
+                                {'value':'lyadjPraWivatBtPdP592803','name':'以前年度采购额计算/PRG/自查调整-促销折扣'},
+                                {'value':'totalWivatBtPdP592803','name':'促销折扣Total'},
+                                {'value':'totalWovatBtPdP592803','name':'促销折扣Total(不含税)'},
+                                {'value':'tyWivatBtDaP592901','name':'本月采购额计算-集中收货折扣'},
+                                {'value':'tyadjCtaWivatBtDaP592901','name':'本月合同调整-集中收货折扣'},
+                                {'value':'tyadjRcaWivatBtDaP592901','name':'本月对帐调整-集中收货折扣'},
+                                {'value':'lyadjCtaWivatBtDaP592901','name':'以前年度合同调整-集中收货折扣'},
+                                {'value':'lyadjRcaWivatBtDaP592901','name':'以前年度对帐调整-集中收货折扣'},
+                                {'value':'lyadjPraWivatBtDaP592901','name':'以前年度采购额计算/PRG调整/自查调整-集中收货折扣'},
+                                {'value':'totalWivatBtDaP592901','name':'集中收货折扣Total'},
+                                {'value':'totalWovatBtDaP592901','name':'集中收货折扣Total(不含税)'},
+                                {'value':'tyWivatBtDgaP592708','name':'本月采购额计算-（残损）购货折扣'},
+                                {'value':'tyadjCtaWivatBtDgaP592708','name':'本月合同调整-（残损）购货折扣'},
+                                {'value':'tyadjRcaWivatBtDgaP592708','name':'本月对帐调整-（残损）购货折扣'},
+                                {'value':'lyadjCtaWivatBtDgaP592708','name':'以前年度合同调整-（残损）购货折扣'},
+                                {'value':'lyadjRcaWivatBtDgaP592708','name':'以前年度对帐调整-（残损）购货折扣'},
+                                {'value':'lyadjPraWivatBtDgaP592708','name':'以前年度采购额计算/PRG调整/自查调整-（残损）购货折扣'},
+                                {'value':'totalWivatBtDgaP592708','name':'（残损）购货折扣Total'},
+                                {'value':'totalWovatBtDgaP592708','name':'（残损）购货折扣Total(不含税)'},
+                                {'value':'tyadjCtaWivatBtIrP592951','name':'本月合同调整-目标退佣'},
+                                {'value':'tyadjRcaWivatBtIrP592951','name':'本月对帐调整-目标退佣'},
+                                {'value':'lyadjCtaWivatBtIrP592951','name':'以前年度合同调整-目标退佣'},
+                                {'value':'lyadjRcaWivatBtIrP592951','name':'以前年度对帐调整-目标退佣'},
+                                {'value':'lyadjPraWivatBtIrP592951','name':'以前年度采购额计算/PRG调整/自查调整-目标退佣'},
+                                {'value':'totalWivatBtIrP592951','name':'目标退佣Total'},
+                                {'value':'totalWovatBtIrP592951','name':'目标退佣(不含税)Total'},
+                                {'value':'tyWivatBtBdsP592792','name':'本月采购额计算-商业发展支持'},
+                                {'value':'tyadjCtaWivatBtBdsP592792','name':'本月合同调整-商业发展支持'},
+                                {'value':'tyadjRcaWivatBtBdsP592792','name':'本月对帐调整-商业发展支持'},
+                                {'value':'lyadjCtaWivatBtBdsP592792','name':'以前年度合同调整-商业发展支持'},
+                                {'value':'lyadjRcaWivatBtBdsP592792','name':'以前年度对帐调整-商业发展支持'},
+                                {'value':'lyadjPraWivatBtBdsP592792','name':'以前年度采购额计算/PRG调整/自查调整-商业发展支持'},
+                                {'value':'totalWivatBtBdsP592792','name':'商业发展支持Total'},
+                                {'value':'totalWovatBtBdsP592792','name':'商业发展支持Total(不含税)'},
+                                {'value':'tyWivatOtLdP592722','name':'本月计算-延误送货罚款'},
+                                {'value':'tyadjCtaWivatOtLdP592722','name':'本月合同调整-延误送货罚款'},
+                                {'value':'tyadjRcaWivatOtLdP592722','name':'本月对帐调整-延误送货罚款'},
+                                {'value':'lyadjCtaWivatOtLdP592722','name':'以前年度合同调整-延误送货罚款'},
+                                {'value':'lyadjRcaWivatOtLdP592722','name':'以前年度对帐调整-延误送货罚款'},
+                                {'value':'lyadjPraWivatOtLdP592722','name':'以前年度PRG调整/自查调整-延误送货罚款'},
+                                {'value':'totalWivatOtLdP592722','name':'延误送货罚款Total'},
+                                {'value':'totalWovatOtLdP592722','name':'延误送货罚款Total(不含税)'},
+                                {'value':'tyWivatOtNfP592780','name':'本月计算-满足率低于95%罚款'},
+                                {'value':'tyadjCtaWivatOtNfP592780','name':'本月合同调整-满足率低于95%罚款'},
+                                {'value':'tyadjRcaWivatOtNfP592780','name':'本月对帐调整-满足率低于95%罚款'},
+                                {'value':'lyadjCtaWivatOtNfP592780','name':'以前年度合同调整-满足率低于95%罚款'},
+                                {'value':'lyadjRcaWivatOtNfP592780','name':'以前年度对帐调整-满足率低于95%罚款'},
+                                {'value':'lyadjPraWivatOtNfP592780','name':'以前年度PRG调整/自查调整-满足率低于95%罚款'},
+                                {'value':'totalWivatOtNfP592780','name':'满足率低于95%罚款Total'},
+                                {'value':'totalWovatOtNfP592780','name':'满足率低于95%罚款Total(不含税)'},
+                                {'value':'tyWivatOtCpnP592743','name':'本月计算-优惠券'},
+                                {'value':'tyadjCtaWivatOtCpnP592743','name':'本月合同调整-优惠券'},
+                                {'value':'tyadjRcaWivatOtCpnP592743','name':'本月对帐调整-优惠券'},
+                                {'value':'lyadjCtaWivatOtCpnP592743','name':'以前年度合同调整-优惠券'},
+                                {'value':'lyadjRcaWivatOtCpnP592743','name':'以前年度对帐调整-优惠券'},
+                                {'value':'lyadjPraWivatOtCpnP592743','name':'以前年度PRG调整/自查调整-优惠券'},
+                                {'value':'totalWivatOtCpnP592743','name':'优惠券Total'},
+                                {'value':'totalWovatOtLpP592743','name':'优惠券Total(不含税)'},
+                                {'value':'tyWivatOtLpP500320','name':'本月计算-会员优惠'},
+                                {'value':'tyadjCtaWivatOtLpP500320','name':'本月合同调整-会员优惠'},
+                                {'value':'tyadjRcaWivatOtLpP500320','name':'本月对帐调整-会员优惠'},
+                                {'value':'lyadjCtaWivatOtLpP500320','name':'以前年度合同调整-会员优惠'},
+                                {'value':'lyadjRcaWivatOtLpP500320','name':'以前年度对帐调整-会员优惠'},
+                                {'value':'lyadjPraWivatOtLpP500320','name':'以前年度PRG调整/自查调整-会员优惠'},
+                                {'value':'totalWivatOtLpP500320','name':'会员优惠Total'},
+                                {'value':'totalWovatOtLpP500320','name':'会员优惠Total(不含税)'},
+                                {'value':'tyWivatBtUepdP592796','name':'本月计算-未在合同上的提早付款折扣'},
+                                {'value':'tyadjCtaWivatBtUepdP592796','name':'本月合同调整-未在合同上的提早付款折扣'},
+                                {'value':'tyadjRcaWivatBtUepdP592796','name':'本月对帐调整-未在合同上的提早付款折扣'},
+                                {'value':'lyadjCtaWivatBtUepdP592796','name':'以前年度合同调整-未在合同上的提早付款折扣'},
+                                {'value':'lyadjRcaWivatBtUepdP592796','name':'以前年度对帐调整-未在合同上的提早付款折扣'},
+                                {'value':'lyadjPraWivatBtUepdP592796','name':'以前年度PRG调整/自查调整-未在合同上的提早付款折扣'},
+                                {'value':'totalWivatBtUepdP592796','name':'未在合同上的提早付款折扣Total'},
+                                {'value':'totalWovatBtUepdP592796','name':'未在合同上的提早付款折扣Total(不含税)'},
+                                {'value':'tyWivatAbtCriP592738','name':'本月计算(TTA)-成本补差'},
+                                {'value':'tyWivatAbotCriP592738','name':'本月计算(ONTOP)-成本补差'},
+                                {'value':'lyadjWivatAbtCriP592738','name':'以前年度计算(TTA)-成本补差'},
+                                {'value':'lyadjWivatAbotCriP592738','name':'以前年度计算(ONTOP)-成本补差'},
+                                {'value':'tyadjCtaWivatAbtCriP592738','name':'本月合同调整-成本补差'},
+                                {'value':'tyadjRcaWivatAbtCriP592738','name':'本月对帐调整-成本补差'},
+                                {'value':'lyadjCtaWivatAbtCriP592738','name':'以前年度合同调整-成本补差'},
+                                {'value':'lyadjRcaWivatAbtCriP592738','name':'以前年度对帐调整-成本补差'},
+                                {'value':'lyadjPraWivatAbtCriP592738','name':'以前年度PRG调整/自查调整-成本补差'},
+                                {'value':'totalWivatAbCriP592738','name':'成本补差Total'},
+                                {'value':'totalWovatAbCriP592738','name':'成本补差Total(不含税)'},
+                                {'value':'tyWivatAbtOemtP592873','name':'本月计算(TTA)-OEM试用装'},
+                                {'value':'tyWivatAbotOemtP592873','name':'本月计算(ONTOP)-OEM试用装'},
+                                {'value':'lyadjWivatAbtOemtP592873','name':'以前年度计算(TTA)-OEM试用装'},
+                                {'value':'lyadjWivatAbotOemtP592873','name':'以前年度计算(ONTOP)-OEM试用装'},
+                                {'value':'tyadjCtaWivatAbtOemP592873','name':'本月合同调整-OEM试用装'},
+                                {'value':'tyadjRcaWivatAbtOemP592873','name':'本月对帐调整-OEM试用装'},
+                                {'value':'lyadjCtaWivatAbtOemP592873','name':'以前年度合同调整-OEM试用装'},
+                                {'value':'lyadjRcaWivatAbtOemP592873','name':'以前年度对帐调整-OEM试用装'},
+                                {'value':'lyadjPraWivatAbtOemP592873','name':'以前年度PRG调整/自查调整-OEM试用装'},
+                                {'value':'totalWivatAbOemtP592873','name':'OEM试用装Total'},
+                                {'value':'totalWovatAbtOemtP592873','name':'OEM试用装otal(不含税)'},
+                                {'value':'tyWivatAbtDsP592814','name':'本月计算(TTA)-数据分享费'},
+                                {'value':'tyWivatAbotDsP592814','name':'本月计算(ONTOP)-数据分享费'},
+                                {'value':'lyadjWivatAbtDsP592814','name':'以前年度计算(TTA)-数据分享费'},
+                                {'value':'lyadjWivatAbotDsP592814','name':'以前年度计算(ONTOP)-数据分享费'},
+                                {'value':'tyadjCtaWivatAbtDsP592814','name':'本月合同调整-数据分享费'},
+                                {'value':'tyadjRcaWivatAbtDsP592814','name':'本月对帐调整-数据分享费'},
+                                {'value':'lyadjCtaWivatAbtDsP592814','name':'以前年度合同调整-数据分享费'},
+                                {'value':'lyadjRcaWivatAbtDsP592814','name':'以前年度对帐调整-数据分享费'},
+                                {'value':'lyadjPraWivatAbtDsP592814','name':'以前年度PRG调整/自查调整-数据分享费'},
+                                {'value':'totalWivatAbDsP592814','name':'数据分享费Total'},
+                                {'value':'tyWivatAbtDroP592810','name':'本月计算(TTA)-促销陈列服务费'},
+                                {'value':'tyWivatAbotDroP592810','name':'本月计算(ONTOP)-促销陈列服务费'},
+                                {'value':'lyadjWivatAbtDroP592810','name':'以前年度计算(TTA)-促销陈列服务费'},
+                                {'value':'lyadjWivatAbotDroP592810','name':'以前年度计算(ONTOP)-促销陈列服务费'},
+                                {'value':'tyadjCtaWivatAbtDroP592810','name':'本月合同调整-促销陈列服务费'},
+                                {'value':'tyadjRcaWivatAbtDroP592810','name':'本月对帐调整-促销陈列服务费'},
+                                {'value':'lyadjCtaWivatAbtDroP592810','name':'以前年度合同调整-促销陈列服务费'},
+                                {'value':'lyadjRcaWivatAbtDroP592810','name':'以前年度对帐调整-促销陈列服务费'},
+                                {'value':'lyadjPraWivatAbtDroP592810','name':'以前年度PRG调整/自查调整-促销陈列服务费'},
+                                {'value':'totalWivatAbDroP592810','name':'促销陈列服务费Total'},
+                                {'value':'tyWivatAbtDrntP592871','name':'本月计算(TTA)-促销陈列服务费-NewTrialProjects'},
+                                {'value':'tyWivatAbotDrntP592871','name':'本月计算(ONTOP)-促销陈列服务费-NewTrialProjects'},
+                                {'value':'lyadjWivatAbtDrntP592871','name':'以前年度计算(TTA)-促销陈列服务费-NewTrialProjects'},
+                                {'value':'lyadjWivatAbotDrntP592871','name':'以前年度计算(ONTOP)-促销陈列服务费-NewTrialProjects'},
+                                {'value':'tyadjCtaWivatAbtDrnP592871','name':'本月合同调整-促销陈列服务费-NewTrialProjects'},
+                                {'value':'tyadjRcaWivatAbtDrnP592871','name':'本月对帐调整-促销陈列服务费-NewTrialProjects'},
+                                {'value':'lyadjCtaWivatAbtDrnP592871','name':'以前年度合同调整-促销陈列服务费-NewTrialProjects'},
+                                {'value':'lyadjRcaWivatAbtDrnP592871','name':'以前年度对帐调整-促销陈列服务费-NewTrialProjects'},
+                                {'value':'lyadjPraWivatAbtDrnP592871','name':'以前年度PRG调整/自查调整-促销陈列服务费-NewTrialProjects'},
+                                {'value':'totalWivatAbDrntP592871','name':'促销陈列服务费-NewTrialProjectsTotal'},
+                                {'value':'tyWivatAbtCrP592715','name':'本月计算(TTA)-专柜促销陈列服务费'},
+                                {'value':'tyWivatAbotCrP592715','name':'本月计算(ONTOP)-专柜促销陈列服务费'},
+                                {'value':'lyadjWivatAbtCrP592715','name':'以前年度计算(TTA)-专柜促销陈列服务费'},
+                                {'value':'lyadjWivatAbotCrP592715','name':'以前年度计算(ONTOP)-专柜促销陈列服务费'},
+                                {'value':'tyadjCtaWivatAbtCrP592715','name':'本月合同调整-专柜促销陈列服务费'},
+                                {'value':'tyadjRcaWivatAbtCrP592715','name':'本月对帐调整-专柜促销陈列服务费'},
+                                {'value':'lyadjCtaWivatAbtCrP592715','name':'以前年度合同调整-专柜促销陈列服务费'},
+                                {'value':'lyadjRcaWivatAbtCrP592715','name':'以前年度对帐调整-专柜促销陈列服务费'},
+                                {'value':'lyadjPraWivatAbtCrP592715','name':'以前年度PRG调整/自查调整-专柜促销陈列服务费'},
+                                {'value':'totalWivatAbCrP592715','name':'专柜促销陈列服务费Total'},
+                                {'value':'tyWivatAbtDmP592751','name':'本月计算(TTA)-宣传单张、宣传牌及促销用品推广服务费'},
+                                {'value':'tyWivatAbotDmP592751','name':'本月计算(ONTOP)-宣传单张、宣传牌及促销用品推广服务费'},
+                                {'value':'lyadjWivatAbtDmP592751','name':'以前年度计算(TTA)-宣传单张、宣传牌及促销用品推广服务费'},
+                                {'value':'lyadjWivatAbotDmP592751','name':'以前年度计算(ONTOP)-宣传单张、宣传牌及促销用品推广服务费'},
+                                {'value':'tyadjCtaWivatAbtDmP592751','name':'本月合同调整-宣传单张、宣传牌及促销用品推广服务费'},
+                                {'value':'tyadjRcaWivatAbtDmP592751','name':'本月对帐调整-宣传单张、宣传牌及促销用品推广服务费'},
+                                {'value':'lyadjCtaWivatAbtDmP592751','name':'以前年度合同调整-宣传单张、宣传牌及促销用品推广服务费'},
+                                {'value':'lyadjRcaWivatAbtDmP592751','name':'以前年度对帐调整-宣传单张、宣传牌及促销用品推广服务费'},
+                                {'value':'lyadjPraWivatAbtDmP592751','name':'以前年度PRG调整/自查调整-宣传单张、宣传牌及促销用品推广服务费'},
+                                {'value':'totalWivatAbDmP592751','name':'宣传单张、宣传牌及促销用品推广服务费Total'},
+                                {'value':'tyWivatAbtNppP592804','name':'本月计算(TTA)-新品种宣传推广服务费'},
+                                {'value':'tyWivatAbotNppP592804','name':'本月计算(ONTOP)-新品种宣传推广服务费'},
+                                {'value':'lyadjWivatAbtNppP592804','name':'以前年度计算(TTA)-新品种宣传推广服务费'},
+                                {'value':'lyadjWivatAbotNppP592804','name':'以前年度计算(ONTOP)-新品种宣传推广服务费'},
+                                {'value':'tyadjCtaWivatAbtNppP592804','name':'本月合同调整-新品种宣传推广服务费'},
+                                {'value':'tyadjRcaWivatAbtNppP592804','name':'本月对帐调整--新品种宣传推广服务费'},
+                                {'value':'lyadjCtaWivatAbtNppP592804','name':'以前年度合同调整--新品种宣传推广服务费'},
+                                {'value':'lyadjRcaWivatAbtNppP592804','name':'以前年度对帐调整--新品种宣传推广服务费'},
+                                {'value':'lyadjPraWivatAbtNppP592804','name':'以前年度PRG调整/自查调整--新品种宣传推广服务费'},
+                                {'value':'totalWivatAbNppP592804','name':'新品种宣传推广服务费Total'},
+                                {'value':'tyWivatAbtBdfP592726','name':'本月计算(TTA)BDF商业发展服务费'},
+                                {'value':'tyWivatAbotBdfP592726','name':'本月计算(ONTOP)BDF商业发展服务费'},
+                                {'value':'lyadjWivatAbtBdfP592726','name':'以前年度计算(TTA)BDF商业发展服务费'},
+                                {'value':'lyadjWivatAbotBdfP592726','name':'以前年度计算(ONTOP)BDF商业发展服务费'},
+                                {'value':'tyadjCtaWivatAbtBdfP592726','name':'本月合同调整BDF商业发展服务费'},
+                                {'value':'tyadjRcaWivatAbtBdfP592726','name':'本月对帐调整BDF商业发展服务费'},
+                                {'value':'lyadjCtaWivatAbtBdfP592726','name':'以前年度合同调整BDF商业发展服务费'},
+                                {'value':'lyadjRcaWivatAbtBdfP592726','name':'以前年度对帐调整BDF商业发展服务费'},
+                                {'value':'lyadjPraWivatAbtBdfP592726','name':'以前年度PRG调整/自查调整BDF商业发展服务费'},
+                                {'value':'totalWivatAbBdfP592726','name':'商业发展服务费Total'},
+                                {'value':'tyWivatAbtHwbP592812','name':'本月计算(TTA)-H'},
+                                {'value':'tyWivatAbotHwbP592812','name':'本月计算(ONTOP)-H'},
+                                {'value':'lyadjWivatAbtHwbP592812','name':'以前年度计算(TTA)-H'},
+                                {'value':'lyadjWivatAbotHwbP592812','name':'以前年度计算(ONTOP)-H'},
+                                {'value':'tyadjCtaWivatAbtHwbP592812','name':'本月合同调整-H'},
+                                {'value':'tyadjRcaWivatAbtHwbP592812','name':'本月对帐调整-H'},
+                                {'value':'lyadjCtaWivatAbtHwbP592812','name':'以前年度合同调整-H'},
+                                {'value':'lyadjRcaWivatAbtHwbP592812','name':'以前年度对帐调整-H'},
+                                {'value':'lyadjPraWivatAbtHwbP592812','name':'以前年度PRG调整/自查调整-H'},
+                                {'value':'totalWivatAbHwbP592812','name':'H'},
+                                {'value':'tyWivatAbtOpbP592700','name':'本月计算(TTA)-其他'},
+                                {'value':'tyWivatAbotOpbP592700','name':'本月计算(ONTOP)-其他'},
+                                {'value':'lyadjWivatAbtOpbP592700','name':'以前年度计算(TTA)-其他'},
+                                {'value':'lyadjWivatAbotOpbP592700','name':'以前年度计算(ONTOP)-其他'},
+                                {'value':'tyWivatAbGlOpbP592700','name':'本月计算(GL)-其他'},
+                                {'value':'tyWivatAbPemOpbP592700','name':'本月采购额计算-其他P*EM'},
+                                {'value':'tyadjCtaWivatAbtOpbP592700','name':'本月合同调整-其他'},
+                                {'value':'tyadjRcaWivatAbtOpbP592700','name':'本月对帐调整--其他'},
+                                {'value':'lyadjCtaWivatAbtOpbP592700','name':'以前年度合同调整--其他'},
+                                {'value':'lyadjRcaWivatAbtOpbP592700','name':'以前年度对帐调整--其他'},
+                                {'value':'lyadjPraWivatAbtOpbP592700','name':'以前年度PRG调整/自查调整-其他'},
+                                {'value':'totalWivatAbOpbP592700','name':'其他Total'},
+                                {'value':'tyWivatAbtMktgP592811','name':'本月计算(TTA)-市场推广服务费'},
+                                {'value':'tyWivatAbotMktgP592811','name':'本月计算(ONTOP)-市场推广服务费'},
+                                {'value':'lyadjWivatAbtMktgP592811','name':'以前年度计算(TTA)-市场推广服务费'},
+                                {'value':'lyadjWivatAbotMktgP592811','name':'以前年度计算(ONTOP)-市场推广服务费'},
+                                {'value':'tyadjCtaWivatAbtMktP592811','name':'本月合同调整-市场推广服务费'},
+                                {'value':'tyadjRcaWivatAbtMktP592811','name':'本月对帐调整-市场推广服务费'},
+                                {'value':'lyadjCtaWivatAbtMktP592811','name':'以前年度合同调整-市场推广服务费'},
+                                {'value':'lyadjRcaWivatAbtMktP592811','name':'以前年度对帐调整-市场推广服务费'},
+                                {'value':'lyadjPraWivatAbtMktP592811','name':'以前年度PRG调整/自查调整-市场推广服务费'},
+                                {'value':'totalWivatAbMktgP592811','name':'市场推广服务费Total'},
+                                {'value':'tyWivatAbtNtP592760','name':'本月计算(TTA)-非贸易收入'},
+                                {'value':'tyWivatAbotNtP592760','name':'本月计算(ONTOP)-非贸易收入'},
+                                {'value':'lyadjWivatAbtNtP592760','name':'以前年度计算(TTA)-非贸易收入'},
+                                {'value':'lyadjWivatAbotNtP592760','name':'以前年度计算(ONTOP)-非贸易收入'},
+                                {'value':'tyadjCtaWivatAbtNtP592760','name':'本月合同调整-非贸易收入'},
+                                {'value':'tyadjRcaWivatAbtNtP592760','name':'本月对帐调整-非贸易收入'},
+                                {'value':'lyadjCtaWivatAbtNtP592760','name':'以前年度合同调整-非贸易收入'},
+                                {'value':'lyadjRcaWivatAbtNtP592760','name':'以前年度对帐调整-非贸易收入'},
+                                {'value':'lyadjPraWivatAbtNtP592760','name':'以前年度PRG调整/自查调整-非贸易收入'},
+                                {'value':'totalWivatAbNtP592760','name':'非贸易收入Total'},
+                                {'value':'tyWivatAbtSbaP592795','name':'本月计算(TTA)-促销服务费'},
+                                {'value':'tyWivatAbotSbaP592795','name':'本月计算(ONTOP)-促销服务费'},
+                                {'value':'lyadjWivatAbtSbaP592795','name':'以前年度计算(TTA)-促销服务费'},
+                                {'value':'lyadjWivatAbotSbaP592795','name':'以前年度计算(ONTOP)-促销服务费'},
+                                {'value':'tyadjCtaWivatAbtSbaP592795','name':'本月合同调整-促销服务费'},
+                                {'value':'tyadjRcaWivatAbtSbaP592795','name':'本月对帐调整-促销服务费'},
+                                {'value':'lyadjCtaWivatAbtSbaP592795','name':'以前年度合同调整-促销服务费'},
+                                {'value':'lyadjRcaWivatAbtSbaP592795','name':'以前年度对帐调整-促销服务费'},
+                                {'value':'lyadjPraWivatAbtSbaP592795','name':'以前年度PRG调整/自查调整-促销服务费'},
+                                {'value':'totalWivatAbSbaP592795','name':'促销服务费Total'},
+                                {'value':'tyWivatAbtOpsP592874','name':'本月计算(TTA)-其他促销服务费'},
+                                {'value':'tyWivatAbotOpsP592874','name':'本月计算(ONTOP)-其他促销服务费'},
+                                {'value':'lyadjWivatAbtOpsP592874','name':'以前年度计算(TTA)-其他促销服务费'},
+                                {'value':'lyadjWivatAbotOpsP592874','name':'以前年度计算(ONTOP)-其他促销服务费'},
+                                {'value':'tyadjCtaWivatAbtOpsP592874','name':'本月合同调整-其他促销服务费'},
+                                {'value':'tyadjRcaWivatAbtOpsP592874','name':'本月对帐调整-其他促销服务费'},
+                                {'value':'lyadjCtaWivatAbtOpsP592874','name':'以前年度合同调整-其他促销服务费'},
+                                {'value':'lyadjRcaWivatAbtOpsP592874','name':'以前年度对帐调整-其他促销服务费'},
+                                {'value':'lyadjPraWivatAbtOpsP592874','name':'以前年度PRG调整/自查调整-其他促销服务费'},
+                                {'value':'totalWivatAbOpsP592874','name':'其他促销服务费Total'},
+                                {'value':'tyWivatSrtNssP592802','name':'本月计算-新店宣传推广服务费'},
+                                {'value':'tyadjCtaWivatSrtNssP592802','name':'本月合同调整-新店宣传推广服务费'},
+                                {'value':'tyadjRcaWivatSrtNssP592802','name':'本月对帐调整-新店宣传推广服务费'},
+                                {'value':'lyadjCtaWivatSrtNssP592802','name':'以前年度合同调整-新店宣传推广服务费'},
+                                {'value':'lyadjRcaWivatSrtNssP592802','name':'以前年度对帐调整-新店宣传推广服务费'},
+                                {'value':'lyadjPraWivatSrtNssP592802','name':'以前年度采购额计算/PRG调整/自查调整-新店宣传推广服务费'},
+                                {'value':'totalWivatSrtNssP592802','name':'新店宣传推广服务费total'},
+                                {'value':'tyWivatSrtRssP592756','name':'本月计算-店铺升级推广服务费'},
+                                {'value':'tyadjCtaWivatSrtRssP592756','name':'本月合同调整-店铺升级推广服务费'},
+                                {'value':'tyadjRcaWivatSrtRssP592756','name':'本月对帐调整-店铺升级推广服务费'},
+                                {'value':'lyadjCtaWivatSrtRssP592756','name':'以前年度合同调整-店铺升级推广服务费'},
+                                {'value':'lyadjRcaWivatSrtRssP592756','name':'以前年度对帐调整-店铺升级推广服务费'},
+                                {'value':'lyadjPraWivatSrtRssP592756','name':'以前年度采购额计算/PRG调整/自查调整-店铺升级推广服务费'},
+                                {'value':'totalWivatSrtRssP592756','name':'店铺升级推广服务费Total'},
+                                {'value':'tyWivatSrtAssP592768','name':'本月计算-节庆促销服务费'},
+                                {'value':'tyadjCtaWivatSrtAssP592768','name':'本月合同调整-节庆促销服务费'},
+                                {'value':'tyadjRcaWivatSrtAssP592768','name':'本月对帐调整-节庆促销服务费'},
+                                {'value':'lyadjCtaWivatSrtAssP592768','name':'以前年度合同调整-节庆促销服务费'},
+                                {'value':'lyadjRcaWivatSrtAssP592768','name':'以前年度对帐调整-节庆促销服务费'},
+                                {'value':'lyadjPraWivatSrtAssP592768','name':'以前年度采购额计算/PRG调整/自查调整-节庆促销服务费'},
+                                {'value':'totalWivatSrtAssP592768','name':'节庆促销服务费Total'},
+                                {'value':'tyWivatSrtWdsP592793','name':'本月计算-节庆促销服务费（38妇女节）'},
+                                {'value':'tyadjCtaWivatSrtWdsP592793','name':'本月合同调整-节庆促销服务费（38妇女节）'},
+                                {'value':'tyadjRcaWivatSrtWdsP592793','name':'本月对帐调整-节庆促销服务费（38妇女节）'},
+                                {'value':'lyadjCtaWivatSrtWdsP592793','name':'以前年度合同调整-节庆促销服务费（38妇女节）'},
+                                {'value':'lyadjRcaWivatSrtWdsP592793','name':'以前年度对帐调整-节庆促销服务费（38妇女节）'},
+                                {'value':'lyadjPraWivatSrtWdsP592793','name':'以前年度PRG调整/自查调整-节庆促销服务费（38妇女节）'},
+                                {'value':'totalWivatSrtWdsP592793','name':'节庆促销服务费（38妇女节）Total'},
+                                {'value':'tyWivatSrtNcsP592813','name':'本月计算-新城市宣传推广服务费'},
+                                {'value':'tyadjCtaWivatSrtNcsP592813','name':'本月合同调整-新城市宣传推广服务费'},
+                                {'value':'tyadjRcaWivatSrtNcsP592813','name':'本月对帐调整-新城市宣传推广服务费'},
+                                {'value':'lyadjCtaWivatSrtNcsP592813','name':'以前年度合同调整-新城市宣传推广服务费'},
+                                {'value':'lyadjRcaWivatSrtNcsP592813','name':'以前年度对帐调整-新城市宣传推广服务费'},
+                                {'value':'lyadjPraWivatSrtNcsP592813','name':'以前年度PRG调整/自查调整-新城市宣传推广服务费'},
+                                {'value':'totalWivatSrtNcsP592813','name':'新城市宣传推广服务费Total'},
+                                {'value':'tyWivatBeTtaRgsP592872','name':'本月采购额计算-退货处理服务费'},
+                                {'value':'tyadjCtaWivatBetRgsP592872','name':'本月合同调整-退货处理服务费'},
+                                {'value':'tyadjRcaWivatBetRgsP592872','name':'本月对帐调整-退货处理服务费'},
+                                {'value':'lyadjCtaWivatBetRgsP592872','name':'以前年度合同调整-退货处理服务费'},
+                                {'value':'lyadjRcaWivatBetRgsP592872','name':'以前年度对帐调整-退货处理服务费'},
+                                {'value':'lyadjPraWivatBetRgsP592872','name':'以前年度调整-PRG-退货处理服务费'},
+                                {'value':'totalWivatBeTtaRgsP592872','name':'退货处理服务费Total'},
+                                {'value':'tyWivatOttLpuP592794','name':'本月计算-延误退货罚款'},
+                                {'value':'tyadjCtaWivatOttLpuP592794','name':'本月合同调整-延误退货罚款'},
+                                {'value':'tyadjRcaWivatOttLpuP592794','name':'本月对帐调整-延误退货罚款'},
+                                {'value':'lyadjCtaWivatOttLpuP592794','name':'以前年度合同调整-延误退货罚款'},
+                                {'value':'lyadjRcaWivatOttLpuP592794','name':'以前年度对帐调整-延误退货罚款'},
+                                {'value':'lyadjPraWivatOttLpuP592794','name':'以前年度调整-PRG-延误退货罚款'},
+                                {'value':'totalWivatOttLpuP592794','name':'延误退货罚款Total'},
+                                {'value':'tyWivatOttTfP592842','name':'本月计算-QA审查服务费'},
+                                {'value':'tyadjCtaWivatOttTfP592842','name':'本月合同调整-QA审查服务费'},
+                                {'value':'tyadjRcaWivatOttTfP592842','name':'本月对帐调整-QA审查服务费'},
+                                {'value':'lyadjCtaWivatOttTfP592842','name':'以前年度合同调整-QA审查服务费'},
+                                {'value':'lyadjRcaWivatOttTfP592842','name':'以前年度对帐调整-QA审查服务费'},
+                                {'value':'lyadjPraWivatOttTfP592842','name':'以前年度调整-PRG-QA审查服务费'},
+                                {'value':'totalWivatOttTfP592842','name':'QA审查服务费Total'},
+                                {'value':'tyWivatOttCiP592836','name':'本月计算-赔偿(补偿)收入'},
+                                {'value':'tyWivatOthSmCiP592836','name':'本月采购额计算-赔偿(补偿)收入'},
+                                {'value':'tyadjCtaWivatOttCiP592836','name':'本月合同调整-赔偿(补偿)收入'},
+                                {'value':'tyadjRcaWivatOttCiP592836','name':'本月对帐调整-赔偿(补偿)收入'},
+                                {'value':'lyadjCtaWivatOttCiP592836','name':'以前年度合同调整-赔偿(补偿)收入'},
+                                {'value':'lyadjRcaWivatOttCiP592836','name':'以前年度对帐调整-赔偿(补偿)收入'},
+                                {'value':'lyadjPraWivatOttCiP592836','name':'以前年度调整-PRG-赔偿(补偿)收入'},
+                                {'value':'totalWivatOttCiP592836','name':'赔偿(补偿)收入Total'},
+                                {'value':'tyWivatOttBiP592868','name':'本月计算-促销服务费(第三方)'},
+                                {'value':'tyadjCtaWivatOttBiP592868','name':'本月合同调整-促销服务费(第三方)'},
+                                {'value':'tyadjRcaWivatOttBiP592868','name':'本月对帐调整-促销服务费(第三方)'},
+                                {'value':'lyadjCtaWivatOttBiP592868','name':'以前年度合同调整-促销服务费(第三方)'},
+                                {'value':'lyadjRcaWivatOttBiP592868','name':'以前年度对帐调整-促销服务费(第三方)'},
+                                {'value':'lyadjPraWivatOttBiP592868','name':'以前年度调整-PRG-促销服务费(第三方)'},
+                                {'value':'totalWivatOttBiP592868','name':'促销服务费(第三方)Total'},
+                                {'value':'createdBy','name':'创建人'},
+                                {'value':'lastUpdatedBy','name':'更新人'},
+                                {'value':'lastUpdateDate','name':'更新日期'},
+                                {'value':'creationDate','name':'创建日期'},
+                                {'value':'tyWivatBtIrP592951','name':'本年度目标计算- 目标退佣'}
+
+                             ]"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <div class="modal fade" id="excelTtaSroiBillLine" data-des="excel_ttaSroiBillLine" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        导入
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12" ng-if="buttonFlag">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">选择文件</span></label>
+                                <input type="file" required accept="*.xlsx"  id="fileUpLoad">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12" ng-if="!buttonFlag">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">当前阶段：</span></label>
+                                <span id="value1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12" ng-if="!buttonFlag">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">当前行(列)数：</span></label>
+                                <span id="value2"></span>
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer " ng-if="buttonFlag">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="save(funcMenuForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="PLDeleteTtaSroiBillLine" data-des="批量删除" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog " style="width: 300px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        选择月份
+                    </h4>
+                </div>
+                <form class="ngValid" name="TtaTermsAcCountForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">月份</span></label>
+                                <input type="text" class="form-control radius3" required
+                                       date-time-picker="" data-date-format="yyyy-mm"
+                                       data-start-view="3" data-min-view="3" data-max-view="3"
+                                       ng-model="paramsPL.month" >
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="saveWindow(TtaTermsAcCountForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+</div>

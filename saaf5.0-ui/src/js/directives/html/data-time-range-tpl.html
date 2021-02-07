@@ -1,0 +1,10 @@
+<div class="input-group-xs input-group">
+    <label class="input-group-addon bn   tr">
+        <span class="w100"><span class="red" ng-if="required || startRequired || endRequired">* </span>
+        {{label}}</span> </label>
+    <input type="text" class="form-control radius3-4 readonly-white" style="width:45%;" ng-model="ngStart" date-time-picker="" data-date-format="{{dateFormat}}" ng-required="required || startRequired"
+          ng-readonly="readonly"  data-enddate="{{ngEnd}}" name="{{startId}}" id="{{startId}}" data-min-view="{{minView}}">
+    <span style="float:left;width:9.8%;text-align: center;font-size: 12px;line-height: 22px">至</span>
+    <input type="text" class="form-control  radius3-4 readonly-white" style="width:45%;" ng-model="ngEnd" date-time-picker="" data-date-format="{{dateFormat}}"  ng-required="required || endRequired"
+           ng-readonly="readonly" data-stratdate="{{ngStart }}" id="{{endId}}" name="{{endId}}" data-min-view="{{minView}}">
+</div>

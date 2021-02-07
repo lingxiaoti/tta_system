@@ -1,0 +1,84 @@
+<div ng-controller="bankfundsApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="saveOrUpdateApTransfer"
+         data-api-get="findApTransferDetailById" data-api-del="" data-api-update="updateApTransfer">
+        <div class="col-md-12 pt15">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>申请信息</h5>
+            <div resp-change="" class="col-xs-6 col-md-4 col-lg-3" style="display: none"></div>
+            <div class="row">
+                <div search-list=""
+                     data-col="4"
+                     ng-model="formParams"
+                     data-legend="[
+                        {key:'deptName',label:'申请部门',readonly:true,required:true},
+                        {key:'personName',label:'申请人',readonly:true,required:true},
+                        {key:'positionName',label:'职位',readonly:true,type:'lov',target:'#positionByPersonModel',required:true,css:'readonly-white'},
+                        {key:'billNo',label:'申请单号',readonly:true},
+                        {key:'requestTime',label:'申请时间',type:'time',disabled:true},
+                        {key:'statusStr',label:'状态',readonly:true},
+                        {key:'transferDate',label:'计划划转日期',required:true,type:'time','date':'yyyy-mm-dd'},
+                        {key:'oAccountName',label:'转出帐号',required:true,readonly:true,type:'lov',target:'#bankfundsModal',css:'readonly-white'},
+                        {key:'iAccountName',label:'转入帐号',required:true,readonly:true,type:'lov',target:'#bankfundsIAccountNumModal',css:'readonly-white'},
+                        {key:'currency',label:'币种',required:true,type:'lookCode',lookCode:'MONEY_TYPE'},
+                ]" ></div>
+                <div class="form-group col-xs-6 col-md-8" >
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>划转金额</span></label>
+                        <input class="form-control" type="text" ng-model="formParams.transferM" number="8" ng-blur="borrowMoneyStr()"  name="borrowMoney" required/>
+                        <div class="input-group-addon">
+                            <div class="w300 oh ellipsis">
+                                {{formParams.borrowMoneyZh}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-12" >
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span
+                                class="w100"><i class="red">*</i>申请原因</span></label>
+                        <textarea class="form-control" rows="1" auto-textarea="" ng-model="formParams.rReson"  max-length="2000" title="字数限制500" placeholder="字数限制500" required name="rReson" style="height: auto"></textarea>
+                        <!-- <input class="form-control" type="text" ng-model="formParams.rReson"   name="rReson" required/></div> -->
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="col-md-12 hook-normal">
+         <div saaf-file="" data-label="<h5 class='fontwB'><span class='fa fa-cog mr15'></span>附件列表</h5>"
+              data-file-data="fileData.file"
+              data-file-filter='{{fileType}}'
+              data-view-only="fileViewOnly"
+         ></div>
+    </div>
+    <div lov-list="bankfundsModal" role="dialog" data-title="请选择银行账号" id="bankfundsModal" ng-model="code3"  class="  "
+         data-url="findApTransferBankAccount"
+         data-auto-request="false"
+         data-return-value="formParams.oAccountNum"
+         data-return-key="formParams.oAccountName"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'bankAccountName','value':'bankAccountId',name:'编号'}"
+         data-other-column="[{'name':'银行账户描述','key':'bankAccountName'}]"
+         data-show-index="false"
+         data-type="competitor"
+         data-callback="bankfundsModalCallback"
+         data-search-key="[{'key':'bankAccountId','placeholder':'编号'}]"
+    >
+    </div>
+    <div lov-list="bankfundsIAccountNumModal" role="dialog" data-title="请选择银行账号" id="bankfundsIAccountNumModal" ng-model="code3"  class="  "
+         data-url="findApTransferBankAccount"
+         data-auto-request="false"
+         data-return-value="formParams.iAccountNum"
+         data-return-key="formParams.iAccountName"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'bankAccountName','value':'bankAccountId',name:'编号'}"
+         data-other-column="[{'name':'银行账户描述','key':'bankAccountName'}]"
+         data-show-index="false"
+         data-callback="officeApplicantCallback"
+         data-type="competitor"
+         data-search-key="[{'key':'bankAccountId','placeholder':'编号'}]"
+    >
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<script id="recursion" type="text/ng-template">
+	<li ng-repeat="item in orgTreeData" ng-class="loop< expandLevel?'':'noExpand'">
+		<span class="hori-line-first" ng-if="$index>0"></span>
+		<span class="hori-line-last" ng-if="$index+1!=orgTreeData.length"></span>
+		<span class="vert-line"></span>
+		<label class="labels" ng-click="labelClick(item,$event)">
+			<span class="item-name"> {{item[keys.value]}} </span>
+			<span class="vert-line-bottom" ng-if="item.children.length"></span>
+			<a href class="expand fa " ng-if="item.children.length"
+			   ng-class="loop<expandLevel?'fa-sort-down':'fa-sort-up'"></a>
+			<!--<a href class="fa fa-minus-square remove tips" title="删除" data-toggle="tooltip"-->
+			<!--ng-click="remove(item)" ng-if="canEdit"></a>-->
+			<a href class="fa fa-plus-square add tips"
+			   title="新增" data-toggle="tooltip"
+			   ng-click="add(item)" ng-if="canEdit"></a>
+			<a href class="fa fa-pencil-square edit tips"
+			   title="编辑" data-toggle="tooltip"
+			   ng-click="edit(item)" ng-if="canEdit"></a>
+			<a href class="fa fa-minus-square remove tips "
+			   title="删除" data-toggle="tooltip"
+			   ng-click="remove(item)" ng-if="canEdit"></a>
+		</label>
+		<div class="anim-width"></div>
+		<ul ng-if="item.children.length" ng-include="'recursion'"
+			ng-init="orgTreeData=item.children;loop=loop+1"></ul>
+	</li>
+</script>
+<div class="bg-white h">
+	<div class="comp-org-tree">
+		<ul ng-include="'recursion'">
+		</ul>
+	</div>
+</div>
+<div class="data-table" style="position: fixed;   bottom: 10px; left:10px; right:10px;z-index: 1000;">
+	<table class="table table-bordered  bg-white  table-condensed" ng-show="currentNode">
+		<thead class="bg-gray-white">
+		<tr class="text-center">
+			<th ng-repeat="th in legend">{{ th.name}}</th>
+
+		</tr>
+		</thead>
+
+		<tbody>
+		<tr class="text-center">
+			<td ng-repeat="td in legend" style="{{td.style}}">
+				{{ currentNode[td.value]}}
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>

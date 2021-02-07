@@ -1,0 +1,22 @@
+<div class="form-group col-xs-6 col-md-{{ col }}" ng-repeat="item in parendData  track by $index">
+    <div class="input-group input-group-xs">
+        <label class="input-group-addon bn">
+            <span
+                class="w100">{{item.label}}--{{ngModel[item.key]}}</span></label>
+        <select  class="form-control radius3"   ng-change="parendChange(item,$index)" ng-disable="isDisabled" ng-model="ngModel[item.key]">
+            <option value="">{{firstText}}</option>
+            <option ng-repeat="item in lookUpData" value="{{item.lookupCode}}" ng-bind="item.meaning"></option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group col-xs-6 col-md-{{ col }}" ng-repeat="cell in lineAttr track by $index" ng-if="cell.childData.length">
+    <div class="input-group input-group-xs">
+        <label class="input-group-addon bn"><span
+                class="w100">{{cell.lable}}-{{ngModel[cell.key]}}</span></label>
+        <select  class="form-control radius3"   ng-change="childCchange(cell,$index)" ng-disable="isDisabled" ng-model="ngModel[cell.key]">
+            <option value="">{{firstText}}</option>
+            <option ng-repeat=" child in cell.childData" value="{{child.lookupCode}}" ng-bind="child.meaning"></option>
+        </select>
+    </div>
+</div>

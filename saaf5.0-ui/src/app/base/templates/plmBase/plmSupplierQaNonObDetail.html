@@ -1,0 +1,510 @@
+<div ng-controller="plmSupplierQaNonObDetailCtrl" class="bigdata">
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" permission-btn="btnSave"   ng-click="btnSave(plmSupplierQaNonObInfoForm.$invalid)" ng-disabled="headerData.billStatus=='ABANDONED'||headerData.billStatus=='APPROVAL'" data-validate-form="plmSupplierQaNonObInfoForm"></button>
+                <button class="btn btn-default" permission-btn="btnSubmit"   ng-click="btnSubmit(plmSupplierQaNonObInfoForm.$invalid)" ng-disabled = "headerData.billStatus=='APPROVAL'||headerData.billStatus=='ABANDONED'
+                ||plmDealerDataTable.length==0||plmProducerDataTable.length==0||(headerData.billStatus=='PURCHASE_TODO'&&userType!=='13')" data-validate-form="plmSupplierQaNonObInfoForm"></button>
+                <button class="btn btn-default" permission-btn="btnDiscard"   ng-click="btnDiscard()" ng-disabled = "headerData.billStatus=='ABANDONED'||headerData.billStatus=='APPROVAL'"></button>
+                <button class="btn btn-default" permission-btn="reject"   ng-click="reject()" ng-disabled = "headerData.billStatus=='ABANDONED'||headerData.billStatus==='TODO'||headerData.billStatus==='APPROVAL'"></button>
+
+            </div>
+
+
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+            <!--------------------- 输入表单  --->
+
+            <div class=" mt10 pb5  oh"
+                 data-des="此节点必需－用于识别输入表单的指令">
+
+                <form id="plmSupplierQaNonObInfoForm" name="plmSupplierQaNonObInfoForm">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>新增资质组</span>
+                    </header>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">资质组ID</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.qaGroupCode">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">资质组名称</span>
+                            </label>
+
+                            <input type="text" ng-disabled="headerData.billStatus!=='TODO'" class="form-control radius3"
+                                   ng-model="headerData.qaGroupName">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i> 特殊商品类型</span>
+                            </label>
+
+                            <select id="specialProductTypeId" class="selectpicker show-tick form-control"
+                                    ng-model="headerData.specialProductType"
+                                    ng-disabled="headerData.billStatus!=='TODO'"
+                                    onchange="angular.element(this).scope().recordSpecialProductTypeName(this.options[this.options.selectedIndex].value)"
+                                    required  data-live-search="true">
+                                <option value="">请选择</option>
+                                <option ng-repeat="item in specialProductTypeList" value="{{item.specialProductType}}" ng-bind="item.specialProductTypeName"></option>
+
+
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <!--<div class="form-group col-xs-4 col-md-3">-->
+                        <!--<div class="input-group input-group-xs">-->
+
+                            <!--<label class="input-group-addon bn">-->
+                                <!--<span class="w100"><i class="red">*</i>品牌中文</span>-->
+                            <!--</label>-->
+
+                            <!--<input type="text" class="form-control radius3" required-->
+                                   <!--ng-disabled="headerData.billStatus=='APPROVAL'"-->
+                                   <!--ng-model="headerData.brandCnName">-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+
+                    <!--<div class="form-group col-xs-4 col-md-3">-->
+                        <!--<div class="input-group input-group-xs">-->
+
+                            <!--<label class="input-group-addon bn">-->
+                                <!--<span class="w100">品牌英文</span>-->
+                            <!--</label>-->
+
+                            <!--<input type="text" class="form-control radius3"-->
+                                   <!--ng-disabled="headerData.billStatus=='APPROVAL'"-->
+                                   <!--ng-model="headerData.brandEnName">-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>审批采购</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3 readonly-white" required name="supplierName" ng-model="headerData.purchaseApprovalRole" readonly>
+                            <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" data-target="#purchaseInfoId"
+                                    ng-disabled="headerData.billStatus!=='TODO'"
+                                    class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </span>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i ng-show="userType==='13'" class="red">*</i>审批QA</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3 readonly-white" ng-required="userType==='13'" name="qaApprovalRole" ng-model="headerData.qaApprovalRole" readonly>
+                            <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" data-target="#qaInfoId"
+                                    ng-disabled="headerData.billStatus!=='PURCHASE_TODO'||userType!=='13'"
+                                    class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>单据状态</span>
+                            </label>
+
+                            <div lookup-code="PLM_SUPPLIER_QA_STATUS" data-required="true" ng-model="headerData.billStatus"
+                                 required  id="billStatus" ng-disabled="true" name="billStatus">
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="row"></div>
+
+                </form>
+            </div>
+
+
+            <div class="col-xs-12 col-md-12 br p0">
+
+                <ul id="tab" class="nav nav-tabs">
+
+                    <li class="active">
+                        <a href="#plmSupplierQaBrand" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>品牌信息</label></a>
+                    </li>
+
+                    <li>
+                        <a href="#dealerInfo" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>经销商信息</label></a>
+                    </li>
+
+                    <li>
+                        <a href="#producerInfo" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>生产商信息</label></a>
+                    </li>
+                </ul>
+
+                <div id="tabContent" class="tab-content">
+
+                    <!-- 品牌 -->
+                    <div class="tab-pane fade in active col-md-12" id="plmSupplierQaBrand">
+                        <div id="saafLoading3" style="position: fixed; top: 0; width: 100%; z-index: 9000; height: 100%; " ng-show="brandFileUploader.isUploading"><div  style="position: absolute; top:50%;left:50%; text-align: center;margin: 0 auto; width:100px;"><img src="img/loading1.gif"></div></div>
+
+                        <!--<div>-->
+                            <!--<label style="margin-left: 10px">&nbsp;</label>-->
+
+                            <!--<div class="btn-group btn-group-xs pull-right" >-->
+
+                                <!--<button type="button" ng-click="saveBrand()" class="btn btn-default btn-xs "-->
+                                        <!--ng-disabled ="headerData.billStatus=='ABANDONED'||!headerData.plmSupplierQaNonObInfoId||headerData.billStatus=='APPROVAL'"-->
+                                <!--&gt;-->
+                                    <!--<i class="fa fa-save">  保存</i>-->
+                                <!--</button>-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <div class="data-table">
+                            <table
+                                    class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                <tr class="text-center">
+                                    <th>序号</th>
+                                    <th><i class="red">*</i>品牌名称</th>
+                                    <th><i class="red">*</i>品牌资质类型</th>
+                                    <th><i class="red">*</i>资质文件</th>
+                                    <th>操作</th>
+
+                                </tr>
+                                </thead>
+                                <tbody id ="plmSupplierQaBrandBody">
+                                <tr class="text-center" ng-repeat="row in plmSupplierQaBrandDataTable"
+                                    ng-class="{'active':plmSupplierQaBrandDataTable.selectRow==$index}"
+                                    ng-click="plmSupplierQaBrandDataTable.selectRow=$index">
+                                    <td>{{$index+1}}</td>
+                                    <td><input class="form-control input-xs" required ng-model="row.brandCnName" ng-disabled="headerData.billStatus=='APPROVAL'"
+                                               ng-readonly="false" >
+                                    </td>
+                                    <td><div class="form-control input-xs" style="width: 100%;" ng-disabled="headerData.billStatus=='APPROVAL'"
+                                             lookup-code="PLM_BRAND_QA_TYPE" data-required="true" ng-model="row.brandQaType"
+                                             required  id="brandQaType" name="brandQaType">
+                                    </div>
+                                    </td>
+                                    <td>
+                                        <a style="text-align: center" href="{{row.fileAddress}}" download="{{row.fileName}}" target="_blank">{{row.fileName}}</a>
+                                    </td>
+                                    <td>
+                                        <input type="file"  ng-show="false" id="brandFileUploadId" nv-file-select uploader="brandFileUploader" style=" display: inline-block"  >
+                                        <div class="btn-group btn-group-xs">
+                                            <!--<label class="btn btn-default" for="brandFileUploadId" ng-click="uploadBrandFile($index)" ><i class="fa fa-plus-circle">  上传</i></label>-->
+                                            <button class="btn btn-default"  ng-click="uploadBrandFile($index)" ng-disabled="headerData.billStatus=='APPROVAL'"  ><i class="fa fa-plus-circle">  上传</i></button>
+                                            <button class="btn btn-default"  ng-click="deleteBrand($index)" ng-disabled="headerData.billStatus=='APPROVAL'" ><i class="fa fa-adjust">  删除</i></button>
+                                        </div>
+
+                                    </td>
+
+
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!-- 经销商信息 -->
+                    <div class="tab-pane fade in col-md-12" id="dealerInfo">
+                        <div id="saafLoading1" style="position: fixed; top: 0; width: 100%; z-index: 9000; height: 100%; " ng-show="dealerFileUploader.isUploading"><div  style="position: absolute; top:50%;left:50%; text-align: center;margin: 0 auto; width:100px;"><img src="img/loading1.gif"></div></div>
+
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+
+                            <div class="btn-group btn-group-xs pull-right" >
+
+                                <button type="button" ng-click="saveDealer()" class="btn btn-default btn-xs "
+                                        ng-disabled ="headerData.billStatus=='ABANDONED'||!headerData.plmSupplierQaNonObInfoId||headerData.billStatus=='APPROVAL'"
+                                >
+                                    <i class="fa fa-save">  保存</i>
+                                </button>
+
+                                <!--<button type="button" ng-click="delProjectException()" class="btn btn-default btn-xs"-->
+                                        <!--id="delProjectException"-->
+                                        <!--ng-disabled = "projectExceptionDataTable.selectRow==undefined||headerData.billStatus=='ABANDONED'||userType=='60'"-->
+                                <!--&gt;-->
+                                    <!--<i class="fa fa-trash">  删除</i>-->
+                                <!--</button>-->
+                            </div>
+                        </div>
+                        <div class="data-table">
+                            <table
+                                    class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                <tr class="text-center">
+                                    <th>序号</th>
+                                    <th><i class="red">*</i>经销商名称</th>
+                                    <th><i class="red">*</i>经销商资质类型</th>
+                                    <th><i class="red">*</i>资质文件</th>
+                                    <th><i class="red">*</i>证书编号类型</th>
+                                    <th><i class="red">*</i>证书编号</th>
+                                    <th><i class="red">*</i>日期类型</th>
+                                    <th><i class="red">*</i>日期</th>
+                                    <th>操作</th>
+
+                                </tr>
+                                </thead>
+                                <tbody id ="plmDealerBody">
+                                <tr class="text-center" ng-repeat="row in plmDealerDataTable"
+                                    ng-class="{'active':plmDealerDataTable.selectRow==$index}"
+                                    ng-click="plmDealerDataTable.selectRow=$index">
+                                    <td>{{$index+1}}</td>
+                                    <td><input class="form-control input-xs" required ng-model="row.personName"
+                                               ng-disabled="headerData.billStatus=='APPROVAL'"
+                                               >
+                                    </td>
+                                    <td>
+                                        <select id="dealerQaType" class="selectpicker show-tick form-control input-xs form-control radius3"
+                                                ng-model="row.personQaType"
+                                                ng-disabled="headerData.billStatus=='APPROVAL'"
+                                                onchange="angular.element(this).scope().initDealerInfoByQaType(this.options[this.options.selectedIndex].value)"
+                                                required  data-live-search="true">
+                                        <option value="">请选择</option>
+                                        <option  ng-repeat="item in dealerQaTypeList" value="{{item.dealerQaTypeValue}}" ng-bind="item.dealerQaTypeName"></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <a  href="{{row.fileAddress}}" download="{{row.fileName}}" target="_blank">{{row.fileName}}</a>
+                                    </td>
+                                    <td>
+                                        <span>{{row.caCodeTypeName}}</span>
+                                    </td>
+                                    <td>
+                                        <input ng-disabled="headerData.billStatus=='APPROVAL'" class="form-control input-xs" required ng-model="row.caCode"
+                                        >
+                                    </td>
+                                    <td>
+                                        {{row.dateTypeName}}
+                                    </td>
+                                    <td>
+                                        <input type="text" required class="form-control radius3 input-xs"
+                                               id="startDataActive"
+                                               date-time-picker
+                                               autocomplete="off"
+                                               data-enddate="{{today}}"
+                                               data-date-format="yyyy-mm-dd"
+                                               data-min-View="2" ng-model="row.chooseDate"
+                                               ng-disabled="headerData.billStatus=='APPROVAL'"
+                                        >
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-xs">
+                                            <input type="file"  ng-show="false" id="dealerFileUpload" nv-file-select uploader="dealerFileUploader" style=" display: inline-block"  >
+                                            <button class="btn btn-default"  ng-click="uploadDealerFile($index)" ng-disabled="headerData.billStatus=='APPROVAL'"  ><i class="fa fa-plus-circle">  上传</i></button>
+
+                                            <button class="btn btn-default"  ng-click="deleteDealer($index)" ng-disabled="headerData.billStatus=='APPROVAL'"  ><i class="fa fa-adjust">  删除</i></button>
+                                        </div>
+
+                                    </td>
+
+
+                                </tr>
+                                <tr><td ng-click="addDealer()"  style="font-size: 14px"><i class="fa fa-plus-square-o"></i></td></tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 生产商信息 -->
+                    <div class="tab-pane fade in col-md-12" id="producerInfo">
+                        <div id="saafLoading2" style="position: fixed; top: 0; width: 100%; z-index: 9000; height: 100%; " ng-show="producerFileUploader.isUploading"><div  style="position: absolute; top:50%;left:50%; text-align: center;margin: 0 auto; width:100px;"><img src="img/loading1.gif"></div></div>
+
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+
+                            <div class="btn-group btn-group-xs pull-right" >
+
+                                <button type="button" ng-click="saveProducer()" class="btn btn-default btn-xs "
+                                        ng-disabled ="headerData.billStatus=='ABANDONED'||!headerData.plmSupplierQaNonObInfoId||headerData.billStatus=='APPROVAL'"
+                                >
+                                    <i class="fa fa-save">  保存</i>
+                                </button>
+
+                                <!--<button type="button" ng-click="delProjectException()" class="btn btn-default btn-xs"-->
+                                <!--id="delProjectException"-->
+                                <!--ng-disabled = "projectExceptionDataTable.selectRow==undefined||headerData.billStatus=='ABANDONED'||userType=='60'"-->
+                                <!--&gt;-->
+                                <!--<i class="fa fa-trash">  删除</i>-->
+                                <!--</button>-->
+                            </div>
+                        </div>
+                        <div class="data-table">
+                            <table
+                                    class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                <tr class="text-center">
+                                    <th>序号</th>
+                                    <th><i class="red">*</i>生产商名称</th>
+                                    <th><i class="red">*</i>生产商资质类型</th>
+                                    <th><i class="red">*</i>资质文件</th>
+                                    <th><i class="red">*</i>证书编号类型</th>
+                                    <th><i class="red">*</i>证书编号</th>
+                                    <th><i class="red">*</i>日期类型</th>
+                                    <th><i class="red">*</i>日期</th>
+                                    <th>操作</th>
+
+                                </tr>
+                                </thead>
+                                <tbody id ="plmProducerBody">
+                                <tr class="text-center" ng-repeat="row in plmProducerDataTable"
+                                    ng-class="{'active':plmProducerDataTable.selectRow==$index}"
+                                    ng-click="plmProducerDataTable.selectRow=$index">
+                                    <td>{{$index+1}}</td>
+                                    <td><input class="form-control input-xs" required ng-model="row.personName"
+                                               ng-disabled="headerData.billStatus=='APPROVAL'"
+                                    >
+                                    </td>
+                                    <td>
+                                        <select id="producerQaType" class="selectpicker show-tick form-control input-xs form-control radius3"
+                                                ng-model="row.personQaType"
+                                                ng-disabled="headerData.billStatus=='APPROVAL'"
+                                                onchange="angular.element(this).scope().initProducerInfoByQaType(this.options[this.options.selectedIndex].value)"
+                                                required  data-live-search="true">
+                                            <option value="">请选择</option>
+                                            <option  ng-repeat="item in producerQaTypeList" value="{{item.producerQaTypeValue}}" ng-bind="item.producerQaTypeName"></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <a  href="{{row.fileAddress}}" download="{{row.fileName}}" target="_blank">{{row.fileName}}</a>
+                                    </td>
+                                    <td>
+                                        <span>{{row.caCodeTypeName}}</span>
+                                    </td>
+                                    <td>
+                                        <input class="form-control input-xs" required ng-model="row.caCode"
+                                               ng-disabled="headerData.billStatus=='APPROVAL'"
+                                        >
+                                    </td>
+                                    <td>
+                                        {{row.dateTypeName}}
+                                    </td>
+                                    <td>
+                                        <input type="text" required class="form-control radius3 input-xs"
+                                               id="producerStartDataActive"
+                                               date-time-picker
+                                               autocomplete="off"
+                                               data-enddate="{{today}}"
+                                               data-date-format="yyyy-mm-dd"
+                                               ng-disabled="headerData.billStatus=='APPROVAL'"
+                                               data-min-View="2" ng-model="row.chooseDate"
+                                        >
+                                    </td>
+                                    <td>
+                                        <input type="file"  ng-show="false" id="producerFileUpload" nv-file-select uploader="producerFileUploader" style=" display: inline-block"  >
+                                        <div class="btn-group btn-group-xs">
+                                            <!--<label class="btn btn-default" for="producerFileUpload" ng-click="uploadProducerFile($index)" ><i class="fa fa-plus-circle">  上传</i></label>-->
+                                            <button class="btn btn-default"  ng-click="uploadProducerFile($index)" ng-disabled="headerData.billStatus=='APPROVAL'"  ><i class="fa fa-plus-circle">  上传</i></button>
+                                            <button class="btn btn-default"  ng-click="deleteProducer($index)" ng-disabled="headerData.billStatus=='APPROVAL'" ><i class="fa fa-adjust">  删除</i></button>
+                                        </div>
+
+                                    </td>
+
+
+                                </tr>
+                                <tr><td ng-click="addProducer()"  style="font-size: 14px"><i class="fa fa-plus-square-o"></i></td></tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- tabContent -->
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div lov-list="purchaseInfoLov" role="dialog" data-title="选择审批采购" id="purchaseInfoId" ng-model="current.em"
+         data-url="userFind"
+         data-dynamic-params='{"status":"Y","userType":"13"}'
+         data-callback="selectPurchaseInfoReturn"
+         data-auto-request="false"
+         data-return-value=""
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'userId','value':'userName','name':'采购名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'userName_like','placeholder':'采购名称'}
+                          ]"
+    >
+    </div>
+
+    <div lov-list="qaInfoLov" role="dialog" data-title="选择审批QA" id="qaInfoId" ng-model="current.em"
+         data-url="userFind"
+         data-dynamic-params='{"status":"Y","userType":"75"}'
+         data-callback="selectQaInfoReturn"
+         data-auto-request="false"
+         data-return-value=""
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'userId','value':'userName','name':'QA名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'userName_like','placeholder':'QA名称'}]"
+    >
+    </div>
+
+
+
+
+</div>

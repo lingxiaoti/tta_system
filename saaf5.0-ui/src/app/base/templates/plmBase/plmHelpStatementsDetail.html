@@ -1,0 +1,107 @@
+<div ng-controller="plmHelpStatementsDetailCtrl" class="bigdata">
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" permission-btn="btnSave"   ng-click="btnSave(plmHelpStatementsInfoForm.$invalid)" data-validate-form="plmHelpStatementsInfoForm"></button>
+                <button class="btn btn-default" permission-btn="btnSubmit"   ng-click="btnSubmit(plmHelpStatementsInfoForm.$invalid)" ng-disabled = "headerData.billStatusName=='已生效'" data-validate-form="plmHelpStatementsInfoForm"></button>
+                <button class="btn btn-default" permission-btn="btnDiscard"   ng-click="btnDiscard()" ng-disabled = "headerData.billStatusName=='制单中'||headerData.billStatusName==='已失效'"></button>
+            </div>
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+            <!--------------------- 输入表单  --->
+
+            <div class=" mt10 pb5  oh"
+                 data-des="此节点必需－用于识别输入表单的指令">
+
+                <form id="plmHelpStatementsInfoForm" name="plmHelpStatementsInfoForm">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>字段说明</span>
+                    </header>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">关联键值</span>
+                            </label>
+
+                            <input  type="text" ng-disabled="true" class="form-control radius3"
+                                    name="plmHelpStatementsId"
+                                    ng-model="headerData.plmHelpStatementsId">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>字段编码</span>
+                            </label>
+
+                            <input  required type="text" class="form-control radius3"
+                                    name="fieldCode"
+                                    ng-model="headerData.fieldCode">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>字段说明</span>
+                            </label>
+
+                            <input type="text" required class="form-control radius3"
+                                   name="fieldMeaning"
+                                   ng-model="headerData.fieldMeaning">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">单据状态</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   name="billStatusName"
+                                   ng-model="headerData.billStatusName">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">创建人</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   name="creator"
+                                   ng-model="headerData.creator">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>

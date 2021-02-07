@@ -1,0 +1,536 @@
+<div class="bigdata" ng-controller="newApplicationFormCtrl">
+  <div id="processForm"
+       data-api-post="savePlmSupplementInfo"
+       data-api-get="plmSupplementHeadService_findPlmsInfoDetail"
+       data-api-update="savePlmSupplementInfo">
+  </div>
+  
+  <div data-des="此节点必需－用户计算滚动区域高度" main-scroll-style>
+    <div class="nicescroll-height  bg-white" data-des="此节点必需-滚动内容及指令" ng-nicescroll id="outbaseInfBoxID"
+          nice-option="{cursorcolor: '#1e90c2',cursorwidth:10,zindex:10,autohidemode:false}">
+
+
+          <ul class="nav nav-tabs" id="GoodsInfoTab">
+              <li class="active" ng-click="tabChangeInfo('baseInfBoxId')">
+                <a data-toggle="tab" ng-href="#baseInfBoxId"><i class="fa fa-list-alt"></i>
+                <label>基本信息</label></a>
+              </li>
+              <li ng-click="tabChangeInfo('flowChart')" ng-if="liuchengPicture">
+                <a data-toggle="tab" href="#flowChart"><i class="fa fa-list-alt"></i>
+                <label>流程图</label></a>
+              </li>
+              <li  ng-show="tabAction=='flowChart'" style=" width: 330px;margin-top: 7px;">
+                  <ul>
+                      <li style="list-style-type: square;float: left;font-size: 20px;color: #cc0033;margin-right: 30px;text-indent: -7px;">
+                          <span style="font-size: 14px;">未接收</span>
+                      </li>
+                      <li style="list-style-type: square;float: left;font-size: 20px;color: #ff6600;margin-right: 30px;text-indent: -7px;">
+                          <span style="font-size: 14px;">办理中</span>
+                      </li>
+                      <li style="list-style-type: square;float: left;font-size: 20px;color: #339933;margin-right: 30px;text-indent: -7px;">
+                          <span style="font-size: 14px;">已办结</span>
+                      </li>
+                      <li style="list-style-type: square;float: left;font-size: 20px;color: #666666;margin-right: 30px;text-indent: -7px;">
+                          <span style="font-size: 14px;">预设步骤</span>
+                      </li>
+                  </ul>
+              </li>
+            </ul>
+            <div class="tab-content" id="GoodsInfoContent">
+              <div id="baseInfBoxId" class="tab-pane fade in active col-md-12" >
+                <div class="bg-gray-white bt mb10">
+                  <div class="bg-gray-white p5">
+                    <div class="pull-right mr20">
+                      <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default"  permission-btn="btnSave">
+                            <i class="fa fa-plus">保存</i>
+                        </button>
+                        <button class="btn btn-default" validate-form-btn="baseInfoFormBox" permission-btn="btnSubmit">
+                            <i class="fa fa-plus">提交</i>
+                        </button>
+                      </div>
+                    </div>
+          
+                    <div class="btn-group btn-group-xs ">
+                      
+                      <button class="btn btn-primary" ng-click="fullWindow($event)">
+                          <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                      </button>
+                      
+                    </div>
+          
+                  </div>
+                </div>
+                <div class="oh" data-des="此节点必需－用于识别输入表单的指令" id="baseInfo">
+                  <header class="col-xs-12 mb10">
+                      <i class="fa fa-cog" aria-hidden="true"></i>
+                      <span>基本信息</span>
+                  </header>
+
+                  
+
+
+                  
+                  <!-- 页面内容 -->
+                  <div style="height: 100px; margin: 10px 0;" >
+                  <div class="data-table">
+                    <div search-form
+                        data-legend="[
+                                    {key:'supCode',label:'申请单号','disabled':true},
+                                    {key:'orderType',label:'订单种类',type:'lookCode',lookCode:'PLM_SUP_ORDER_TYPE',required: 'true'},
+                                    {key:'orderStatus',label:'单据状态',type:'lookCode',lookCode:'PLM_SUP_BILL_STATE', 'disabled':true},
+                                    {key:'creator',label:'创建人','disabled':true},
+                                    {key:'creationDate',label:'创建时间','disabled':true}
+                                  ]"
+                        ng-model="params"
+                    ></div>
+                  </div>
+                </div>
+
+
+                    <div class="row" style="border-top: 1px solid #ddd; height: 1px;"></div>
+                    <div class="baseInfoContent" style="padding: 15px;">
+
+                        <div class="btn-group btn-group-xs pull-right">
+                            <button class="btn btn-default a-black" onclick="window.location.href='app/base/templates/proMng/replenishment/modelForSup.xlsx'" ><i class="fa fa-download" style="font-size: 12px;"></i>下载模板</button>
+                            <button type="button" class="btn btn-default" saaf-xls-import-component ng-disabled="!upOloadPlmSupplementHeadId"
+                                    data-list-options="{
+                                                rmsCode:{headName:'货号',require:true},
+                                                productName:{headName:'货品名称',require:false},
+                                                warehouse:{headName:'仓库',require:false},
+                                                region:{headName:'region',require:false},
+                                                meter:{headName:'米数',require:false},
+                                                pogCode:{headName:'POG_code',require:false},
+                                                store:{headName:'店铺',require:false},
+                                                supplementStatus:{headName:'补货状态',require:false},
+                                                stopReason:{headName:'停止补货原因',require:false},
+                                                storeType:{headName:'存货方式',require:false},
+                                                exeDate:{headName:'生效/失效时间',require:true},
+                                                remarks:{headName:'备注',require:false},
+                                                }"
+                                  data-info="{'plmSupplementHeadId': {{upOloadPlmSupplementHeadId}}}"
+                                  data-url="importSupLines" data-after-action="reflash()"
+                                  data-message="导入将清空原有数据；全部必填" >
+                                <i class="fa fa-upload"></i>导入
+                            </button>
+
+                          <div class="btn-group btn-group-xs" permission-buttons="btnExport" ng-disabled="!upOloadPlmSupplementHeadId"></div> 
+
+                        </div>
+
+                        <div class="pull-right mr10">
+                            <div class="btn-group btn-group-xs" >
+                              <button class="btn btn-default" ng-click="newGoods()">
+                                  <i class="fa fa-plus" style="font-size: 12px;"></i>  新增
+                              </button>
+                            </div>
+                          </div>
+
+                
+                      
+                      <!-- <div class="base-data-table-edit">
+                        <div base-data-table="dataTable"
+                          ng-params="params"
+                          data-show-index="true"
+                          data-callback="[{value:'plmCode',callback:'btnDetail'}]"
+                          data-url="FindProductList"
+                          data-legend="[
+                            {'value':'plmCode','name':'货号','style':'text-align: center;'},
+                            {'value':'productName','name':'货品名称（CN）','style':'text-align: center;'},
+                            {'value':'brandCn','name':'Region','style':'text-align: center;'},
+                            {'value':'orderstatusName','name':'仓库','style':'text-align: center;'},
+                            {'value':'createdstr','name':'米数 m','style':'text-align: center;'},
+                            {'value':'creationDate','name':'POG code','style':'text-align: center;'},
+                            {'value':'plmCode','name':'店铺','style':'text-align: center;'},
+                            {'value':'brandCn','name':'补货状态','style':'text-align: center;'},
+                            {'value':'orderstatusName','name':'停止补货原因','style':'text-align: center;'},
+                            {'value':'createdstr','name':'存货方式','style':'text-align: center;'},
+                            {'value':'creationDate','name':'生效/失效日期','style':'text-align: center;'},
+                            {'value':'plmCode','name':'South Item list','style':'text-align: center;'},
+                            {'value':'productName','name':'West Item list','style':'text-align: center;'},
+                            {'value':'brandCn','name':'East Item list','style':'text-align: center;'},
+                            {'value':'orderstatusName','name':'North Item list','style':'text-align: center;'},
+                            {'value':'createdstr','name':'备注','style':'text-align: center;'},
+                          ]"
+                        ></div>
+                      </div> -->
+
+                      <!-- <div class="data-table" ng-show="true">
+                        <div base-data-table-edit="dataTable"
+                        ng-model="params"
+                        data-form-params-key="items"
+                        data-show-index="true"
+                        data-callback="[{value:'plmCode',callback:'btnDetail'}]"
+                        data-url="FindProductList2"
+                        data-legend="[
+                        {'value':'PeriodAmount1','name':'货号','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount2','name':'货品名称（CN）','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount3','name':'仓库','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount3','name':'米数','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount3','name':'POG code','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount3','name':'店铺','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount3','name':'补货状态','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount3','name':'停止补货原因','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount3','name':'存货方式','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount3','name':'生效/失效日期','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount3','name':'South Item list','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount3','name':'West Item list','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount3','name':'East Item list','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount3','name':'North Item list','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'},
+                        {'value':'PeriodAmount3','name':'备注','style':'textAlign: center;',rowClassName:'text-left',maxlength:'20',placeholder:'请输入'}
+                        ]"
+                        > 
+                        </div>
+                      </div> -->
+                      
+                      <div ng-show= "false">
+                      <div base-data-table="dataTable" 
+                              data-auto-request="true"
+                              ng-params="{}"
+                              data-show-index="true"
+                              data-callback=""
+                              data-url="findLines"
+                              data-legend="[
+                                    {'value':'rmsCode','name':'货号', style:'text-align:center'},
+                                    {'value':'productName','name':'货品名称（CN）', style:'text-align:center'},
+                                    {'value':'warehouse','name':'仓库', style:'text-align:center'},
+                                    {'value':'region','name':'Region', style:'text-align:center'},
+                                    {'value':'meter','name':'米数', style:'text-align:center'},
+                                    {'value':'pogCode','name':'POG code', style:'text-align:center'},
+                                    {'value':'store','name':'店铺', style:'text-align:center'},
+                                    {'value':'supplementStatus','name':'补货状态', style:'text-align:center'},
+                                    {'value':'stopReason','name':'停止补货原因', style:'text-align:center'},
+                                    {'value':'storeType','name':'存货方式', style:'text-align:center'},
+                                    {'value':'exeDate','name':'生效/失效日期', style:'text-align:center'},
+                                    {'value':'southItemList','name':'South Item list', style:'text-align:center'},
+                                    {'value':'westItemList','name':'West Item list', style:'text-align:center'},
+                                    {'value':'eastItemList','name':'East Item list', style:'text-align:center'},
+                                    {'value':'northItemList','name':'North Item list', style:'text-align:center'},
+                                    {'value':'remarks','name':'备注', style:'text-align:center'},
+                              ]"
+                          ></div>
+                          </div>
+
+                      <form id="baseInfoForm" name="baseInfoFormBox" > 
+                      <div class="data-table mt30" style="overflow: auto;" >
+                        <table class="table table-bordered" style="margin-top: 15px; width: 2000px;" name="dataTable" id="dataTable">
+                          <thead class="bg-gray-white">
+                            <tr>
+                              <th>序号</th>
+                              <th style="text-align: center;"><p style="color: red;display: inline;">*</p>货号</th>
+                              <th style="text-align: center;"><p style="color: red;display: inline;">*</p>货品名称（CN）</th>
+                              <th style="text-align: center;">仓库</th>
+                              <th style="text-align: center;">Region</th>
+                              <th style="text-align: center;">POG code</th>
+                              <th style="text-align: center;">米数</th>
+                              <th style="text-align: center;">店铺</th>
+                              <th style="text-align: center;width: 120px;">补货状态</th>
+                              <th style="text-align: center;">停止补货原因</th>
+                              <th style="text-align: center;width: 110px;">存货方式</th>
+                              <th style="text-align: center;"><p style="color: red;display: inline;">*</p>生效/失效日期</th>
+                              <th style="text-align: center;">South Item list</th>
+                              <th style="text-align: center;">West Item list</th>
+                              <th style="text-align: center;">East Item list</th>
+                              <th style="text-align: center;">North Item list</th>
+                              <th style="text-align: center;width: 100px;">备注</th>
+                              <th style="text-align: center;">操作</th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            <tr ng-repeat="(index,item) in params.lines">
+                              <td>{{index+1}}</td>
+                              <td style="color:#1e90c2;cursor: pointer;" ng-click="goDetails(item)">{{item.rmsCode}}</td>
+                              <td>{{item.productName}}</td>
+                              <td>
+                                <div class="input-group input-group-xs" style="width:100%">
+                                  <!-- <input class="form-control radius3" name="warehouse" ng-disabled="item.pogCode||item.meter"
+                                  ng-model="item.warehouse" type="text"> -->
+                                  <div  lookup-code="PLM_SUP_WAREHOUSE" name="warehouse" ng-disabled="item.pogCode||item.meter" ng-model="item.warehouse"></div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="input-group input-group-xs" style="width:100%">
+                                  <!-- <input class="form-control radius3" name="region" ng-disabled="item.pogCode||item.meter"
+                                  ng-model="item.region" type="text"> -->
+                                  <div  lookup-code="PLM_SUP_REGION" name="region" ng-disabled="item.pogCode||item.meter" ng-model="item.region"  ></div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="input-group input-group-xs" style="width:100%">
+                                  <input class="form-control radius3" name="pogCode" ng-disabled="item.region||item.warehouse"
+                                  ng-model="item.pogCode" type="text">
+                                  <span class="input-group-btn ng-scope">
+                                      <button class="btn btn-default" ng-click="showMePoMol(index)" type="button" ng-disabled="item.region||item.warehouse">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                                </div>
+                              </td>
+                              <td>
+                                  <div class="input-group input-group-xs" style="width:100%">
+                                    <input class="form-control radius3" name="meter"  ng-disabled="item.region||item.warehouse"
+                                    ng-model="item.meter" type="text">
+                                    <span class="input-group-btn ng-scope">
+                                        <button class="btn btn-default" ng-click="showMePoMol(index)" type="button" ng-disabled="item.region||item.warehouse">
+                                          <i class="fa fa-search"></i>
+                                        </button>
+                                      </span>
+                                  </div>
+                                </td>
+                              <td>
+                                <div class="input-group input-group-xs" style="width:100%">
+                                  <input class="form-control radius3" name="store"
+                                  ng-model="item.store" type="text">
+                                </div>
+                              </td>
+                              <!-- <td>{{item.metre}}</td>
+                              <td>{{item.pogCode}}</td>
+                              <td>{{item.store}}</td> -->
+                              <td>
+                                <div class="input-group input-group-xs" style="width:100%">
+                                  <div  lookup-code="PLM_SUP_STATUS" name="supplementStatus" ng-model="item.supplementStatus" ng-change="supplementStatusChange(index)" ></div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="input-group input-group-xs" style="width:100%">
+                                  <div  lookup-code="PLM_SUP_STOP_REASON" name="stopReason" ng-model="item.stopReason" ng-required="item.supplementStatus=='1'" ng-disabled="item.supplementStatus!=='1'"></div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="input-group input-group-xs" style="width:100%">
+                                  <div  lookup-code="PLM_SUP_STORE_TYPE" name="storeType" ng-model="item.storeType"  ng-disabled="(item.region||item.pogCode||item.meter)||(!item.warehouse)"></div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="input-group input-group-xs" style="width:100%">
+                                  <div class="input-group input-group-xs" style="display: inline-block;font-size: 8px;" >
+                                    <input class="form-control" name="exeDate" required
+                                      date-time-picker="" data-date-format="yyyy-mm-dd"
+                                      maxlength="20" data-min-view="2" 
+                                      ng-model="item.exeDate" >
+                                  </div>
+                                </div>
+                              </td>
+                              <td>{{item.southItemList}}</td>
+                              <td>{{item.westItemList}}</td>
+                              <td>{{item.eastItemList}}</td>
+                              <td>{{item.northItemList}}</td>
+                              <td>
+                                <div class="input-group input-group-xs" style="width:100%">
+                                  <input class="form-control radius3" name="remarks"
+                                  ng-model="item.remarks" type="text">
+                                </div>
+                              </td>
+                              <td>
+                                <div  class="btn-group btn-group-xst">
+                                  <button type="button" class="btn btn-default btn-xs" ng-click="del(item, index)">
+                                    <i class="fa fa-trash-o">删除</i>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+
+                        </table>
+
+                      </div>
+
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!-- 流程图 -->
+              <div class="tab-pane fadeIn col-md-12" id="flowChart">
+                  <div class=" mt10 pb5 "  data-des="此节点必需－用于识别输入表单的指令">
+                      <div ng-if="!urlParams.businessKey" ng-show="tabAction== 'flowChart'" role="tabpanel" class="tab-pane "
+                          style="border: 0;width:100%;height: 750px;margin-top:50px; overflow: hidden;position: relative;">
+
+                          <div style="position: absolute; z-index: 1; right: 36px;" ng-show="tabAction=='flowChart'">
+                              <a class="btn btn-xs btn-primary" ng-click="zoom('zoom')"><i class="fa fa-search-minus"></i>缩小</a>
+                              <a class="btn btn-xs btn-primary" ng-click="zoom('enlarge')"><i class="fa fa-search-plus"></i>放大</a>
+                              <a class="btn btn-xs btn-primary" ng-click="zoom('reduction')"><i class="fa fa-undo"></i>还原</a>
+                          </div>
+
+                          <div id="processImg" style="width: 100%;height:100%; overflow: auto;">流程图加载中，请稍候...</div>
+                      </div>
+                      <div class="cb " >
+                          <div class="pl15 pr15 pr">
+
+
+                              <h5><span class="fa  fa-pencil-square-o"></span> 审批历史</h5>
+                              <div base-data-table="taskTable" id="taskTable"
+                                   data-url="processFindHistoricActivities"
+                                   data-page-size="20"
+                                   data-onload="historicListLoad"
+                                   data-auto-request="{{ action!=='new' && action !=='draft'}}"
+                                   ng-params="processInstanceParams"
+                                   data-legend='[{"value": "taskName","name": "节点名称",style:"width:10%"},
+                                    {"value": "userFullName","name": "处理人",style:"width:16%;"},
+                                    {"value": "his_detail_option","name": "处理结果",style:"width:8%;"},
+                                    {"value": "his_detail_opinion","name": "审批意见",nowrap:false},
+                                    {"value": "startTime","name": "审批开始时间",style:"width:136px;"},
+                                    {"value": "endTime","name": "审批结束时间",style:"width:136px;"}]'>
+                              </div>
+
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+
+
+    <!-- 商品查询 -->
+    <div class="modal fade" role="dialog" id="goodsSearchId">
+      <div class="modal-dialog" style="width: 900px;margin-top: 5%">
+          <div class="modal-content"  style="width: 900px;">
+              <form name="filediv">
+                  <div class="modal-header" style="background-color: #f0f0f0;">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title" >商品查询
+                      </h4>
+                  </div>
+
+                  <div class="modal-body">
+                      <!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+                        <!-- <div class="btn-group btn-group-xs mt10 " style="float: right;">
+                          <button class="btn btn-default" type="button" ng-click="newDataTable.search(1)">
+                            <i class="fa fa-search" ></i>搜索
+                          </button>
+                        </div> -->
+
+                        <div class="bg-gray-white bt mb10" style="height: 33px">
+                          <div class="bg-gray-white p5">
+                            <div class="pull-right mr10">
+                              <div class="btn-group btn-group-xs">
+                                <button class="btn btn-default" type="button" ng-click="newDataTable.search(1)">
+                                  <i class="fa fa-search" ></i>搜索
+                                </button>
+                                <button class="btn btn-default" type="button" ng-click="newDataTable.restore()">
+                                  <i class="fa fa-undo" aria-hidden="true"></i>重置
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
+                        <div class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+                            <!-- 搜索输入框组-->
+                            <div search-form
+                                data-col='4'
+                                data-legend="[
+                                          {key:'rmsCode',label:'货号'},
+                                          {key:'brandnameCn',label:'品牌名称（CN）'},
+                                          {key:'brandnameEn',label:'品牌名称（EN）'},
+                                          {key:'sesionProduct',label:'季节性货品',type:'lookCode',lookCode:'PLM_PRODUCT_SESION'},
+                                          {key:'productEname',label:'Group'},
+                                          {key:'department',label:'部门编码'},
+                                          {key:'classes',label:'分类编码'},
+                                          {key:'subClass',label:'子分类编码'},
+                                          {key:'productReturn',label:'退货属性',type:'lookCode',lookCode:'PLM_PRODUCT_RETURNPRO'}
+                                          ]"
+                                ng-model="goodsSearchparams"
+                            ></div>
+                        </div>
+
+                          <div class="data-table">
+                              <div base-data-table="newDataTable"
+                                  data-page-size="5"
+                                  ng-params="goodsSearchparams"
+                                  data-show-index="true"
+                                  data-url="FindProductList2"
+                                  data-checked-type="checkbox"
+                                  data-keys="{'key':'productHeadId'}"
+                                  data-legend="[
+                                  {'value':'rmsCode','name':'货号','style':'text-align: center;'},
+                                  {'value':'productName','name':'货品名称','style':'text-align: center;'},
+                                  {'value':'brandnameCn','name':'品牌名称(CN)','style':'text-align: center;'},
+                                  {'value':'brandnameEn','name':'品牌名称(EN)','style':'text-align: center;'},
+                                  {'value':'group','name':'Group','style':'text-align: center;'},
+                                  {'value':'department','name':'部门','style':'text-align: center;'},
+                                  {'value':'classes','name':'分类','style':'text-align: center;'},
+                                  {'value':'subClass','name':'子分类','style':'text-align: center;'},
+                                  {'value':'productReturnName','name':'退货属性',type:'lookCode',lookCode:'PLM_PRODUCT_RETURNPRO'},
+                                  {'value':'sesionProductName','name':'季节性商品',type:'lookCode',lookCode:'PLM_PRODUCT_SESION'}
+                                  ]"
+                              ></div>
+                            </div>
+
+                      <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+                  </div>
+                    <div class="modal-footer">
+                      <div style="padding: 3px 10px;">
+                          <button type="button" class="btn btn-default btn-sm " validate-form-btn="" ng-click="newData()"
+                                  data-dismiss="modal" style="background-color: cornflowerblue; color: honeydew; font-weight: bold;">确定</button>
+                          <button type="button" ng-class="{'mt10': paging.total }" class="btn btn-default btn-sm "
+                                  data-dismiss="modal" style="font-weight: bold;" ng-click="qx()">取消</button>
+                      </div>
+                    </div>
+              </form>
+          </div>
+      </div>
+    </div> 
+
+    <!-- 导入 -->
+    <div class="modal fade" role="dialog" data-backdrop="static" id="filediv">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="filediv">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" >导入模板
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+
+                        <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn"><span class="w120"><i class="red">*</i>相关文件</span></label>
+                    <input type="file" nv-file-select="" uploader="ZsFileFileUploader">
+                  </div>
+
+
+                        <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+                    </div>
+                          <div class="modal-footer">
+                        <div style="padding: 3px 10px;">
+                            <button type="button" class="btn btn-default btn-sm " validate-form-btn="" ng-click="qd()"
+                                    data-dismiss="modal">确定</button>
+                            <button type="button" ng-class="{'mt10': paging.total }" class="btn btn-default btn-sm "
+                                    data-dismiss="modal" ng-click="qx()">取消</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+
+
+    <!--pogCode或米数-->
+    <div data-auto-request="true" data-callback="showMePoMolReturn" data-checked-type="radio"
+         data-dynamic-params='' data-keys="{'key':'pogCode','value':'pogCode','name':'pogCode'}"
+         data-params="{}"  
+         data-other-column="[{'name':'米数','key':'metre' },]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'pogCode_like','placeholder':'pogCode'},{'key':'metre_like','placeholder':'米数'},]"
+         data-show-index="false"
+         data-title="选择数据"
+         data-type="competitor"
+         data-url="plmSupplementLineService_findMeter"
+         id="showMePoMol"
+         lov-list="showMePoLov"
+         ng-model="current.pogCode"
+         role="dialog"
+    ></div>
+
+
+    </div>
+
+
+  </div>
+

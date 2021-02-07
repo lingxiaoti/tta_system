@@ -1,0 +1,13 @@
+API地址：http://www.bootcss.com/p/bootstrap-datetimepicker/demo.htm
+
+http://www.bootcss.com/p/bootstrap-datetimepicker/
+
+本项目使用方法：请以标签的属性方式使用，
+
+如：<input type='text' date-time-picker data-date-format="yyyy-mm-dd"   data-min-view="2"   />
+
+开始时间不能大于结束时间：
+<input type='text' title="开始日期" date-time-picker data-date-format="yyyy-mm-dd"   data-min-view="2" 　ng-model="AddData.startDateActive"  data-enddate="{{AddData.startDateActive}}"/>
+<input type='text'  title="结束日期"  date-time-picker data-date-format="yyyy-mm-dd"   data-min-view="2"  ng-model="AddData.endDateActive" data-stratdate="{{AddData.startDateActive}}"  />
+
+主要　属性： data-stratdate:开始日期　　　data-enddate：结束日期

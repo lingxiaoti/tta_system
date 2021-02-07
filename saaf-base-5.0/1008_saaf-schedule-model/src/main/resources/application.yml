@@ -1,0 +1,48 @@
+server:
+  port: 8108
+  tomcat:
+      max-threads: 2000
+      accept-count: 200
+      max-connections: 2000
+  #context-path: /1008-saaf-schedule-server
+
+spring:
+  application:
+    name: 1008-saaf-schedule-server
+#  zipkin:
+#      base-url: http://admin:admin@${eureka.instance.hostname}:8761
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://admin:admin@${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    port: 8760
+management:
+  security:
+    enabled: false
+    port: 8070
+    address: localhost
+    context-path: /shutdown
+endpoints:
+  shutdown:
+    enabled: true
+
+#fastdfs配置
+fastdfs:
+  connect_timeout_in_seconds: 2
+  network_timeout_in_seconds: 30
+  charset: utf-8
+  http_anti_steal_token: false
+  http_secret_key: FastDFS1234567890
+  http_tracker_http_port: 80
+  tracker_servers: #TrackerList参数,支持多个
+    - 10.82.24.117:22122
+  thumb_image: #缩略图生成参数
+    width: 150
+    height: 150
+  access: #访问地址
+    address: 10.82.24.117
+    http_type: http://
+    http_port: 8888

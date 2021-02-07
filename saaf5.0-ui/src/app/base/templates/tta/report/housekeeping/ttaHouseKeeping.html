@@ -1,0 +1,195 @@
+<div ng-controller="ttaHouseKeepingCtrl" class="gridtable">
+
+    <div data-des="此节点必需－用户计算滚动区域高度" main-scroll-style>
+            <div class="nicescroll-height  bg-white" data-des="此节点必需-滚动内容及指令"
+                 nice-option="{cursorcolor: '#009E96',cursorwidth:10,zindex:10,autohidemode:false}">
+       <!-- <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">-->
+            <div class="col-xs-12 col-md-12 br p0">
+
+                        <!--------------------- 按钮--->
+                        <div class="bg-gray-white p5">
+                            <div class=" pull-right ml10">
+                                <div class="btn-group btn-group-xs ml10" id="outputButton">
+                                    <button class="btn btn-default" type="button" ng-click="search()">
+                                        <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                                    </button>
+                                    <button type="button" class="btn btn-default" permission-btn=""  ng-click="btnSave(ttaHouseKeepingForm)" ></button>
+                                    <!--<button type="button" class="btn btn-default" permission-btn=""  ng-click="btnNew()" ></button>-->
+                                </div>
+                            </div>
+                            <div class="btn-group btn-group-xs ">
+                                <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                                </button>
+                            </div>
+                        </div>
+                        <!---------------------  / .按钮  --->
+                        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                            <div class="nicescroll-height  bg-white "
+                                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                                <div class="col-xs-12 col-md-12" style="margin-right: -1px; height: 100%; ">
+                                        <form class="  m10" ng-submit="ttaContractRecordHeaderTable.getData()">
+                                            <!--<div class="form-group col-xs-6 col-md-4 col-lg-3">
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn"><span class="w100">合同年度：</span></label>
+                                                    <input type="text" class="form-control radius3"
+                                                           date-time-picker="" data-date-format="yyyy"
+                                                           data-start-view="4" data-min-view="4" data-max-view="4"
+                                                           ng-model="params.year">
+
+                                                </div>
+                                            </div>-->
+                                            <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn"><span class="w100">ITEM_NBR：</span></label>
+                                                    <input  type="text" ng-model="params.itemNbr"
+                                                            class="form-control radius3">
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn"><span class="w100">ITEM_NAME：</span></label>
+                                                    <input  type="text" ng-model="params.vendorNbr"
+                                                            class="form-control radius3">
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn"><span class="w100">DEPT_CODE：</span></label>
+                                                    <input  type="text" ng-model="params.saleTypeName"
+                                                            class="form-control radius3">
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn"><span class="w100">DEPT_DESC：</span></label>
+                                                    <input  type="text" ng-model="params.brand"
+                                                            class="form-control radius3">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                                                <div class="input-group input-group-xs">
+                                                    <label class="input-group-addon bn"><span class="w100">BRAND_CN：</span></label>
+                                                    <input  type="text" ng-model="params.brand"
+                                                            class="form-control radius3">
+                                                </div>
+                                            </div>
+                                            <div class="row"></div>
+                                        </form>
+                                        <form id="ttaHouseKeepingForm" name="ttaHouseKeepingForm">
+                                            <div id ="parentFixedId" style="" main-scroll-style>
+                                            <div id ="fixedId" style =" height: auto;overflow:auto;position:relative" class="data-table"  nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2',cursorwidth:'10px',autohidemode:false,zindex:10}" >
+                                                <table saaf-table="houseKeepingTable"
+                                                       id = "houseKeepingTableId"
+                                                       data-url="findTtaContractRecordHeader"
+                                                       data-after-get-data="afterGetData()"
+                                                       data-params="params"
+                                                       data-checked-type="radio"
+                                                       data-auto-get-data="true"
+                                                       data-page-rows="10"
+                                                       class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                                                    <thead class="bg-gray-white">
+                                                    <tr class="text-center">
+                                                        <th>
+                                                            <input  ng-checked="selectedAll" type="checkbox"
+                                                                 ng-click="checkedAll($event)" >
+                                                        </th>
+                                                        <th>序号</th>
+                                                        <th>ITEM_NBR</th>
+                                                        <th>ITEM_NAME</th>
+                                                        <th>dept</th>
+                                                        <th>BRAND_CN</th>
+                                                        <th>原UDA4</th>
+                                                        <th>原UDA8</th>
+                                                        <th style="min-width: 175px;">修改UDA4为</th>
+                                                        <th style="min-width: 175px;">修改UDA8为</th>
+                                                        <th style="min-width: 180px;">不修改的原因</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody ng-show="houseKeepingTable.data">
+                                                    <tr class="text-center" ng-repeat="row in houseKeepingTable.data"
+                                                        ng-class="{'active':houseKeepingTable.data.selectRow==$index}"
+                                                        ng-click="houseKeepingTable.data.selectRow=$index;
+                                                         houseKeepingTable.data.selectRowData =row;" >
+                                                        <td>
+                                                            <input id="{{  'houseKeepingTable_'+row.ttaContractRecordId}}" ng-checked="row.checked" type="checkbox"
+                                                                   ng-click="check(row,$event)" name="keys">
+                                                        </td>
+                                                        <td ng-bind="$index+1" class="w50">1</td>
+                                                        <td><span>{{row.itemNbr}}</span></td>
+                                                        <td><span>{{row.itemName}}</span></td>
+                                                        <td><span>{{row.deptDesc}}</span></td>
+                                                        <td><span>{{row.brandCn}}</span></td>
+                                                        <td><span>{{row.uda4}}</span></td>
+                                                        <td><span>{{row.uda8}}</span></td>
+                                                        <input class="form-control input-xs" required  name = "{{'mobilePhone' + $index}}"  ng-model="row.changeUda4">
+                                                        <input class="form-control input-xs" required  name = "{{'mobilePhone' + $index}}"  ng-model="row.changeUda8">
+                                                        <td>
+                                                            <input ng-show="!row.remakeFlag" ng-click="row.remakeFlag= true;click($index);" class="form-control input-xs"  name = "{{'remake1' + $index}}"  ng-model="row.noChangReason">
+                                                            <textarea ng-show="row.remakeFlag" ng-blur="row.remakeFlag= false" class="" id = "{{'id_reason'+$index}}"
+                                                                      name="{{'remake'+$index}}"
+                                                                      ng-model="row.noChangReason" style="background-color:#fff;position: absolute; z-index: 1005; display: block;width: 200px;height: 100px;">
+                                                            </textarea>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+
+                                            </div>
+                                                <div saaf-table-tfoot="houseKeepingTable" ng-show="houseKeepingTable.data.length>0"></div>
+                                        </div>
+                                        </form>
+
+                                    <!--<div lov-list="selectTtaContractRecordHeaderDept" role="dialog" data-title="选择部门信息" id="selectTtaContractRecordHeaderDeptIdL" ng-model="current.em"
+                                         data-url="findDeptPagination"
+                                         data-dynamic-params='{"flag": "findDept","departmentType":"30"}'
+                                         data-callback="selectDeptLReturn"
+                                         data-auto-request="true"
+                                         data-return-type="key"
+                                         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+                                         data-checked-type="radio"
+                                         data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+                                         data-show-index="false"
+                                         data-type="competitor"
+                                         data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+                                         data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                                          {'key':'departmentName','placeholder':'部门名称'}]"
+                                    >
+                                    </div>-->
+
+                                    <!--<div data-auto-request="true" data-callback="selectSupplierReturn" data-checked-type="radio"
+                                         data-dynamic-params="selectVendorParams"
+                                         data-keys="{'key':'proposalId','value':'proposalYear','name':'年度'}"
+                                         data-other-column="[{'name':'供应商编码','key':'vendorCode'},{'name':'供应商名称','key':'vendorName'},
+                                                             {'name':'销售方式','key':'saleTypeName'},{'name':'品牌','key':'brandCn'},
+                                                             {'name':'合同版本','key':'agreementEdition'},
+                                                             {'name':'proposal单号','key':'orderNbr'}]"
+                                         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+                                         data-return-type="key"
+                                         data-search-key="[{'key':'vendorCode','placeholder':'供应商编码'},
+                                         {'key':'vendorName','placeholder':'供应商名称'}]"
+                                         data-show-index="false"
+                                         data-title="选择供应商信息"
+                                         data-type="competitor"
+                                         data-url="proposalFindVendor"
+                                         id="supplierCode"
+                                         lov-list="supplierCodeLov"
+                                         ng-model="current.em"
+                                         role="dialog"
+                                    >
+                                    </div>-->
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+            </div>
+            </div>
+     </div>
+</div>

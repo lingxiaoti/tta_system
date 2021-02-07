@@ -1,0 +1,376 @@
+<div ng-controller="promotionGuidelineCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify">
+
+                    </div>
+
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+
+
+                <!--------------------- 输入表单  --->
+
+                <div class=" mt10 pb5  oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form id="contractForm" name="contractForm">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>单据头信息</span>
+
+                            <button type="button" class="btn btn-default" saaf-xls-import-component data-list-options="{
+                    osd:{headName:'OSD'},
+                    offerCode:{headName:'Offer Code'},
+                    step:{headName:'Step'},
+                    effectArea:{headName:'生效地区'},
+                    effectCityTier:{headName:'生效城市级别'},
+                    effectStoreType:{headName:'生效店铺类型'},
+                    storeLicenseStatus:{headName:'店铺证件类型'},
+                    dept:{headName:'部门'},
+                    itemCode:{headName:'产品编号'},
+                    chineseDescription:{headName:'中文名称'},
+                    englishDescription:{headName:'英文描述'},
+                    display:{headName:'陈列位置'},
+                    buyerNote:{headName:'陈列指示备注'},
+                    pOG:{headName:'是否陈列图'},
+                    pOGStoreCount:{headName:'陈列图店铺数'},
+                    stockWkCoverage13:{headName:'现有库存周数(最近13周)'},
+                    promPack:{headName:'是否促销装'},
+                    retailPrice:{headName:'零售价'},
+                    promoPrice:{headName:'促销价'},
+                    promoMech:{headName:'混配方式'},
+                    memberOffer:{headName:'会员优惠'},
+                    unitCost:{headName:'原成本'},
+                    newCost:{headName:'促销成本'},
+                    orderDiscount:{headName:'订单折扣'},
+                    costChangePeriod:{headName:'促销成本生效时段'},
+                    gPPer:{headName:'毛利'},
+                    rTV:{headName:'是否可退货'},
+                    returnDate:{headName:'退货时间'},
+                    promoType:{headName:'补货方式'},
+                    mDQ:{headName:'MDQ'},
+                    maxDQ:{headName:'Max DQ'},
+                    iner:{headName:'内装箱数'},
+                    storeCount:{headName:'生效区域店铺计数'},
+                    forctDiscrepancy:{headName:'供应链与采购部差异'},
+                    tradingForctQty:{headName:'采购预计销售量'},
+                    tradingForctSales:{headName:'采购预计销售金额'},
+                    percentage:{headName:'percentage'},
+                    reason:{headName:'原因'},
+                    supplyForctQty:{headName:'供应链预计销售量'},
+                    wH998:{headName:'998南海仓总量'},
+                    wH998FreeGoods:{headName:'998南海仓免费货'},
+                    wH997:{headName:'997成都仓总量'},
+                    wH997FreeGoods:{headName:'997成都仓免费货'},
+                    wH999:{headName:'999上海仓总量'},
+                    wH999FreeGoods:{headName:'999上海仓免费货'},
+                    wH992:{headName:'992昆山仓总量'},
+                    wH992FreeGoods:{headName:'992昆山仓免费货'},
+                    wH995:{headName:'995大兴仓总量'},
+                    wH995FreeGoods:{headName:'995大兴仓免费货'},
+                    wH991:{headName:'991沈阳仓总量'},
+                    wH991FreeGoods:{headName:'991沈阳仓免费货'},
+                    wH996:{headName:'996武汉仓总量'},
+                    wH996FreeGoods:{headName:'996武汉仓免费货'},
+                    wH9901:{headName:'9901郑州仓总量'},
+                    wH9901FreeGoods:{headName:'9901郑州仓免费货'},
+                    wH9902:{headName:'9902厦门仓总量'},
+                    wH9902FreeGoods:{headName:'9902厦门仓免费货'},
+                    wH9903:{headName:'9903天津仓总量'},
+                    wH9903FreeGoods:{headName:'9903天津仓免费货'},
+                    wH9906:{headName:'9906南宁仓总量'},
+                    wH9906FreeGoods:{headName:'9906南宁仓免费货'},
+                    wH9907:{headName:'9907西安仓总量'},
+                    wH9907FreeGoods:{headName:'9907西安仓免费货'},
+                    wH998Per:{headName:'998南海仓%'},
+                    wH997Per:{headName:'997成都仓%'},
+                    wH999Per:{headName:'999上海仓%'},
+                    wH992Per:{headName:'992昆山仓%'},
+                    wH995Per:{headName:'995大兴仓%'},
+                    wH991Per:{headName:'991沈阳仓%'},
+                    wH996Per:{headName:'996武汉仓%'},
+                    wH9901Per:{headName:'9901郑州仓%'},
+                    wH9902Per:{headName:'9902厦门仓%'},
+                    wH9903Per:{headName:'9903天津仓%'},
+                    wH9906Per:{headName:'9906南宁仓%'},
+                    wH9907Per:{headName:'9907西安仓%'},
+                    supplierCode998:{headName:'998供应商编号'},
+                    supplierName998:{headName:'998供应商名称'},
+                    supplierCode997:{headName:'997供应商编号'},
+                    supplierName997:{headName:'997供应商名称'},
+                    supplierCode999:{headName:'999供应商编号'},
+                    supplierName999:{headName:'999供应商名称'},
+                    supplierCode992:{headName:'992供应商编号'},
+                    supplierName992:{headName:'992供应商名称'},
+                    supplierCode995:{headName:'995供应商编号'},
+                    supplierName995:{headName:'995供应商名称'},
+                    supplierCode991:{headName:'991供应商编号'},
+                    supplierName991:{headName:'991供应商名称'},
+                    supplierCode996:{headName:'996供应商编号'},
+                    supplierName996:{headName:'996供应商名称'},
+                    supplierCode9901:{headName:'9901供应商编号'},
+                    supplierName9901:{headName:'9901供应商名称'},
+                    supplierCode9902:{headName:'9902供应商编号'},
+                    supplierName9902:{headName:'9902供应商名称'},
+                    supplierCode9903:{headName:'9903供应商编号'},
+                    supplierName9903:{headName:'9903供应商名称'},
+                    supplierCode9906:{headName:'9906供应商编号'},
+                    supplierName9906:{headName:'9906供应商名称'},
+                    supplierCode9907:{headName:'9907供应商编号'},
+                    supplierName9907:{headName:'9907供应商名称'},
+                    locationList998:{headName:'998地点清单'},
+                    locationList997:{headName:'997地点清单'},
+                    locationList999:{headName:'999地点清单'},
+                    locationList992:{headName:'992地点清单'},
+                    locationList995:{headName:'995地点清单'},
+                    locationList991:{headName:'991地点清单'},
+                    locationList996:{headName:'996地点清单'},
+                    locationList9901:{headName:'9901地点清单'},
+                    locationList9902:{headName:'9902地点清单'},
+                    locationList9903:{headName:'9903地点清单'},
+                    locationList9906:{headName:'9906地点清单'},
+                    locationList9907:{headName:'9907地点清单'},
+                    freesupplierCode998:{headName:'998免费货供应商编号'},
+                    freesupplierName998:{headName:'998免费货供应商名称'},
+                    freesupplierCode997:{headName:'997免费货供应商编号'},
+                    freesupplierName997:{headName:'997免费货供应商名称'},
+                    freesupplierCode999:{headName:'999免费货供应商编号'},
+                    freesupplierName999:{headName:'999免费货供应商名称'},
+                    freesupplierCode992:{headName:'992免费货供应商编号'},
+                    freesupplierName992:{headName:'992免费货供应商名称'},
+                    freesupplierCode995:{headName:'995免费货供应商编号'},
+                    freesupplierName995:{headName:'995免费货供应商名称'},
+                    freesupplierCode991:{headName:'991免费货供应商编号'},
+                    freesupplierName991:{headName:'991免费货供应商名称'},
+                    freesupplierCode996:{headName:'996免费货供应商编号'},
+                    freesupplierName996:{headName:'996免费货供应商名称'},
+                    freesupplierCode9901:{headName:'9901免费货供应商编号'},
+                    freesupplierName9901:{headName:'9901免费货供应商名称'},
+                    freesupplierCode9902:{headName:'9902免费货供应商编号'},
+                    freesupplierName9902:{headName:'9902免费货供应商名称'},
+                    freesupplierCode9903:{headName:'9903免费货供应商编号'},
+                    freesupplierName9903:{headName:'9903免费货供应商名称'},
+                    freesupplierCode9906:{headName:'9906免费货供应商编号'},
+                    freesupplierName9906:{headName:'9906免费货供应商名称'},
+                    freesupplierCode9907:{headName:'9907免费货供应商编号'},
+                    freesupplierName9907:{headName:'9907免费货供应商名称'},
+                    refSalesPeriod:{headName:'历史促销时段'},
+                    refArea:{headName:'历史生效地区'},
+                    refOSDType:{headName:'历史促销位置'},
+                    refItem:{headName:'历史促销货号'},
+                    refDesc:{headName:'历史促销品名'},
+                    historicSalesQty:{headName:'历史销售总量'},
+                    historicSalesAMT:{headName:'历史销售金额'},
+                    historicAvgUnitPrice:{headName:'历史平均单价(含税)'},
+                    displayonDM:{headName:'是否上DM'},
+                    matchtheme:{headName:'是否符合主题'},
+                    consignment:{headName:'是否寄售商品'},
+                    newItem:{headName:'是否新品'},
+                    ownBrand:{headName:'是否自有品牌'},
+                    limitedItem:{headName:'是否供应商限量'},
+                    exclusiveItem:{headName:'是否独家产品'},
+                    onShelfPromItem:{headName:'是否牌面促销产品'},
+                    clearanceItem:{headName:'是否清货产品'},
+                    freeGoods:{headName:'是否免费货'},
+                    promocompensation:{headName:'促销补偿'},
+                    detail:{headName:'补差详情'}
+
+                    }" data-url="promotionGuidelineImport"
+                                    data-info="{id:'{{params.id}}',promNumber:'{{params.promNumber}}',promPeriodFrom:'{{params.promPeriodFrom}}',promPeriodTo:'{{params.promPeriodTo}}'}"
+                                    data-after-action="dataTable.getData()"
+                                    data-message="暂时不做校验"   >
+                                <i class="fa fa-upload"></i>导入
+                            </button>
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110">PromNumber：</span></label>
+                                <input  type="text" ng-model="params.promNumber" disabled
+                                        class="form-control radius3">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">Prom Period From：</span></label>
+                                <input id="promPeriodFrom" type="text" class="form-control radius3" ng-change="change()"
+                                       date-time-picker data-date-format="yyyy-mm-dd"
+                                       data-min-View="2" placeholder="" ng-model="params.promPeriodFrom"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">Prom Period To:</span></label>
+                                <input type="text" class="form-control radius3"
+                                       date-time-picker data-date-format="yyyy-mm-dd"
+                                       id="params_sendDateEnd"
+                                       data-min-View="2" placeholder="" ng-model="params.promPeriodTo"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="row"></div>
+
+
+                    </form>
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="false"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="promotionGuidelineFind"
+                         data-legend="[
+                            {'value':'osd','name':'OSD'},
+                            {'value':'offerCode','name':'OfferCode'},
+                            {'value':'step','name':'step'},
+                            {'value':'effectArea','name':'生效地区'},
+                            {'value':'effectCityTier','name':'生效城市级别'},
+                            {'value':'effectStoreType','name':'生效店铺类型'},
+                            {'value':'storeLicenseStatus','name':'店铺证件类型'},
+                            {'value':'dept','name':'部门'},
+                            {'value':'itemCode','name':'产品编号'},
+                            {'value':'chineseDescription','name':'中文名称'},
+                            {'value':'englishDescription','name':'英文描述'},
+                            {'value':'display','name':'陈列位置'},
+                            {'value':'buyerNote','name':'陈列指示备注'},
+                            {'value':'pOG','name':'是否陈列图'},
+                            {'value':'pOGStoreCount','name':'陈列图店铺数'},
+                            {'value':'stockWkCoverage13','name':'现有库存周数(最近13周)'},
+                            {'value':'promPack','name':'是否促销装'},
+                            {'value':'retailPrice','name':'零售价'},
+                            {'value':'promoPrice','name':'促销价'},
+                            {'value':'promoMech','name':'混配方式'},
+                            {'value':'memberOffer','name':'会员优惠'},
+                            {'value':'unitCost','name':'原成本'},
+                            {'value':'newCost','name':'促销成本'},
+                            {'value':'orderDiscount','name':'订单折扣'},
+                            {'value':'costChangePeriod','name':'促销成本生效时段'},
+                            {'value':'gPPer','name':'毛利'},
+                            {'value':'rTV','name':'是否可退货'},
+                            {'value':'returnDate','name':'退货时间'},
+                            {'value':'promoType','name':'补货方式'},
+                            {'value':'mDQ','name':'MDQ'},
+                            {'value':'maxDQ','name':'MaxDQ'},
+                            {'value':'iner','name':'内装箱数'},
+                            {'value':'storeCount','name':'生效区域店铺计数'},
+                            {'value':'forctDiscrepancy','name':'供应链与采购部差异'},
+                            {'value':'tradingForctQty','name':'采购预计销售量'},
+                            {'value':'tradingForctSales','name':'采购预计销售金额'},
+                            {'value':'percentage','name':'+/-%'},
+                            {'value':'reason','name':'原因'},
+                            {'value':'supplyForctQty','name':'供应链预计销售量'},
+                            {'value':'wH998','name':'998南海仓总量'},
+                            {'value':'wH998FreeGoods','name':'998南海仓免费货'},
+                            {'value':'wH997','name':'997成都仓总量'},
+                            {'value':'wH997FreeGoods','name':'997成都仓免费货'},
+                            {'value':'wH999','name':'999上海仓总量'},
+                            {'value':'wH999FreeGoods','name':'999上海仓免费货'},
+                            {'value':'wH992','name':'992昆山仓总量'},
+                            {'value':'wH992FreeGoods','name':'992昆山仓免费货'},
+                            {'value':'wH995','name':'995大兴仓总量'},
+                            {'value':'wH995FreeGoods','name':'995大兴仓免费货'},
+                            {'value':'wH991','name':'991沈阳仓总量'},
+                            {'value':'wH991FreeGoods','name':'991沈阳仓免费货'},
+                            {'value':'wH996','name':'996武汉仓总量'},
+                            {'value':'wH996FreeGoods','name':'996武汉仓免费货'},
+                            {'value':'wH9901','name':'9901郑州仓总量'},
+                            {'value':'wH9901FreeGoods','name':'9901郑州仓免费货'},
+                            {'value':'wH9902','name':'9902厦门仓总量'},
+                            {'value':'wH9902FreeGoods','name':'9902厦门仓免费货'},
+                            {'value':'wH9903','name':'9903天津仓总量'},
+                            {'value':'wH9903FreeGoods','name':'9903天津仓免费货'},
+                            {'value':'wH9906','name':'9906南宁仓总量'},
+                            {'value':'wH9906FreeGoods','name':'9906南宁仓免费货'},
+                            {'value':'wH9907','name':'9907西安仓总量'},
+                            {'value':'wH9907FreeGoods','name':'9907西安仓免费货'},
+                            {'value':'wH998Per','name':'998南海仓%'},
+                            {'value':'wH997Per','name':'997成都仓%'},
+                            {'value':'wH999Per','name':'999上海仓%'},
+                            {'value':'wH992Per','name':'992昆山仓%'},
+                            {'value':'wH995Per','name':'995大兴仓%'},
+                            {'value':'wH991Per','name':'991沈阳仓%'},
+                            {'value':'wH996Per','name':'996武汉仓%'},
+                            {'value':'wH9901Per','name':'9901郑州仓%'},
+                            {'value':'wH9902Per','name':'9902厦门仓%'},
+                            {'value':'wH9903Per','name':'9903天津仓%'},
+                            {'value':'wH9906Per','name':'9906南宁仓%'},
+                            {'value':'wH9907Per','name':'9907西安仓%'},
+                            {'value':'supplierCode998','name':'998供应商编号'},
+                            {'value':'supplierName998','name':'998供应商名称'},
+                            {'value':'supplierCode997','name':'997供应商编号'},
+                            {'value':'supplierName997','name':'997供应商名称'},
+                            {'value':'supplierCode999','name':'999供应商编号'},
+                            {'value':'supplierName999','name':'999供应商名称'},
+                            {'value':'supplierCode992','name':'992供应商编号'},
+                            {'value':'supplierName992','name':'992供应商名称'},
+                            {'value':'supplierCode995','name':'995供应商编号'},
+                            {'value':'supplierName995','name':'995供应商名称'},
+                            {'value':'supplierCode991','name':'991供应商编号'},
+                            {'value':'supplierName991','name':'991供应商名称'},
+                            {'value':'supplierCode996','name':'996供应商编号'},
+                            {'value':'supplierName996','name':'996供应商名称'},
+                            {'value':'supplierCode9901','name':'9901供应商编号'},
+                            {'value':'supplierName9901','name':'9901供应商名称'},
+                            {'value':'supplierCode9902','name':'9902供应商编号'},
+                            {'value':'supplierName9902','name':'9902供应商名称'},
+                            {'value':'supplierCode9903','name':'9903供应商编号'},
+                            {'value':'supplierName9903','name':'9903供应商名称'},
+                            {'value':'supplierCode9906','name':'9906供应商编号'},
+                            {'value':'supplierName9906','name':'9906供应商名称'},
+                            {'value':'supplierCode9907','name':'9907供应商编号'},
+                            {'value':'supplierName9907','name':'9907供应商名称'},
+                            {'value':'locationList998','name':'998地点清单'},
+                            {'value':'locationList997','name':'997地点清单'},
+                            {'value':'locationList999','name':'999地点清单'},
+                            {'value':'locationList992','name':'992地点清单'},
+                            {'value':'locationList995','name':'995地点清单'},
+                            {'value':'locationList991','name':'991地点清单'},
+                            {'value':'locationList996','name':'996地点清单'}
+
+                             ]"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+</div>

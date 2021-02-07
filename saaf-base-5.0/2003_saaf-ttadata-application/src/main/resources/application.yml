@@ -1,0 +1,51 @@
+server:
+  port: 2003
+  tomcat:
+    max-threads: 2000
+    accept-count: 200
+    max-connections: 2000
+    max-http-post-size: -1
+    uri-encoding: UTF-8
+  context-path: /ttadata
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://admin:admin@139.159.228.191:8760/eureka/ #多个注册中心用逗号分隔
+  instance:
+    metadata-map:
+      management:
+        context-path: /${server.context-path}
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    prefer-ip-address: true
+
+
+spring:
+  activemq:
+    broker-url: failover:(tcp://139.159.229.31:61616)
+    pool:
+      enabled: true
+      max-connections: 50
+      expiry-timeout: 10000
+      idle-timeout: 30000
+  redis:
+    cluster:
+      nodes: 182.61.61.130:7001,182.61.61.130:7002,182.61.61.130:7003,182.61.61.130:7004,182.61.61.130:7005,182.61.61.130:7006
+    password: nopassword
+    pool:
+      max-active: 80
+      max-idle: 8
+      max-wait: -1
+      min-idle: 0
+  layering-cache:
+    login-username: admin
+    login-password: admin
+    enable-update: true
+    stats=true: true
+    layering-cache-servlet-enabled: true
+    url-pattern: /layering-cache/*

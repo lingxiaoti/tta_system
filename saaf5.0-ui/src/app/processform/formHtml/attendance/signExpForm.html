@@ -1,0 +1,133 @@
+<div ng-controller="signExpFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="findSignExpReqApplyDetail"
+         data-api-get="findSignExpReqApplyDetail" data-api-del="" data-api-update="findSignExpReqApplyDetail">
+        <div class="cb">
+            <h5><span class="fa fa-cog"></span> 打卡申请单详情</h5>
+
+            <div search-form
+                 data-legend="[
+                                {key:'guideEmpNo',label:'申请人工号',readonly:true},
+                                {key:'guideName',label:'申请人',readonly:true},
+                                {key:'reqTypeStr',label:'类型',readonly:true},
+                                {key:'requestNum',label:'申请单号',readonly:true},
+                                {key:'reqTime',label:'申请时间',readonly:true},
+                                {key:'reqStatusStr',label:'状态',readonly:true},
+                                {key:'storeNo',label:'门店编码',readonly:true},
+                                {key:'shopName',label:'门店名称',readonly:true},
+                                {key:'guideTypeStr',label:'导购类型',readonly:true},
+                            ]"
+                 data-col="4"
+                 ng-model="formParams"
+            ></div>
+            <div class="form-group col-xs-6 col-md-12">
+                <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">照片说明</span>
+                    </label>
+                    <div>
+                        <img  class="img-preview pr5" ng-src="{{file.filePath}}"  ng-if="file.filePath"
+                              style="height: 34.5px;width: 45px" ng-repeat="file in formParams.files" >
+                        <!--<img ng-if="file.filePath" ng-src="{{file.filePath}}" style="height: 34.5px;width: 45px" ng-repeat="file in formParams.files" class="pr5"
+                             filePath="{{file.filePath}}" enlarge-pic>-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="cb" >
+            <h5><span class="fa fa-cog"></span> 申请内容</h5>
+            <div class="data-table" style="overflow-x: scroll">
+                <table class="nicescroll-height report-data ">
+                    <thead class="bg-gray-white">
+                    <tr class="text-center">
+                        <th>打卡日期</th>
+                        <th>签到时间</th>
+                        <th>签到打卡位置</th>
+                        <th>签到偏差距离（米）</th>
+                        <th>签到异常原因</th>
+                        <th>签退时间</th>
+                        <th>签退打卡位置</th>
+                        <th>签退偏差距离（米）</th>
+                        <th>签退异常原因</th>
+                        <th>正确签到时间</th>
+                        <th>正确签退时间</th>
+                        <th>申请备注</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="text-center" ng-repeat="row in formParams.signExpDetails">
+                        <td class="nowrap">
+                            <span class="report-td" title="{{row.attDate}}">{{row.attDate}}</span>
+                        </td>
+                        <td class="nowrap">
+                            <span class="report-td" title="{{row.attSigninTime}}">{{row.attSigninTime}}</span>
+                        </td>
+                        <td class="nowrap">
+                            <span class="report-td" title="{{row.attSigninLoc}}">{{row.attSigninLoc}}</span>
+                        </td>
+                        <td class="nowrap">
+                            <span class="report-td" title="{{row.attSigninDev}}">{{row.attSigninDev}}</span>
+                        </td>
+                        <td class="nowrap">
+                            <span class="report-td" title="{{row.attSigninReason}}">{{row.attSigninReason}}</span>
+                        </td>
+                        <td class="nowrap">
+                            <span class="report-td" title="{{row.attSignoutTime}}">{{row.attSignoutTime}}</span>
+                        </td>
+                        <td class="nowrap">
+                            <span class="report-td" title="{{row.attSignoutLoc}}">{{row.attSignoutLoc}}</span>
+                        </td>
+                        <td class="nowrap">
+                            <span class="report-td" title="{{row.attSignoutDev}}">{{row.attSignoutDev}}</span>
+                        </td>
+                        <td class="nowrap">
+                            <span class="report-td" title="{{row.attSignoutReason}}">{{row.attSignoutReason}}</span>
+                        </td>
+                        <td class="nowrap">
+                            <span class="report-td" title="{{row.realSigninTime}}">{{row.realSigninTime}}</span>
+                        </td>
+                        <td class="nowrap">
+                            <span class="report-td" title="{{row.realSignoutTime}}">{{row.realSignoutTime}}</span>
+                        </td>
+                        <td class="nowrap">
+                            <span class="report-td" title="{{row.attReqMemo}}">{{row.attReqMemo}}</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--<div class="data-table">
+                <div base-data-table="dataTable"
+                     ng-params="params"
+                     data-show-index="true"
+                     ng-data-source="formParams.signExpDetails"
+                     data-legend="[
+                             {'value':'attDate','name':'打卡日期'},
+                             {'value':'attSigninTime','name':'签到时间'},
+                             {'value':'attSigninLoc','name':'签到打卡位置'},
+                             {'value':'attSigninDev','name':'签到偏差距离（米）'},
+                             {'value':'attSigninReason','name':'签到异常原因'},
+                             {'value':'attSignoutTime','name':'签退时间'},
+                             {'value':'attSignoutLoc','name':'签退打卡位置'},
+                             {'value':'attSignoutDev','name':'签退偏差距离（米）'},
+                             {'value':'attSignoutReason','name':'签退异常原因'},
+                             {'value':'attSignoutReason','name':'正确签到时间'},
+                             {'value':'realSignoutTime','name':'正确签退时间'},
+                             {'value':'attReqMemo','name':'申请备注'}
+                         ]"
+                ></div>
+            </div>-->
+
+        </div>
+
+    </div>
+
+</div>
+<div class="mask" close-Pic>
+    <div class="mask-box"></div>
+    <div class="big-pic-wrap">
+        <img src="" alt="" class="bigPic" />
+        <span class="close-pic"><i class="fa fa-close"></i></span>
+    </div>
+</div>

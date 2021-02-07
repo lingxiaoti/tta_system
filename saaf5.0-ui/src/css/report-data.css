@@ -1,0 +1,1021 @@
+.bigdata fieldset,
+.gridtable fieldset {
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+.bigdata fieldset legend,
+.gridtable fieldset legend {
+  font-size: inherit;
+  width: auto;
+  border: none;
+  margin-bottom: 0;
+  padding: 0 10px;
+}
+.bigdata fieldset ul,
+.gridtable fieldset ul {
+  margin: 0;
+  margin-bottom: 6px;
+}
+.bigdata .panel,
+.gridtable .panel {
+  margin: 0;
+}
+.bigdata .report-data-box,
+.gridtable .report-data-box {
+  z-index: 10;
+  position: relative;
+}
+.bigdata .report-data-box .export-btn,
+.gridtable .report-data-box .export-btn {
+  position: relative;
+  z-index: 11;
+}
+.bigdata .report-data-box .toExcel,
+.gridtable .report-data-box .toExcel {
+  position: absolute;
+  right: 15px;
+  bottom: -35px;
+  background-color: #1e90c2;
+  border-radius: 3px;
+  z-index: 11;
+}
+.bigdata .report-data-box .toExcel ul,
+.gridtable .report-data-box .toExcel ul {
+  border-radius: 3px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 23px;
+  overflow: hidden;
+  display: block;
+  position: relative;
+}
+.bigdata .report-data-box .toExcel ul:hover,
+.gridtable .report-data-box .toExcel ul:hover {
+  height: auto;
+  max-height: 350px;
+  overflow: auto;
+}
+.bigdata .report-data-box .toExcel ul li,
+.gridtable .report-data-box .toExcel ul li {
+  font-size: 12px;
+  display: block;
+  color: #fff;
+  padding: 3px 10px;
+  cursor: pointer;
+  text-align: left;
+}
+.bigdata .report-data-box .toExcel ul li:hover,
+.gridtable .report-data-box .toExcel ul li:hover {
+  background-color: #46423f;
+}
+.bigdata .report-data-box .toExcel:hover .triangle,
+.gridtable .report-data-box .toExcel:hover .triangle {
+  display: none;
+}
+.bigdata .report-data-box .triangle,
+.gridtable .report-data-box .triangle {
+  display: block;
+  width: 16px;
+  height: 8px;
+  background: url("../img/triangle2-down.png") no-repeat center;
+  bottom: -8px;
+  left: 28px;
+  position: absolute;
+}
+.bigdata table.report-data,
+.gridtable table.report-data {
+  font-size: 12px;
+  min-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid #eee;
+}
+.bigdata table.report-data tr,
+.gridtable table.report-data tr {
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  height: 33px;
+  line-height: 33px;
+  overflow: hidden;
+}
+.bigdata table.report-data tr.active,
+.gridtable table.report-data tr.active {
+  background-color: #efefef;
+  border-left: 2px solid #1e90c2;
+}
+.bigdata table.report-data td,
+.gridtable table.report-data td {
+  border-right: 1px solid #eee;
+  padding: 0 8px;
+}
+.bigdata table.report-data td a:hover .fa-check-circle,
+.gridtable table.report-data td a:hover .fa-check-circle {
+  transform: scale(1.5, 1.5);
+}
+.bigdata table.report-data th,
+.gridtable table.report-data th {
+  border-right: 1px solid #eee;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 0 8px;
+}
+.bigdata table.report-data thead,
+.gridtable table.report-data thead {
+  border-bottom: 2px solid #d5efed;
+  background-color: #E2EFEF;
+}
+.bigdata table.report-data .report-td,
+.gridtable table.report-data .report-td {
+  max-width: 500px;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: default;
+}
+.bigdata table.fixedTable,
+.gridtable table.fixedTable {
+  min-width: 0;
+  width: auto;
+  position: absolute;
+  margin: 0;
+  z-index: 10;
+  background-color: #fff;
+}
+.bigdata table.fixedL,
+.gridtable table.fixedL {
+  top: 0;
+  left: 0;
+  box-shadow: #e2efef 2px 0 8px;
+}
+.bigdata table.fixedR,
+.gridtable table.fixedR {
+  top: 0;
+  right: 0;
+  box-shadow: #e2efef -2px 0 8px;
+}
+.bigdata .inhover,
+.gridtable .inhover {
+  background-color: #f5f5f5;
+}
+.bigdata table.scroll-table tbody,
+.gridtable table.scroll-table tbody {
+  display: block;
+  overflow: hidden;
+}
+.bigdata table.scroll-table thead,
+.gridtable table.scroll-table thead,
+.bigdata table.scroll-table tbody tr,
+.gridtable table.scroll-table tbody tr,
+.bigdata table.scroll-table tfoot,
+.gridtable table.scroll-table tfoot {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+.bigdata .pagination,
+.gridtable .pagination {
+  margin: 12px 0 0 0;
+}
+.bigdata .pagination > li > a,
+.gridtable .pagination > li > a,
+.bigdata .pagination > li > span,
+.gridtable .pagination > li > span {
+  padding: 2px 10px !important;
+}
+.bigdata .min-paging,
+.gridtable .min-paging {
+  font-size: 12px;
+}
+.bigdata .min-paging .pagination > li > a,
+.gridtable .min-paging .pagination > li > a,
+.bigdata .min-paging .pagination > li > span,
+.gridtable .min-paging .pagination > li > span {
+  padding: 2px 3px !important;
+}
+.bigdata .modal-content .pagination > li > a,
+.gridtable .modal-content .pagination > li > a,
+.bigdata .modal-content .pagination > li > span,
+.gridtable .modal-content .pagination > li > span {
+  padding: 3px 6px !important;
+}
+.bigdata .chart-a,
+.gridtable .chart-a {
+  height: 350px;
+}
+.bigdata .chart-b,
+.gridtable .chart-b {
+  height: 400px;
+}
+.bigdata .btn-ul,
+.gridtable .btn-ul {
+  list-style: none;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  display: block;
+  height: 32px;
+  background-color: #efefef;
+  position: relative;
+}
+.bigdata .btn-ul li,
+.gridtable .btn-ul li {
+  display: block;
+  float: left;
+  position: relative;
+  height: 32px;
+  line-height: 32px;
+}
+.bigdata .btn-ul li:hover,
+.gridtable .btn-ul li:hover {
+  cursor: pointer;
+  background-color: #1e90c2;
+  color: #fff;
+}
+.bigdata .btn-ul li.active,
+.gridtable .btn-ul li.active {
+  background-color: #1e90c2;
+  color: #fff;
+}
+.bigdata .btn-ul li.active .moreDate,
+.gridtable .btn-ul li.active .moreDate {
+  background-color: #1e90c2;
+  color: #fff;
+}
+.bigdata .btn-ul .moreDate,
+.gridtable .btn-ul .moreDate {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  height: 32px;
+  cursor: pointer;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  text-align: center;
+}
+.bigdata .btn-ul-4 li,
+.gridtable .btn-ul-4 li {
+  width: 25%;
+}
+.bigdata .btn-ul-2 li,
+.gridtable .btn-ul-2 li {
+  width: 50%;
+}
+.bigdata .seat-rate,
+.gridtable .seat-rate {
+  list-style: none;
+  padding: 0;
+  margin: 0 !important;
+}
+.bigdata .seat-rate li,
+.gridtable .seat-rate li {
+  border-bottom: 1px dotted #ddd;
+  height: 35px;
+  position: relative;
+}
+.bigdata .seat-rate li .name,
+.gridtable .seat-rate li .name,
+.bigdata .seat-rate li .rate,
+.gridtable .seat-rate li .rate {
+  float: left;
+  height: 35px;
+  position: relative;
+}
+.bigdata .seat-rate li .name,
+.gridtable .seat-rate li .name {
+  width: 60%;
+  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 35px;
+  margin-right: 1px;
+}
+.bigdata .seat-rate li .radius,
+.gridtable .seat-rate li .radius {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  font-size: 12px;
+  font-weight: normal;
+  text-align: center;
+  line-height: 20px;
+  background-color: #1e90c2;
+  color: #fff;
+}
+.bigdata .seat-rate li .rate,
+.gridtable .seat-rate li .rate {
+  width: 39%;
+}
+.bigdata .seat-rate li .rate .line,
+.gridtable .seat-rate li .rate .line {
+  background-color: #ff5715;
+  border-radius: 10px;
+  height: 4px;
+}
+.bigdata .seat-rate li:last-child,
+.gridtable .seat-rate li:last-child {
+  border-bottom: none;
+}
+.bigdata .seat-rate li:hover,
+.gridtable .seat-rate li:hover {
+  background-color: #efefef;
+  padding: 0 15px;
+  margin: 0 -15px;
+}
+.bigdata .overview,
+.gridtable .overview {
+  text-align: left;
+  border: 1px solid #efefef;
+  padding: 15px;
+}
+.bigdata .overview h5,
+.gridtable .overview h5 {
+  margin: 0;
+}
+.bigdata .cinemaBox-ul,
+.gridtable .cinemaBox-ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.bigdata .cinemaBox-ul li,
+.gridtable .cinemaBox-ul li {
+  display: inline-block;
+  width: 20%;
+  text-align: center;
+  border-right: 1px solid #eee;
+}
+.bigdata .cinemaBox-ul li .value,
+.gridtable .cinemaBox-ul li .value {
+  color: #ff5715;
+  font-weight: 600;
+}
+.bigdata .cinemaBox-ul li:last-child,
+.gridtable .cinemaBox-ul li:last-child {
+  border: none;
+}
+.bigdata .statisticsType,
+.gridtable .statisticsType {
+  padding: 15px;
+  line-height: 26px;
+}
+.bigdata .moviebox-ul,
+.gridtable .moviebox-ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.bigdata .moviebox-ul li,
+.gridtable .moviebox-ul li {
+  display: inline-block;
+  border: 1px solid #ccc;
+  padding: 0 10px;
+  margin-right: 15px;
+  border-radius: 3px;
+}
+.bigdata .moviebox-ul li:hover,
+.gridtable .moviebox-ul li:hover {
+  background-color: #1e90c2;
+}
+.bigdata .moviebox-ul li.active,
+.gridtable .moviebox-ul li.active {
+  background-color: #ff5715;
+  border: 1px solid #ff5715;
+}
+.bigdata .moviebox-ul li.active a,
+.gridtable .moviebox-ul li.active a {
+  color: #fff;
+}
+.bigdata .yesterday-ul,
+.gridtable .yesterday-ul,
+.bigdata .movieBox-ul,
+.gridtable .movieBox-ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.bigdata .yesterday-ul li,
+.gridtable .yesterday-ul li,
+.bigdata .movieBox-ul li,
+.gridtable .movieBox-ul li {
+  display: inline-block;
+  border-right: 1px solid #eee;
+  text-align: center;
+  height: 45px;
+  position: relative;
+}
+.bigdata .yesterday-ul li .name,
+.gridtable .yesterday-ul li .name,
+.bigdata .movieBox-ul li .name,
+.gridtable .movieBox-ul li .name,
+.bigdata .yesterday-ul li .value,
+.gridtable .yesterday-ul li .value,
+.bigdata .movieBox-ul li .value,
+.gridtable .movieBox-ul li .value {
+  display: inline-block;
+  width: 100%;
+}
+.bigdata .yesterday-ul li .value,
+.gridtable .yesterday-ul li .value,
+.bigdata .movieBox-ul li .value,
+.gridtable .movieBox-ul li .value {
+  font-size: 16px;
+  color: #ff5715;
+  font-weight: 600;
+}
+.bigdata .yesterday-ul li:last-child,
+.gridtable .yesterday-ul li:last-child,
+.bigdata .movieBox-ul li:last-child,
+.gridtable .movieBox-ul li:last-child {
+  border: none;
+}
+.bigdata .yesterday-ul li,
+.gridtable .yesterday-ul li {
+  width: 20%;
+}
+.bigdata .movieBox-ul li,
+.gridtable .movieBox-ul li {
+  width: 25%;
+}
+.bigdata .date-btn-Schedule,
+.gridtable .date-btn-Schedule {
+  padding: 15px;
+  text-align: center;
+}
+.bigdata table.scheduleTable,
+.gridtable table.scheduleTable {
+  width: 100%;
+  font-size: 12px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+}
+.bigdata table.scheduleTable thead,
+.gridtable table.scheduleTable thead {
+  border-bottom: 2px solid #ccc;
+  background-color: #f6f6f6;
+}
+.bigdata table.scheduleTable th,
+.gridtable table.scheduleTable th,
+.bigdata table.scheduleTable td,
+.gridtable table.scheduleTable td {
+  padding: 0;
+  position: relative;
+}
+.bigdata table.scheduleTable th,
+.gridtable table.scheduleTable th {
+  border-right: 1px solid #ccc;
+  height: 50px;
+  /* .ulscale {
+         td {
+
+           .hours {
+             display: inline-block;
+             position: relative;
+             margin-left: -7px;
+             background-color: #f6f6f6;
+
+           }
+           &:last-child {
+             .minute {
+               span:last-child {
+                 border-right:none;
+               }
+             }
+           }
+         }
+       }*/
+}
+.bigdata table.scheduleTable th .timer,
+.gridtable table.scheduleTable th .timer {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+.bigdata table.scheduleTable th .cinema,
+.gridtable table.scheduleTable th .cinema {
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+}
+.bigdata table.scheduleTable th .date,
+.gridtable table.scheduleTable th .date {
+  padding: 2px 6px;
+  font-size: 14px;
+  height: 25px;
+  line-height: 25px;
+  display: block;
+}
+.bigdata table.scheduleTable td,
+.gridtable table.scheduleTable td {
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.bigdata table.scheduleTable .td-span,
+.gridtable table.scheduleTable .td-span {
+  padding: 2px 6px;
+}
+.bigdata table.scheduleTable .cinema-name,
+.gridtable table.scheduleTable .cinema-name {
+  max-height: 40px;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  text-overflow: ellipsis;
+}
+.bigdata table.scheduleTable th.first,
+.gridtable table.scheduleTable th.first {
+  height: 50px;
+  width: 160px;
+}
+.bigdata table.scheduleTable th.first:before,
+.gridtable table.scheduleTable th.first:before {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 165px;
+  /*这里需要自己调整，根据td的宽度和高度*/
+  top: 0;
+  left: 0;
+  background-color: #ccc;
+  display: block;
+  transform: rotate(-73deg);
+  /*这里需要自己调整，根据线的位置*/
+  transform-origin: top;
+}
+.bigdata table.scheduleTable table.scale,
+.gridtable table.scheduleTable table.scale {
+  width: 100%;
+}
+.bigdata table.scheduleTable table.scale td,
+.gridtable table.scheduleTable table.scale td {
+  border-bottom: none;
+  height: 82px;
+}
+.bigdata table.scheduleTable table.scale td .info,
+.gridtable table.scheduleTable table.scale td .info {
+  position: absolute;
+  padding: 5px;
+  top: 2px;
+  background-color: #00BB9C;
+  color: #fff;
+  font-size: 12px;
+  z-index: 10;
+  border-radius: 4px;
+}
+.bigdata table.scheduleTable table.scale td .info .movie-name,
+.gridtable table.scheduleTable table.scale td .info .movie-name {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: bold;
+}
+.bigdata table.scheduleTable table.scale td .info:hover,
+.gridtable table.scheduleTable table.scale td .info:hover {
+  cursor: default;
+  box-shadow: #666666 0 0 5px;
+  z-index: 11;
+}
+.bigdata table.scheduleTable table.scale td .info:hover .movie-name,
+.gridtable table.scheduleTable table.scale td .info:hover .movie-name {
+  overflow: auto;
+  white-space: normal;
+}
+.bigdata table.scheduleTable table.scale td:last-child,
+.gridtable table.scheduleTable table.scale td:last-child {
+  border-right: none;
+}
+.bigdata table.scheduleTable table.ulscale,
+.gridtable table.scheduleTable table.ulscale {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  position: relative;
+  /*
+            li {
+              min-height: 22px;
+              border-right: 1px solid #ccc;
+              position: relative;
+              display: block;
+              float: left;
+              font-weight: normal;
+              &:last-child {
+                border: none;
+              }
+            }*/
+}
+.bigdata table.scheduleTable table.ulscale td,
+.gridtable table.scheduleTable table.ulscale td {
+  height: 25px;
+  border-bottom: none;
+  position: relative;
+}
+.bigdata table.scheduleTable table.ulscale td .hours,
+.gridtable table.scheduleTable table.ulscale td .hours {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  margin-left: -7px;
+  background-color: #f6f6f6;
+}
+.bigdata table.scheduleTable table.ulscale td:last-child,
+.gridtable table.scheduleTable table.ulscale td:last-child {
+  border-right: none;
+}
+.bigdata table.scheduleTable table.ulscale td .minute,
+.gridtable table.scheduleTable table.ulscale td .minute {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 5px;
+}
+.bigdata table.scheduleTable table.ulscale td .minute span,
+.gridtable table.scheduleTable table.ulscale td .minute span {
+  display: inline-block;
+  width: 20%;
+  float: left;
+  border-right: 1px solid #ccc;
+  height: 5px;
+}
+.bigdata table.scheduleTable table.ulscale td .minute span:last-child,
+.gridtable table.scheduleTable table.ulscale td .minute span:last-child {
+  border-right: none;
+}
+.bigdata .scheduleBox,
+.gridtable .scheduleBox {
+  font-size: 12px;
+  position: relative;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+.bigdata .scheduleBox .s-c-table,
+.gridtable .scheduleBox .s-c-table {
+  display: table;
+  width: 100%;
+}
+.bigdata .scheduleBox .s-c-cell,
+.gridtable .scheduleBox .s-c-cell {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 0 6px;
+  position: relative;
+}
+.bigdata .scheduleBox .s-c-edit,
+.gridtable .scheduleBox .s-c-edit {
+  position: absolute;
+  bottom: 30px;
+  color: #f00;
+  right: 6px;
+  padding: 0 5px;
+  line-height: 22px;
+  border: 1px solid #f00;
+  border-radius: 5px;
+}
+.bigdata .scheduleBox .s-c-edit .triangle-right,
+.gridtable .scheduleBox .s-c-edit .triangle-right {
+  width: 6px;
+  height: 13px;
+  position: absolute;
+  top: 5px;
+  right: -6px;
+  background: url("../img/triangle-right.png");
+}
+.bigdata .scheduleBox .s-header,
+.gridtable .scheduleBox .s-header {
+  font-weight: bold;
+  background-color: #f4f4f4;
+  height: 50px;
+  border-bottom: 1px solid #ccc;
+}
+.bigdata .scheduleBox .s-box-left,
+.gridtable .scheduleBox .s-box-left {
+  position: relative;
+  width: 160px;
+  float: left;
+  border-right: 1px solid #ccc;
+}
+.bigdata .scheduleBox .s-box-left .s-header,
+.gridtable .scheduleBox .s-box-left .s-header {
+  position: relative;
+}
+.bigdata .scheduleBox .s-box-left .s-header .s-time,
+.gridtable .scheduleBox .s-box-left .s-header .s-time {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+.bigdata .scheduleBox .s-box-left .s-header .s-cinema,
+.gridtable .scheduleBox .s-box-left .s-header .s-cinema {
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+}
+.bigdata .scheduleBox .s-box-left .s-header:before,
+.gridtable .scheduleBox .s-box-left .s-header:before {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 165px;
+  top: 0;
+  left: 0;
+  background-color: #ccc;
+  display: block;
+  transform: rotate(-73deg);
+  transform-origin: top;
+}
+.bigdata .scheduleBox .s-box-left .s-name,
+.gridtable .scheduleBox .s-box-left .s-name {
+  height: 82px;
+  border-top: 1px solid #ccc;
+}
+.bigdata .scheduleBox .s-box-left .s-name.edit,
+.gridtable .scheduleBox .s-box-left .s-name.edit {
+  height: 164px;
+}
+.bigdata .scheduleBox .s-box-left .s-c-name,
+.gridtable .scheduleBox .s-box-left .s-c-name {
+  max-height: 40px;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  text-overflow: ellipsis;
+}
+.bigdata .scheduleBox .s-box-left .s-c-room,
+.gridtable .scheduleBox .s-box-left .s-c-room {
+  font-weight: bold;
+}
+.bigdata .scheduleBox .s-box-right,
+.gridtable .scheduleBox .s-box-right {
+  margin-left: 160px;
+  position: relative;
+}
+.bigdata .scheduleBox .s-box-right .s-header,
+.gridtable .scheduleBox .s-box-right .s-header {
+  width: auto;
+}
+.bigdata .scheduleBox .rows,
+.gridtable .scheduleBox .rows {
+  position: relative;
+  /*    &:last-child .info{
+            top:auto;
+            bottom:2px;
+
+          }*/
+}
+.bigdata .scheduleBox .rows .deleteline,
+.gridtable .scheduleBox .rows .deleteline {
+  height: 1px !important;
+  border-bottom: 1px dashed #f00;
+  overflow: hidden;
+  width: 100%;
+  position: absolute;
+  bottom: 41px;
+  z-index: 20;
+}
+.bigdata .scheduleBox .s-r-scale,
+.gridtable .scheduleBox .s-r-scale {
+  list-style: none;
+  white-space: nowrap;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  display: block;
+  z-index: 1;
+  overflow: hidden;
+}
+.bigdata .scheduleBox .s-r-scale.edit li,
+.gridtable .scheduleBox .s-r-scale.edit li {
+  height: 164px;
+}
+.bigdata .scheduleBox .s-r-scale .error,
+.gridtable .scheduleBox .s-r-scale .error {
+  color: #ff0000;
+  text-decoration: line-through;
+}
+.bigdata .scheduleBox .s-r-scale li,
+.gridtable .scheduleBox .s-r-scale li {
+  border-top: 1px solid #ccc;
+  height: 82px;
+  display: inline-block;
+  float: left;
+  border-right: 1px solid #ccc;
+  position: relative;
+}
+.bigdata .scheduleBox .s-r-scale li:last-child,
+.gridtable .scheduleBox .s-r-scale li:last-child {
+  border-right: none;
+}
+.bigdata .scheduleBox .s-r-scale .info,
+.gridtable .scheduleBox .s-r-scale .info {
+  position: absolute;
+  padding: 5px;
+  top: 2px;
+  background-color: #00BB9C;
+  color: #fff;
+  font-size: 12px;
+  z-index: 10;
+  border-radius: 4px;
+}
+.bigdata .scheduleBox .s-r-scale .info.edit,
+.gridtable .scheduleBox .s-r-scale .info.edit {
+  color: #333;
+  border: 1px solid #fff;
+  background: url("../img/cracking.png") no-repeat right top;
+  top: 84px;
+}
+.bigdata .scheduleBox .s-r-scale .info .mask,
+.gridtable .scheduleBox .s-r-scale .info .mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000;
+  opacity: 0.3;
+}
+.bigdata .scheduleBox .s-r-scale .info .movie-name,
+.gridtable .scheduleBox .s-r-scale .info .movie-name {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: bold;
+}
+.bigdata .scheduleBox .s-r-scale .info:hover,
+.gridtable .scheduleBox .s-r-scale .info:hover {
+  cursor: default;
+  box-shadow: #666666 0 0 5px;
+  width: auto !important;
+  min-width: 100px;
+  z-index: 11;
+}
+.bigdata .scheduleBox .s-h-scale,
+.gridtable .scheduleBox .s-h-scale {
+  height: 50px;
+  list-style: none;
+  white-space: nowrap;
+  padding: 25px 0 0 0;
+}
+.bigdata .scheduleBox .s-h-scale li,
+.gridtable .scheduleBox .s-h-scale li {
+  height: 25px;
+  display: inline-block;
+  border-right: 1px solid #ccc;
+  position: relative;
+}
+.bigdata .scheduleBox .s-h-scale li .hours,
+.gridtable .scheduleBox .s-h-scale li .hours {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  margin-left: -7px;
+  background-color: #f6f6f6;
+}
+.bigdata .scheduleBox .s-h-scale li .hours .tomorrow,
+.gridtable .scheduleBox .s-h-scale li .hours .tomorrow {
+  position: absolute;
+  left: 0;
+  bottom: 20px;
+  color: #999;
+  font-weight: normal;
+}
+.bigdata .scheduleBox .s-h-scale li:last-child,
+.gridtable .scheduleBox .s-h-scale li:last-child {
+  border-right: none;
+}
+.bigdata .scheduleBox .s-h-scale li:first-child .hours,
+.gridtable .scheduleBox .s-h-scale li:first-child .hours {
+  margin-left: 2px;
+}
+.bigdata .scheduleBox .s-h-scale li .minute,
+.gridtable .scheduleBox .s-h-scale li .minute {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+}
+.bigdata .scheduleBox .s-h-scale li .minute span,
+.gridtable .scheduleBox .s-h-scale li .minute span {
+  display: inline-block;
+  width: 16.666666%;
+  float: left;
+  border-right: 1px solid #ccc;
+  height: 5px;
+}
+.bigdata .scheduleBox .s-h-scale li .minute span:last-child,
+.gridtable .scheduleBox .s-h-scale li .minute span:last-child {
+  border-right: none;
+}
+.bigdata .scheduleBox .s-h-date,
+.gridtable .scheduleBox .s-h-date {
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  font-weight: bold;
+}
+.bigdata .lov-name,
+.gridtable .lov-name {
+  font-weight: normal;
+  display: block;
+}
+.bigdata .competitorList ul,
+.gridtable .competitorList ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.bigdata .competitorList li,
+.gridtable .competitorList li {
+  display: inline-block;
+}
+.bigdata .competitorList li label,
+.gridtable .competitorList li label {
+  font-weight: normal;
+  margin: 3px 5px;
+  overflow: hidden;
+  position: relative;
+  /* input {
+           position: absolute;
+           top: -500px;
+         }*/
+  /*&.active {
+          border: 1px solid @brand-primary;
+          background-image: url("../img/triangle.png");
+          background-repeat: no-repeat;
+          background-position: bottom right;
+        }*/
+}
+.bigdata .timer-two,
+.gridtable .timer-two {
+  text-align: center;
+}
+.bigdata .timer-two input,
+.gridtable .timer-two input {
+  width: 46%;
+  border: none;
+  text-align: center;
+  display: inline-block;
+  float: left;
+  outline: none;
+}
+.bigdata .timer-two span,
+.gridtable .timer-two span {
+  display: inline-block;
+  width: 8%;
+  float: left;
+}
+.bigdata .currentList ul,
+.gridtable .currentList ul {
+  padding: 0;
+  list-style: none;
+}
+.bigdata .currentList ul li,
+.gridtable .currentList ul li {
+  display: inline-block;
+  margin-right: 15px;
+}
+.bigdata .currentList ul li label,
+.gridtable .currentList ul li label {
+  font-weight: normal;
+  margin-bottom: 0;
+}
+.bigdata .sub-data-table,
+.gridtable .sub-data-table {
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  transition: all 0.3s;
+  background-color: #fff;
+  box-shadow: #999 0 0 10px;
+}
+.bigdata .sub-data-table .top-arrows,
+.gridtable .sub-data-table .top-arrows,
+.bigdata .sub-data-table .bottom-arrows,
+.gridtable .sub-data-table .bottom-arrows {
+  height: 9px;
+  width: 100%;
+  position: absolute;
+  background: center no-repeat;
+  z-index: 1;
+}
+.bigdata .sub-data-table .top-arrows,
+.gridtable .sub-data-table .top-arrows {
+  background-image: url('../img/top-arrows.png');
+  top: -9px;
+}
+.bigdata .sub-data-table .bottom-arrows,
+.gridtable .sub-data-table .bottom-arrows {
+  background-image: url('../img/bottom-arrows.png');
+  bottom: -9px;
+}

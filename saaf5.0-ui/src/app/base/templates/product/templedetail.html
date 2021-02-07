@@ -1,0 +1,555 @@
+<div ng-controller="templedetailCtrl"  class="gridtable">
+    <div>
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                    <button  type="button" ng-click="btnSave()"  permission-btn="" data-validate-form="addForm" class="btn btn-default" >
+                    </button>
+                </div>
+                <div class="btn-group btn-group-xs ">
+                </div>
+            </div>
+        </div>
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+
+                <form name="addForm" id="addForm" class=" mt10 pb5 bb oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+        
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>我的模板</span>
+                        </header>
+
+                         <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>货品形态</span></label>
+                                <div lookup-code="PLM_PRODUCT_FORM" required  name="productShape" ng-model="params.productShape"></div>
+                            </div>
+                        </div>
+                        
+               
+                        
+                        <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w150">日损耗率</span></label>
+                                <input type="text" id="description" class="form-control radius3"
+                                       ng-model="params.dayDamage" name="dayDamage" number>
+                            </div>
+                        </div>
+                        
+                          <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w150">税收分类编码</span></label>
+
+                                <div class="input-group input-group-xs" style="width: 100%;">
+                                    <input class="form-control radius3" name="rateCode" 
+                                    ng-model="item.rateCode" type="text">
+                                    <span class="input-group-btn ng-scope">
+                                        <button class="btn btn-default" ng-click="rateCodeShowMol()" type="button" >
+                                        <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                </div>       
+                            </div>
+                        </div>
+                        
+                                            <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>商品来源</span></label>
+                                <div lookup-code="PLM_PRODUCT_RESOURCE" required  name="productResource" ng-model="params.productResource"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110"><p style="color: red;display: inline;">*</p>计价单位(Unit):</span>
+                                </label>
+                                <div  lookup-code="PLM_PRODUCT_UNITPRICE" required name="countUnit" ng-model="params.countUnit"></div>
+                            </div>
+                        </div>
+
+                           <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>特别牌照</span></label>
+                                <div lookup-code="PLM_PRODUCT_YESORNO" required  name="specialLicence" ng-model="params.specialLicence"></div>
+                            </div>
+                        </div>
+                        
+                       <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>独有商品</span></label>
+                                <div lookup-code="PLM_PRODUCT_UNQUIE" required  name="uniqueCommodities" ng-model="params.uniqueCommodities"></div>
+                            </div>
+                        </div>
+                        
+                              <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>商品种类</span></label>
+                                <div lookup-code="PLM_PRODUCT_CATEGORY" required  name="productCategeery" ng-model="params.productCategeery" data-callback="productCategeeryChange"></div>
+                            </div>
+                        </div>
+                        
+                                <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>商品性质</span></label>
+                                <div lookup-code="PLM_PRODUCT_PRO" required  name="productProperties" ng-model="params.productProperties"></div>
+                            </div>
+                        </div>
+                        
+                             <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>专柜商品</span></label>
+                                <div lookup-code="PLM_PRODUCT_YESORNO" required  name="specialtyProduct" ng-model="params.specialtyProduct"></div>
+                            </div>
+                        </div>
+                        
+                              <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>危险品及易燃易爆</span></label>
+                                <div lookup-code="PLM_PRODUCT_YESORNO" required  name="dangerousProduct" ng-model="params.dangerousProduct"></div>
+                            </div>
+                        </div>
+                        
+                            <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>Buying Level</span></label>
+                                <div lookup-code="PLM_PRODUCT_BUYINGLEVEL" required  name="buyingLevel" ng-model="params.buyingLevel"></div>
+                            </div>
+                        </div>
+                        
+                                    <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>国际采购商品</span></label>
+                                <div lookup-code="PLM_PRODUCT_YESORNO" required  name="internationProduct" ng-model="params.internationProduct"></div>
+                            </div>
+                        </div>
+                        
+                           <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>POS弹出信息商品</span></label>
+                                <div lookup-code="PLM_PRODUCT_POSINFO" required  name="posInfo" ng-model="params.posInfo"></div>
+                            </div>
+                        </div>
+                        
+                                 <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w150">TOP商品</span></label>
+                                <input type="text" id="topProduct" class="form-control radius3"
+                                       ng-model="params.topProduct" name="topProduct" ng-init="params.topProduct='0'">
+                            </div>
+                        </div>
+                        
+                          <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>季节性商品</span></label>
+                                <div lookup-code="PLM_PRODUCT_SESION" required  name="sesionProduct" ng-model="params.sesionProduct"></div>
+                            </div>
+                        </div>
+                        
+                        
+                                     <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>蓝帽商品</span></label>
+                                <div lookup-code="PLM_PRODUCT_YESORNO" required  name="bluecapProduct" ng-model="params.bluecapProduct"></div>
+                            </div>
+                        </div>
+                        
+                      <!-- <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w150">Mother company</span></label>
+                                <input type="text" id="motherCompany" class="form-control radius3"
+                                       ng-model="params.motherCompany" name="motherCompany">
+                            </div>
+                        </div> -->
+                        
+                                 <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>VC商品</span></label>
+                                <div lookup-code="PLM_PRODUCT_YESORNO" required  name="vcProduct" ng-model="params.vcProduct"></div>
+                            </div>
+                        </div>
+                        
+                             <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>跨境商品</span></label>
+                                <div lookup-code="PLM_PRODUCT_YESORNO" required  name="crossborderProduct" ng-model="params.crossborderProduct"></div>
+                            </div>
+                        </div>
+                        
+                                 <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>COMPANY DELETION</span></label>
+                                <div lookup-code="MESSAGE_BLACKLIST_FLAG" required  name="companyDeletion" ng-model="params.companyDeletion"></div>
+                            </div>
+                        </div>
+                        
+                                <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>仓库来源</span></label>
+                                <div lookup-code="PLM_PRODUCT_WAREHOUSERESOURCE" required  name="warehouseResource" ng-model="params.warehouseResource"></div>
+                            </div>
+                        </div>
+                        
+                                           <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w150">单位规格</span></label>
+                                <input type="text" id="topProduct" class="form-control radius3"
+                                       ng-model="params.unit" name="unit" ng-init="params.unit='0'">
+                            </div>
+                        </div>
+                        
+                         <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w150">原产国</span></label>
+                                <input type="text" id="originCountry" class="form-control radius3"
+                                       ng-model="params.originCountry" name="originCountry">
+                            </div>
+                        </div>
+                        
+                                <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w150">仓库可出货天数</span></label>
+                                <input type="text" id="warehousePostDay" class="form-control radius3"
+                                       ng-model="params.warehousePostDay" name="warehousePostDay" number ng-init="params.warehousePostDay='120'">
+                            </div>
+                        </div>
+                        
+                                <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w150">仓库可收货天数</span></label>
+                                <input type="text" id="warehouseGetDay" class="form-control radius3"
+                                       ng-model="params.warehouseGetDay" name="warehouseGetDay" number ng-init="params.warehouseGetDay='100'">
+                            </div>
+                        </div>
+                        
+                                         <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>Power Brand OB专用</span></label>
+                                <div lookup-code="PLM_PRODUCT_POWEROB" required  name="powerOb" ng-model="params.powerOb"></div>
+                            </div>
+                        </div>
+                        
+                                   <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w150">Rang Ob专用</span></label>
+                                <input type="text" id="warehouseGetDay" class="form-control radius3"
+                                       ng-model="params.rangOb" name="rangOb"  ng-init="params.rangOb='Toothbrush'">
+                            </div>
+                        </div>
+                        
+                             <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>特殊要求</span></label>
+                                <div lookup-code="PLM_PRODUCT_SPECIALREQUEST" required  name="specialRequier" ng-model="params.specialRequier"></div>
+                            </div>
+                        </div>
+                        
+                               <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>TIER</span></label>
+                                <div lookup-code="PLM_PRODUCT_TIER" required  name="tier" ng-model="params.tier"></div>
+                            </div>
+                        </div>
+                        
+                                    <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>商品证照</span></label>
+                                <div lookup-code="PLM_PRODUCT_CERTIFICATE" required  name="productLicense" ng-model="params.productLicense"></div>
+                            </div>
+                        </div>
+                        
+                        
+                          <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w150"><i class="red">*</i>运输存储</span></label>
+                                <div lookup-code="PLM_PRODUCT_TRANS" required  name="transportStorage" ng-model="params.transportStorage"></div>
+                            </div>
+                        </div>
+                        
+                                       <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w150">Sales QTY</span></label>
+                                <input type="text" id="salesQty" class="form-control radius3" numberd
+                                       ng-model="params.salesQty" name="salesQty">
+                            </div>
+                        </div>
+                        
+                                        <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w150">参考货号</span></label>
+                                <input type="text" id="consultProductno" class="form-control radius3"
+                                       ng-model="params.consultProductno" name="consultProductno">
+                            </div>
+                        </div>
+                        
+                                        <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w150">参考货号名称</span></label>
+                                <!-- <input type="text" id="consultProductname" class="form-control radius3"
+                                       ng-model="params.consultProductname" name="consultProductname"> -->
+                                    <input class="form-control radius3" ng-model="params.consultProductname" readonly   name ="consultProductname" type="text"/>
+                                    <span class="input-group-btn ng-scope">
+                                        <button class="btn btn-default" ng-click="consultProductNameMol()" type="button" >
+                                        <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-4 col-md-5">
+                            <div class="input-group input-group-xs">
+                              <label class="input-group-addon bn">
+                                  <span class="w150">价格竞争商品:</span>
+                              </label>
+                              <div  lookup-code="PLM_PRODUCT_YESORNO" name="pricewarProduct"  ng-model="params.pricewarProduct" required></div>
+                              </div>
+                          </div>
+            
+                            <div class="form-group col-xs-4 col-md-5"">
+                              <div class="input-group input-group-xs">
+                              <label class="input-group-addon bn">
+                                  <span class="w150"><p style="color: red;display: inline;">*</p>参考时间段:</span>
+                              </label>
+                              <div style="display: flex">
+                                <div class="input-group input-group-xs" style="display: inline-block;font-size: 8px;" >
+                                  <input class="form-control" required name="consultDate" 
+                                    date-time-picker="" data-date-format="yyyy-mm-dd"
+                                    maxlength="20" data-min-view="2" 
+                                    ng-model="params.consultDate" >
+                                  </div>
+                                  -
+                                  <div class="input-group input-group-xs" style="display: inline-block;font-size: 8px;">
+                                    <input class="form-control" required name="consultEnddate" 
+                                    date-time-picker="" data-date-format="yyyy-mm-dd"
+                                    maxlength="20" data-min-view="2" 
+                                    ng-model="params.consultEnddate" >
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+            
+                              <div class="form-group col-xs-4 col-md-5"">
+                                <div class="input-group input-group-xs">
+                                  <label class="input-group-addon bn">
+                                      <span class="w150"><p style="color: red;display: inline;">*</p>是否乳制品:</span>
+                                  </label>
+                                  <div  lookup-code="PLM_PRODUCT_YESORNO" name="isDiaryproduct"  ng-model="params.isDiaryproduct" required></div>
+                                  </div>
+                                  
+                              </div>
+            
+                              <div class="form-group col-xs-4 col-md-5"">
+                                  <div class="input-group input-group-xs">
+                                    <label class="input-group-addon bn">
+                                        <span class="w150"><p style="color: red;display: inline;">*</p>商品可退货属性:</span>
+                                    </label>
+                                    <div  lookup-code="PLM_PRODUCT_RETURNPRO" name="productReturn"  ng-model="params.productReturn" required data-callback="productReturnChange"></div>
+                                  </div>
+                              </div>
+            
+                              <div class="form-group col-xs-4 col-md-5">
+                                <div class="input-group input-group-xs">
+                                  <label class="input-group-addon bn">
+                                      <span class="w150">退货条件:</span>
+                                  </label>
+                                  <div id="conditionId" lookup-code="PLM_PRODUCT_RETURNCONDITION" name="condition" disabled  ng-model="params.condition"></div>
+                                </div>
+                              </div>
+
+
+                              <div class="form-group col-xs-12 col-md-12" style="padding-left: 0;">
+
+                                <div class="form-group col-xs-4 col-md-5" ng-show="productCategeeryChangeFlag">
+                                    <div class="input-group input-group-xs">
+                                      <label class="input-group-addon bn">
+                                          <span class="w150">All Tier:</span>
+                                      </label>
+                                      <input style="vertical-align: top;" name="allRegion" type="checkbox" ng-model="params.allTier" ng-false-value="'N'" ng-true-value="'Y'" ng-click="allTierChange()"><span style="font-size: 12px; vertical-align: middle;"> All Region </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-4 col-md-5" ng-show="productCategeeryChangeFlag">
+                                    <div class="input-group input-group-xs">
+                                      <label class="input-group-addon bn">
+                                          <span class="w150">Tier 1:</span>
+                                      </label>
+                                      <div class="input-group input-group-xs" ng-click="getTierOne()">
+                                        <input style="vertical-align: top;" name="TierOne" value="N" type="checkbox" ng-checked="params.Tier1&&params.Tier1.indexOf('N')!== -1"><span style="font-size: 12px; vertical-align: middle;"> N </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TierOne" value="S" type="checkbox" ng-checked="params.Tier1&&params.Tier1.indexOf('S')!== -1"><span style="font-size: 12px; vertical-align: middle;"> S </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TierOne" value="E" type="checkbox" ng-checked="params.Tier1&&params.Tier1.indexOf('E')!== -1"><span style="font-size: 12px; vertical-align: middle;"> E </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TierOne" value="W" type="checkbox" ng-checked="params.Tier1&&params.Tier1.indexOf('W')!== -1"><span style="font-size: 12px; vertical-align: middle;"> W </span>
+                                      </div>
+                                    </div>
+                                </div>
+              
+                                
+              
+                                <div class="form-group col-xs-4 col-md-5" ng-show="productCategeeryChangeFlag">
+                                    <div class="input-group input-group-xs">
+                                      <label class="input-group-addon bn">
+                                          <span class="w150">Tier 2:</span>
+                                      </label>
+                                      <div class="input-group input-group-xs" ng-click="getTierTow()">
+                                        <input style="vertical-align: top;" name="TierTow" value="N" type="checkbox" ng-checked="params.Tier2&&params.Tier2.indexOf('N')!== -1"><span style="font-size: 12px; vertical-align: middle;"> N </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TierTow" value="S" type="checkbox" ng-checked="params.Tier2&&params.Tier2.indexOf('S')!== -1"><span style="font-size: 12px; vertical-align: middle;"> S </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TierTow" value="E" type="checkbox" ng-checked="params.Tier2&&params.Tier2.indexOf('E')!== -1"><span style="font-size: 12px; vertical-align: middle;"> E </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TierTow" value="W" type="checkbox" ng-checked="params.Tier2&&params.Tier2.indexOf('W')!== -1"><span style="font-size: 12px; vertical-align: middle;"> W </span>
+                                      </div>
+                                    </div>
+                                </div>
+              
+                                <div class="form-group col-xs-4 col-md-5" ng-show="productCategeeryChangeFlag">
+                                    <div class="input-group input-group-xs">
+                                      <label class="input-group-addon bn">
+                                          <span class="w150">Tier 3/4/5:</span>
+                                      </label>
+                                      <div class="input-group input-group-xs" ng-click="getTierTFF()">
+                                        <input style="vertical-align: top;" name="TierTFF" value="N" type="checkbox" ng-checked="params.tier345&&params.tier345.indexOf('N')!== -1"><span style="font-size: 12px; vertical-align: middle;"> N </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TierTFF" value="S" type="checkbox" ng-checked="params.tier345&&params.tier345.indexOf('S')!== -1"><span style="font-size: 12px; vertical-align: middle;"> S </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TierTFF" value="E" type="checkbox" ng-checked="params.tier345&&params.tier345.indexOf('E')!== -1"><span style="font-size: 12px; vertical-align: middle;"> E </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TierTFF" value="W" type="checkbox" ng-checked="params.tier345&&params.tier345.indexOf('W')!== -1"><span style="font-size: 12px; vertical-align: middle;"> W </span>
+                                      </div>
+                                    </div>
+                                </div>
+              
+                                <div class="form-group col-xs-6 col-md-12" ng-show="productCategeeryChangeFlag">
+                                    <div class="input-group input-group-xs">
+                                      <label class="input-group-addon bn">
+                                          <span class="w150">Store Type:</span>
+                                      </label>
+                                      <div class="input-group input-group-xs" ng-click="getstoreType()">
+                                        <!-- <input style="vertical-align: top;" name="storeType" ng-click="getstoreTypeAll()" ng-model="storeTypeAll" ng-false-value="'N'" ng-true-value="'Y'"  type="checkbox"><span style="font-size: 12px; vertical-align: middle;"> ALL </span> -->
+                                        <input style="vertical-align: top;" name="storeType" value="Super Star/Star" type="checkbox" ng-checked="params.storeType&&params.storeType.indexOf('Super Star/Star')!== -1"><span style="font-size: 12px; vertical-align: middle;"> Super Star/Star </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="storeType" value="Anchor/Basic" type="checkbox" ng-checked="params.storeType&&params.storeType.indexOf('Anchor/Basic')!== -1"><span style="font-size: 12px; vertical-align: middle;"> Anchor/Basic </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="storeType" value="Baby/Embryo" type="checkbox" ng-checked="params.storeType&&params.storeType.indexOf('Baby/Embryo')!== -1"><span style="font-size: 12px; vertical-align: middle;"> Baby/Embryo </span>
+                                      </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-6 col-md-12" ng-show="productCategeeryChangeFlag">
+                                    <div class="input-group input-group-xs">
+                                      <label class="input-group-addon bn">
+                                          <span class="w150">Trade Zone:</span>
+                                      </label>
+                                      <div class="input-group input-group-xs" ng-click="getTradeZone()">
+                                        <!-- <input style="vertical-align: top;" ng-click="tradeZoneAll()" ng-model="TradeZoneAll" name="TradeZoneAll" ng-false-value="'N'" ng-true-value="'Y'"  type="checkbox"><span style="font-size: 12px; vertical-align: middle;"> ALL </span> -->
+                                        <input style="vertical-align: top;" name="TradeZone" value="DC" type="checkbox" ng-checked="params.tradeZone&&params.tradeZone.indexOf('DC')!== -1"><span style="font-size: 12px; vertical-align: middle;"> DC </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TradeZone" value="CC" type="checkbox" ng-checked="params.tradeZone&&params.tradeZone.indexOf('CC')!== -1"><span style="font-size: 12px; vertical-align: middle;"> CC </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TradeZone" value="RC" type="checkbox" ng-checked="params.tradeZone&&params.tradeZone.indexOf('RC')!== -1"><span style="font-size: 12px; vertical-align: middle;"> RC </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TradeZone" value="SC" type="checkbox" ng-checked="params.tradeZone&&params.tradeZone.indexOf('SC')!== -1"><span style="font-size: 12px; vertical-align: middle;"> SC </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TradeZone" value="OC" type="checkbox" ng-checked="params.tradeZone&&params.tradeZone.indexOf('OC')!== -1"><span style="font-size: 12px; vertical-align: middle;"> OC </span>
+                                        <input style="vertical-align: top;margin-left: 5px;" name="TradeZone" value="RC+OC" type="checkbox" ng-checked="params.tradeZone&&params.tradeZone.indexOf('RC+OC')!== -1"><span style="font-size: 12px; vertical-align: middle;"> RC+OC </span>
+                                      </div>
+                                    </div>
+                                </div>
+              
+                              </div>
+                        
+                        
+                        <div class="row"></div>
+
+
+                        <!--<hr width="100%">-->
+             			<footer style="text-align: center;margin-top: 30px;">
+							<button class="btn btn-primary" validate-form-btn="addForm" ng-click="btnSave()">应用模板</button>
+							<button class="btn btn-default" ng-click="gotoLogin()">取消</button>
+						</footer>
+
+               
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div lov-list="subpool" role="dialog" data-title="请选择父类型" id="prandSystemCode" ng-model="code1" class="  "
+         data-url="querylookupType"
+         data-params='{}'
+         data-return-key="params.parentLookupTypeId"
+         data-return-value="addParam.lookupType"
+         data-keys="{'key':'lookupTypeId','value':'lookupType','name':'快码类型'}"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-other-column="[{'name':'描述','key':'description'},{'name':'系统代码','key':'systemCode'}]"
+         data-show-index="false"
+         data-search-key="[{'key':'lookupType_like','placeholder':'快码类型'}]"
+    >
+    </div>
+    <div lov-list="findByParentLov" role="dialog" data-title="请选择父值" id="findByParentModel" ng-model="code2"
+         data-url="findByParent"
+         data-callback="findByParentCallback"
+         data-dynamic-params='{lookupTypeId:params.parentLookupTypeId}'
+         data-keys="{'key':'lookupValuesId','value':'meaning','name':'描述'}"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-other-column="[{'name':'代码','key':'lookupCode'}]"
+         data-show-index="false"
+         data-search-key="[{'key':'lookupType_like','placeholder':'快码类型'}]"
+    >
+    </div>
+
+    <!-- 参考名称 -->
+    <div data-auto-request="true" data-callback="referenceProductNameReturn" data-checked-type="radio"
+         data-dynamic-params='' data-keys="{'key':'productName','value':'productName','name':'参考货品名称'}"
+         data-params="{orderStatus:'6'}"
+         data-other-column="[{'name':'参考货号','key':'plmCode' },]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'productName','placeholder':'参考货品名称'}]"
+         data-show-index="false"
+         data-title="选择参考货品名称"
+         data-type="competitor"
+         data-url="FindProductList"
+         id="consultProductNameMol"
+         lov-list="consultProductPlnDeptLov"
+         ng-model="current.productName"
+         role="dialog"
+    ></div>
+
+    <!--税收分类编码选择-->
+    <div data-auto-request="true" data-callback="rateCodeMolReturn" data-checked-type="radio"
+         data-dynamic-params='' data-keys="{'key':'plmTaxTypeCode','value':'plmTaxTypeCode','name':'税收分类编码'}"
+         data-params="{}"
+         data-other-column="[{'name':'税收分类名称','key':'plmTaxTypeName' },]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'plmTaxTypeName','placeholder':'税收分类名称'}]"
+         data-show-index="false"
+         data-title="选择税收分类编码"
+         data-type="competitor"
+         data-url="findPlmTaxTypeListInfo"
+         id="rateCodeShowMolID"
+         lov-list="rateCodeLov"
+         ng-model="current.plmTaxTypeCode"
+         role="dialog"
+    ></div>
+</div>

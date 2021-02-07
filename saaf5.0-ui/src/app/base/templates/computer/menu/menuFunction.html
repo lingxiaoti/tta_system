@@ -1,0 +1,579 @@
+<div ng-controller="menuFunctionCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <!--<div user-button data-des="此节点必需－用户的按钮指令"></div>-->
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div permission-buttons="btnNew,btnDel,btnSave" class="btn-group btn-group-xs pull-right ml10">
+
+                    <button class="btn btn-default" ng-click="btnDel()" ng-disabled="!showinfo">
+                    </button>
+                    <button class="btn btn-default"  ng-click="btnSave(savedataForm)" ng-disabled="!showinfo">
+
+                    </button>
+                </div>
+                <div class="btn-group btn-group-xs ">
+                    <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <!---------------------  / .按钮  --->
+        <div class="bg-white h" main-scroll-style>
+            <!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+            <div class="col-xs-3 br" style="margin-right: -1px;" data-des="此节点必需－用户计算滚动区域高度">
+                <div class="input-group-xs col-xs-12 pt15 pb15 " ng-show="currentResp.isAdmin">
+                    <label>请选择系统</label>
+                    <div data-callback="changeSys" lookup-code="SYSTEM_CODE" ng-model="treeParams.systemCode"
+                         data-first-text="全部系统"></div>
+                    <div class="pt5">
+                        <label ng-repeat="item in FROM_TYPE.dataList" class="mr10" >
+                            <input type="checkbox" name="FROM_TYPE" value="{{ item.lookupCode }}"
+                                   ng-click="changeFormType()"  ng-model="fromTypes[item.lookupCode]"> {{ item.meaning }}</label>
+
+                    </div>
+                    <form class="pt5  input-group input-group-xs" ng-submit="treeSearch()">
+
+                        <input class="form-control radius3" name="searchTreeParam" ng-keyup="treeSearch()"
+                               ng-model="searchTreeParam" placeholder="请输入菜单名">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary"  ><i
+                                    class="fa fa-search"></i></button>
+                        </span>
+                    </form>
+                </div>
+                <div class="cb"></div>
+                <div main-scroll-style ng-style="styles">
+                    <div class=" nicescroll-height " ng-nicescroll
+                         nice-option="{cursorcolor: '#999',touchbehavior:false,cursorwidth:10,zindex:10}"
+                         data-des="此节点必需-滚动内容及指令">
+                        <ul style="margin-bottom: 10px" z-tree="" class="ztree p10" id="menuTree" ng-show="!showTree"
+                            data-params="{{ treeParams }}"
+                            data-extend-name='{"name":"menuName",extend:"fromType",style:"color:#999;margin-left:5px;"}'
+                            data-url="menuList"
+                            data-watch="true"
+                            data-keys='{"name":"extendName"}'
+                            data-simpledata='{"enable":"true","idKey":"menuId","pIdKey":"menuParentId"}'>
+                        </ul>
+                        <ul sie-ztree="newTree" style="margin-bottom: 10px;" class="ztree pt10 pb10" id="newTree" ng-show="showTree"
+                            data-clear-data="false"
+                            ng-data-source="newTreeArray"
+                            data-keys='{"name":"extendName"}'
+                            data-simpledata='{"enable":"true","idKey":"menuId","pIdKey":"menuParentId"}'
+                            data-page-rows="10000"
+                            data-expand-node="true"
+                            data-node-click="treeNodeClick"
+
+                        >
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-xs-9 bl h" ng-show="showinfo">
+                <h4>菜单信息</h4>
+                <div class="pb20">
+                    <form class="" novalidate name="savedataForm" id="savedataForm"
+                          ng-submit="save(savedataForm)">
+                        <input type="hidden" ng-model="currentData.menuId">
+
+                        <div class="form-group col-xs-6 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red ">*</i>菜单名称</span></label>
+                                <input type="text" class="form-control radius3" id="currentDataMenuName" name="currentDataMenuName"
+                                       required minlength="2" ng-model="currentData.menuName">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red ">* </i>菜单编码</span></label>
+                                <input type="text" class="form-control radius3" required
+                                       ng-minlength="2" id="currentDataMenuCode" name="currentDataMenuCode"
+                                       ng-model="currentData.menuCode">
+									<span class="input-group-btn">
+									<button type="button" class="btn btn-warning" ng-click="currentPinyin()">简拼</button>
+								</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">菜单提示信息</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-minlength="2"
+                                       ng-model="currentData.menuDesc">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-4">
+
+
+                            <div z-tree-select="menuParentId"
+                                 name="menuParentName"
+                                 ng-value="currentData.menuParentName"
+                                 ng-key="currentData.menuParentId"
+                                 ng-tree-data="zTreeData.Json"
+                                 data-label="请选择上级菜单"
+                                 data-input-readonly="true"
+                                 data-required="true"
+                                 data-keys='{"name":"menuName"}'
+                                 data-simpledata='{"enable":"true","idKey":"menuId","pIdKey":"menuParentId"}'
+                                 data-append-node='{"menuName":"－－－顶层菜单－－－","menuId":"0"}'
+                            ></div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">菜单序号</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="currentData.orderNo">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>访问来源</span></label>
+
+                                <div lookup-code="FROM_TYPE" ng-model="currentData.fromType" required="" name="currentDatafromType"></div>
+
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>系统编码</span></label>
+                                <div lookup-code="SYSTEM_CODE" ng-model="currentData.systemCode" required="" name="currentDatasystemCode"
+                                      ng-disabled="systemCodeDisabled"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-12 col-md-8">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">功能url</span></label>
+                                <input type="text" class="form-control radius3" name="htmlUrl"
+                                       disable-valid-styling="true" ng-model="currentData.htmlUrl">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-8">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">菜单图标</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="currentData.imageLink">
+                                <span btn-font-icon="" id="fonticonA" class="input-group-btn"
+                                      ng-model="currentData.imageLink"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">菜单图标颜色</span></label>
+                                <input type="color" class="form-control radius3" placeholder="目前仅在主菜单支持该功能"
+                                       ng-model="currentData.imageColor">
+                            </div>
+                        </div>
+
+                        <!--<div class="form-group col-xs-6 col-md-8">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">APP端图标</span></label>
+                                <input type="text" class="form-control radius3" placeholder="请使用4.6版本font Awesome"
+                                       ng-model="currentData.imageLinkApp">
+                                <span class="input-group-btn">
+                                    <a class="btn btn-sm btn-warning" href="http://fontawesome.io/icons/"
+                                       target="_blank">查看图标</a></span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">APP菜单名称</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="currentData.menuShortName">
+                            </div>
+                        </div>-->
+                        <div class="form-group col-xs-6   col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red ">*</i>是否生效</span></label>
+                                <select required ng-model="currentData.enabled"  name="currentDataenabled" class="form-control radius3">
+                                    <option value="N">否</option>
+                                    <option value="Y">是</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red ">*</i>生效日期</span></label>
+                                <input type="text" class="form-control radius3"
+                                       required date-time-picker="" data-date-format="yyyy-mm-dd" data-min-View="2"
+                                       data-start-view="2"
+                                       data-enddate="{{currentData.endDateActive}}" name="currentData_startDateActive"
+                                       ng-model="currentData.startDateActive " id="currentData_startDateActive">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">失效日期</span></label>
+                                <input type="text" class="form-control radius3"
+                                       id="currentData_endDateActive" disable-valid-styling="true"
+                                       date-time-picker="" data-date-format="yyyy-mm-dd" data-min-View="2"
+                                       data-stratdate="{{currentData.startDateActive}}"
+                                       name="currentData_endDateActive"
+                                       ng-model="currentData.endDateActive ">
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </form>
+                </div>
+
+
+                <div class="clearfix w " ng-show="currentData.htmlUrl.length>2">
+                    <hr class="bt mt20"/>
+                    <h4>已有功能
+                        <button class="btn btn-warning btn-xs ml10 " ng-click="addFunc()"><i
+                                class="fa fa-plus"></i>新增资源
+                        </button>
+                    </h4>
+                    <div class="col-xs-12">
+                        <div class="p15 func-list">
+                            <a   ng-repeat="item in currentData.btndata" title="{{item.resourceCode  + '  ' +item. resourceDesc}}"
+                                    class="btn btn-default btn-xs ml10  pr">
+                                <i class="iconfont icon-cuowu angle-radius" style="z-index: 10"
+                                   ng-click="removeFunc(item,$event)"></i>
+                                <div class="pl10 pr10"><i class="{{ item.resIcon}}"></i>{{item.resourceName}}</div>
+                            </a>
+                            　
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+
+        </div>
+    </div>
+    <div class="modal fade" id="addFuncModal" data-des="添加功能" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        新增资源
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm" ng-submit="addFuncMenu(funcMenuForm.$valid)">
+                    <div class="modal-body">
+
+                        <!--<div class="menu-button-list">
+                            <ul>
+                                <li ng-repeat="item in buttonList"><a href="javascript:" class="btn btn-xs btn-default">{{ item.bbdName}}</a></li>
+                            </ul>
+                        </div>-->
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">*</i>选择按钮</span></label>
+                                <select ng-model="FuncData.button" ng-change="selectedBtn()"
+                                        ng-options="item.bbdName for item in buttonList" class="form-control radius3"
+                                        required>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">*</i>资源类型</span></label>
+
+                                <div lookup-code="RESOURCE_TYPE" id="RESOURCE_TYPE" required=""
+                                     ng-model="FuncData.resourceType"></div>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">资源编码</span></label>
+                                <input type="text" class="form-control radius3"
+                                       name="resourceCode" readonly
+                                       ng-model="FuncData.resourceCode">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">图标代码</span></label>
+                                <input type="text" class="form-control radius3"
+                                       name="buttonUrl" readonly
+                                       ng-model="FuncData.resIcon">
+								<span class="input-group-addon">
+									<i class="{{ FuncData.resIcon }}"></i>
+								</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">按钮URL</span></label>
+                                <input type="text" class="form-control radius3"
+                                       name="buttonUrl"
+                                       ng-model="FuncData.buttonUrl">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">资源描述</span></label>
+                                <input type="text" class="form-control radius3"
+                                       name="resourceDesc"
+                                       ng-model="FuncData.resourceDesc">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12 none">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span>CSS样式</span></label>
+                                <!--<input type="text" class="form-control radius3" disable-valid-styling="true"-->
+                                <!--ng-model="FuncData.buttonDesc" placeholder="请输入ICON 样式">-->
+                                <select class="form-control radius3" disable-valid-styling="true"
+                                        ng-model="FuncData.buttonDesc">
+                                    <option value="fa fa-plus">新增</option>
+                                    <option value="fa fa-minus">删除</option>
+                                    <option value="fa fa-pencil">修改</option>
+                                    <option value="fa fa-search">搜索</option>
+                                    <option value="fa fa-save">保存</option>
+                                    <option value="fa fa-undo">重置</option>
+                                    <option value="fa fa-download">导出</option>
+                                    <option value="fa fa-print">打印</option>
+                                    <option value="fa fa-envelope-o">信息</option>
+                                    <option value="fa fa-trash-o">垃圾桶</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    ng-click="dataTable.getData()">取消
+                            </button>
+                            <button type="submit" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal fade" id="AddModal" data-des="新增菜单" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <form name="addModalForm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close"
+                                data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            新增菜单
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>系统编码</span></label>
+                                <div lookup-code="SYSTEM_CODE" ng-model="AddData.systemCode" data-callback="changeSys" name="systemCode"
+                                     required=""></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-6">
+
+                            <div z-tree-select="addNewTree"
+                                 name="addNewTree"
+                                 ng-value="AddData.menuParentName"
+                                 ng-key="AddData.menuParentId"
+                                 ng-tree-data="zTreeData.Json"
+                                 data-label="上级菜单"
+                                 data-input-readonly="true"
+                                 data-required="true"
+                                 data-keys='{"name":"menuName"}'
+                                 data-simpledata='{"enable":"true","idKey":"menuId","pIdKey":"menuParentId"}'
+                                 data-append-node='{"menuName":"－－－顶层菜单－－－","menuId":"0"}'
+                            ></div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red ">*</i>菜单名称</span></label>
+                                <input type="text" class="form-control radius3" id="menuName"
+                                       name="menuName"
+                                       required minlength="2" ng-model="AddData.menuName">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red ">* </i>菜单编码</span></label>
+                                <input type="text" class="form-control radius3" required
+                                       ng-minlength="2" id="menuCode"    name="menuCode"
+                                       ng-model="AddData.menuCode">
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-warning" ng-click="addPinyin()">简拼</button>
+								</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">菜单提示信息</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-minlength="2"
+                                       ng-model="AddData.menuDesc">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>访问来源</span></label>
+                                <div lookup-code="FROM_TYPE" ng-model="AddData.fromType" required="" id="fromType"    name="fromType"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">菜单序号</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="AddData.orderNo">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-12 col-md-8">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">功能url</span></label>
+                                <input type="text" class="form-control radius3" name="htmlUrl"
+                                       disable-valid-styling="true" ng-model="AddData.htmlUrl">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-8">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">菜单图标</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="AddData.imageLink">
+                                <span btn-font-icon="" id="imageLink" class="input-group-btn"
+                                      ng-model="AddData.imageLink"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">菜单图标颜色</span></label>
+                                <input type="color" class="form-control radius3" placeholder="目前仅在主菜单支持该功能"
+                                       ng-model="AddData.imageColor">
+                            </div>
+                        </div>
+
+                        <!--<div class="form-group col-xs-6 col-md-8">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">APP端图标</span></label>
+                                <input type="text" class="form-control radius3" placeholder="请使用4.6版本font Awesome"
+                                       ng-model="AddData.imageLinkApp">
+                                <span class="input-group-btn">
+                                    <a class="btn btn-sm btn-warning" href="http://fontawesome.io/icons/"
+                                       target="_blank">查看图标</a></span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">APP菜单名称</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="AddData.menuShortName">
+                            </div>
+                        </div>-->
+                        <div class="form-group col-xs-6   col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red ">*</i>是否生效</span></label>
+                                <select required ng-model="AddData.enabled" class="form-control radius3"  id="enabled"  name="enabled">
+                                    <option value="N">否</option>
+                                    <option value="Y">是</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red ">*</i>生效日期</span></label>
+                                <input type="text" class="form-control radius3"
+                                       required date-time-picker="" data-date-format="yyyy-mm-dd" data-min-View="2"
+                                       data-start-view="2"     name="AddData_startDateActive"
+                                       data-enddate="{{AddData.endDateActive}}"
+                                       ng-model="AddData.startDateActive " id="AddData_startDateActive">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">失效日期</span></label>
+                                <input type="text" class="form-control radius3"
+                                       id="AddData_endDateActive" disable-valid-styling="true"
+                                       date-time-picker="" data-date-format="yyyy-mm-dd" data-min-View="2"
+                                       data-stratdate="{{AddData.startDateActive}}"
+                                       ng-model="AddData.endDateActive ">
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button   type="button" validate-form-btn="addModalForm"  ng-click="addMenu()"
+                                class="btn btn-warning btn-sm">
+                            <span class="fa fa-plus"> 确定新增</span></button>
+                        <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal"
+                                aria-label="Close"><span class="fa ">取消</span>
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </form>
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" lov-list="lovResource" id="lovResource" data-url="resourceFind"
+         ng-model="current.resource"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-key="FuncData.buttonUrl"
+         data-return-value="FuncData.resourceName"
+         data-keys="{'key':'resourceCode','value':'resourceName'}"
+         data-other-column="[{'name':'编码','key':'resourceCode'}]"
+         data-search-key="{'key':'resourceName','placeholder':'请输入要搜索的编码名'}"
+    ></div>
+</div>

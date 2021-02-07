@@ -1,0 +1,19 @@
+server:
+  port: 8111
+spring:
+  application:
+    name:  1011_saaf-message-mq-server
+  jmx:
+    enabled: false
+#  zipkin:
+#    base-url: http://admin:admin@139.159.227.77:8761
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://admin:admin@${eureka.instance.hostname}:${eureka.instance.port}/eureka/ #多个注册中心用逗号分隔
+  instance:
+    #hostname: 139.159.227.77
+    hostname: 127.0.0.1
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    prefer-ip-address: true
+    port: 8760

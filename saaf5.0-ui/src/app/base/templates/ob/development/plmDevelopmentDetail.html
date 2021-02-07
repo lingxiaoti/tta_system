@@ -1,0 +1,938 @@
+<div ng-controller="plmDevelopmentDetailCtrl" class="bigdata">
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" permission-btn="btnSave"   ng-click="btnSave(plmDevelopmentInfoForm.$invalid,'DEVELOPING')" data-validate-form="plmDevelopmentInfoForm" ng-disabled="headerData.developmentBillStatus==='ABANDONED'"></button>
+                <button class="btn btn-default" permission-btn="KFWC"   ng-click="KFWC(plmDevelopmentInfoForm.$invalid)" ng-disabled = "!headerData.plmDevelopmentInfoId||headerData.developmentBillStatus==='ABANDONED'" data-validate-form="plmDevelopmentInfoForm"></button>
+                <button class="btn btn-default" permission-btn="KFWCDBC"   ng-click="KFWCDBC(plmDevelopmentInfoForm.$invalid)" ng-disabled = "!headerData.plmDevelopmentInfoId||headerData.developmentBillStatus==='ABANDONED'" data-validate-form="plmDevelopmentInfoForm"></button>
+                <button class="btn btn-default" permission-btn="btnDiscard"   ng-click="btnDiscard()" ng-disabled = "!headerData.plmDevelopmentInfoId||headerData.developmentBillStatus==='ABANDONED'||headerData.productStatus==='INTRODUCING'||headerData.productStatus==='COMPLETED'"></button>
+            </div>
+
+
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+            <!--------------------- 输入表单  --->
+
+            <div class=" mt10 pb5  oh"
+                 data-des="此节点必需－用于识别输入表单的指令">
+
+                <form id="plmDevelopmentInfoForm" name="plmDevelopmentInfoForm">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>基本信息</span>
+                    </header>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">OB_ID</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.obId">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>项目名称</span></label>
+                            <input type="text" class="form-control radius3 readonly-white" required name="projectName" ng-model="headerData.projectName" readonly>
+                            <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" data-target="#projectNameWindow" ng-disabled="headerData.developmentBillStatus=='ABANDONED'||headerData.plmDevelopmentInfoId"
+                                    class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">Range</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3"
+                                   ng-model="headerData.projectRange"
+                                   ng-disabled="true"
+                            >
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">招标编码</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3"
+                                   ng-model="headerData.biddingCode"
+                                   ng-disabled="true"
+                            >
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>产品名称</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3" required
+                                   title="{{headerData.productName}}"
+                                   ng-disabled="headerData.developmentBillStatus=='ABANDONED'"
+                                   ng-model="headerData.productName">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>产品品类</span>
+                            </label>
+
+                            <div lookup-code="PLM_PROJECT_PRODUCT_CATEGORY" data-required="true" ng-model="headerData.productCategory"
+                                 ng-disabled="headerData.developmentBillStatus=='ABANDONED'"
+                                 required  id="productCategory"  name="productCategory">
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>生产商名称</span></label>
+                            <input type="text" class="form-control radius3 readonly-white"
+                                   title="{{headerData.producer}}" required
+                                   name="producer" ng-model="headerData.producer" readonly>
+                            <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" data-target="#producerInfoId"
+                                    ng-disabled="headerData.developmentBillStatus=='SUBMITTED'||headerData.developmentBillStatus=='ABANDONED'"
+                                    class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i> 是否特批</span>
+                            </label>
+
+                            <div lookup-code="YES_OR_NO" data-required="true" ng-model="headerData.specialApprovalFlag"
+                                 ng-disabled="headerData.developmentBillStatus=='ABANDONED'"
+                                 required  id="specialApprovalFlag"  name="specialApprovalFlag">
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">货品名称(CN)</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.productNameCn">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">货品名称(EN)</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.productNameEn">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">供应商类型</span>
+                            </label>
+
+                            <div lookup-code="PLM_SUPPLIER_TYPE" data-required="true" ng-model="headerData.supplierType"
+                                 ng-disabled="true"
+                                 required  id="supplierType" name="supplierType">
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">供应商名称</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3"
+                                   ng-model="headerData.supplierName"
+                                   ng-disabled="true"
+                            >
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">品牌名称(CN)</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3"
+                                   ng-model="headerData.brandCn"
+                                   ng-disabled="true"
+                            >
+
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">货号</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3"
+                                   ng-model="headerData.productNo"
+                                   ng-disabled="true"
+                            >
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">Barcode</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3"
+                                   ng-disabled="headerData.developmentBillStatus=='ABANDONED'"
+                                   ng-model="headerData.barcode"
+                            >
+
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">生效日期</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.startDate">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"> 单据状态</span>
+                            </label>
+
+                            <div lookup-code="PLM_OB_PRODUCT_BILL_STATUS" data-required="true" ng-model="headerData.developmentBillStatus"
+                                 required  id="developmentBillStatus" ng-disabled="true" name="developmentBillStatus">
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100"> 产品状态</span>
+                            </label>
+
+                            <div lookup-code="PLM_DEVE_PRODUCT_STATUS" data-required="true" ng-model="headerData.productStatus"
+                                 required  id="productStatus" ng-disabled="true" name="productStatus">
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">产品创建人</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.productCreator">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">失效日期</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.endDate">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">创建日期</span>
+                            </label>
+
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="headerData.creationDate">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-8 col-md-9">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">备注</span>
+                            </label>
+
+                            <input type="text" class="form-control radius3"
+                                   ng-disabled="headerData.developmentBillStatus=='ABANDONED'"
+                                   ng-model="headerData.remarks">
+                        </div>
+                    </div>
+
+
+                    <div class="row"></div>
+
+                </form>
+            </div>
+
+
+            <div class="col-xs-12 col-md-12 br p0">
+
+                <ul id="tab" class="nav nav-tabs">
+
+                    <li class="active">
+                        <a href="#productQaFile" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>产品资质文件</label></a>
+                    </li>
+
+                    <li>
+                        <a href="#productIngredients" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>产品成分表</label></a>
+                    </li>
+
+                    <li>
+                        <a href="#packageSpecification" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>包装规格书</label></a>
+                    </li>
+
+                    <li id="batchInfoId">
+                        <a href="#batchInfo" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>批次信息</label></a>
+                    </li>
+
+                </ul>
+
+                <div id="tabContent" class="tab-content">
+
+                    <!-- 产品明细  class = " active " -->
+                    <div class="tab-pane fade in active col-md-12" id="productQaFile">
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+
+                            <div class="btn-group btn-group-xs pull-right" ng-if="true">
+                                <div class="btn-group btn-group-xs" ng-if="true">
+
+                                    <button type="button" ng-click="saveProductQaSummary()" class="btn btn-default btn-xs"
+                                            id="addProductDetailButton"
+                                            ng-disabled = "!headerData.plmDevelopmentInfoId||headerData.developmentBillStatus==='ABANDONED'"
+                                    >
+                                        <i class="fa fa-save">  保存</i>
+                                    </button>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="data-table">
+                            <table
+                                    class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                <tr class="text-center">
+                                    <!--<th>序号</th>-->
+                                    <th>文件类型</th>
+                                    <th>是否不适用</th>
+                                    <th>文件数量</th>
+                                    <th>驳回原因</th>
+                                    <th>备注</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-center" ng-repeat="row in productQaFileDataTable"
+                                    ng-class="{'active':productQaFileDataTable.selectRow==$index}"
+                                    ng-click="productQaFileDataTable.selectRow=$index">
+                                    <!--<td>{{$index+1}}</td>-->
+                                    <td ng-click="productQaFileUploadShow($index)" style="color: #1e90c2; cursor: pointer; text-align: left">
+                                        <!--<div class="input-group input-group-xs">-->
+                                            <!--<input type="text" class="form-control radius3" ng-click="productQaFileUploadShow($index)"-->
+                                                   <!--style="width: 100%;"-->
+                                                   <!--ng-disabled="headerData.developmentBillStatus=='ABANDONED'"-->
+                                                   <!--ng-model="row.fileAlterType" >-->
+                                            {{row.fileAlterType}}
+                                            <!--<span class="input-group-btn ng-scope">-->
+                                                 <!--<button type="button" ng-disabled="headerData.developmentBillStatus=='ABANDONED'"-->
+                                                         <!--ng-click="productQaFileUploadShow($index)" class="btn btn-default"><i class="fa fa-search"></i></button>-->
+                                            <!--</span>-->
+                                        <!--</div>-->
+                                    </td>
+                                    <td><input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'"
+                                               ng-model="row.inapplicableSign" >
+                                    </td>
+                                    <td>{{row.fileCount}}
+                                    </td>
+                                    <td>{{row.rejectReason}}
+                                    </td>
+                                    <td><input type="text" style="width: 100%;"
+                                               ng-model="row.remarks" ng-disabled="headerData.developmentBillStatus=='ABANDONED'" >
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!-- 产品成分表 -->
+                    <div class="tab-pane fade in col-md-12" id="productIngredients">
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+
+                            <div class="btn-group btn-group-xs pull-right" ng-style="myStyle">
+                                <button class="btn btn-default a-black" onclick="window.location.href='app/base/templates/ob/exampleFile/productIngredients.xlsx'" ><i class="fa fa-file-excel-o"></i>下载模板</button>
+                                <button type="button" class="btn btn-default" saaf-xls-import-component
+                                        ng-disabled = "!headerData.plmDevelopmentInfoId||headerData.developmentBillStatus==='ABANDONED'"
+                                        data-list-options="{
+                                                    rawMaterialName:{headName:'成份',require:true},
+                                                    rawMaterialProducer:{headName:'原料生产商的名称',require:true},
+                                                    rawMaterialSourceArea:{headName:'原生产商原产地',require:true},
+                                                    standardChineseName:{headName:'标准中文名',require:true},
+                                                    inciName:{headName:'INCI名',require:true},
+                                                    inciOrCiSource:{headName:'INCI / CI 来源',require:true},
+                                                    casNumber:{headName:'CAS号码',require:true},
+                                                    einecsNumber:{headName:'EINECS  号码',require:true},
+                                                    function:{headName:'功能',require:true},
+                                                    w1:{headName:'W1 =配方中原料的％w / w',require:true},
+                                                    w2:{headName:'W2 =原料中活性物质的％',require:true},
+                                                    w3:{headName:'W3 =配方中活性物质的％w / w',require:true},
+                                                    }" data-info="{plmProjectId:{{headerData.plmProjectId}},plmDevelopmentInfoId:{{headerData.plmDevelopmentInfoId}}}"
+                                        data-url="savePlmDevelopmentIngredientsInfo" data-after-action="searchProductIngredients()"
+                                        data-message="导入将清空原有数据；W3之和需为100；W1、W2、W3需为6位小数；全部必填" >
+                                    <i class="fa fa-upload"></i>导入
+                                </button>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="data-table">
+                            <div base-data-table="developmentIngredientsTable"
+                                 data-auto-request="true"
+                                 ng-params="developmentIngredientsTableParams"
+                                 data-show-index="true"
+                                 data-page-size="200"
+
+                                 data-url="findPlmDevelopmentIngredientsInfo"
+                                 data-legend="[
+                                 {'value':'rawMaterialName','name':'原料名、成分', style:'text-align:center'},
+                                 {'value':'rawMaterialProducer','name':'原料生产商', style:'text-align:center'},
+                                 {'value':'rawMaterialSourceArea','name':'原料原产地', style:'text-align:center'},
+                                 {'value':'standardChineseName','name':'标准中文名', style:'text-align:center'},
+                                 {'value':'inciName','name':'INCI名', style:'text-align:center'},
+                                 {'value':'inciOrCiSource','name':'INCI/CI来源', style:'text-align:center'},
+                                 {'value':'casNumber','name':'CAS号码', style:'text-align:center'},
+                                 {'value':'einecsNumber','name':'EINECS号码', style:'text-align:center'},
+                                 {'value':'function','name':'功能', style:'text-align:center'},
+                                 {'value':'w1','name':'W1', style:'text-align:center'},
+                                 {'value':'w2','name':'W2', style:'text-align:center'},
+                                 {'value':'w3','name':'W3', style:'text-align:center'},
+                                 ]"
+                            ></div>
+
+                        </div>
+                    </div>
+
+                    <!-- 包装规格书 -->
+                    <div class="tab-pane fade in col-md-12" id="packageSpecification">
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+
+                            <div class="btn-group btn-group-xs pull-right" ng-style="myStyle">
+                                <button class="btn btn-default a-black" onclick="window.location.href='app/base/templates/ob/exampleFile/packageSpecification.xlsx'" ><i class="fa fa-file-excel-o"></i>下载模板</button>
+                                <button type="button" class="btn btn-default" saaf-xls-import-component
+                                        ng-disabled = "!headerData.plmDevelopmentInfoId||headerData.developmentBillStatus==='ABANDONED'"
+                                        data-list-options="{
+                                                    packageNumber:{headName:'编号'},
+                                                    itemLocalizationOrName:{headName:'部件位置/名称',require:true},
+                                                    material:{headName:'材质',require:true},
+                                                    netWeightPerGram:{headName:'净重/克数',require:true},
+                                                    recyclable:{headName:'可回收利用的',require:true},
+                                                    remarks:{headName:'备注'},
+                                                    }" data-info="{plmProjectId:{{headerData.plmProjectId}},plmDevelopmentInfoId:{{headerData.plmDevelopmentInfoId}}}"
+                                        data-url="savePlmPackageSpecificationInfo" data-after-action="searchPackageSpecification()"
+                                        data-message="导入将清空原有数据" >
+                                    <i class="fa fa-upload"></i>导入
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <div class="data-table">
+                            <div base-data-table="packageSpecificationTable"
+                                 data-auto-request="true"
+                                 ng--params="developmentIngredientsTableParams"
+                                 data-show-index="true"
+                                 data-page-size="200"
+
+                                 data-url="findPlmPackageSpecificationInfo"
+                                 data-legend="[
+                                     {'value':'itemLocalizationOrName','name':'部件位置/名称Item localization/name', style:'text-align:center'},
+                                     {'value':'material','name':'材质Material', style:'text-align:center'},
+                                     {'value':'netWeightPerGram','name':'净重/克数Net Weight/gram', style:'text-align:center'},
+                                     {'value':'recyclable','name':'可回收利用的Recyclable', style:'text-align:center'},
+                                     {'value':'remarks','name':'备注remarks', style:'text-align:center'},
+                                 ]"
+                            ></div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- 批次信息 -->
+                    <div class="tab-pane fade in col-md-12" id="batchInfo">
+                        <!--<div ng-show="fileUploader.isUploading"  class="progress" style="margin-bottom: 10px;">-->
+                            <!--<div class="progress-bar" role="progressbar"-->
+                                 <!--ng-style="{ 'width': fileUploader.progress + '%' }"-->
+                                 <!--style="width: 0%;">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <div id="saafLoading" style="position: fixed; top: 0; width: 100%; z-index: 9000; height: 100%; " ng-show="fileUploader.isUploading"><div  style="position: absolute; top:50%;left:50%; text-align: center;margin: 0 auto; width:100px;"><img src="img/loading1.gif"></div></div>
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+
+                            <div class="btn-group btn-group-xs pull-right" ng-if="true">
+                                <div class="btn-group btn-group-xs" id ="dropDownId" >
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" ng-disabled="fileButtonDisabled||!headerData.plmDevelopmentInfoId||headerData.developmentBillStatus==='ABANDONED'||fileUploader.isUploading">
+                                        上传<span class="caret"></span></button>
+                                    <ul class="dropdown-menu " role="menu">
+                                        <li><a ng-click="uploadFileAndOpenButton('出厂检验报告')">出厂检验报告</a></li>
+                                        <li><a ng-click="uploadFileAndOpenButton('CIQ报告')">CIQ报告</a></li>
+                                        <li><a ng-click="uploadFileAndOpenButton('报关单')">报关单</a></li>
+                                    </ul>
+                                </div>
+                                <div class="btn-group btn-group-xs" ng-if="true">
+
+                                    <button type="button" ng-click="saveBatchInfo()" class="btn btn-default btn-xs"
+                                            id="addBatchInfoButton"
+                                            ng-disabled = "!headerData.plmDevelopmentInfoId||headerData.developmentBillStatus==='ABANDONED'"
+                                    >
+                                        <i class="fa fa-save">  保存</i>
+                                    </button>
+
+                                    <button type="button" ng-click="delBatchInfo()" class="btn btn-default btn-xs"
+                                            id="delBatchInfo"
+                                            ng-disabled = "batchInfoDataTable.selectRow==undefined||headerData.developmentBillStatus==='ABANDONED'"
+                                    >
+                                        <i class="fa fa-trash">  删除</i>
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="data-table">
+                            <table
+                                    class="table table-bordered table-hover table-condensed">
+                                <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                                <tr class="text-center">
+                                    <th>序号</th>
+                                    <th>文件类型</th>
+                                    <th>文件名</th>
+                                    <th>上传时间</th>
+                                    <th><i class="red">*</i>生产批次</th>
+                                    <th><i class="red">*</i>生产数量</th>
+                                    <th>备注</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-center" ng-repeat="row in batchInfoDataTable"
+                                    ng-class="{'active':batchInfoDataTable.selectRow==$index}"
+                                    ng-click="batchInfoDataTable.selectRow=$index">
+                                    <td>{{$index+1}}</td>
+                                    <td>{{row.fileAlterType}}
+                                    </td>
+                                    <td style="width:400px;" title="{{row.fileName}}">
+                                        <div style="width: 400px;" class="ellipsis"><a href="{{row.fileAddress}}" download="{{row.fileName}}" target="_blank">{{row.fileName}}</a></div>
+                                    </td>
+                                    <td>{{row.uploadDate}}
+                                    </td>
+                                    <td><input class="form-control input-xs" ng-model="row.productionBatch"
+                                    >
+                                    <td><input class="form-control input-xs" ng-model="row.productionCount"
+                                    >
+                                    <td><input class="form-control input-xs" ng-model="row.remarks"
+                                    >
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- tabContent -->
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- 资质文件明细弹窗 -->
+    <div class="modal fade" id="fileUpload" tabindex="-1"
+         data-backdrop="static" role="dialog"
+         aria-labelledby="accessoryModalLabel">
+        <div class="modal-dialog modal-lg" style="margin-top: 5%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            ng-click="search()"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title pull-left" id="accessoryModalLabel">资质文件明细</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="saafLoading1" style="position: fixed; top: 0; width: 100%; z-index: 9000; height: 100%; " ng-show="fileUploader.isUploading"><div  style="position: absolute; top:50%;left:50%; text-align: center;margin: 0 auto; width:100px;"><img src="img/loading1.gif"></div></div>
+
+                    <div class="btn-group btn-group-xs pull-right" >
+
+                        <button type="button" ng-click="delQaDetail()" class="btn btn-default btn-xs"
+                                id="deleteQaDetail"
+                                ng-disabled="headerData.developmentBillStatus==='ABANDONED'||qaDetailTable.length==0||qaDetailTable.selectRow===undefined||qaDetailTable[qaDetailTable.selectRow].fileStatusName==='审批通过'"
+                        >
+                            <i class="fa fa-trash">  删除</i>
+                        </button>
+                        <button type="button" ng-click="saveFile('PASSED')" class="btn btn-default btn-xs"
+                                id="approve" ng-show="userType!=='60'"
+                                ng-disabled="headerData.developmentBillStatus==='ABANDONED'||qaDetailTable.length==0||userType==='60'"
+                        >同意
+                        </button>
+                        <button type="button" ng-click="showRejectedModal()" class="btn btn-default btn-xs"
+                                id="reject" ng-show="userType!=='60'"
+                                ng-disabled="headerData.developmentBillStatus==='ABANDONED'||qaDetailTable.length==0||userType==='60'"
+                        >驳回
+                        </button>
+                        <button type="button" ng-click="saveFile('REAPPROVE')" class="btn btn-default btn-xs"
+                                id="reApprove" ng-show="userType!=='60'"
+                                ng-disabled="headerData.developmentBillStatus==='ABANDONED'||qaDetailTable.length==0||userType==='60'"
+                        >重新审批
+                        </button>
+                        <button type="button" ng-click="saveFile('APPROVING')" class="btn btn-default btn-xs"
+                                id="submitButton" ng-show="userType==='60'"
+                                ng-disabled="headerData.developmentBillStatus==='ABANDONED'||qaDetailTable.length==0"
+                        >提交
+                        </button>
+                        <div class="input-group input-group-xs" style="margin-bottom:10px;" ng-hide="viewOnly=='true' ">
+                            <label class="btn btn-default btn-xs" ng-show="headerData.developmentBillStatus!=='ABANDONED'"  for="fileUploadButton"> <span class="w100">附件上传</span></label>
+                            <input id = "fileUploadButton" type="file" nv-file-select="" uploader="fileUploader" multiple ng-show="false" >
+                        </div>
+                    </div>
+                    <div class = "row"></div>
+                    <!--<div ng-show="fileUploader.isUploading"  class="progress" style="margin-bottom: 10px;">-->
+                        <!--<div class="progress-bar" role="progressbar"-->
+                             <!--ng-style="{ 'width': fileUploader.progress + '%' }"-->
+                             <!--style="width: 0%;">-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="data-table">
+                        <table
+                                class="table table-bordered table-hover table-condensed">
+                            <thead class="bg-gray-white" style="background-color: #E2EFEF">
+                            <tr class="text-center">
+                                <th>序号</th>
+                                <th>文件名</th>
+                                <th>上传时间</th>
+                                <!--<th>签字时间</th>-->
+                                <th>备注</th>
+                                <th>文件状态</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="text-center" ng-repeat="row in qaDetailTable"
+                                ng-class="{'active':qaDetailTable.selectRow==$index}"
+                                ng-click="qaDetailTable.selectRow=$index">
+                                <td>{{$index+1}}</td>
+                                <td style="width:400px;" title="{{row.fileName}}">
+                                    <div style="width: 400px;" class="ellipsis"><a href="{{row.fileAddress}}" download="{{row.fileName}}" target="_blank">{{row.fileName}}</a></div>
+                                </td>
+                                <td title="{{row.uploadDate}}">{{row.uploadDate}}</td>
+                                <!--<td><input type="text" required class="form-control radius3 input-xs"-->
+                                           <!--id="signatureTime"-->
+                                           <!--date-time-picker-->
+                                           <!--data-date-format="yyyy-mm-dd"-->
+                                           <!--data-min-View="2" ng-model="row.signatureTime"-->
+
+                                <!--&gt;-->
+                                <td><input class="form-control input-xs" ng-model="row.remarks"
+                                >
+                                </td>
+                                <td title="{{row.fileStatusName}}">{{row.fileStatusName}}</td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="modal-footer ">
+                    <div style="text-align: center">
+                        <!--<button style="" type="button" class="btn btn-default"-->
+                                <!--ng-click="search()"-->
+                                <!--data-dismiss="modal">取消-->
+                        <!--</button>-->
+                        <!--<button type="button" id="saveQaDetail" ng-disabled="headerData.developmentBillStatus==='ABANDONED'"-->
+                                <!--ng-click="saveFile()" class="btn btn-primary mr10">保存-->
+                        <!--</button>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 驳回弹窗 -->
+    <div class="modal fade" id="disagreeModal" tabindex="-1"
+         data-backdrop="static" role="dialog"
+         aria-labelledby="accessoryModalLabel">
+        <div class="modal-dialog " style="margin-top: 5%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            ng-click="refindFile()"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title pull-left" id="disagreeTitle">驳回全部</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row"></div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">驳回原因</span>
+                            </label>
+
+                            <input type="text" ng-disabled="false" class="form-control radius3"
+                                   ng-model="rejectReason">
+                        </div>
+                    </div>
+                    <div class="row"></div>
+
+                </div>
+                <div class="modal-footer ">
+                    <div style="text-align: center">
+                        <button style="" type="button" class="btn btn-default"
+                                ng-click="refindFile()"
+                                data-dismiss="modal">取消
+                        </button>
+                        <button type="button" id="disagreeButton"
+                                ng-click="saveFile('REJECTED')" class="btn btn-primary mr10">驳回
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="saveModal" tabindex="-1"
+         data-backdrop="static" role="dialog"
+         aria-labelledby="accessoryModalLabel">
+        <div class="modal-dialog " style="margin-top: 5%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title pull-left" id="saveTitle">保存</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row"></div>
+
+                    <!--<div class="form-group col-xs-12 col-md-12">-->
+                    <!--<div class="input-group input-group-xs">-->
+
+                    <!--<label class="input-group-addon bn">-->
+                    <!--<span class="w100">驳回原因</span>-->
+                    <!--</label>-->
+
+                    <!--<input type="text" ng-disabled="false" class="form-control radius3"-->
+                    <!--ng-model="rejectReason">-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <span style="font-size: medium">录入数据未保存,是否保存</span>
+                    <div class="row"></div>
+
+                </div>
+                <div class="modal-footer ">
+                    <div style="text-align: center">
+                        <button style="" type="button" class="btn btn-default"
+                                ng-click="closeHeadTab()"
+                                data-dismiss="modal">否
+                        </button>
+                        <button type="button" id="saveUnsavedButton"
+                                ng-click="saveBatchInfo('SAVE_ALL')" class="btn btn-primary mr10">是
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="discardModal" tabindex="-1"
+         data-backdrop="static" role="dialog"
+         aria-labelledby="accessoryModalLabel">
+        <div class="modal-dialog " style="margin-top: 5%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            ng-click="refindFile()"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title pull-left" id="disgardTitle">作废</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row"></div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="input-group input-group-xs">
+
+                            <label class="input-group-addon bn">
+                                <span class="w100">作废原因</span>
+                            </label>
+
+                            <input type="text" ng-disabled="false" class="form-control radius3"
+                                   ng-model="discardReason">
+                        </div>
+                    </div>
+                    <div class="row"></div>
+
+                </div>
+                <div class="modal-footer ">
+                    <div style="text-align: center">
+                        <button style="" type="button" class="btn btn-default"
+                                ng-click="refindFile()"
+                                data-dismiss="modal">取消
+                        </button>
+                        <button type="button" id="discardButton"
+                                ng-click="discardAction()" class="btn btn-primary mr10">作废
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div lov-list="projectNameLov" role="dialog" data-title="选择项目名称" id="projectNameWindow" ng-model="current.em"
+         data-url="findPlmProjectInfoInfo"
+         data-dynamic-params='{"billStatus":"SUBMITTED","import":"Y"}'
+         data-callback="selectProjectInfoReturn"
+         data-auto-request="false"
+         data-return-value=""
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'3'}"
+         data-checked-type="radio"
+         data-keys="{'key':'projectName','value':'projectName','name':'项目名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'项目单号','key':'projectNumber'},{'name':'Range','key':'projectRange'},{'name':'供应商名称','key':'supplierName'},{'name':'项目创建人','key':'creatorName'}]"
+         data-search-key="[{'key':'projectName_like','placeholder':'项目名称'},
+                          {'key':'supplierName_like','placeholder':'供应商名称'}]"
+    >
+    </div>
+
+    <div lov-list="producerInfoLov" role="dialog" data-title="选择生产商" id="producerInfoId" ng-model="current.em"
+         data-url="userFind"
+         data-dynamic-params='{"status":"Y","userType":"60"}'
+         data-callback="selectProducerInfoReturn"
+         data-auto-request="false"
+         data-return-value=""
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'userId','value':'userName','name':'生产商名称'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'userName','placeholder':'生产商名称'}]"
+    >
+    </div>
+
+
+</div>

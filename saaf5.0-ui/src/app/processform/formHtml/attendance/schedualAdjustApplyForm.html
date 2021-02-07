@@ -1,0 +1,84 @@
+<div ng-controller="schedualAdjustApplyFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="findAdjustmentReqDetail"
+         data-api-get="findAdjustmentReqDetail" data-api-del="" data-api-update="findAdjustmentReqDetail">
+        <div class="cb">
+            <h5><span class="fa fa-cog"></span> 排班申请单详情</h5>
+
+            <div search-form
+                 data-legend="[
+
+                                {key:'guideEmpNo',label:'申请人工号',readonly:true},
+                                {key:'guideName',label:'申请人',readonly:true},
+                                {key:'reqTypeStr',label:'类型',readonly:true},
+                                {key:'requestNum',label:'申请单号',readonly:true},
+                                {key:'reqTime',label:'申请时间',readonly:true},
+                                {key:'reqStatusStr',label:'状态',readonly:true},
+                                {key:'schedualMonth',label:'排班月份',readonly:true},
+                                {key:'storeNo',label:'门店编码',readonly:true},
+                                {key:'shopName',label:'门店名称',readonly:true},
+                                {key:'guideTypeStr',label:'导购类型',readonly:true},
+                            ]"
+                 data-col="4"
+                 ng-model="formParams"
+            ></div>
+
+            <div class="form-group col-xs-6 col-md-12">
+                <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn"><span
+                            class="w100">申请备注</span></label>
+                    <textarea class="form-control" rows="3" ng-model="formParams.reqMemo" name="reqMemo" style="height: auto"></textarea>
+                </div>
+            </div>
+
+
+            <div class="form-group col-xs-6 col-md-12">
+                <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn">
+                        <span class="w100">照片说明</span>
+                    </label>
+                    <div>
+                        <img  class="img-preview pr5" ng-src="{{file.filePath}}"  ng-if="file.filePath"
+                              style="height: 34.5px;width: 45px" ng-repeat="file in formParams.files" >
+                        <!--<img ng-if="file.filePath" ng-src="{{file.filePath}}" style="height: 34.5px;width: 45px" ng-repeat="file in formParams.files" class="pr5"
+                             filePath="{{file.filePath}}" enlarge-pic>-->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="cb" >
+            <h5><span class="fa fa-cog"></span> 申请内容</h5>
+            <div class="data-table">
+                <table class="nicescroll-height report-data ">
+                    <thead class="bg-gray-white">
+                    <tr class="text-center">
+                        <th>申请内容</th>
+                        <th>调整日期</th>
+                        <th>调整前</th>
+                        <th>调整后</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="text-center" ng-repeat="row in formParams.schedualLine">
+                        <td>{{formParams.reqTypeStr}}</td>
+                        <td>{{row.schedualDay}}</td>
+                        <td>{{row.lastWorkStartTime}}~{{row.lastWorkEndTime}} {{row.lastShiftTypeStr}}</td>
+                        <td>{{row.workStartTime}}~{{row.workEndTime}} {{row.shiftTypeStr}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="mask" close-Pic>
+    <div class="mask-box"></div>
+    <div class="big-pic-wrap">
+        <img src="" alt="" class="bigPic" />
+        <span class="close-pic"><i class="fa fa-close"></i></span>
+    </div>
+</div>

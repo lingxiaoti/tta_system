@@ -1,0 +1,41 @@
+{
+  "apps": [
+    {
+      "name": "printapp",
+      "cwd": "/app/local/nodeapp",
+      "script": "/app/local/nodeapp/printapp/bin/www",
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "error_file": "/app/local/nodeapp/printapp/node-app.stderr.log",
+      "out_file": "/app/local/nodeapp/printapp/node-app.stdout.log",
+      "pid_file": "/app/local/nodeapp/printapp/node-geo-api.pid",
+      "min_uptime": "200s",
+      "max_restarts": 20,
+      "max_memory_restart": "14336M",
+      "watch": false,
+      "merge_logs": true,
+      "exec_interpreter": "node",
+      "exec_mode": "fork",
+      "autorestart": false,
+      "vizion": false,
+      "env": {
+        "NODE_ENV": "development",
+        "USER_NAME": "admin",
+        "PASSWORD": "Pw123456!$",
+        "IP": "127.0.0.1"
+
+      },
+      "env_prod": {
+        "NODE_ENV": "prod",
+        "USER_NAME": "admin",
+        "PASSWORD": "watsons19",
+        "IP": "10.82.31.206"
+      },
+      "env_uat": {
+        "NODE_ENV": "uat",
+        "USER_NAME": "admin",
+        "PASSWORD": "Pw123456!$",
+        "IP": "10.82.24.107"
+      }
+    }
+  ]
+}

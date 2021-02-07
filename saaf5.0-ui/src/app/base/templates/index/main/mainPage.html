@@ -1,0 +1,363 @@
+<div class="bg-white gridtable " style="margin: 10px;">
+    <style type="text/css">
+        /* This parent can be any width and height */
+
+        .cutblock {
+            text-align: center;
+        }
+
+        /* The ghost, nudged to maintain perfect centering */
+
+        .cutblock:before {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            margin-right: -0.25em;
+            /* Adjusts for spacing */
+        }
+
+        /* The element to be centered, can
+           also be of any width and height */
+
+        .centered {
+            display: inline-block;
+            vertical-align: middle;
+            width: 50%;
+        }
+
+        .main-table {
+            table-layout: fixed;
+        }
+
+        .main-table tbody > tr > td {
+            width: 14.285714285714%;
+            height: 70px;
+            position: relative;
+        }
+
+        .main-table tbody > tr:hover {
+            background-color: white;
+        }
+
+        .main-table tbody > tr > td:hover {
+            background-color: rgb(242, 128, 99);
+        }
+
+        .main-table tbody > tr > td.selected {
+            background-color: rgb(242, 156, 112);
+        }
+
+        .todaycolor {
+            background-color: rgb(235, 181, 107);
+        }
+
+        .todaycolor:hover {
+            background-color: rgb(235, 230, 99);
+        }
+
+        .h60 {
+            height: 60px;
+        }
+
+        .td-div {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 80%
+        }
+
+        .addBtn {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            bottom: 10px;
+            font-size: 18px;
+            right: 10px;
+            /* background: rgb(252,102,51);    */
+            cursor: pointer;
+            color: rgb(81, 144, 223);
+        }
+
+        .btn-info {
+            background-color: #428bca !important;
+            border-color: #428bca !important;
+        }
+
+        .bg-green {
+            background-color: green;
+        }
+
+        .bg-cycle {
+            background-color: #01b987;
+        }
+
+        .bg-brown {
+            background-color: #dd9c04;
+        }
+
+        .bg-skyblue {
+            background-color: #08a1b1;
+        }
+
+        .menu-item:nth-child(1n+0) .cutblock{
+            background-color: #01b987;
+
+        }
+        .menu-item:nth-child(2n+0) .cutblock{
+            background-color: #dd9c04;
+        }
+        .menu-item:nth-child(3n+0) .cutblock{
+            background-color: #08a1b1;
+        }
+
+        .cutblock {
+            border-radius:60px;width: 60px;height: 60px ; line-height:60px;margin:0 auto;
+            background-color: #eee;
+            vertical-align: middle;
+            display: inline-block;
+
+            box-sizing: content-box;
+            transition: all .3s;
+        }
+        .cutblock:hover {
+            transform: scale(1.2,1.2);
+            background-color: #2383c2 !important;
+
+        }
+
+        .cutblock i{
+            color:#fff;
+            font-size: 24px;;
+            vertical-align: middle;
+        }
+        .cutblock:hover i{
+            color:#fff !important;
+        }
+    </style>
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+            <div class="container-fluid mt10">
+                <div style="position: relative">
+                    <div style="min-height: 200px">
+                        <header style="font-size: 18px;padding:20px;">{{ $l('快速通道')}}</header>
+
+                        <div class="pl50 pr50">
+                            <div class="row" style="min-height: 200px">
+                                <div   class="col-md-2 col-xs-2 tc pb30 menu-item"
+                                       ng-repeat="row in userShortcut" ng-mouseenter="row.show=true"
+                                       ng-mouseleave="row.show=false">
+                                    <button type="button" ng-click="deleteCutAction(row)"
+                                            class="fa fa-times btn  btn-warning btn-xs" ng-if="row.show"
+                                            style="border-radius:20px;position: absolute; top:0; right:20px"></button>
+
+                                    <a href class="cutblock" ng-click="goto(row)"  >
+                                        <i  ng-class="row.imageLink?row.imageLink:' fa fa-newspaper-o '"
+                                            ng-style="{color:row.imageColor?row.imageColor:'#fff'}"></i>
+                                    </a>
+                                    <div class="mt10 mb10 text-brand-black ellipsis f10">{{ $l(row.functionName)}}
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="col-md-2 col-xs-2 tc">
+                                    <a class="cutblock " ng-click="showMenuList()"  style="background-color: transparent;border: 1px  dashed #ccc;">
+                                        <i  class="fa fa-plus " style="color:#00a0e9"></i>
+                                    </a>
+                                    <div class="mt10 mb10 f10">{{ $l('新增菜单')}}</div>
+
+                                    <!--</div>-->
+                                    <!--<div lov-list="respLov" role="dialog" data-title="职责名称" id="allRoleModal" ng-model="current.rp"-->
+                                    <!--data-return-value="params.responsibilityName"-->
+                                    <!--data-url="responsibility"-->
+                                    <!--data-callback="confirmAllRole"-->
+                                    <!--data-params='{"systemCode":"{{respParams.systemCode}}"}'-->
+
+                                    <!--data-clear="clear"-->
+                                    <!--data-return-type="value"-->
+                                    <!--data-pagination="{'pageIndex':'1','pageRows':'5'}"-->
+                                    <!--data-checked-type="checkbox"-->
+                                    <!--data-keys="{'key':'responsibilityId','value':'responsibilityName'}"-->
+                                    <!--data-show-index="true"-->
+                                    <!--data-type="competitor"-->
+                                    <!--data-search-key="{'key':'responsibilityName','placeholder':'职责名称'}"-->
+                                    <!--&gt;-->
+                                    <!--</div>-->
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <ul class="nav nav-tabs mt10">
+                            <li class="active" ng-click="myProcessTabChange('myProcessUpcoming')">
+                                <a href="#myProcessUpcoming" data-toggle="tab">
+                                    待审批
+                                    <span ng-click="myProcessNewWindow('待办', '/myUpcoming')" class="glyphicon glyphicon glyphicon-new-window"></span>
+                                </a>
+                            </li>
+                            <li ng-click="myProcessTabChange('myProcessApproval')">
+                                <a href="#myProcessApproval" data-toggle="tab">
+                                    已审批
+                                    <span ng-click="myProcessNewWindow('已审批', '/myApproval')" class="glyphicon glyphicon glyphicon-new-window"></span>
+                                </a>
+                            </li>
+                            <li ng-click="myProcessTabChange('myProcessProcessList')">
+                                <a href="#myProcessProcessList" data-toggle="tab">
+                                    我的流程
+                                    <span ng-click="myProcessNewWindow('我的流程', '/myProcessList')" class="glyphicon glyphicon glyphicon-new-window"></span>
+                                </a>
+                            </li>
+                            <li ng-click="myProcessTabChange('myWorkbenchList')">
+                                <a href="#myWorkbenchList" data-toggle="tab">
+                                    我的工作台
+                                    <span class="glyphicon glyphicon glyphicon-new-window"></span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="my-process-tab-contents mb10">
+                            <div ng-show="myProcessTabName== 'myProcessUpcoming'" class="tab-pane active" id="myProcessUpcoming">
+                                <div class="data-table">
+                                    <div base-data-table="dataTable"
+                                         data-url="processFindTodoTasks" data-show-index='true'
+                                         data-keys="{key:'taskId',value:'bpm_title'}"
+                                         data-callback="[{value:'bpm_title',callback:'myUpcomingGo'}]"
+                                         data-paging-show="false"
+                                         data-page-size="5"
+                                         data-legend='[
+                            {"value": "billNo","name": "单据编号"},
+                            {"value": "bpm_title","name": "流程标题"},
+                            {"value": "bpm_categoryName","name": "流程分类"},
+                            {"value": "bpm_userFullName","name": "流程发起人"},
+                            {"value": "bpm_startTime","name": "申请时间"},
+                            {"value": "taskName","name": "审批节点"},
+                            {"value": "status","name": "待办状态"},
+                            {"value": "bpm_communicated","name": "已发消息" ,boolean:"icon"},
+                            {"value": "createTime","name": "待办开始时间"},
+                            {"value": "durationDHM","name": "待处理时长"}]'>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div ng-show="myProcessTabName== 'myProcessApproval'" class="tab-pane " id="myProcessApproval">
+                                <div class="data-table">
+                                    <div base-data-table="myApprovalTable"
+                                         data-url="processFindHistoricTasks" data-show-index='true'
+                                         data-page-size="5"
+                                         data-paging-show="false"
+                                         data-callback="[{value:'bpm_title',callback:'myApprovalGo'}]"
+                                         data-legend='[
+                            {"value": "billNo","name": "单据编号"},
+                            {"value": "bpm_title","name": "流程标题"},
+                            {"value": "bpm_categoryName","name": "流程分类"},
+                            {"value": "bpm_userFullName","name": "流程发起人"},
+                            {"value": "bpm_startTime","name": "申请时间"},
+                            {"value": "taskName","name": "审批节点"},
+                            {"value": "bpm_statusName","name": "单据状态"},
+                            {"value": "bpm_communicated","name": "已发消息", boolean:"icon"},
+                            {"value": "endTime","name": "审批时间"},
+                            {"value": "durationDHM","name": "处理时长"}]'>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div ng-show="myProcessTabName== 'myProcessProcessList'" class="tab-pane " id="myProcessProcessList">-->
+                                <!--<div class="data-table">-->
+                                    <!--<div base-data-table="myProcessTable"-->
+                                         <!--data-url="processFindBpmLists" data-show-index='true'-->
+                                         <!--data-paging-show="false"-->
+                                         <!--data-page-size="5"-->
+                                         <!--data-callback="[{value:'title',callback:'myProcessListGo'}]"-->
+                                         <!--data-legend='[-->
+                           <!--{"value": "billNo","name": "单据编号"},-->
+                            <!--{"value": "title","name": "流程标题"},-->
+                            <!--{"value": "categoryName","name": "流程分类"},-->
+                            <!--{"value": "userFullName","name": "流程发起人"},-->
+                            <!--{"value": "startTime","name": "申请时间"},-->
+                            <!--{"value": "cur_taskName","name": "审批节点"},-->
+                            <!--{"value": "statusName","name": "流程状态"},-->
+                            <!--{"value": "communicated","name": "发消息", boolean:"icon"},-->
+                            <!--{"value": "durationDHM","name": "单据处理时长"}-->
+
+                            <!--]'>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+<!--=========================================-->
+                            <div ng-show="myProcessTabName== 'myWorkbenchList'" class="tab-pane " id="myWorkbenchList">
+                                <div class="data-table">
+                                    <div base-data-table="supplierManagerTable"
+                                         data-url="processFindBpmLists" data-show-index='true'
+                                         data-paging-show="false"
+                                         data-page-size="5"
+                                         data-callback="[{value:'title',callback:'myProcessListGo'}]"
+                                         data-legend='[
+                           {"value": "billNo","name": "供应商名称"},
+                            {"value": "title","name": "节点"},
+                            {"value": "categoryName","name": "单据号"},
+                            {"value": "userFullName","name": "单据状态"},
+                            {"value": "startTime","name": "业务类型"}
+                            ]'>
+                                    </div>
+                                </div>
+
+                                <div class="data-table">
+                                    <div base-data-table="quotationManagerTable"
+                                         data-url="processFindBpmLists" data-show-index='true'
+                                         data-paging-show="false"
+                                         data-page-size="5"
+                                         data-callback="[{value:'title',callback:'myProcessListGo'}]"
+                                         data-legend='[
+                           {"value": "billNo","name": "项目名称"},
+                            {"value": "title","name": "节点"},
+                            {"value": "categoryName","name": "单据号"},
+                            {"value": "userFullName","name": "单据状态"}
+                            ]'>
+                                    </div>
+                                </div>
+                            </div>
+<!--=========================================-->
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div lov-list="menuModal" role="dialog" data-title="菜单列表" id="menuModal" ng-model="meunData.rp"
+         data-url="findMenuList"
+         data-callback="saveQuickMenu"
+         data-params='{"menuName_like":"","systemCode":"{{currentRespAndSys.systemCode}}"}'
+         data-clear="clear"
+         data-return-type="value"
+         data-pagination="{'pageIndex':'1','pageRows':'1000'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'menuId','value':'menuName'}"
+         data-show-index="true"
+
+         data-search-key="{'key':'menuName_like','placeholder':'菜单名称'}"
+    >
+    </div>
+    <!--旧版-->
+    <!--<div lov-list="menuModal" role="dialog" data-title="菜单列表" id="menuModal" ng-model="meunData.rp"-->
+    <!--data-url="findSelectMenu"-->
+    <!--data-callback="saveQuickMenu"-->
+    <!--data-params='{"systemCode":"{{currentRespAndSys.systemCode}}","respId":"{{currentRespAndSys.respId}}"}'-->
+
+    <!--data-clear="clear"-->
+    <!--data-return-type="value"-->
+    <!--data-pagination="{'pageIndex':'1','pageRows':'6'}"-->
+    <!--data-checked-type="checkbox"-->
+    <!--data-keys="{'key':'menuId','value':'menuName'}"-->
+    <!--data-show-index="true"-->
+
+    <!--data-search-key="{'key':'menuName','placeholder':'菜单名称'}"-->
+    <!--&gt;-->
+    <!--</div>-->
+
+</div>

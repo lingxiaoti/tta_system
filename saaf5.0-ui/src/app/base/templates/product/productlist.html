@@ -1,0 +1,126 @@
+<div ng-controller="productlistCtrl" class="gridtable">
+	<form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+		<!--------------------- 按钮--->
+		<div class="bg-gray-white bt">
+			<div class="bg-gray-white p5">
+
+					<div class="pull-right ml10">
+						<div class="btn-group btn-group-xs ">
+							<button class="btn btn-default a-black" type="button" ng-click="downloadTem()" ><i class="fa fa-file-excel-o"></i>
+								下载模板
+							</button>
+								<button class="btn btn-default a-black"  type="button" ng-click="fileopen()"><i class="fa fa-file-excel-o"></i>
+											批量导入
+							</button>
+						</div>
+					</div>
+
+				<div class="pull-right ml10">
+					<div class="btn-group btn-group-xs ">
+						<button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+							<i class="fa fa-search" aria-hidden="true"></i>搜索
+						</button>
+						<button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+							<i class="fa fa-undo" aria-hidden="true"></i>重置
+						</button>
+					</div>
+				</div>		
+
+				<div class="btn-group btn-group-xs ">
+					<button type="button" class="btn btn-primary" ng-click="fullWindow($event)"><i
+							class="fa fa-square-o"></i>数据全屏
+					</button>
+				</div>
+			</div>
+		</div>
+		<!---------------------  / .按钮  --->
+		<div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+			<div class="nicescroll-height  bg-white " ng-nicescroll
+				 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+				<!--------------------- 输入表单  --->
+				<div class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+
+
+					<!-- 搜索输入框组-->
+
+
+					<div search-form
+						 data-legend="[
+													{key:'plmCode',label:'PLMID'},
+													{key:'rmsCode',label:'RMSID'},
+													{key:'productName',label:'商品名称'},
+													{key:'department',label:'部门编码'},
+													{key:'productType',label:'商品类型',type:'lookCode',lookCode:'PLM_PRODUCT_TYPE'},
+													{key:'createdBy',label:'创建人'},
+													{key:'creationDate',label:'创建日期',type:'time','date':'yyyy-mm-dd' ,endDate:'endDate',},
+													{key:'purchaseType',label:'采购类型',type:'lookCode',lookCode:'PLM_PRODUCT_PURCHASE'},
+													{key:'brandnameCn',label:'品牌'},
+													{key:'markerChannel',label:'销售渠道',type:'lookCode',lookCode:'PLM_PRODUCT_SALES_CHANNAL'}, 
+													{key:'orderStatus',label:'工单状态',type:'lookCode',lookCode:'PLM_PRODUCT_STATUS' }
+                        ]"
+						 ng-model="params"
+					></div>
+
+
+				</div>
+
+				<div class="data-table">
+					<div base-data-table="dataTable"
+
+						 ng-params="params"
+						 data-show-index="true"
+						 data-url="FindProductList"
+						 data-callback="[{value:'plmCode',callback:'btnDetail'}]"
+						 data-legend="[
+                             {'value':'plmCode','name':'PLM ID',type:'button','style':'text-align: center;'},
+                             {'value':'rmsCode','name':'RMS ID',type:'button','style':'text-align: center;'},
+                             {'value':'productName','name':'商品名称','style':'text-align: center;'},
+							 {'value':'brandnameCn','name':'品牌名','style':'text-align: center;'},
+							 {'value':'orderstatusName','name':'工单状态','style':'text-align: center;'},
+							 {'value':'createdstr','name':'创建人','style':'text-align: center;'},
+							 {'value':'creationDate','name':'创建日期','style':'text-align: center;'}
+
+						 ]"
+
+					></div>
+				</div>
+
+			</div>
+		</div>
+	</form>
+	
+	         <div class="modal fade" role="dialog" data-backdrop="static" id="filediv">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="filediv">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" >上传文件
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+
+                     		<div class="input-group input-group-xs">
+										<label class="input-group-addon bn"><span class="w120"><i class="red">*</i>相关文件</span></label>
+										<input type="file" nv-file-select="" uploader="ZsFileFileUploader">
+									</div>
+
+
+                        <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+                    </div>
+                           <div class="modal-footer">
+                        <div style="padding: 3px 10px;">
+                            <button type="button" class="btn btn-default btn-sm " validate-form-btn="" ng-click="qd()"
+                                    data-dismiss="modal">确定</button>
+                            <button type="button" ng-class="{'mt10': paging.total }" class="btn btn-default btn-sm "
+                                    data-dismiss="modal" ng-click="qx()">取消</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+        
+</div>

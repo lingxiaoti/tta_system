@@ -1,0 +1,86 @@
+<div ng-controller="plmProductIngredientsReportCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDiscard,btnExport">
+                        <button class="btn btn-default" permission-btn="btnDiscard" ng-disabled="!dataTable.selectRow||dataTable.selectRow.developmentBillStatus!=='DEVELOPING'" ng-click="btnDiscard()" ></button>
+                    </div>
+
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <div search-form
+                         data-legend="[
+                            {key:'standardChineseName_like',label:'标准中文名'},
+                            {key:'inciName_like',label:'INCI名'},
+                            {key:'function_like',label:'功能'},
+                            {key:'rawMaterialProducer_like',label:'原料生产商名称'},
+                            {key:'casNumber_like',label:'CAS号码'},
+                            {key:'startDate_gte',label:'生效日期从',type:'time','date':'yyyy-mm-dd'},
+                            {key:'startDate_lt',label:'至',type:'time','date':'yyyy-mm-dd'},
+                        ]"
+                         ng-model="params"
+                    ></div>
+
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="true"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="findPlmDevelopmentIngredientsInfo"
+                         data-legend="[
+                                 {'value':'barcode','name':'Barcode', style:'text-align:center'},
+                                 {'value':'productName','name':'产品名称', style:'text-align:center'},
+                                 {'value':'productNameCn','name':'货品名称(CN)', style:'text-align:center'},
+                                 {'value':'producer','name':'生产商名称', style:'text-align:center'},
+                                 {'value':'rawMaterialName','name':'原料名', style:'text-align:center'},
+                                 {'value':'rawMaterialProducer','name':'原料生产商', style:'text-align:center'},
+                                 {'value':'rawMaterialSourceArea','name':'原料原产地', style:'text-align:center'},
+                                 {'value':'standardChineseName','name':'标准中文名', style:'text-align:center'},
+                                 {'value':'inciName','name':'INCI 名', style:'text-align:center'},
+                                 {'value':'inciOrCiSource','name':'INCI / CI 来源', style:'text-align:center'},
+                                 {'value':'casNumber','name':'CAS  号码', style:'text-align:center'},
+                                 {'value':'einecsNumber','name':'EINECS  号', style:'text-align:center'},
+                                 {'value':'function','name':'功能', style:'text-align:center'},
+                                 {'value':'w1','name':'W1', style:'text-align:center'},
+                                 {'value':'w2','name':'W2', style:'text-align:center'},
+                                 {'value':'w3','name':'W3', style:'text-align:center'},
+
+                         ]"
+                    ></div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+</div>

@@ -1,0 +1,80 @@
+<div ng-controller="applicationFormListCtrl" class="gridtable">
+  <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white bt">
+      <div class="bg-gray-white p5">
+        <div class="pull-right ml10">
+          <div class="btn-group btn-group-xs ">
+            <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+              <i class="fa fa-search" aria-hidden="true"></i>搜索
+            </button>
+            <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+              <i class="fa fa-undo" aria-hidden="true"></i>重置
+            </button>
+          </div>
+        </div>
+        
+        <div class="pull-right ml10">
+            <div class="btn-group btn-group-xs ">
+              <button class="btn btn-default" type="button" ng-click="btnNew()">
+                  <i class="fa fa-plus" style="font-size: 12px;"></i>新增
+              </button>
+              <button class="btn btn-default" type="button" ng-click="btnDel()">
+                  <i class="fa fa-trash-o" style="font-size: 12px;"></i>删除
+              </button>
+            </div>
+          </div>	
+            
+
+        <div class="btn-group btn-group-xs ">
+          <button type="button" class="btn btn-primary" ng-click="fullWindow($event)"><i
+              class="fa fa-square-o"></i>数据全屏
+          </button>
+        </div>
+      </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+      <div class="nicescroll-height  bg-white " ng-nicescroll
+         nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+        <!--------------------- 输入表单  --->
+        <div class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+
+
+          <!-- 搜索输入框组-->
+
+          <div search-form
+             data-legend="[
+                          {key:'supCode',label:'申请单号'},
+                          {key:'orderType',label:'订单种类',type:'lookCode',lookCode:'PLM_SUP_ORDER_TYPE'},
+                          {key:'orderStatus',label:'单据状态',type:'lookCode',lookCode:'PLM_SUP_BILL_STATE'},
+                          {key:'creator',label:'创建人'},
+                          {key:'startDate',label:'从创建时间',type:'time','date':'yyyy-mm-dd'},
+                          {key:'endDate',label:'至创建时间',type:'time','date':'yyyy-mm-dd'}
+                        ]"
+             ng-model="params"
+          ></div>
+
+        </div>
+
+        <div class="data-table">
+          <div base-data-table="dataTable"
+             ng-params="params"
+             data-show-index="true"
+             data-callback="[{value:'supCode',callback:'btnDetail'}]"
+             data-url="plmSupplementHeadService_findPlmsInfo"
+             data-legend="[
+              {'value':'supCode','name':'申请单号','style':'text-align: center;'},
+              {'value':'orderTypeDesc','name':'订单种类','style':'text-align: center;'},
+              {'value':'orderStatusDesc','name':'单据状态','style':'text-align: center;'},
+              {'value':'creator','name':'创建人','style':'text-align: center;'},
+              {'value':'creationDate','name':'创建时间','style':'text-align: center;'}
+             ]"
+          ></div>
+        </div>
+
+      </div>
+    </div>
+  </form>
+        
+</div>

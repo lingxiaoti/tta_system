@@ -1,0 +1,952 @@
+<div ng-controller="supplierDetailCtrl" class="bigdata">
+
+
+    <!--------------------- 按钮--->
+    <div class="bg-gray-white p5">
+        <div class=" pull-right ml10">
+
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" permission-btn="btnSave"   ng-click="btnSave(supplierForm.$invalid)" data-validate-form="supplierForm"></button>
+
+            </div>
+
+
+        </div>
+        <div class="btn-group btn-group-xs ">
+            <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+            </button>
+        </div>
+    </div>
+    <!---------------------  / .按钮  --->
+    <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+        <div class="nicescroll-height  bg-white " ng-nicescroll
+             nice-option="{{niceOpction}}"
+             data-des="此节点必需-滚动内容及指令">
+
+            <!--------------------- 输入表单  --->
+
+            <div class=" mt10 pb5  oh"
+                 data-des="此节点必需－用于识别输入表单的指令">
+
+                <form id="supplierForm" name="supplierForm">
+                    <header class="col-xs-12 mb10">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span>供应商信息</span>
+                    </header>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">供应商编号</span>
+                            </label>
+                            <input type="text" ng-disabled="true" class="form-control radius3"
+                                   ng-model="params.supplierCode">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>供应商名称</span>
+                            </label>
+                            <!--ng-disabled="params.supplierId" -->
+                            <input  data-required-msg="请填写供应商名称"
+                                   type="text" class="form-control radius3"  id="supplierName"
+                                   name="supplierName"  required
+                                   ng-model="params.supplierName">
+                        </div>
+                    </div>
+
+
+                   <!--  <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>部门编码：</span></label>
+                            <input type="text" class="form-control radius3"
+                                   required      ng-model="params.ownerDept" />
+                            <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getDeptCode()" type="button" >
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">* </i>部门名称：</span></label>
+                            <input data-required-msg="部门名称" type="text" ng-model="params.deptName"
+                                   required readonly class="form-control radius3">
+                        </div>
+                    </div> -->
+
+
+                   <!-- <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"> <i class="red">*</i>状态</span>
+                            </label>
+                            <div lookup-code="SUPPLIER_STATUS" data-required="true" ng-model="params.status"
+                                 required  id="status" name="status" ng-change="changeStatus()"></div>
+                        </div>
+                    </div>-->
+
+                    <div class="form-group col-xs-3 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>{{ $l('状态')}}</span></label>
+                            <select class="form-control radius3" ng-change="changeStatus()" ng-model="params.status" ng-required="true">
+                                <option></option>
+                                <option saaf-select-lookupcode="SUPPLIER_STATUS"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">是否潜在供应商</span>
+                            </label>
+                            <input type="checkbox" ng-true-value="'Y'" ng-false-value="'N'" class=" radius3"   disabled
+                                   ng-model="params.isLatent">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100"><i class="red">*</i>合同主要负责部门</span>
+                            </label>
+                            <input readonly type="text" class="form-control radius3"  required ng-model="params.ownerGroup">
+                            <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getBrandGroupCode('2')" type="button" >
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3"  >
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">负责部门名称 ：</span></label>
+                            <input data-required-msg="合同主要负责部门" type="text" ng-model="params.ownerGroupName"  readonly
+                                   class="form-control radius3">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">合同是否输出</span></label>
+                            <div lookup-code="EXCLUSIVE_YES_OR_NO" name="contractOutput" ng-model="params.contractOutput"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">销售方式</span>
+                            </label>
+                            <input type="text" class="form-control radius3" ng-model="params.purchaseMode">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">品牌</span>
+                            </label>
+                            <input type="text" class="form-control radius3" ng-model="params.proposalBrandGroup">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3"  ng-show="params.isLatent =='Y'"  >
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">正式供应商编码：</span></label>
+                            <input  readonly type="text" class="form-control radius3"
+                                   ng-model="params.formalCode" />
+                            <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default"  ng-click="cancelSupplier()"
+                                        type="button"><i class="fa fa-remove"></i></button>
+                                <button class="btn btn-default" ng-click="getLatenSupplierCode()" type="button" >
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3"  ng-show="params.isLatent =='Y'"  >
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">正式供应商名称 ：</span></label>
+                            <input data-required-msg="部门名称" type="text" ng-model="params.formalName"  readonly
+                                   class="form-control radius3">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">残损折扣校验：</span></label>
+                            <div lookup-code="EXCLUSIVE_YES_OR_NO" name="returnedPurchaseFlag" ng-model="params.returnedPurchaseFlag"></div>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">退货运输费校验：</span></label>
+                            <div lookup-code="EXCLUSIVE_YES_OR_NO" name="returnFreightFlag" ng-model="params.returnFreightFlag"></div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100"><i class="red">*</i>是否提交proposal：</span></label>
+                            <div  data-required="true" lookup-code="YES_OR_NO" name="isSubmitProposal" ng-model="params.isSubmitProposal"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100"><i class="red">*</i>是否提交合同：</span></label>
+                            <div data-required="true" lookup-code="YES_OR_NO" name="isSubmitContract" ng-model="params.isSubmitContract"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100"><i class="red">*</i>是否全新供应商：</span></label>
+                            <div data-required="true" lookup-code="YES_OR_NO" name="isNewSupplier" ng-model="params.isNewSupplier"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">资料是否收集完整：</span></label>
+                            <div lookup-code="YES_OR_NO" name="isCollect" ng-model="params.isCollect" ng-disabled="true"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">供应商联系人 ：</span></label>
+                            <input type="text" ng-model="params.venderLinkMan"
+                                   class="form-control radius3">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn">
+                                <span class="w100">供应商手机号：</span></label>
+                            <input type="text" ng-model="params.venderPhone"
+                                   class="form-control radius3">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">不提交proposal原因：</span></label>
+                            <textarea type="text" id="noSubmitReason" class="form-control radius3" style="width: 900px; height: 80px;"
+                                      ng-model="params.noSubmitReason"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row"></div>
+
+
+                </form>
+            </div>
+
+
+            <div class="col-xs-12 col-md-12 br p0">
+                <ul id="tab" class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#relSupplier" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>关联供应商</label></a>
+                    </li>
+                    <li>
+                        <a href="#supplierBrand" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>供应商对应品牌信息</label></a>
+                    </li>
+                    <li>
+                        <a href="#supplierAttr" data-toggle="tab"><i class="fa fa-list-alt"></i>
+                            <label>供应商附件信息</label></a>
+                    </li>
+                </ul>
+                <div id="tabContent" class="tab-content">
+
+                    <!-- 关联供应商 -->
+                    <div class="tab-pane fade in active col-md-12" id="relSupplier">
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+
+                            <div class="btn-group btn-group-xs pull-right" ng-if="true">
+                                <div class="btn-group btn-group-xs" ng-if="true">
+                                    <button class="btn btn-default" type="button" ng-click="relSupplierTable.search(1)">
+                                        <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                                    </button>
+                                    <button type="button" ng-click="addRelSupplier()" class="btn btn-default btn-xs"
+                                            id="addRelSupplierButton">
+                                        <i class="fa fa-plus">新增</i>
+                                    </button>
+                                    <button type="button" ng-click="editRelSupplier()" class="btn btn-default btn-xs"
+                                            id="editRelSupplierButton"
+                                    >
+                                        <i class="fa fa-pencil">修改</i>
+                                    </button>
+                                    <button type="button" ng-click="delRelSupplier()" class="btn btn-default btn-xs"
+                                            id="delRelSupplierButton">
+                                        <i class="fa fa-trash">删除</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" mt10 pb5 input-form bb oh" input-form
+                             data-des="此节点必需－用于识别输入表单的指令">
+                            <!--{key:'description',label:'描述'},-->
+                            <!--{key:'isadmin',label:'是否管理员',type:'lookCode',lookCode:'YES_OR_NO'},-->
+                            <!--{key:'internalUser',label:'是否EBS用户',type:'lookCode',lookCode:'YES_OR_NO'},-->
+
+                            <div search-form
+                                 data-legend="[
+                            {key:'relSupplierCode',label:'供应商编码'},
+                            {key:'relSupplierName',label:'供应商名称'}
+                        ]"
+                                 ng-model="relSupplierParams"
+                            ></div>
+
+                        </div>
+                        <div class="data-table">
+                            <div base-data-table="relSupplierTable"
+                                 ng-params="relSupplierParams"
+                                 data-keys="{'key':'relSupplierId','value':'relSupplierId','name':'关联供应商ID'}"
+                                 data-checked-type="checkbox"
+                                 data-show-index="true"
+                                 data-auto-request="false"
+                                 data-url="supplierRelFind"
+                                 data-legend="[
+                                     {'value':'relSupplierCode','name':'供应商编码'},
+                                     {'value':'relSupplierName','name':'供应商名称'},
+                                     {'value':'relContractOutput','name':'合同是否输出'},
+                                     {'value':'creationDate','name':'创建日期'}
+                                 ]">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 供应商部门信息 -->
+                    <div class="tab-pane fade in col-md-12" id="supplierDept">
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+
+                            <div class="btn-group btn-group-xs pull-right" ng-if="true">
+                                <button type="button" ng-click="addSupplierDept()" class="btn btn-default btn-xs"
+                                        id="addSupplierDeptButton"
+                                >
+                                    <i class="fa fa-plus">新增</i>
+                                </button>
+                                <button type="button" ng-click="editSupplierDept()" class="btn btn-default btn-xs"
+                                        id="editSupplierDeptButton"
+                                >
+                                    <i class="fa fa-pencil">修改</i>
+                                </button>
+                                <button type="button" ng-click="delSupplierDept()" class="btn btn-default btn-xs"
+                                        id="delSupplierDeptButton"
+                                >
+                                    <i class="fa fa-trash">删除</i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="data-table">
+                            <div base-data-table="supplierDeptTable"
+                                 ng-params="supplierDeptParams"
+                                 data-keys="{'key':'relSupplierId','value':'relSupplierId','name':'供应商部门ID'}"
+                                 data-checked-type="checkbox"
+                                 data-show-index="true"
+                                 data-auto-request="false"
+                                 data-url="supplierDeptFind"
+                                 data-legend="[
+                                     {'value':'relDeptCode','name':'部门编码'},
+                                     {'value':'relDeptName','name':'部门名称'}
+                                 ]">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--供应商附件信息 start-->
+                    <div class="tab-pane fade in col-md-12" id="supplierAttr">
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+                            <div class="btn-group btn-group-xs pull-right" ng-if="true">
+                               <!-- <button class="btn btn-default" type="button" ng-click="supplierBrandTable.search(1)">
+                                    <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                                </button>-->
+                                <button type="button" ng-click="addAttr()" ng-show="true"
+                                        class="btn btn-default btn-xs" id="addAttr"
+                                >
+                                    <i class="fa fa-plus">新增附件</i>
+                                </button>
+                                <button type="button" ng-click="deletAttr()" ng-show="true"
+                                        class="btn btn-default btn-xs" id="deleteAttr"
+                                >
+                                    <i class="fa fa-trash">删除</i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div base-data-table="fileDataTable"
+                             ng-params="fileDataParams"
+                             data-keys="{'key':'functionId','value':'functionId','name':'模块id'}"
+                             data-show-index="true"
+                             data-auto-request="true"
+                             data-url="findSupplierAttachmentList"
+                             data-legend="[
+                                 {'value':'createdByUser','name':'上传人'},
+                                 {'value':'creationDate','name':'上传时间'},
+                                 {'value':'sourceFileName','name':'附件名称'},
+                                 {'value':'fileType','name':'附件类型'},
+                                 {'value':'remark','name':'备注信息'},
+			                  ]"
+                             data-func-column = "[{'icon':'fa fa-download','text':'下载附件','callback':'downFileEvent'}]"
+                        >
+                        </div>
+
+                    </div>
+                    <!--供应商附件信息 end-->
+
+
+                    <!-- 供应商对应品牌信息 -->
+                    <div class="tab-pane fade in col-md-12" id="supplierBrand">
+                        <div>
+                            <label style="margin-left: 10px">&nbsp;</label>
+
+                            <div class="btn-group btn-group-xs pull-right" ng-if="true">
+                                <button class="btn btn-default" type="button" ng-click="supplierBrandTable.search(1)">
+                                    <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                                </button>
+                                <button type="button" ng-click="addSupplierBrand()" ng-show="true"
+                                        class="btn btn-default btn-xs" id="addSupplierBrandButton"
+                                >
+                                    <i class="fa fa-plus">新增</i>
+                                </button>
+                                <button type="button" ng-click="editSupplierBrand()" ng-show="true"
+                                        class="btn btn-default btn-xs" id="editSupplierBrandButton"
+                                >
+                                    <i class="fa fa-pencil">修改</i>
+                                </button>
+                                <button type="button" ng-click="delSupplierBrand()" ng-show="true"
+                                        class="btn btn-default btn-xs" id="delSupplierBrandButton"
+                                >
+                                    <i class="fa fa-trash">删除</i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class=" mt10 pb5 input-form bb oh" input-form
+                             data-des="此节点必需－用于识别输入表单的指令">
+                            <!--{key:'description',label:'描述'},-->
+                            <!--{key:'isadmin',label:'是否管理员',type:'lookCode',lookCode:'YES_OR_NO'},-->
+                            <!--{key:'internalUser',label:'是否EBS用户',type:'lookCode',lookCode:'YES_OR_NO'},-->
+
+                            <div search-form
+                                 data-legend="[
+                            {key:'relBrandName',label:'品牌_CN'},
+                            {key:'relBrandNameEn',label:'品牌_EN'}
+                        ]"
+                                 ng-model="supplierBrandParams"
+                            ></div>
+
+                        </div>
+                        <div class="data-table">
+                            <div base-data-table="supplierBrandTable"
+                                 ng-params="supplierBrandParams"
+                                 data-keys="{'key':'relSupplierId','value':'relSupplierId','name':'供应商对应品牌ID'}"
+                                 data-checked-type="checkbox"
+                                 data-show-index="true"
+                                 data-auto-request="true"
+                                 data-url="supplierBrandFind"
+                                 data-legend="[
+                                     {'value':'relBrandName','name':'品牌（BrandNameCN）'},
+                                     {'value':'relBrandNameEn','name':'品牌（BrandNameEN）'},
+                                     {'value':'groupName','name':'GROUP_NAME'},
+                                      {'value':'groupCode','name':'GROUP_CODE'},
+                                     {'value':'deptCode','name':'Dept Code'},
+                                     {'value':'deptName','name':'Dept'},
+                                     {'value':'buScorecard','name':'BU Scorecard（Mother Company）'},
+                                     {'value':'winTopSupplier','name':'Win/Top Supplier（Mother Company）'},
+                                     {'value':'kbScorecard','name':'KB Scorecard（Mother Company）'},
+                                 ]">
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <!-- tabContent -->
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- 关联供应商 -->
+    <div  class="modal fade" id="relSupplierLov" data-des="关联供应商" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                    </button>
+                    <h4 class="modal-title" id="driverModalLabel">
+                        关联供应商
+                    </h4>
+                </div>
+                <form class="ngValid" name="relSupplierForm">
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>关联供应商编码：</span></label>
+                                <input type="text" class="form-control radius3" id="relSupplierCode"
+                                       required     name="relSupplierCode" ng-model="relSupplierInfo.relSupplierCode" disabled/>
+                                <span class="input-group-btn ng-scope">
+                                <button ng-disabled="opreateUpdateFlag" class="btn btn-default" ng-click="getRelSupplierCode()" type="button" >
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>关联供应商名称：</span></label>
+                                <input data-required-msg="关联供应商名称" type="text" ng-model="relSupplierInfo.relSupplierName"  disabled
+                                       required class="form-control radius3">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>合同是否输出</span></label>
+                                <div lookup-code="EXCLUSIVE_YES_OR_NO"  name="relContractOutput" ng-model="relSupplierInfo.relContractOutput"></div>
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="saveSupplier(relSupplierForm.$invalid)" validate-form-btn=""
+                                    data-validate-form="relSupplierForm" id="saveDriverBtn" class="btn btn-primary mr10">保存
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+
+
+
+
+    <div lov-list="cityLov" role="dialog" data-title="选择供应商信息" id="prandSupplierCode" ng-model="current.em"
+         data-url="supplierFindLov"
+         data-dynamic-params='{"isLatent": "N"}'
+         data-callback="selectSupplierCodeReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'},{'name':'合同是否输出','key':'contractOutput'}]"
+         data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                          {'key':'supplierName','placeholder':'供应商名称'}]"
+    >
+    </div>
+
+
+    <div lov-list="cityLov" role="dialog" data-title="选择正式供应商信息" id="latentSupplierCode" ng-model="current.em"
+         data-url="supplierFindLov"
+         data-dynamic-params='{"isLatent": "N"}'
+         data-callback="selectLatentSupplierReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+         data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                          {'key':'supplierName','placeholder':'供应商名称'}]"
+    >
+    </div>
+
+
+    <!-- 供应商部门信息 -->
+    <div class="modal fade" id="supplierDeptLov" data-des="供应商部门信息" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                    </button>
+                    <h4 class="modal-title" id="supplierDeptModalLabel">
+                        供应商部门
+                    </h4>
+                </div>
+                <form class="ngValid" name="supplierDeptForm">
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>部门编码：</span></label>
+                                <input type="text" class="form-control radius3" id="relDeptCode"
+                                       required     name="relSupplierCode" ng-model="supplierDeptInfo.relDeptCode" disabled/>
+                                <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getRelDeptCode()" type="button" >
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>部门名称：</span></label>
+                                <input data-required-msg="部门名称" type="text" ng-model="supplierDeptInfo.relDeptName"  disabled
+                                       required class="form-control radius3">
+                            </div>
+                        </div>
+
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="saveSupplierDept(supplierDeptForm.$invalid)" validate-form-btn=""
+                                    data-validate-form="supplierDeptForm" id="saveSupplierDeptBtn" class="btn btn-primary mr10">保存
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+
+
+    <div lov-list="cityLov" role="dialog" data-title="选择部门信息" id="prandSupplierDept" ng-model="current.em"
+         data-url="itemFind"
+         data-dynamic-params='{"findFlag": "findDept"}'
+         data-callback="selectSupplierDeptReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+         data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                          {'key':'departmentName','placeholder':'部门名称'}]"
+    >
+    </div>
+
+
+
+    <!-- 品牌信息 -->
+    <div class="modal fade" id="supplierBrandLov" data-des="供应商品牌信息" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                    </button>
+                    <h4 class="modal-title" id="supplierBrandModalLabel">
+                        品牌信息
+                    </h4>
+                </div>
+                <form class="ngValid" name="supplierBrandForm">
+                    <div class="modal-body">
+
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>BRAND_CN：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       required     ng-model="supplierBrandInfo.relBrandName" readonly />
+                                <span class="input-group-btn ng-scope">
+                                    <button class="btn btn-default" ng-click="getBrandBrandCode()" type="button" >
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>BRAND_EN：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       readonly    ng-model="supplierBrandInfo.relBrandNameEn" />
+
+                            </div>
+                        </div>
+
+                       <!-- <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>BRAND_CN：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       readonly    ng-model="supplierBrandInfo.relBrandName" />
+
+                            </div>
+                        </div>-->
+
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>GROUP_CODE：</span></label>
+                                <input data-required-msg="GROUP" type="text" ng-model="supplierBrandInfo.groupCode"
+                                       required class="form-control radius3" readonly>
+                                <span class="input-group-btn ng-scope">
+                                    <button class="btn btn-default" ng-click="getBrandGroupCode('1')" type="button" >
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>GROUP_NAME：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       readonly    ng-model="supplierBrandInfo.groupName" />
+
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">Win/Top Supplier（Mother Company）：</span></label>
+                                <input data-required-msg="Win/Top Supplier" type="text" ng-model="supplierBrandInfo.winTopSupplier"
+                                       class="form-control radius3">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>DEPT_CODE：</span></label>
+                                <input type="text" class="form-control radius3" id="deptCode"
+                                       required     name="deptCode" ng-model="supplierBrandInfo.deptCode"  readonly/>
+                                <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getBrandDeptCode()" type="button" >
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>DEPT_NAME：</span></label>
+                                <input data-required-msg="部门名称" type="text" ng-model="supplierBrandInfo.deptName"
+                                       readonly class="form-control radius3">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i class="red">* </i>BU Scorecard（Mother Company）：</span></label>
+                                <input data-required-msg="BU Scorecard" type="text" ng-model="supplierBrandInfo.buScorecard"
+                                       required class="form-control radius3">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">KB Scorecard（Mother Company）：</span></label>
+                                <input data-required-msg="KB Scorecard" type="text" ng-model="supplierBrandInfo.kbScorecard"
+                                       class="form-control radius3">
+                            </div>
+                        </div>
+
+
+
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="saveSupplierBrand(supplierBrandForm.$invalid)" validate-form-btn=""
+                                    data-validate-form="supplierBrandForm" id="saveSupplierBrandBtn" class="btn btn-primary mr10">保存
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+
+
+    <div lov-list="cityLov" role="dialog" data-title="选择部门信息" id="supplierHeadDept" ng-model="current.em"
+         data-url="itemFind"
+         data-dynamic-params='{"findFlag": "findDept"}'
+         data-callback="selectHeadDeptReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+         data-show-index="false"是否潜在供应商
+         data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+         data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                          {'key':'departmentName','placeholder':'部门名称'}]"
+    >
+    </div>
+
+
+
+    <div lov-list="cityLov" role="dialog" data-title="选择部门信息" id="supplierBrandDept" ng-model="current.em"
+         data-url="itemFind"
+         data-dynamic-params='{"findFlag": "findDept"}'
+         data-callback="selectBrandDeptReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'departmentCode','value':'departmentCode','name':'部门编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'部门名称','key':'departmentName'}]"
+         data-search-key="[{'key':'departmentCode','placeholder':'部门编码'},
+                          {'key':'departmentName','placeholder':'部门名称'}]"
+    >
+    </div>
+
+    <div lov-list="cityLov" role="dialog" data-title="选择GROUP" id="supplierBrandGroup" ng-model="current.em"
+         data-url="itemFind"
+         data-dynamic-params='{"findFlag": "findGroup"}'
+         data-callback="selectBrandGroupReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'groupCode','value':'groupCode','name':'GROUP_CODE'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'GROUP_DESC','key':'groupDesc'}]"
+         data-search-key="[{'key':'groupCode','placeholder':'GROUP_CODE'},
+                          {'key':'groupDesc','placeholder':'GROUP_DESC'}]"
+    >
+    </div>
+
+    <div lov-list="cityLov" role="dialog" data-title="选择BRAND" id="supplierBrandBrand" ng-model="current.em"
+         data-url="itemFind"
+         data-dynamic-params='{"findFlag": "findBrand"}'
+         data-callback="selectBrandBrandReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'brandCn','value':'brandCn','name':'BRAND_CN'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'BRAND_EN','key':'brandEn'}]"
+         data-search-key="[{'key':'brandCn','placeholder':'BRAND_CN'},
+                          {'key':'brandEn','placeholder':'BRAND_EN'}]"
+    >
+    </div>
+
+
+    <!-- 上传附件信息-->
+    <div style="z-index: 1043;"  class="modal fade" id="fileLov" data-des="附件" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                    </button>
+                    <h4 class="modal-title">
+                        附件上传
+                    </h4>
+                </div>
+                <form class="ngValid" name="fileForm">
+                    <div class="modal-body">
+
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">*</i>附件类型</span></label>
+                                <div lookup-code="TTA_SUPPLIER_FILE_TYPE" required="true" name="fileType"
+                                     ng-model="fileInfo.fileType" ></div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">备注信息</span></label>
+                                <input type="text" class="form-control radius3" ng-model="fileInfo.remark">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">选择文件</span></label>
+                                <input type="file" required id="fileUpLoad">
+
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="saveFile(fileForm.$invalid)" validate-form-btn=""
+                                    data-validate-form="fileForm" class="btn btn-primary mr10">保存
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>

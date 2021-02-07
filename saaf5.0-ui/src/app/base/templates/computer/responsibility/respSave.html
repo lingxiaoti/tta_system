@@ -1,0 +1,250 @@
+<div ng-controller="respSaveCtrl" class="gridtable">
+	<div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+		<!--------------------- 按钮--->
+		<!--------------------- 按钮--->
+		<div class="bg-gray-white bt">
+			<div class="bg-gray-white p5">
+				<div class="btn-group btn-group-xs pull-right ml10" >
+
+
+					<button class="btn btn-default" type="button" permission-btn="" data-validate-form="saveForm" ng-click="btnSave(saveForm.$invalid)">
+						<i class="fa fa-save" aria-hidden="true"></i>保存
+					</button>
+
+				</div>
+
+				<div class="btn-group btn-group-xs ">
+
+					<button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+					</button>
+				</div>
+			</div>
+		</div>
+		<!---------------------  / .按钮  --->
+		<div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+			<div class="nicescroll-height  bg-white " ng-nicescroll
+				
+				 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+				<!--------------------- 输入表单  --->
+				<form class=" mt10 pb5 oh input-form bb" input-form data-des="此节点必需－用于识别输入表单的指令" name="saveForm">
+					<div class="pl30 ">
+						<h5><span class="fa fa-file-text mr15"></span>职责信息</h5>
+					</div>
+					<div class="form-group col-xs-6 col-md-3">
+						<div class="input-group input-group-xs">
+							<label class="input-group-addon bn"><span
+									class="w100"><i class="red">*</i>职责名称</span></label>
+							<input type="text" required class="form-control radius3" name="responsibilityName"
+								   ng-model="params.responsibilityName">
+						</div>
+					</div>
+
+					<div class="form-group col-xs-6 col-md-3">
+						<div class="input-group input-group-xs">
+							<label class="input-group-addon bn"><span
+									class="w100"><i class="red">*</i>职责编号</span></label>
+							<input type="text" required class="form-control radius3" name="responsibilityCode"
+								   ng-model="params.responsibilityCode">
+							<span class="input-group-btn">
+								<button class="btn btn-xs btn-warning" type="button" ng-click="setPinyin()">
+									简拼
+								</button>
+							</span>
+						</div>
+					</div>
+					<div class="form-group col-xs-6 col-md-3">
+						<div class="input-group input-group-xs">
+							<label class="input-group-addon bn"><span
+									class="w100"><i class="red">*</i>系统编码</span></label>
+							<div lookup-code="SYSTEM_CODE" ng-model="params.systemCode" name="systemCode" required=""></div>
+						</div>
+					</div>
+
+
+					<div class="form-group col-xs-6 col-md-3">
+						<div class="input-group input-group-xs">
+							<label class="input-group-addon bn"><span
+									class="w100"><i class="red">*</i>职责描述</span></label>
+							<input type="text" required class="form-control radius3" name="responsibilityDesc"
+								   ng-model="params.responsibilityDesc">
+						</div>
+					</div>
+					<div class="form-group col-xs-6 col-md-3">
+						<div class="input-group input-group-xs">
+							<label class="input-group-addon bn"><span
+									class="w100"><i class="red">*</i>生效日期</span></label>
+							<input type="text" data-enddate="{{params.endDateActive}}"
+								   required class="form-control radius3" data-min-View="1" name="startDateActive"
+								   data-is-today="true"
+
+								   ng-model="params.startDateActive" data-date-format="yyyy-mm-dd"
+								   date-time-picker>
+						</div>
+					</div>
+					<div class="form-group col-xs-6 col-md-3">
+						<div class="input-group input-group-xs">
+							<label class="input-group-addon bn"><span
+									class="w100">失效日期</span></label>
+							<input type="text" class="form-control radius3"
+								   data-stratdate="{{params.startDateActive}}" data-min-View="1" name="endDateActive"
+								   ng-model="params.endDateActive" data-date-format="yyyy-mm-dd"
+								   date-time-picker>
+						</div>
+					</div>
+
+				</form>
+				<!--------------------- ./  输入表单  --->
+				<!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+				<div class="pl30 pr30 pt20">
+					<h5><span class="fa fa-user mr15"></span>关联角色
+						<button class="btn btn-primary btn-xs fr" data-toggle="modal" ng-click="btnNewRole()" permission-btn=""
+								data-target="#role-lov">新增
+						</button>
+					</h5>
+					<div lov-list="roleList" role="dialog" data-title="角色选择" id="role-lov" ng-model="current.roles"
+						 data-url="roleList"
+
+						 data-params='{"systemCode":"{{params.systemCode}}"}'
+						 data-callback="setRoleList"
+						 data-checked-type="checkbox"
+						 data-keys="{'key':'roleId','value':'roleName',name:'角色名称'}"
+						 data-show-index="true"
+						 data-other-column="[{'name':'角色编号','key':'roleCode'},{'name':'系统编码','key':'systemCode'}]"
+						 data-search-key="{'key':'roleName','placeholder':'请输入角色名称'}"
+						 data-pagination="{'pageIndex':'1','pageRows':'5'}"
+					>
+					</div>
+					<div base-data-table="roleTable" class="mb20"
+						 ng-params="params"
+						 data-show-index="true"
+						 ng-data-source="roleData"
+						 data-legend="[
+                             {'value':'roleName','name':'角色名称'},
+                              {'value':'roleCode','name':'角色编码'},
+                             {'value':'roleDesc','name':'角色描述'}
+                             ]"
+						 data-func-column="[{icon:'fa fa-remove',callback:'roleRemove'}]"
+					></div>
+
+
+					<h5><span class="fa fa-cog mr15"></span>关联profile
+						<button class="btn btn-primary btn-xs fr" data-toggle="modal" permission-btn="" ng-click="btnNewProfile()"
+								data-target="#profile-lov">新增
+						</button>
+					</h5>
+
+					<div lov-list="profileList" role="dialog" data-title="关联Profile" id="profile-lov"
+						 ng-model="current.profile"
+						 data-url="baseProfileFind"
+						 data-params='{deleteFlag:0}'
+						 data-callback="setProfile"
+						 data-checked-type="radio"
+						 data-keys="{'key':'profileId','value':'profileName',name:'Profile名称'}"
+						 data-show-index="true"
+						 data-other-column="[{'name':'profile编码','key':'profileCode'}]"
+						 data-search-key="{'key':'profileName','placeholder':'profile名称'}"
+						 data-pagination="{'pageIndex':'1','pageRows':'5'}"
+					>
+					</div>
+
+					<table class=" table-hover report-data  ">
+						<thead>
+						<tr>
+							<th>Profile名称</th>
+							<th>Profile编码</th>
+							<th>Profile描述</th>
+							<th>Profile值</th>
+							<th>数据源</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat=" row in profileData"
+							ng-click="dataTable.selectRow=$index">
+							<td>{{ row.profileName}}</td>
+							<td>{{ row.profileCode}}</td>
+							<td>{{ row.profileDesc}}</td>
+							<td ng-class="{'has-error':!row.profileValue}">
+
+								<div class="input-group input-group-xs" ng-if="row.profileCode=='VENDOR' || row.profileCode=='VENDOR_GROUP'">
+									<input style="float: none" ng-if="row.profileCode=='VENDOR' || row.profileCode=='VENDOR_GROUP'" type="text" class="form-control radius3" required ng-model="row.profileValueTxt"
+										   readonly>
+
+									<span class="input-group-btn" >
+										<button ng-if="row.profileCode=='VENDOR'" class="btn btn-default" data-toggle="modal" data-target="#vendorLov" ng-click="getProfileVal()" type="button">
+											<i class="fa fa-search"></i>
+										</button>
+										<button ng-if="row.profileCode=='VENDOR_GROUP'" class="btn btn-default" data-toggle="modal" data-target="#vendorGroupLov" ng-click="getProfileVal()" type="button">
+											<i class="fa fa-search"></i>
+										</button>
+									</button>
+									</span>
+
+								</div>
+
+
+								<select ng-if="row.profileCode!='VENDOR' && row.profileCode!='VENDOR_GROUP'" ng-model="row.profileValue" class=" from-input input-xs">
+									<option ng-repeat="item in row.option" value="{{item.VAL}}">
+										{{item.TXT}}
+									</option>
+								</select>
+							</td>
+							<td>{{ row.dsName}}</td>
+							<td><a href="javascript:" class="fa fa-remove" ng-click="profileRemove($index)">删除</a></td>
+						</tr>
+						</tbody>
+					</table>
+					<div ng-show="profileData.length===0" class="p15 tc red">
+						没有数据
+					</div>
+
+
+					<!--<div base-data-table="profileTable" class="mb20"
+						 ng-params="params"
+						 ng-data-source="profileData"
+						 data-show-index="true"
+						 data-legend="[
+                             {'value':'profileName','name':'Profile名称'},
+                             {'value':'profileCode','name':'Profile编码'},
+                             {'value':'profileDesc','name':'Profile描述'},
+                              {'value':'dsName','name':'数据源'}
+                             ]"
+						 data-func-column="[{icon:'fa fa-remove',callback:'profileRemove'}]"
+					></div>-->
+
+				</div>
+				<!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+			</div>
+		</div>
+	</div>
+
+
+
+	<div lov-list="vendorLov" role="dialog" data-title=" " id="vendorLov" ng-model="code1" class="  "
+		 data-url="baseVendorProfilefind"
+		 data-callback="vendorCallback"
+		 data-params='{}'
+		 data-keys="{'key':'vendorNbr','value':'vendorName','name':'名称'}"
+		 data-pagination="{'pageIndex':'1','pageRows':'5'}"
+		 data-checked-type="radio"
+		 data-other-column="[{'name':'编码','key':'vendorNbr'}]"
+		 data-show-index="true"
+		 data-search-key="[{'key':'vendorName','placeholder':'名称'}]"
+	>
+	</div>
+
+	<div lov-list="vendorGroupLov" role="dialog" data-title=" " id="vendorGroupLov" ng-model="code1" class="  "
+		 data-url="baseVendorGroupProfilefind"
+		 data-callback="vendorCallback"
+		 data-params='{}'
+		 data-keys="{'key':'vendorNbr','value':'vendorName','name':'名称'}"
+		 data-pagination="{'pageIndex':'1','pageRows':'5'}"
+		 data-checked-type="radio"
+		 data-other-column="[{'name':'编码','key':'vendorNbr'}]"
+		 data-show-index="true"
+		 data-search-key="[{'key':'vendorName','placeholder':'名称'}]"
+	>
+	</div>
+
+
+</div>

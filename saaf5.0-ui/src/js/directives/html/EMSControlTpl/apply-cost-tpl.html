@@ -1,0 +1,181 @@
+<div class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content {{ css}}">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">{{title}}
+                    <small> {{ subTitle}}</small>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div style="max-height: 450px;position: relative;">
+
+                    <div class="search pb10">
+
+                        <form ng-submit="dataTableSelection.getData()" class="row">
+                            <div class="form-group col-xs-5 col-md-5">
+                                <div class="input-group input-group-sm">
+                                    <label class="input-group-addon bn"> <span class="w80">申请编号</span></label>
+                                    <input type="text" class="form-control radius3"
+                                           ng-model="params.bcEncumbranceHId">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-5 col-md-5">
+                                <div class="input-group input-group-sm">
+                                    <label class="input-group-addon bn">费用科目名称</label>
+                                    <input type="text" class="form-control radius3"
+                                           ng-model="params.expenseAccountName">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-2 col-md-2">
+                                <div class="input-group input-group-xs input-group-sm">
+                                    <button type="button" class="btn btn-primary btn-sm" ng-click="dataTableSelection.getData()">
+                                        <i class="fa fa-search mr5"></i>搜索
+                                    </button>
+                                </div>
+                            </div>
+                            <!--<div class="form-group col-xs-5 col-md-5" style="padding-top:3px;">-->
+                                <!--<div class="input-group input-group-xs">-->
+                                    <!--<label class="input-group-addon bn"><span class="w80">部门</span></label>-->
+                                    <!--<input type="text" class="form-control radius3"-->
+                                           <!--ng-model="params.departmentName">-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+
+                        </form>
+                    </div>
+                    <fieldset class="currentList mb10" ng-show="dataTableSelection.data[dataTableSelection.data.selectRow]">
+                        <legend class="text-brand-primary">当前挑选</legend>
+                        <ul>
+                            <li>
+                                <label>
+                                    <input type="radio" checked="checked"  ng-value="dataTableSelection.data[dataTableSelection.data.selectRow].bcEncumbranceCode">
+                                    {{dataTableSelection.data[dataTableSelection.data.selectRow].bcEncumbranceCode}}
+                                </label>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <div class="data-table" style="overflow-x: scroll;">
+                        <!--<div base-data-table="dataTableSelection"-->
+                             <!--data-auto-request="false"-->
+                             <!--data-checked-type="radio"-->
+                             <!--data-keys="{'key':'positionId','value':'personId',delKey:'id',delKeyType:'array'}"-->
+                             <!--ng-params="params"-->
+                             <!--data-show-index="true"-->
+                             <!--data-url="personList"-->
+                             <!--data-onload=""-->
+                             <!--data-page-size="5"-->
+                             <!--data-legend="[-->
+                                 <!--{'value':'departmentName','name':'申请编号'},-->
+                                 <!--{'value':'personId','name':'事业部'},-->
+                                 <!--{'value':'personName','name':'渠道'},-->
+                                 <!--{'value':'positionName','name':'部门/省区'},-->
+                                 <!--{'value':'departmentName','name':'人员'},-->
+                                 <!--{'value':'personId','name':'当前责任人'},-->
+                                 <!--{'value':'personName','name':'经销商'},-->
+                                 <!--{'value':'positionName','name':'申请金额'},-->
+                                 <!--{'value':'departmentName','name':'报销金额'},-->
+                                 <!--{'value':'personId','name':'报销金额（含审批中）'},-->
+                                 <!--{'value':'personName','name':'费用科目'},-->
+                                 <!--{'value':'positionName','name':'期间'},-->
+                                 <!--{'value':'departmentName','name':'职位'},-->
+                                 <!--{'value':'personId','name':'申请费用类型'},-->
+                                 <!--{'value':'personName','name':'活动开始日期'},-->
+                                 <!--{'value':'positionName','name':'活动结束日期'},-->
+                                 <!--{'value':'departmentName','name':'申请来源'},-->
+                                 <!--{'value':'personId','name':'申请来源编号'},-->
+                                 <!--{'value':'personName','name':'活动内容'}-->
+                             <!--]"-->
+                        <!--&gt;</div>-->
+
+                        <table saaf-table="dataTableSelection"
+                               data-url="applyCost"
+                               data-params="params"
+                               data-auto-get-data="false"
+                               data-page-rows="5"
+                               class="table table-bordered table-hover table-condensed">
+                            <thead class="bg-gray-white">
+                            <tr class="text-center">
+                                <th>选择</th>
+                                <th>序号</th>
+                                <th>申请编号</th>
+                                <th >事业部</th>
+                                <th >渠道</th>
+                                <th >部门/省区</th>
+                                <th >人员</th>
+                                <th >当前责任人</th>
+                                <th >经销商</th>
+                                <th >申请金额</th>
+                                <th >报销金额</th>
+                                <th >报销金额（含审批中）</th>
+                                <th >费用科目</th>
+                                <th>期间</th>
+                                <th >职位</th>
+                                <th >申请费用类型</th>
+                                <th >活动开始日期</th>
+                                <th >活动结束日期</th>
+                                <th >申请来源</th>
+                                <th >申请来源编号</th>
+                                <th >活动内容</th>
+                            </tr>
+                            </thead>
+                            <tbody ng-if="dataTableSelection.data && dataTableSelection.data.length<1">
+                            <tr><td class="p15 tc text-brand-primary" colspan="30" style="font-size: 14px">暂无数据</td></tr>
+                            </tbody>
+                            <tbody  ng-if="dataTableSelection.data">
+
+                            <tr class="text-center" ng-repeat="row in dataTableSelection.data" ng-class="{'active':dataTableSelection.data.selectRow==$index}" ng-click="dataTableSelection.data.selectRow=$index">
+                                <td><input type="radio" name="applyCost" ng-checked="dataTableSelection.data.selectRow==$index"></td>
+                                <td ng-bind="(dataTableSelection.curIndex-1)*dataTableSelection.pageSize+$index+1" style="width: 50px;text-align: center">1</td>
+                                <td >{{row.bcEncumbranceCode}}
+                                    <!--<a style="color:#ff5715 ; cursor:pointer" ui-sref="home.editLookuptype({'lookupTypeId':'1'})">{{row.lookupType}}</a>-->
+                                </td>
+                                <td >{{row.orgName}}  </td>
+                                <td >{{row.channelName}}  </td>
+                                <td >{{row.departmentName}}  </td>
+                                <td >{{row.personName}}  </td>
+                                <td >{{row.substitutePersonName}} </td>
+                                <td >{{row.custAccountName}} </td>
+                                <td >{{row.encumbranceAmount}}  </td>
+                                <td >{{row.reimburseAmount}}  </td>
+                                <td >{{row.reimbursingAmount}}  </td>
+                                <td >{{row.expenseAccountName}}  </td>
+                                <td >{{row.expensePeriod}}  </td>
+                                <td >{{row.positionName}} </td>
+                                <td >{{row.expenseName}}  </td>
+                                <td >{{row.startDate}}  </td>
+                                <td >{{row.endDate}}  </td>
+                                <td >{{row.sourceName}}  </td>
+                                <td >{{row.sourceCode}}  </td>
+                                <td >{{row.eventDesc}}  </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div  ng-if="!dataTableSelection.data" class="p15 tc text-brand-primary" style="font-size: 14px;margin-top: -20px;">请查询数据</div>
+                        <div saaf-table-tfoot="dataTableSelection" ng-if="dataTableSelection.data"></div>
+
+                </div>
+
+                 </div>
+            </div>
+            <div class="modal-footer">
+                <div style="padding: 3px 10px;">
+                    <!--<button type="button" ng-class="{'mt10': paging.total }" class="btn btn-default btn-sm "-->
+                            <!--data-dismiss="modal">取消-->
+                    <!--</button>-->
+                    <button type="button" ng-class="{'mt10': paging.total }" class="btn btn-default btn-sm "
+                            ng-click="cancel()" data-dismiss="modal">清除选择
+                    </button>
+                    <button type="button" ng-class="{'mt10': paging.total }" class="btn btn-primary btn-sm "
+                            ng-click="callback()" data-dismiss="modal">确定
+                    </button>
+                </div>
+
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+
+</div>
+

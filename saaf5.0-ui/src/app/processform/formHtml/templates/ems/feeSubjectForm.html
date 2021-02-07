@@ -1,0 +1,320 @@
+<div ng-controller="feeSubjectFormCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="feeApplicationForm"
+         data-api-get="findApplicationDetail" data-api-del="" data-api-update="feeApplicationForm">
+        <div class="col-md-12 oh">
+            <div class="col-xs-12">
+                <h5 class="fontwB"><span class="fa fa-cog mr5"></span>申请信息</h5>
+            </div>
+            <div resp-change="" style="display: none"></div>
+            <div class="row">
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">申请编号</span></label>
+                        <input type="text" class="form-control radius3" readonly
+                               ng-model="formParams.encumbranceCode">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">状态</span></label>
+                        <div lookup-code="BATCH_STATUS" class="form-control radius3" required="true" disabled
+                             ng-if="action=='new'||action=='edit'||action=='draft'||action=='refusal'"
+                             ng-model="formParams.encumbranceStatus"></div>
+                        <input type="text" class="form-control radius3" readonly ng-model="formParams.statusName"
+                               ng-if="action!='new'&&action!='edit'&&action!='draft'&&action!='refusal'">
+                        <!--<div  class="form-control radius3" readonly="true" ng-model="formParams.encumbranceStatus"-->
+                             <!--ng-show="action=='new'">草稿</div>-->
+                        <!--<input type="text" class="form-control radius3" disabled-->
+                               <!--ng-model="formParams.statusName">-->
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">渠道</span></label>
+                        <input type="text" class="form-control radius3" readonly
+                               ng-model="formParams.channelName">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">部门</span></label>
+                        <input type="text" class="form-control radius3" readonly
+                               ng-model="formParams.departmentName">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4" ng-hide="userType=='30'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">人员</span></label>
+                        <input type="text" ng-readonly="true" class="form-control radius3 readonly-white"
+                               ng-model="formParams.applyPersonName">
+                        <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" data-target="#person"
+                                    ng-disabled="editDisabled"  class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">职位</span></label>
+                        <input type="text" class="form-control radius3" readonly
+                               ng-model="formParams.applyPositionName">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">经销商</span></label>
+                        <input type="text" readonly class="form-control radius3 readonly-white"
+                               ng-model="formParams.custAccountName">
+                        <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" data-target="#dealer"
+                                    ng-disabled="editDisabled"
+                                    class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>费用期间</span></label>
+                        <!--<div lookup-code="BOUNDARY_CODE" ng-model="applicationItem.expensePeriod" required="true" ng-disabled="editDisabled"></div>-->
+                        <select class="form-control input-xs radius3-4" ng-model="formParams.expensePeriod" name="expensePeriod" required
+                                ng-if="action=='new'||action=='edit'||action=='draft'||action=='refusal'">
+                            <option value="">请选择</option>
+                            <option ng-value="expensePeriod.expensePeriod" ng-repeat="expensePeriod in periodList">{{expensePeriod.expensePeriod}}</option>
+                        </select>
+
+                        <input type="text" class="form-control radius3" readonly ng-model="formParams.expensePeriod"
+                               ng-if="action!='new'&&action!='edit'&&action!='draft'&&action!='refusal'">
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>费用科目</span></label>
+                        <input type="text" readonly class="form-control radius3 readonly-white" name="feeSubject" required
+                               ng-model="formParams.expenseAccountName">
+                        <span class="input-group-btn ng-scope">
+                            <button type="button" data-toggle="modal" data-target="#expSubject"
+                                    ng-disabled="editDisabled"
+                                    class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>费用类型</span></label>
+                        <div lookup-code="EXPENSE_TYPE" ng-model="formParams.expenseType" required="true" name="expenseType"
+                             ng-if="action=='new'||action=='edit'||action=='draft'||action=='refusal'"
+                             data-callback="changeExpenseType" id="expenseType"></div>
+
+                        <input type="text" class="form-control radius3" readonly ng-model="formParams.expenseName"
+                               ng-if="action!='new'&&action!='edit'&&action!='draft'&&action!='refusal'">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>提交金额</span></label>
+                        <input type="number" min="0.01" class="form-control radius3" name="subMount"
+                               ng-change="changeAmount(formParams,'commitAmount',2)"
+                               ng-readonly="editDisabled" id="commitAmount"
+                               required ng-model="formParams.commitAmount">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4" ng-if="action!='draft'&&action!='new'&&action!='refusal'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>申请金额</span></label>
+                        <input type="number" min="0.01" class="form-control radius3" name="encumbranceAmount"
+                               ng-readonly="editDisabled" id="encumbranceAmount"
+                               ng-change="changeAmount(formParams,'encumbranceAmount',2)"
+                               onblur="this.value=parseFloat(this.value).toFixed(2)"
+                               required ng-model="formParams.encumbranceAmount">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4" ng-if="action=='detail'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">报销金额</span></label>
+                        <input type="number" min="0.01" readonly class="form-control radius3" ng-model="formParams.reimburseAmount">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4" ng-if="action=='detail'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">冲回金额</span></label>
+                        <input type="number" min="0.01" readonly class="form-control radius3" ng-model="formParams.reverseAmount">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>开始日期</span></label>
+                        <input class="form-control input-xs radius3-4" ng-model="formParams.startDate" date-time-picker autocomplete="off"
+                               data-enddate="{{formParams.endDate}}" data-min-view="2" required name="startDate"
+                               data-date-format="yyyy-mm-dd" ng-readonly="editDisabled">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>结束日期</span></label>
+                        <input class="form-control input-xs radius3-4" ng-model="formParams.endDate" date-time-picker autocomplete="off"
+                               data-stratdate="{{formParams.startDate}}" data-min-view="2" required name="endDate"
+                               data-date-format="yyyy-mm-dd" ng-readonly="editDisabled">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4" ng-show="action=='detail'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">单据来源</span></label>
+                        <input class="form-control input-xs radius3-4" ng-model="formParams.sourceType" ng-readonly="editDisabled">
+                    </div>
+                </div>
+                <div class="form-group col-xs-4 col-md-4" ng-show="!(action=='new')">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">来源单据编号</span></label>
+                        <input class="form-control input-xs radius3-4" ng-model="formParams.sourceCode " readonly>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-12">
+                    <div class="input-group input-group-xs" ng-if="orgId!=82">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>申请内容</span></label>
+                        <textarea style="height: 50px" class="form-control radius3" ng-model="formParams.eventDesc"
+                                  ng-readonly="editDisabled" max-textarea-cn="60"
+                                  name="eventDesc" required></textarea>
+                    </div>
+                    <div class="input-group input-group-xs" ng-if="orgId==82">
+                        <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>申请内容</span></label>
+                        <textarea style="height: 50px" class="form-control radius3" ng-model="formParams.eventDesc"
+                                  ng-readonly="editDisabled" max-textarea-cn="1000"
+                                  name="eventDesc" required></textarea>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-12" ng-show="formParams.encumbranceStatus=='create' || formParams.encumbranceStatus=='unpass'">
+                    <div class="input-group input-group-xs">
+                        <label class="input-group-addon bn"><span class="w100">会签意见</span></label>
+                        <textarea id="feeopinion" style="height: 50px" class="form-control radius3" ng-model="params.properties.opinion"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 pb10 oh hook-normal"
+             ng-if="action=='detail'&&(formParams.encumbranceStatus=='pass'||formParams.encumbranceStatus=='close')&&systemSource=='ems'">
+            <h5 class="fontwB">
+                <span class="fa fa-cog mr15"></span>报销头
+            </h5>
+            <div class="data-table">
+                <table class="nicescroll-height report-data">
+                    <thead>
+                    <tr>
+                        <th>选择</th>
+                        <th>报销编号</th>
+                        <th>渠道</th>
+                        <th>部门</th>
+                        <th>人员</th>
+                        <th>经销商</th>
+                        <th>费用科目</th>
+                        <th>费用期间</th>
+                        <th>报销费用类型</th>
+                        <th>提交金额</th>
+                        <th>报销金额</th>
+                        <th>状态</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="headerItem in formParams.reimburseData" ng-click="selectHeaderFun(headerItem)">
+                        <td><input type="radio" ng-value="true" ng-model="headerItem.radioValue" name="reimburse"></td>
+                        <td ng-bind="headerItem.bcReimburseCode"></td>
+                        <td ng-bind="headerItem.channelName"></td>
+                        <td ng-bind="headerItem.departmentName"></td>
+                        <td ng-bind="headerItem.applyPersonName"></td>
+                        <td ng-bind="headerItem.custAccountName"></td>
+                        <td ng-bind="headerItem.expenseAccountName"></td>
+                        <td ng-bind="headerItem.expensePeriod"></td>
+                        <td ng-bind="headerItem.encumbranceExpenseName"></td>
+                        <td ng-bind="headerItem.commitAmount"></td>
+                        <td ng-bind="headerItem.reimburseAmount"></td>
+                        <td ng-bind="headerItem.statusName"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-12 oh hook-normal"
+             ng-if="action=='detail'&&(formParams.encumbranceStatus=='pass'||formParams.encumbranceStatus=='close')&&systemSource=='ems'">
+            <h5 class="fontwB">
+                <span class="fa fa-cog mr15"></span>报销行
+            </h5>
+            <div class="data-table">
+                <table class="nicescroll-height report-data">
+                    <thead>
+                    <tr>
+                        <th>部门</th>
+                        <th>报销项目</th>
+                        <th>人员</th>
+                        <th>经销商</th>
+                        <th>经销商子库编码</th>
+                        <th>第三方</th>
+                        <th>报销金额</th>
+                        <th>开始日期</th>
+                        <th>结束日期</th>
+                        <th>活动内容</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="rowItem in rowLists">
+                        <td ng-bind="rowItem.departmentName"></td>
+                        <td ng-bind="rowItem.expenseItemDesc"></td>
+                        <td ng-bind="rowItem.personName"></td>
+                        <td ng-bind="rowItem.accountName"></td>
+                        <td ng-bind="rowItem.secondaryInventoryName"></td>
+                        <td ng-bind="rowItem.thirdParty"></td>
+                        <td ng-bind="rowItem.reimburseAmount"></td>
+                        <td ng-bind="rowItem.startDate"></td>
+                        <td ng-bind="rowItem.endDate"></td>
+                        <td ng-bind="rowItem.eventDesc"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button class="btn btn-primary btn-xs mt15" ng-if="orgId==81" type="button" ng-click="downloadTmp('BUDGET_REIMBURSE_TEMPLATE')">
+                下载费用单据模板
+            </button>
+        </div>
+        <div class="col-md-12">
+            <div saaf-file data-file-data="fileData" data-lookupcode="fileFilter.code" data-lookupcode-key="fileFilter.key" data-file-filter='{{fileType}}' data-view-only="fileViewOnly"
+                 data-label='<header class="col-xs-12 fontwB"><i class="fa fa-cog mr5" aria-hidden="true"></i>附件</header>'>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-12 oh" id="closeReason" ng-if="closeReason.show && systemSource=='ems'">
+            <h5 class="fontwB"><span class="fa fa-cog mr15"></span>关闭申请</h5>
+            <div class="form-group col-xs-12 col-md-12">
+                <div class="input-group input-group-xs">
+                    <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>关闭理由</span></label>
+                    <textarea style="height: 50px" class="form-control radius3" ng-model="closeReason.remark"></textarea>
+                </div>
+            </div>
+            <div class="form-group col-xs-12 col-md-12" style="text-align: center;">
+            	<button type="button" class="btn btn-primary" ng-click="closeReason.submit()">关闭申请</button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!--人员-->
+    <div e-user-select="findHeaderUser" role="dialog" data-title="请选择人员" id="person" ng-model="personItem" data-search-auto="true"
+         ng-params="{responsibilityId:respId,userType:itemAllot.userType,userAuth:'maintain'}" return-fun="selectPersonFun">
+    </div>
+
+    <!--经销商-->
+    <div ems-dealer-select data-sel-params="{responsibilityId:respId,userAuth:'maintain',menuCode:'EMS_FYSQ',resourceCode:'20YHKYXZBMSYJXS',channelType:ctrlChannelType}" id="dealer" ng-model="dealerItem"
+         data-keys="{key:'customerId',value:'customerName',userAuth:'maintain'}" data-dir-type="header" data-search-auto="true"
+         callaction="dealerSelectFun()" emptyaction="dealerEmptyFun()"></div>
+
+    <!--费用科目-->
+    <div ems-exp-subject-select data-sel-params="{responsibilityId:respId,channelType:ctrlChannelType,isEncumbranceAuth:'Y',
+        isLeafFlag:'Y',needEncumbrance:'Y',userAuth:'maintain'}" id="expSubject" ng-model="expSubjectItem"
+         data-keys="{key:'expenseAccount',value:'expenseAccountName'}" data-dir-type="header" data-search-auto="true"
+         callaction="expSelectFun()" emptyaction="expEmptyFun()"></div>
+</div>

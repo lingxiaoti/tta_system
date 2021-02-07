@@ -1,0 +1,228 @@
+<div ng-controller="projectAndModuleCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+
+                <div class="btn-group btn-group-xs pull-right ml10" permission-buttons="btnNew,btnModify,btnDel" data-disabled-for-table="moduleTable">
+                    <button type="button" class="btn btn-default" ng-click="btnNew()"
+                            ng-disabled="projectTable.data.selectRow==null">
+                        <i class="fa fa-plus"></i>新增
+                    </button>
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)"><i
+                            class="fa fa-square-o"></i>数据全屏
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white h" main-scroll-style>
+            <div class="br h p0" style="margin-right: -1px;">
+                <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                        <div class="col col-xs-4 col-md-2 p0">
+                            <div class="data-table">
+                                <table id="projectTable"
+                                       saaf-table="projectTable"
+                                       data-url="baseApiCenterHFind"
+                                       data-params="projectParams"
+                                       data-page-rows="-1"
+                                       class="table table-hover table-condensed" style="border: 1px solid #ddd;">
+                                    <thead class="bg-gray-white">
+                                    <tr class="text-center" style="position: relative;">
+                                        <th colspan="2">项目</th>
+                                        <button class="btn btn-default btn-sm" ng-click="addProject()" type="button"
+                                                style="position: absolute;"><i class="fa fa-plus"></i>新增
+                                        </button>
+                                    </tr>
+                                    </thead>
+                                    <tbody ng-show="projectTable.data.length<1">
+                                    <!--<tr class="text-center" ng-click="addProject()">-->
+                                    <!--<td colspan="2"><i class="fa fa-plus"></i></td>-->
+                                    <!--</tr>-->
+                                    <tr>
+                                        <td colspan="2">暂无数据</td>
+                                    </tr>
+                                    </tbody>
+                                    <tbody ng-show="projectTable.data.length>0">
+                                    <tr>
+                                        <td colspan="2">
+                                            <input class="form-control" placeholder="搜索项目…"
+                                                   ng-model="projectParams.centerName">
+                                        </td>
+                                    </tr>
+                                    <!--<tr class="text-center" ng-click="addProject()">-->
+                                    <!--<td colspan="2"><i class="fa fa-plus"></i></td>-->
+                                    <!--</tr>-->
+                                    <tr class="text-center"
+                                        ng-repeat="item in projectTable.data | filter:{centerName:projectParams.centerName}"
+                                        ng-class="{'active':projectTable.data.selectRow==$index}"
+                                        ng-click="projectTable.data.selectRow=$index;changeProject(item)">
+                                        <td class="text-left">
+                                            <span style="text-align: left">{{item.centerName}}</span>
+                                        </td>
+                                        <td>
+                                            <div class="pos">
+                                                <button style="border:0;background: none;"
+                                                        ng-click="updateProject(item,$event)"><i
+                                                        style="left: 0;color: #3498db;" class="fa fa-pencil"></i>
+                                                </button>
+                                                <button style="border:0;background: none;"
+                                                        ng-click="deleteProject(item,$event)"><i style="left: 32px;"
+                                                                                                 class="fa fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col col-xs-8 col-md-10 p0">
+
+                            <div class="data-table">
+                                <div base-data-table="moduleTable"
+                                     data-auto-request='false'
+                                     ng-params="moduleParams"
+                                     data-show-index="true"
+                                     data-url="baseApiCenterLFind"
+                                     data-legend="[
+                             {'value':'modelName','name':'模块名称'},
+                             {'value':'modelCode','name':'模块编号'},
+						 ]"
+
+                                ></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form class="ngValid" name="projectForm" ng-submit="confirmProject(projectForm.$invalid)">
+        <div class="modal fade" id="projectModal" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            {{projectModalTitle}}
+                        </h4>
+                    </div>
+
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>项目名称：</span></label>
+
+                                        <input type="text" class="form-control radius3" required
+                                               ng-model="project.centerName">
+                                    </div>
+                                </div>
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>项目编号：</span></label>
+
+                                        <input type="text" class="form-control radius3" required
+                                               ng-model="project.centerCode">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true">取消
+                            </button>
+                            <button type="submit" class="btn btn-primary mr10">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+    </form>
+
+    <form class="ngValid" name="moduleForm" ng-submit="confirmModule(moduleForm.$invalid)">
+        <div class="modal fade" id="moduleModal" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            {{moduleModalTitle}}
+                        </h4>
+                    </div>
+
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="">项目名称：</span></label>
+
+                                        <input type="text" class="form-control radius3" disabled
+                                               ng-model="changeRow.centerName">
+                                    </div>
+                                </div>
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="">项目编号：</span></label>
+
+                                        <input type="text" class="form-control radius3" disabled
+                                               ng-model="changeRow.centerCode">
+                                    </div>
+                                </div>
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>模块名称：</span></label>
+
+                                        <input type="text" class="form-control radius3" required
+                                               ng-model="module.modelName">
+                                    </div>
+                                </div>
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>模块编号：</span></label>
+
+                                        <input type="text" class="form-control radius3" required
+                                               ng-model="module.modelCode">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true">取消
+                            </button>
+                            <button type="submit" class="btn btn-primary mr10">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+    </form>
+</div>

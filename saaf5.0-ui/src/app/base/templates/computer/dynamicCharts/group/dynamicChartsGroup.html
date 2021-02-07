@@ -1,0 +1,76 @@
+<div ng-controller="dynamicChartsGroupCtrl" class="gridtable" data-desc="动态报表组">
+	<form class="form bg-white" ng-submit="dataTable.search(1)" inner-frame data-des="此节点必需－内框页面的指令">
+		<!--------------------- 按钮--->
+		<div class="bg-gray-white bt">
+			<div class="bg-gray-white p5">
+				<div class="pull-right ml10" >
+					<div class="btn-group btn-group-xs ">
+						<button class="btn btn-default"  >
+							<i class="fa fa-search" aria-hidden="true"></i>搜索
+						</button>
+						<button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+							<i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+						</button>
+						<a class="btn btn-default" href="help/dynamic_report_set.html" target="_blank">
+							<i class="fa fa-question-circle-o" aria-hidden="true">帮助文档</i>
+						</a>
+					</div>
+					<div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDel">
+
+					</div>
+				</div>
+
+				<div class="btn-group btn-group-xs ">
+					<button class="btn  btn-warning" ng-click="moreInput($event)">
+						<i class="fa fa-chevron-circle-down"></i>高级查询
+					</button>
+					<button class="btn btn-primary" ng-click="fullWindow($event)">
+						<i class="fa fa-square-o"></i>数据全屏
+					</button>
+				</div>
+			</div>
+		</div>
+		<!---------------------  / .按钮  --->
+		<div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+			<div class="nicescroll-height  bg-white " ng-nicescroll
+				 nice-option="{{niceOpction}}"
+				 data-des="此节点必需-滚动内容及指令">
+				<!--------------------- 输入表单  --->
+				<div class=" mt10 pb5 input-form" input-form
+					 data-des="此节点必需－用于识别输入表单的指令">
+					<div resp-change="" class="col-xs-4 col-md-3"></div>
+					<div class="form-group col-xs-4 col-md-3">
+						<div class="input-group input-group-xs">
+							<label style="padding-left: 22px;" class="input-group-addon bn"><span
+									class="pl10">动态报表组名称</span></label>
+							<input type="text" class="form-control radius3" name="" ng-model="params.menuTabName"
+								   placeholder="">
+						</div>
+					</div>
+				</div>
+
+				<!--------------------- ./  输入表单  --->
+
+				<!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+
+				<div class="cb">
+					<div base-data-table="dataTable" id="dataTableDynamicChartsGroup" data-url="dynamicReportGroupList"
+						 ng-params="params"
+						 data-show-index="true"
+						 data-keys="{'key':'reportGroupId'}"
+						 data-delete-url="dynamicReportGroupDelete"
+						 data-legend="[
+                             {'value':'menuTabName','name':'动态报表组名称'},
+                             {'value':'reportGroupDesc','name':'动态报表组描述'},
+                             {'value':'creationDate','name':'创建日期'}
+                             ]"
+					>
+					</div>
+				</div>
+
+
+				<!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+			</div>
+		</div>
+	</form>
+</div>

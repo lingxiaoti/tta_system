@@ -1,0 +1,546 @@
+<div ng-controller="ttaFreeGoodsPolistCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" >
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="search()">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <!--因是导入的数据,因此不给删除的按钮权限-->
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnSave,btnModify,btnBatchJoin,btnBatchJoinYear,PLSC">
+                    </div>
+                    <div class="btn-group btn-group-xs ">
+                        <button type="button" class="btn btn-default ng-scope ng-binding"  ng-click="btnExport1()" style="">
+                            <i class="fa fa-file-excel-o"></i>导出
+                        </button>
+                    </div>
+                    <!-- 导入、下载模板start -->
+                    <div class="btn-group btn-group-xs" permission-btn-group="btnImport" ng-style="myStyle" id="isSq">
+                        <button class="btn btn-default  a-black "
+                                onclick="window.location.href='app/base/templates/tta/exampleFlie/ttaFreeGoodsPolist.xlsx'">
+                            <i class="fa fa-file-excel-o"></i>下载模板
+                        </button>
+                        <button class="btn btn-default  a-black " ng-click="daoru()"><i class="fa fa-upload"></i>导入
+                        </button>
+                    </div>
+
+                    <!-- <button type="button" class="btn btn-default" saaf-xls-import-component data-list-options="{
+                        week:{headName:'周期'},
+                        supplierCodeDept:{headName:'Supplier code + item department'},
+                        contractOwnerDept:{headName:'CONTRACT OWNER DEPT.'},
+                        supplierCode:{headName:'SUPPLIER CODE'},
+                        supplierName:{headName:'SUPPLIER NAME'},
+                        type:{headName:'TYPE'},
+                        po:{headName:'PO'},
+                        comments:{headName:'COMMENTS'},
+                        itemCode:{headName:'ITEM CODE'},
+                        itemName:{headName:'ITEM NAME'},
+                        brand:{headName:'BRAND'},
+                        groupDesc:{headName:'ITEM GROUP_DESC'},
+                        productType:{headName:'PRODUCT_TYPE'},
+                        qtyReceived:{headName:'QTY_RECEIVED'},
+                        unitCostInit:{headName:'UNIT_COST_INIT'},
+                        salseNotax:{headName:'零售价（不含税）'},
+                        receivedAmount:{headName:'ACT. RECEIVED AMOUNT'},
+                        poType:{headName:'PO TYPE FOR BUYER FEEDBACK'},
+                        supplierDepartmentPer:{headName:'2018年计算合同免费货应得权利实收的supplier+department'},
+                        contractFg2018:{headName:'2018合同免费货'},
+                        contractFg2017:{headName:'2017合同免费货'},
+                        prosalseFg:{headName:'促销免费货'},
+                        dummyProduct:{headName:'Dummy Product'},
+                        obPoList:{headName:'OB PO list checking on 2019.1.10'},
+
+                        orderNo:{headName:'ORDER_NO'},
+                        location:{headName:'LOCATION'},
+                        origApprovalDate:{headName:'ORIG_APPROVAL_DATE'},
+                        closeDate:{headName:'CLOSE_DATE'},
+                        unitCost:{headName:'UNIT_COST'}
+
+                }" data-url="saveImportFreeGoodsPolistInfo"
+                            data-info="{date:'{{params.id}}'}"
+                            data-after-action="dataTable.getData()"
+                            data-message="暂无检验规则"   >
+                        <i class="fa fa-upload"></i>导入
+                    </button>-->
+
+                    <!-- 导入、下载模板end -->
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <!--<button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>-->
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+
+                <!--------------------- 输入表单  --->
+
+                <div class=" mt10 pb5  oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form id="contractForm" name="contractForm" ng-submit="dataTable.getData()">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>单据头信息</span>
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110">BATCH：</span></label>
+                                <input type="text" ng-model="params.timesVersion"
+                                       class="form-control radius3">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110">供应商编号:</span></label>
+                                <input type="text" class="form-control radius3"
+                                       name="paramsSupplierCode"
+                                       ng-model="params.supplierCode">
+                                <span class="input-group-btn ng-scope">
+                                    <button class="btn btn-default" ng-click="getSupplierCode()" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110">供应商名称:</span></label>
+                                <input type="text" ng-model="params.supplierName" name="supplierName"
+                                       class="form-control radius3">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110">PO编号:</span></label>
+                                <input type="text" ng-model="params.orderNo" name="orderNo"
+                                       class="form-control radius3">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110">是否加入计算:</span></label>
+                                <div lookup-code="CALCULATE_CODE" name="isCalculate"
+                                     ng-model="params.isCalculate"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">费用年度:</span></label>
+                                <input type="text" class="form-control radius3"
+                                       date-time-picker="" data-date-format="yyyy"
+                                       data-start-view="4" data-min-view="4" data-max-view="4" required readonly
+                                       ng-model="params.chargeYear">
+                            </div>
+                        </div>
+                        <div class="row"></div>
+                    </form>
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="data-table" ng-nicescroll="" id="nicescroll_tta_oi_cw"
+                         nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2',cursorwidth:'10px'}"
+                    >
+                        <table saaf-table="dataTable"
+                               data-url="findFreeGoodsPolistDetailPagination"
+                               data-params="params"
+                               data-checked-type="radio"
+                               data-auto-get-data="true"
+                               data-page-rows="10"
+                               class=" nicescroll-height  table table-bordered table-hover table-condensed">
+                            <thead class="bg-gray-white">
+                            <tr class="text-center">
+                                <th>
+                                    <input  ng-checked="selectedAll" type="checkbox"
+                                            ng-click="checkedAll($event)" >
+                                </th>
+                                <th>序号</th>
+                                <th>WEEK</th>
+                                <th>SUPPLIER CODE</th>
+                                <th>SUPPLIER NAME</th>
+                                <th>PO</th>
+                                <th>COMMENTS</th>
+                                <th>ITEM CODE</th>
+                                <th>ITEM NAME</th>
+                                <th>BRAND</th>
+                                <th>GROUP_DESC</th>
+                                <th>DEPT_DESC</th>
+                                <th>Unit_cost</th>
+                                <th>QTY_RECEIVED</th>
+                                <th>UNIT_COST_INIT</th>
+                                <th>促销价（不含税）</th>
+                                <th>实收金额（不含税）</th>
+                                <th>订单类型</th>
+                                <th>是否加入计算</th>
+                                <th>费用年度</th>
+                                <th>批次</th>
+                            </tr>
+                            </thead>
+                            <tbody ng-show="dataTable.data">
+                            <tr class="text-center" ng-repeat="row in dataTable.data"
+                                ng-class="{'active':dataTable.data.selectRow==$index}"
+                                ng-click="dataTable.data.selectRow=$index;
+                                     dataTable.data.selectRowData =row;">
+                                <td>
+                                    <input id="{{ 'fgTable_'+row.id}}" ng-checked="row.checked" type="checkbox"
+                                           ng-click="check(row,$event)" name="keys">
+                                </td>
+                                <td ng-bind="$index+1" class="w50">1</td>
+                                <td><span>{{row.relWeek}}</span></td>
+                                <td><span>{{row.supplierCode}}</span></td>
+                                <td><span>{{row.supplierName}}</span></td>
+                                <td><span>{{row.relPo}}</span></td>
+                                <td><span>{{row.relComments}}</span></td>
+                                <td><span>{{row.itemCode}}</span></td>
+                                <td><span>{{row.itemName}}</span></td>
+                                <td><span>{{row.brand}}</span></td>
+                                <td><span>{{row.groupDesc}}</span></td>
+                                <td><span>{{row.deptDesc}}</span></td>
+                                <td><span>{{row.relUnitCost}}</span></td>
+                                <td><span>{{row.relQtyReceived}}</span></td>
+                                <td><span>{{row.unitCostInit}}</span></td>
+
+                                <td>
+                                    <span ng-if="!(userType == '45')">{{row.promotionPrice}}</span>
+                                    <div class="input-group input-group-xs" style="width: 172px;"
+                                         ng-if="userType == '45'">
+                                        <input class="form-control input-xs"
+                                               ng-model="row.promotionPrice" to-change-number
+                                               name="{{'promotionPrice' + $index}}"
+                                        >
+                                    </div>
+                                </td>
+
+                                <td><span>{{row.actualMoney}}</span></td>
+
+                                <td><span>{{row.relRderType}}</span></td>
+                                <!--是否加入计算-->
+                                <td>
+                                    <!--<span ng-if="!(userType == '45') || (!(row.openSelect=='Y') && !(userType =='13'|| userType == '12'))">{{row.isCalculate}}</span>-->
+                                    <!--ng-if="userType == '45' || (row.openSelect=='Y' && (userType =='13'|| userType == '12'))"-->
+                                    <div class="input-group input-group-xs" style="width: 172px;"
+                                         >
+                                        <div lookup-code="CALCULATE_CODE" data-first-text="请选择"
+                                             ng-model="row.isCalculate" required></div>
+                                    </div>
+                                </td>
+
+                                <!--费用年度-->
+                                <td>
+                                    <!--<span ng-if="!(userType == '45') || (!(row.openSelect=='Y') && !(userType =='13'|| userType == '12'))">{{row.chargeYear}}</span>-->
+                                    <!--ng-if="userType == '45' || ((row.openSelect=='Y') && (userType =='13'|| userType == '12'))"-->
+                                    <div class="input-group input-group-xs radius3" style="width: 172px;"
+                                         >
+                                        <input type="text" class="form-control input-xs"
+                                               date-time-picker="" data-date-format="yyyy"
+                                               data-start-view="4" data-min-view="4" data-max-view="4"
+                                               ng-model="row.chargeYear"
+                                        >
+                                    </div>
+                                </td>
+                                <td><span>{{row.timesVersion}}</span></td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div saaf-table-tfoot="dataTable" ng-show="dataTable.data.length>0"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!--导入弹出框-->
+    <div class="modal fade" id="excelTtaFreeGoodsPolist" data-des="excel_ttaFreeGoodsPolist" data-backdrop="static"
+         tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        导入
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm">
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12" ng-if="buttonFlag">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">选择文件</span></label>
+                                <input type="file" required accept="*.xlsx" id="fileUpLoad">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12" ng-if="!buttonFlag">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">当前阶段：</span></label>
+                                <span id="value1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12" ng-if="!buttonFlag">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">当前行(列)数：</span></label>
+                                <span id="value2"></span>
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer" ng-if="buttonFlag">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="save(funcMenuForm.$invalid)" validate-form-btn=""
+                                    data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="msgCfgModal" data-des="编辑" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabelL">
+                        {{modalTitle}}
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm1" ng-submit="btnSavePolist()">
+                    <div class="modal-body">
+
+                        <div class="form-group col-xs-7 col-md-7" ng-if="userType == '45'">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w130">促销价（不含税）</span></label>
+                                <input type="text" class="form-control radius3" name="promotionPrice"
+                                       ng-disabled="userType != '45'"
+                                       maxlength="255" ng-model="addParams.promotionPrice">
+                            </div>
+                        </div>
+
+                        <!--userType == 45 BIC用户  userType == 13 或者 userType == 12 是采购用户-->
+                        <div class="form-group col-xs-7 col-md-7"
+                             ng-if="userType == '45' || (addParams.openSelect=='Y' && (userType =='13'|| userType == '12'))">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w130">是否加入计算</span></label>
+
+                                <div lookup-code="CALCULATE_CODE" name="isCalculate" ng-model="addParams.isCalculate"
+                                     id="isCalculate" required
+                                     ng-disabled="!userType == '45' || !(addParams.openSelect=='Y' && (userType =='13'|| userType == '12'))"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-7 col-md-7"
+                             ng-if="userType == '45' || (addParams.openSelect=='Y' && (userType =='13'|| userType == '12'))">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w130">费用年度</span></label>
+
+                                <input type="text" class="form-control radius3"
+                                       date-time-picker="" data-date-format="yyyy"
+                                       data-start-view="4" data-min-view="4" data-max-view="4"
+                                       ng-model="addParams.chargeYear"
+                                       ng-disabled="!userType == '45' || !(addParams.openSelect=='Y' && (userType =='13'|| userType == '12'))"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button type="submit" id="saveButton1" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <!--批量加入计算-->
+    <form id="fgBatchJoinCountForm" name="fgBatchJoinCountForm" ng-submit="saveBatchJoin(fgBatchJoinCountForm)">
+        <div class="modal fade" id="fgBatchJoinCountModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+             role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog " style="margin-top: 30px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title" id="fgBatchJoinCountTitle">
+                            批量加入计算
+                        </h4>
+                    </div>
+                    <div class="w80p h20" style=""></div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w130"><i class="red">*</i>是否加入计算</span></label>
+                                        <div lookup-code="CALCULATE_CODE" name="isCalculate" ng-model="requestParams.isCalculate"
+                                              required></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: 20px;">
+                        <div style="text-align: center">
+                            <button style="" type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+
+                            <button id="submitfgBatchJoinCount"  type="submit" class="btn btn-primary btn-sm">
+                                <span>保存</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!--加入费用年度-->
+    <form id="fgBatchJoinFeeYearForm" name="fgBatchJoinFeeYearForm" ng-submit="saveBatchJoinFeeYear(fgBatchJoinFeeYearForm)">
+        <div class="modal fade" id="fgBatchJoinFeeYearModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+             role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog " style="margin-top: 30px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title" id="fgBatchJoinFeeYearTitle">
+                            批量加入费用年度
+                        </h4>
+                    </div>
+                    <div class="w80p h20" style=""></div>
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class="w130"><i class="red">*</i>费用年度</span></label>
+                                        <input type="text" class="form-control radius3"
+                                               date-time-picker="" data-date-format="yyyy"
+                                               data-start-view="4" data-min-view="4" data-max-view="4"
+                                               required
+                                               ng-model="requestParams.chargeYear"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: 20px;">
+                        <div style="text-align: center">
+                            <button style="" type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+
+                            <button id="submitfgBatchJoinFeeYear"  type="submit" class="btn btn-primary btn-sm">
+                                <span>保存</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div lov-list="supplierList" role="dialog" data-title="选择供应商信息" id="supplierCode" ng-model="current.em"
+         data-url="supplierFindLov"
+         data-dynamic-params=''
+         data-callback="selectSupplierReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+         data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                          {'key':'supplierName','placeholder':'供应商名称'}]"
+    >
+    </div>
+
+    <div class="data-table" ng-show="false">
+        <div base-data-table="poDataTable"
+             ng-params="params"
+             data-show-index="true"
+             data-url="findFreeGoodsPolistDetailPagination"
+             data-keys="{key:'id'}"
+             data-legend="[
+                                     {'value':'relWeek','name':'WEEK'},
+                                     {'value':'supplierCode','name':'SUPPLIER CODE'},
+                                     {'value':'supplierName','name':'SUPPLIER NAME'},
+                                     {'value':'relPo','name':'PO'},
+                                     {'value':'relComments','name':'COMMENTS'},
+                                     {'value':'itemCode','name':'ITEM CODE'},
+                                     {'value':'itemName','name':'ITEM NAME'},
+                                     {'value':'brand','name':'BRAND'},
+                                     {'value':'groupDesc','name':'GROUP_DESC'},
+                                     {'value':'deptDesc','name':'DEPT_DESC'},
+                                     {'value':'relUnitCost','name':'Unit_cost'},
+                                     {'value':'relQtyReceived','name':'QTY_RECEIVED'},
+                                     {'value':'unitCostInit','name':'UNIT_COST_INIT'},
+                                     {'value':'promotionPrice','name':'促销价（不含税）'},
+                                     {'value':'actualMoney','name':'实收金额（不含税）'},
+                                     {'value':'relRderType','name':'订单类型'},
+                                     {'value':'isCalculate','name':'是否加入计算'},
+                                     {'value':'chargeYear','name':'费用年度'},
+                                     {'value':'timesVersion','name':'批次'},
+                                     {'value':'id','name':'唯一标识'}
+
+                             ]"
+        ></div>
+    </div>
+
+</div>
+
+
+

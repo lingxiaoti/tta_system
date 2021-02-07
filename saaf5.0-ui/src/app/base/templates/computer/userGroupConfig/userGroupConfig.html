@@ -1,0 +1,159 @@
+<div ng-controller="userGroupConfigCtrl" class="bigdata">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div>
+            <div class="bg-gray-white bt">
+                <div class="bg-white p5">
+                    <div class="pull-right ml10" >
+                        <div class="btn-group btn-group-xs ">
+                            <div class="btn-group btn-group-xs ">
+                                <!--<button class="btn btn-default" type="button" ng-click="dataTable.restore()">-->
+                                <!--<i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}-->
+                                <!--</button>-->
+                            </div>
+                        </div>
+                        <!--<div class="btn-group btn-group-xs ">-->
+                        <!--<button class="btn btn-default" permission-btn="btnDel" ng-click="btnDel()"-->
+                        <!--ng-show="dataTable.selectRowList.length!==0">-->
+                        <!--</button>-->
+                        <!--<button class="btn btn-default" permission-btn="btnConfirm" ng-click="btnConfirm('confirm')"-->
+                        <!--ng-show="dataTable.selectRowList.length!==0">-->
+                        <!--</button>-->
+                        <!--<button class="btn btn-default" permission-btn="btnReject" ng-click="btnReject('defined')"-->
+                        <!--ng-show="dataTable.selectRowList.length!==0">-->
+                        <!--</button>-->
+                        <!--<button class="btn btn-default" permission-btn="SCWTD" ng-click="SCWTD()"-->
+                        <!--ng-show="dataTable.selectRowList.length!==0">-->
+                        <!--</button>-->
+                        <!--</div>-->
+
+                        <div class="btn-group btn-group-xs ml10" permission-buttons="KFYJCJGGXGL">
+                            <button ng-click="KFYJCJGGXGL()" ng-disabled="!dataTable.selectRow || !dataTable2.list"></button>
+                        </div>
+
+                    </div>
+
+                    <div class="btn-group btn-group-xs ">
+                        <button  type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                            <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="bg-white" main-scroll-style>
+            <div class="col-xs-4 col-md-4 br">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <form ng-submit="dataTable.search()">
+                        <div class="form-group col-xs-12 col-md-12 col-lg-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w50">群组名称：</span></label>
+                                <input type="text"  class="form-control radius3" name="meaning"  title="{{groupParams.meaning}}"
+                                       ng-model="groupParams.meaning">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="groupTable.search()">
+                                    <!--<i class="fa fa-search"></i>-->
+                                    搜索
+                                </button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div main-scroll-style>
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+                        <div class="data-table">
+                            <div base-data-table="groupTable"
+                                 data-auto-request="true"
+                                 data-show-index="true"
+                                 data-click-row="searchExitUser"
+                                 data-url="base_lookupVal"
+                                 data-legend="[{'value':'meaning','name':'群组名称'}]"
+                                 ng-params="groupParams">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 col-md-4 br">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <form ng-submit="searchSupplier()">
+                        <div class="form-group col-xs-12 col-md-12 col-lg-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w50">登录账号</span></label>
+                                <input type="text"  class="form-control radius3" name="userName"  title="{{userParams.userName}}"
+                                       ng-model="userParams.userName">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="userTable.search()">
+                                    <!--<i class="fa fa-search"></i>-->
+                                    搜索
+                                </button>
+                                </span>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+                        <div class="data-table">
+                            <div base-data-table="userTable"
+                                 data-auto-request="true"
+                                 data-show-index="true"
+                                 data-click-row="addExitUser"
+                                 data-url="userFind"
+                                 data-legend="[{'value':'userName','name':'登录账号','style':'text-align:left'},
+                                 {'value':'personName','name':'员工名称'}]"
+                                 ng-params="userParams">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 col-md-4">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <div class="form-group col-xs-4 col-md-4 col-lg-4">
+                        已分配账号
+                    </div>
+                    <div class="form-group col-xs-8 col-md-8 col-lg-8">
+                        <div class="pull-right">
+                            <button class="btn btn-default btn-xs"  type="button" permission-btn="btnSave">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+                    <div class="nicescroll-height  bg-white " ng-nicescroll
+                         nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+                        <div class="data-table">
+                            <div base-data-table="exitUserTable"
+                                 data-auto-request="false"
+                                 data-paging-show="false"
+                                 data-show-index="true"
+                                 data-func-column="[{'icon':'fa fa-remove','text':'删除','callback':'deleteExitUserLine'}]"
+                                 data-url="findUserGroupAssignsForGroup"
+                                 data-legend="[
+                                             {'value':'userId','name':'用户ID','style':'text-align:left'},
+                                             {'value':'userName','name':'用户名称'}]"
+                                 ng-params="exitUserParams">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>

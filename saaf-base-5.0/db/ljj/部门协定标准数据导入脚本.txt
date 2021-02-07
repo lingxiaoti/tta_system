@@ -1,0 +1,150 @@
+INSERT INTO TTA_DEPT_FEE
+  (ITEM_DESC_CN,ITEM_DESC_EN,LINE_CODE, VERSION_NUM,
+STANDARD_VALUE1,UNIT1,STANDARD_VALUE2,UNIT2,STANDARD_VALUE3,UNIT3,
+UNIT,ACCORD_TYPE,PROPOSAL_ID,PROPOSAL_YEAR
+)
+  SELECT DISTINCT A.TERM_CN,A.TERM_EN,A.ITEM_PROJECT,0, A.DEFAULT_STANDARD1, lookup1.LOOKUP_CODE,TO_NUMBER(A.DEFAULT_STANDARD2), 
+         lookup2.LOOKUP_CODE LOOKUP_CODE2,TO_NUMBER(A.DEFAULT_STANDARD3), lookup3.LOOKUP_CODE LOOKUP_CODE3,
+         lookup4.LOOKUP_CODE LOOKUP_CODE4,
+         case WHEN A.COST_TYPE like '%促销陈列服务费%' THEN 'A' 
+         WHEN A.COST_TYPE like '%宣传单张推广服务费%' THEN 'B' END ACCORD_TYPE, 
+         TO_NUMBER(h.PROPOSAL_ID),TO_NUMBER(h.PROPOSAL_YEAR)
+    FROM TTA_DEPT_DEFAULT_STANDARD A
+    left join TTA_PROPOSAL_HEADER h
+    on a.PROPOSAL_CODE = h.ORDER_NBR  
+    left join 
+			 (select lookup_type, lookup_code, meaning 
+					from base_lookup_values 
+				 where lookup_type = 'UNIT' 
+					 and enabled_flag = 'Y' 
+					 and delete_flag = 0 
+					 and start_date_active < sysdate 
+					 and (end_date_active >= sysdate or end_date_active is null) 
+					 and system_code = 'BASE') lookup1 
+    on A.DEFAULT_UNIT1 = lookup1.MEANING
+left join 
+			 (select lookup_type, lookup_code, meaning 
+					from base_lookup_values 
+				 where lookup_type = 'UNIT' 
+					 and enabled_flag = 'Y' 
+					 and delete_flag = 0 
+					 and start_date_active < sysdate 
+					 and (end_date_active >= sysdate or end_date_active is null) 
+					 and system_code = 'BASE') lookup2 
+    on A.DEFAULT_UNIT2 = lookup2.MEANING
+left join 
+			 (select lookup_type, lookup_code, meaning 
+					from base_lookup_values 
+				 where lookup_type = 'UNIT' 
+					 and enabled_flag = 'Y' 
+					 and delete_flag = 0 
+					 and start_date_active < sysdate 
+					 and (end_date_active >= sysdate or end_date_active is null) 
+					 and system_code = 'BASE') lookup3 
+    on A.DEFAULT_UNIT3 = lookup3.MEANING
+left join 
+			 (select lookup_type, lookup_code, meaning 
+					from base_lookup_values 
+				 where lookup_type = 'UNIT' 
+					 and enabled_flag = 'Y' 
+					 and delete_flag = 0 
+					 and start_date_active < sysdate 
+					 and (end_date_active >= sysdate or end_date_active is null) 
+					 and system_code = 'BASE') lookup4 
+    on A.COMPANY_STANDARD = lookup4.MEANING
+
+delete from TTA_DEPT_FEE
+
+                    
+
+                    
+
+SELECT DISTINCT * from  TTA_DEPT_DEFAULT_STANDARD A 
+
+select * from TTA_PROPOSAL_HEADER h where h.PROPOSAL_NBR = '201908220281'
+
+ALTER TABLE TTA_DEPT_FEE DROP CONSTRAINT ((TTA_UAT.SYS_C0024902))
+
+select TTA_DEPT_FEE from dba_constraints where constraint_name = 'SYS_C0024902';
+
+
+CREATE OR REPLACE TRIGGER " TTA_DEPT_FEE_TRI" BEFORE
+INSERT ON TTA_DEPT_FEE
+FOR EACH ROW
+BEGIN
+SELECT SEQ_TTA_DEPT_FEE.NEXTVAL INTO :NEW.DEPTFEE_LINE_ID FROM DUAL;
+END;
+
+
+
+create sequence SEQ_TTA_DEPT_FEE
+ 
+ minvalue 1
+  
+  maxvalue 999999999999999999999999999
+ 
+ start with 1500
+ 
+  increment by 1
+
+
+
+
+
+
+select lookup_type, lookup_code, meaning 
+					from base_lookup_values 
+				 where lookup_type = 'UNIT' 
+					 and enabled_flag = 'Y' 
+					 and delete_flag = 0 
+					 and start_date_active < sysdate 
+					 and (end_date_active >= sysdate or end_date_active is null) 
+					 and system_code = 'BASE'
+
+
+select * from TTA_DEPT_DEFAULT_STANDARD d where d.id= 42691
+
+select count(1) from TTA_SALES_IN_201805
+
+delete from TTA_DEPT_FEE
+
+delete from TTA_DEPT_DEFAULT_STANDARD where id in(
+SELECT   max(A.id) 
+    FROM TTA_DEPT_DEFAULT_STANDARD A  
+    left join TTA_PROPOSAL_HEADER h
+    on a.PROPOSAL_CODE = h.ORDER_NBR  
+where h.PROPOSAL_ID in(
+select PROPOSAL_ID from (
+SELECT  count(1), A.ITEM_PROJECT,
+         A.COST_TYPE, 
+         h.PROPOSAL_ID,
+         A.COMPANY_STANDARD
+    FROM TTA_DEPT_DEFAULT_STANDARD A
+    left join TTA_PROPOSAL_HEADER h
+    on a.PROPOSAL_CODE = h.ORDER_NBR  
+GROUP BY A.ITEM_PROJECT,
+         A.COST_TYPE, 
+         h.PROPOSAL_ID,
+         A.COMPANY_STANDARD 
+having count(1) >1) abc )
+and  A.ITEM_PROJECT = '1.2'
+     and    A.COST_TYPE ='促销陈列服务费'
+     and    A.COMPANY_STANDARD = '/店/档期'
+GROUP BY h.PROPOSAL_ID)
+
+SELECT   A.*
+    FROM TTA_DEPT_DEFAULT_STANDARD A 
+    left join TTA_PROPOSAL_HEADER h
+    on a.PROPOSAL_CODE = h.ORDER_NBR  
+where 
+ A.ITEM_PROJECT = '1.2'
+     and    A.COST_TYPE ='促销陈列服务费'
+     and    h.PROPOSAL_ID = '770'
+     and    A.COMPANY_STANDARD = '/店/档期'
+
+delete from TTA_DEPT_DEFAULT_STANDARD where id in(43162,43163)
+
+
+
+ 
+ cache 20;

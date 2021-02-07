@@ -1,0 +1,101 @@
+spring:
+  application:
+    name: 1002-saaf-api-gateway
+  http: #文件大小配置
+    multipart:
+      file-size-threshold: 10Mb
+      max-file-size: 100MB
+      max-request-size: 200MB
+    encoding:
+      charset: utf-8 #设置字符集
+      force: true
+      enabled: true
+server:
+  port: 8089
+  tomcat:
+    max-threads: 1000
+    accept-count: 200
+    max-connections: 1000
+    uri-encoding: UTF-8 #配置字符集
+  context-path: /api
+eureka:
+  instance:
+    appname: 1002-saaf-api-gateway
+    hostname: localhost
+    prefer-ip-address: true
+    port: 8760
+  client:
+    serviceUrl:
+      defaultZone: http://admin:admin@${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+
+turbine:
+  # 配置Eureka中的serviceId列表，表明监控哪些服务,多个服务用',"分隔
+  appConfig: 1006-saaf-base-server,1008-saaf-schedule-server,1009-saaf-dataexport-server,1010-saaf-message-server,1012-saaf-bpm-server,1013-saaf-app-deployee-server,2000-saaf-tta-server,2003-saaf-ttadata-server,3001-saaf-equotation-server
+  aggregator:
+    # 指定聚合哪些集群，多个使用”,”分割，默认为default。可使用http://.../turbine.stream?cluster={clusterConfig之一}访问
+    clusterConfig: default
+  # 1. clusterNameExpression指定集群名称，默认表达式appName；此时：turbine.aggregator.clusterConfig需要配置想要监控的应用名称；
+  # 2. 当clusterNameExpression: default时，turbine.aggregator.clusterConfig可以不写，因为默认就是default；
+  # 3. 当clusterNameExpression: metadata[‘cluster’]时，假设想要监控的应用配置了eureka.instance.metadata-map.cluster: ABC，则需要配置，同时turbine.aggregator.clusterConfig: ABC
+  clusterNameExpression: new String("default")
+
+#Hystrix的超时
+hystrix:
+  threadpool:
+    default:
+      coreSize: 1000
+      maximumSize: 1000
+      maxQueueSize: 200
+      queueSizeRejectionThreshold: 20
+  command:
+    default:
+    circuitBreaker:
+#      errorThresholdPercentage: 100
+      errorThresholdPercentage: 70%
+      sleepWindowInMilliseconds: 10000
+      requestVolumeThreshold: 1000
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          strategy: THREAD
+          semaphore:
+            maxConcurrentRequests: 5000
+          thread:
+            timeoutInMilliseconds: 600000
+
+#Ribbon的超时
+ribbon:
+  ReadTimeout: 300000
+  ConnectTimeout: 300000
+  okhttp:
+      enabled: true
+  hystrix:
+      enabled: true
+
+#网关超时
+zuul:
+  add-host-header: true
+  add-proxy-headers: true
+  max:
+    host:
+      max-per-route-connections: 1000
+      max-total-connections: 2000
+      connections: 2000
+  host:
+    socket-timeout-millis: 300000
+    connect-timeout-millis: 300000
+  routes:
+    1006-saaf-base-server: /baseServer/**
+    1008-saaf-schedule-server: /schedule/**
+    1009-saaf-dataexport-server: /exportServer/**
+    1010-saaf-message-server: /messageServer/**
+    1012-saaf-bpm-server: /bpmServer/**
+    1013-saaf-app-deployee-server: /appDeployServer/**
+    2000-saaf-tta-server: /ttaServer/**
+    2003-saaf-ttadata-server: /ttadataServer/**
+    3001-saaf-equotation-server: /equotationServer/**
+
+#生产文件上传临时目录：/home/ttaprd/jars/data/temp  uat目录：
+# uploadTempPath: /home/ttaprd/jars/data/temp
+uploadTempPath: /home/ttauat/jars/data/temp

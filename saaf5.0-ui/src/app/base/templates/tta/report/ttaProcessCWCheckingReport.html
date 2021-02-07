@@ -1,0 +1,550 @@
+<div ng-controller="ttaProcessCWCheckingReportCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white p5">
+            <div class=" pull-right ml10">
+                <div class="btn-group btn-group-xs ml10" id="outputButton">
+                    <button class="btn btn-default" type="button" ng-click="search()">
+                        <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                    </button>
+
+                    <!--<div class="btn-group btn-group-xs ml10" permission-buttons="batchRejected,batchApproval">-->
+                    <div class="btn-group btn-group-xs ml10">
+                        <button class="btn btn-default" type="button" ng-click="batchApproval()"  ng-disabled="!dataSummary.selectRowList.length>0">
+                            批量审批
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="batchRejected()" ng-disabled="!dataSummary.selectRowList.length>0">
+                            批量驳回
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnExport">
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group btn-group-xs ">
+                <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>数据全屏
+                </button>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class="col-xs-12 col-md-12" style="margin-right: -1px; height: 100%; ">
+                    <div class="col-xs-12 col-md-12 br p0">
+                        <ul class="nav nav-tabs" id="tab">
+                            <li class="active">
+                                <a data-toggle="tab" href="#summary"><i class="fa fa-list-alt"></i>
+                                    <label>审批汇总</label></a>
+                            </li>
+
+                            <li>
+                                <a data-toggle="tab" href="#detail"><i class="fa fa-list-alt"></i>
+                                    <label>审批明细</label></a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="tabContent">
+
+                            <div  ng-class="['tab-pane', tab.active==0?'active':'']"  id="summary">
+                                <div class=" mt10 pb5  oh" data-des="此节点必需－用于识别输入表单的指令">
+
+                                    <!--第一步分统计数据 start-->
+                                    <div class="data-table">
+                                        <div base-data-table="dataSummary"
+                                             data-url="findProcessSummaryCwInfo" data-show-index='true'
+                                             ng-params="params"
+                                             data-checked-type="checkbox"
+                                             ng-model="currentModel"
+                                             data-keys="{key:'taskIds',value:'taskIds'}"
+                                             data-callback="[{value:'bpm_title',callback:'clickColumns'}]"
+                                             data-legend='[
+                                                {"value": "groupDesc","name": "部门名称"},
+                                                {"value": "receiveAmount","name": "应收金额(含加成)"},
+                                                {"value": "unconfirmAmount","name": "需采购确认收取金额(含加成)"},
+                                                {"value": "difference","name": "差异"},
+                                                {"value": "concludeRate","name": "达成率(%)"},
+                                                ]'>
+                                        </div>
+                                    </div>
+
+                                    <form  name="approvalForm"  id="approvalForm" >
+                                        <div class="modal fade" id="approvalFormModal" data-backdrop="static" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-md">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                            &times;
+                                                        </button>
+                                                        <h4 class="modal-title">
+                                                            {{ apporvalParamsBtn }}
+                                                        </h4>
+                                                    </div>
+
+                                                    <div class="modal-body ">
+                                                        <div class="pl30 pr30">
+                                                            <div class="row">
+                                                                <div class="form-group col col-xs-12 col-md-12">
+                                                                    <div class="input-group input-group-xs">
+                                                                        <label class="input-group-addon bn"><span
+                                                                                class=""><i class="red">*</i>{{ $l('审批意见') }}：</span></label>
+
+                                                                        <textarea class="radius3-4 w100p" rows="4" ng-model="addParams.opinion" name="addParams_userName">
+
+                                                                        </textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group col col-xs-12 col-md-12" ng-if="false">
+                                                                    <div class="input-group input-group-xs">
+                                                                        <label class="input-group-addon bn"><span
+                                                                                class="">{{ $l('快捷回复') }}：</span></label>
+                                                                        <select class="form-control radius3 " ng-model="showParams.opinion"
+                                                                                ng-change="toOpinion()" name="addParams_Opinion">
+                                                                            <option value="{{ val }}" ng-repeat="val in OpinionsList">{{ val }}</option>
+
+
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer ">
+                                                        <div style="text-align:center">
+                                                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                                                    aria-hidden="true">{{ $l('取消')}}
+                                                            </button>
+                                                            <button type="button" ng-click="btnApproval()"
+                                                                    validate-form-btn="approvalForm" class="btn btn-primary mr10"> 确定
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.modal -->
+                                    </form>
+
+                                    <!--第一步分统计数据 end-->
+
+
+
+
+                                </div>
+                            </div>
+
+
+                            <!-- 审批明细 start -->
+                            <div ng-class="['tab-pane', tab.active==1?'active':'']"  id="detail">
+                                <form class="  m10" ng-submit="cwTable.getData()">
+
+                                    <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span
+                                                    class="w120">促销区间：</span></label>
+                                            <input  type="text" ng-model="params.promotionSection"
+                                                    class="form-control radius3">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span
+                                                    class="w100">供应商编号:</span></label>
+                                            <input  type="text" ng-model="params.priorVendorCode"
+                                                    class="form-control radius3">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                                        <div class="input-group input-group-xs">
+                                            <label class="input-group-addon bn"><span
+                                                    class="w100">产品编号:</span></label>
+                                            <input  type="text" ng-model="params.itemCode"
+                                                    class="form-control radius3">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row"></div>
+
+
+                                </form>
+                                <div class="data-table">
+                                    <!-- data-checked-type="checkbox"-->
+                                    <div base-data-table="cwTable"
+                                         ng-params="cwParams"
+                                         data-keys="{'key':'cwId','value':'cwId','name':'CWID'}"
+                                         data-show-index="true"
+                                         data-auto-request="true"
+                                         data-url="findProcessTtaCwInfo"
+                                         data-legend="[
+                                    {'value':'groupDesc','name':'GROUP_DESC'},
+                                    {'value':'deptDesc','name':'DEPT_DESC'},
+                                    {'value':'brandCn','name':'品牌_CN'},
+                                    {'value':'itemCode','name':'产品编号'},
+                                    {'value':'cnName','name':'产品名称'},
+                                    {'value':'promotionSection','name':'促销区间'},
+                                    {'value':'promotionLocation','name':'促销位置'},
+                                    {'value':'storesNum','name':'店铺数量'},
+                                    {'value':'content','name':'活动内容'},
+                                     {'value':'priorVendorCode','name':'供应商编号'},
+                                    {'value':'priorVendorName','name':'供应商名称'},
+                                    {'value':'parentVendorCode','name':'拆分前的VENDOR_CODE'},
+                                    {'value':'parentVendorName','name':'拆分前的VENDOR_NAME'},
+                                    {'value':'chargeStandards','name':'收取方式'},
+                                    {'value':'chargeMoney','name':'收费标准'},
+                                    {'value':'chargeUnitName','name':'收费单位'},
+                                    {'value':'noReceiveAmount','name':'应收金额(不含加成)'},
+                                    {'value':'receiveAmount','name':'应收金额(含加成)'},
+                                     {'value':'noAdjustReceiveAmount','name':'调整应收金额(不含加成)'},
+                                     {'value':'adjustReceiveAmount','name':'调整应收金额(含加成)'},
+                                    {'value':'noAdjustAmount','name':'调整实收金额(不含加成)'},
+                                    {'value':'adjustAmount','name':'调整实收金额(含加成)'},
+                                     {'value':'noUnconfirmAmount','name':'需采购确认收取金额(不含加成)'},
+                                    {'value':'unconfirmAmount','name':'需采购确认收取金额(含加成)'},
+                                    {'value':'difference','name':'差异(含加成)'},
+                                    {'value':'collect','name':'TTA/OnTop'},
+                                     {'value':'purchaseName','name':'采购行动'},
+                                    {'value':'exemptionReasonName','name':'豁免原因_1'},
+                                    {'value':'exemptionReason2Name','name':'豁免原因_2'},
+                                    {'value':'remark','name':'备注'},
+                                    {'value':'currentUserName','name':'当前审批人'},
+                                    {'value':'processCode','name':'流程单据号'},
+                                    {'value':'processStatusName','name':'流程状态'},
+                                     {'value':'promotionStartDate','name':'促销开始日期'},
+                                    {'value':'promotionEndDate','name':'促销结束日期'},
+                                    {'value':'debitOrderCode','name':'借记单编号'},
+                                    {'value':'receipts','name':'实收金额'},
+                                    {'value':'adjustByName','name':'调整人'},
+                                    {'value':'batchCode','name':'批次编号'},
+                                     {'value':'cwId','name':'唯一标识'},
+                                    {'value':'timeDimension','name':'周'}
+                                         ]">
+                                    </div>
+                                </div>
+
+                            </div>
+                             <!-- 审批明细 end -->
+
+                        </div>
+
+                    </div>
+
+
+                    <!--导出功能 start-->
+                    <div class="tab-pane fade in active col-md-12" id="dm" ng-show="false">
+                        <div class="data-table">
+                            <div class="data-table" ng-show="false">
+                                <div base-data-table="dataTable"
+                                     ng-params="params"
+                                     data-show-index="true"
+                                     data-url="findProcessTtaCwInfo"
+                                     data-keys="{key:'cwId'}"
+                                     data-legend="[
+                                    {'value':'groupDesc','name':'GROUP_DESC'},
+                                    {'value':'deptDesc','name':'DEPT_DESC'},
+                                    {'value':'brandCn','name':'品牌_CN'},
+                                    {'value':'itemCode','name':'产品编号'},
+                                    {'value':'cnName','name':'产品名称'},
+                                    {'value':'promotionSection','name':'促销区间'},
+                                    {'value':'promotionLocation','name':'促销位置'},
+                                    {'value':'storesNum','name':'店铺数量'},
+                                    {'value':'content','name':'活动内容'},
+                                     {'value':'priorVendorCode','name':'供应商编号'},
+                                    {'value':'priorVendorName','name':'供应商名称'},
+                                    {'value':'parentVendorCode','name':'拆分前的VENDOR_CODE'},
+                                    {'value':'parentVendorName','name':'拆分前的VENDOR_NAME'},
+                                    {'value':'chargeStandards','name':'收取方式'},
+                                    {'value':'chargeMoney','name':'收费标准'},
+                                    {'value':'chargeUnitName','name':'收费单位'},
+                                    {'value':'noReceiveAmount','name':'应收金额(不含加成)'},
+                                    {'value':'receiveAmount','name':'应收金额(含加成)'},
+                                     {'value':'noAdjustReceiveAmount','name':'调整应收金额(不含加成)'},
+                                     {'value':'adjustReceiveAmount','name':'调整应收金额(含加成)'},
+                                    {'value':'noAdjustAmount','name':'调整实收金额(不含加成)'},
+                                    {'value':'adjustAmount','name':'调整实收金额(含加成)'},
+                                     {'value':'noUnconfirmAmount','name':'需采购确认收取金额(不含加成)'},
+                                    {'value':'unconfirmAmount','name':'需采购确认收取金额(含加成)'},
+                                    {'value':'difference','name':'差异(含加成)'},
+                                    {'value':'collect','name':'TTA/OnTop'},
+                                     {'value':'purchaseName','name':'采购行动'},
+                                    {'value':'exemptionReasonName','name':'豁免原因_1'},
+                                    {'value':'exemptionReason2Name','name':'豁免原因_2'},
+                                    {'value':'remark','name':'备注'},
+                                    {'value':'currentUserName','name':'当前审批人'},
+                                    {'value':'processCode','name':'流程单据号'},
+                                    {'value':'processStatusName','name':'流程状态'},
+                                     {'value':'promotionStartDate','name':'促销开始日期'},
+                                    {'value':'promotionEndDate','name':'促销结束日期'},
+                                    {'value':'debitOrderCode','name':'借记单编号'},
+                                    {'value':'receipts','name':'实收金额'},
+                                    {'value':'adjustByName','name':'调整人'},
+                                    {'value':'batchCode','name':'批次编号'},
+                                     {'value':'cwId','name':'唯一标识'},
+                                    {'value':'timeDimension','name':'周'}
+                             ]"
+                                ></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--excel 上传 并更新借记编号，实收金额start -->
+    <div class="modal fade" id="excelUp" data-des="EXCEL_UP" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="fileImportId">
+                        导入
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">选择文件</span></label>
+                                <input type="file" required accept="*.xlsx"  id="fileUpLoad">
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="uploadSave(funcMenuForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <!--excel 上传 并更新借记编号，实收金额end -->
+
+    <!--excel 上传 每行附件上传 start -->
+    <div class="modal fade" id="addFileUpload" data-des="文件上传" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog " style="width: 600px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel2">
+                        文件上传
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenucWForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="btn-group btn-group-xs" style="">
+                                <input  type="file" id ="cWReportUploadFile" name="cWReportUploadFile"  emms-file-upload="myFile">
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="uploadFile(funcMenucWForm.$invalid)" validate-form-btn="" data-validate-form="funcMenucWForm" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <!--excel 上传 每行附件上传 end-->
+
+    <div lov-list="userGroupDeptBrandLovList" role="dialog" data-title="用户" id="userGroupDeptBrandLov" ng-model="code1" class="  "
+         data-url="itemFind"
+         data-params="{findFlag:'userGroupDeptBrand'}"
+         data-callback="selecGroupReturn"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'valueAll','value':'groupCode',name:'GROUP'}"
+         data-show-index="false"
+         data-other-column="[
+            {'name':'GROUP_DESC','key':'groupDesc'},
+            {'name':'DEPT','key':'deptCode'},
+            {'name':'DEPT_DESC','key':'deptDesc'},
+             {'name':'BRAND_CN','key':'brandCn'},
+            {'name':'BRAND_EN','key':'brandEn'},
+             {'name':'BRAND_CODE','key':'brandCode'}
+        ]"
+         data-search-key="[
+         {'key':'groupCode','placeholder':'GROUP'},
+         {'key':'deptCode','placeholder':'DEPT'},
+         {'key':'brandCode','placeholder':'BRAND'},
+         ]"
+    >
+    </div>
+
+    <div lov-list="userGroupLovList" role="dialog" data-title="用户" id="userGroupLov" ng-model="code1" class="  "
+         data-url="itemFind"
+         data-params="{findFlag:'findGroup'}"
+         data-callback="selecGroupReturn"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'groupCode','value':'groupCode',name:'GROUP'}"
+         data-show-index="false"
+         data-other-column="[
+            {'name':'GROUP_DESC','key':'groupDesc'}
+        ]"
+         data-search-key="[
+         {'key':'groupCode','placeholder':'GROUP'},
+         {'key':'groupDesc','placeholder':'GROUP_DESC'}
+         ]"
+    >
+    </div>
+
+
+    <div lov-list="userGroupDeptBrandLovList" role="dialog" data-title="用户" id="userGroupDeptLov" ng-model="code1" class="  "
+         data-url="itemFind"
+         data-params="{findFlag:'findGroupDept'}"
+         data-callback="selecGroupReturn"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="checkbox"
+         data-keys="{'key':'valueAll','value':'groupCode',name:'GROUP'}"
+         data-show-index="false"
+         data-other-column="[
+            {'name':'GROUP_DESC','key':'groupDesc'},
+            {'name':'DEPT','key':'deptCode'},
+            {'name':'DEPT_DESC','key':'deptDesc'}
+        ]"
+         data-search-key="[
+         {'key':'groupCode','placeholder':'GROUP'},
+         {'key':'deptCode','placeholder':'DEPT'},
+         ]"
+    >
+    </div>
+
+    <div class="modal fade" id="cwSplit" data-des="拆分" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog " style="width: 500px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        请填写
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm"  >
+                    <div>
+                        <label style="margin-left: 10px"><i class="fa fa-list-alt"></i>详情</label>
+                        <div  class="btn-group btn-group-xs ml5 pull-right">
+                            <button type="button" class="btn btn-default btn-xs " ng-disabled="splitDataTable.selectRow==undefined" ng-click="btnDelRow()"><i class="fa fa-trash-o fa-lg"></i>删除</button>
+                            <button type="button" class="btn btn-default btn-xs" ng-click="btnNewRow()"><i class="fa fa-plus">增加</i></button>
+                        </div>
+
+                    </div>
+
+
+                    <div class="data-table">
+                        <table
+                                class="table table-bordered table-hover table-condensed">
+                            <thead class="bg-gray-white">
+                            <tr class="text-center">
+                                <th>采购确认收取金额</th>
+                                <th>供应商</th>
+                                <th>供应商名称</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="text-center" ng-repeat="row in splitDataTable"
+                                ng-class="{'active':splitDataTable.selectRow==$index}"
+                                ng-click="splitDataTable.selectRow=$index">
+                                <td>
+                                    <div class="input-group input-group-xs">
+                                        <input class="form-control radius3" ng-model="row.unconfirmAmount" name="{{'unconfirmAmount_split'+$index}}"
+                                               required type="text"  to-change-number />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group input-group-xs">
+                                    </div>
+                                    <div class="input-group input-group-xs">
+                                        <input class="form-control radius3" ng-model="row.priorVendorCode" name="{{'priorVendorCode_split'+$index}}"
+                                               readonly required type="text"/>
+                                        <span class="input-group-btn ng-scope">
+                                        <button class="btn btn-default" ng-click="getVendorL()" type="button">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span>{{row.priorVendorName}}</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="modal-footer " ng-if="buttonFlag">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="saveWindow(funcMenuForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div data-auto-request="true" data-callback="selectSupplierReturn" data-checked-type="radio"
+         data-dynamic-params="{flag:'isNew'}" data-keys="{'key':'supplierCode','value':'supplierCode','name':'供应商编码'}"
+         data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'supplierCode','placeholder':'供应商编码'},
+                          {'key':'supplierName','placeholder':'供应商名称'}]"
+         data-show-index="false"
+         data-title="选择供应商信息"
+         data-type="competitor"
+         data-url="supplierFindLov"
+         id="cWReportListId"
+         lov-list="cWReportList"
+         ng-model="current.em"
+         role="dialog"
+    >
+    </div>
+
+    <div data-auto-request="true" data-callback="selectTransferReturn" data-checked-type="radio"
+         data-other-column="[{key:'userName',name:'账号'},{key:'userFullName',name:'员工姓名'}]"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-return-type="key"
+         data-search-key="[{'key':'userFullName','placeholder':'请输入员工姓名'},{'key':'userName','placeholder':'请输入员工账号'}]"
+         data-show-index="false"
+         data-title="选择转办人"
+         data-type="competitor"
+         data-keys="{'key':'userName','value':'userFullName','name':'账号',hide:'true'}"
+         data-url="processFindInternalUsers"
+         id="lovcWReportFind"
+         lov-list="lovcWReportFind"
+         ng-model="current.em"
+         role="dialog"
+    >
+    </div>
+
+
+</div>

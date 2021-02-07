@@ -1,0 +1,183 @@
+<div ng-controller="profileCtrl" class="bigdata" data-desc="profile">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="search()">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="search()">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDel">
+
+                    </div>
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <div search-form
+                         data-legend="[
+                        {key:'profileName',label:'Profile名称'},
+                        {key:'profileCode',label:'Profile编码'},
+                        {key:'profileDesc',label:'Profile描述'},
+                        {key:'dsName',label:'数据源'},
+                        ]"
+                         ng-model="params"
+                    ></div>
+
+                </div>
+
+                <div class="data-table">
+                    <!--data-func-column="[{'icon':'fa-trash','callback':'delete'}]"-->
+                    <div base-data-table="dataTable"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="baseProfileFind"
+                         data-auto-request='false'
+                         data-legend="[
+                             {'value':'profileName','name':'Profile名称'},
+                             {'value':'profileCode','name':'Profile编码'},
+                             {'value':'profileDesc','name':'Profile描述'},
+                             {'value':'dsName','name':'数据源'},
+                             {'value':'sourceSql','name':'Profile SQL'},
+                         ]"
+                    ></div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+    <form class="ngValid" name="formArea" >
+        <div class="modal fade" id="Modal" data-backdrop="static" tabindex="-1">
+            <div class="modal-dialog modal-dialog-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            {{$l('profile管理')}}
+                        </h4>
+                    </div>
+
+                    <div class="modal-body ">
+                        <div class="pl30 pr30">
+                            <div class="row">
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>{{$l('Profile名称')}}</span></label>
+
+                                        <input type="text" class="form-control radius3" required name="currentProfileName"
+                                               ng-change="toPinyin()" ng-model="current.profileName">
+                                    </div>
+                                </div>
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>{{$l('Profile编码')}}</span></label>
+
+                                        <input type="text" class="form-control radius3" required name="currentProfileCode"
+                                               ng-model="current.profileCode">
+                                    </div>
+                                </div>
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>{{$l('Profile描述')}}</span></label>
+
+                                        <input type="text" class="form-control radius3" required  name="currentProfileDesc"
+                                               ng-model="current.profileDesc">
+                                    </div>
+                                </div>
+                                <div class="form-group col col-xs-11 col-md-6">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>{{$l('数据源')}}</span></label>
+
+                                        <!--<input type="text" class="form-control radius3" required-->
+                                        <!--ng-model="current.dsName">-->
+
+                                        <div class=" input-group input-group-xs col col-md-12">
+                                            <input type="text" class="form-control radius3" ng-model="current.dsName" name="currentDsName"
+                                                   disabled required>
+                                            <span class="input-group-btn">
+                                               <button class="btn btn-default" ng-click="getDs()" type="button"><i
+                                                       class="fa fa-search"></i></button>
+                                             </span>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group col col-xs-12 col-md-12">
+                                    <div class="input-group input-group-xs">
+                                        <label class="input-group-addon bn"><span
+                                                class=""><i class="red">*</i>{{$l('Profile SQL')}}</span></label>
+
+                                        <textarea type="text" style="height: 100px" class="form-control h80 radius3"
+                                                  required  name="currentSourceSql"
+                                                  ng-model="current.sourceSql"></textarea>
+
+                                        <span class="f12"> <i class="red">*</i>
+                                                前端select控件需要绑定显示值(val)与名称(txt)，请给SQL语句添加关键字段名的别名,如menu_id as val,menu_name as txt</span>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                    aria-hidden="true">{{$l('取消')}}
+                            </button>
+                            <button  ng-click="confirm(formArea.$invalid)" validate-form-btn="formArea" class="btn btn-primary mr10">{{$l('提交')}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+    </form>
+
+    <div lov-list="" role="dialog" data-title="数据源" id="dsnLov" ng-model="current.rp"
+         data-return-value="params.lov"
+         data-url="datasourceFind"
+         data-params='{}'
+         data-callback="saveDs"
+         data-return-type="value"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'dsId','value':'dsName'}"
+         data-show-index="true"
+         data-type="competitor"
+         data-other-column="[{'name':'数据源类型','key':'dsType'}]"
+         data-search-key="{'key':'dsName','placeholder':'查找数据源'}"
+    >
+    </div>
+</div>

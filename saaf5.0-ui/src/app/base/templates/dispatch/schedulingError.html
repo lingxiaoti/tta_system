@@ -1,0 +1,97 @@
+<div ng-controller="schedulingErrorCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ">
+                    <div class="btn-group btn-group-xs ml10">
+                        <button class="btn btn-default" type="button" validate-form-btn="searchForm" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>搜索
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>重置
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs ml10" permission-buttons="btnDetail">
+                    </div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>高级查询
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>数据全屏
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll            
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <!--------------------- 输入表单  --->
+                <form class=" mt10 pb5 input-form bb oh" name="searchForm" id="searchForm" data-des="此节点必需－用于识别输入表单的指令">
+                    <!--------------------- 输入表单  --->
+                    <div resp-change="" class="col-xs-6 col-md-4 col-lg-3"></div>
+                    <div search-form=""
+                         data-legend="[
+                {key:'jobName',label:'请求名称'},
+                {key:'statusCode',label:'状态',type:'lookCode',lookCode:'CP_STATUS_CODE'},
+                {key:'scheduleType',label:'运行计划',type:'lookCode',lookCode:'SAAF_SCHE_TYPE'},
+                {key:'system',label:'系统平台',type:'lookCode',lookCode:'SCHEDULED_SYSTEM'},
+                {key:'module',label:'业务模块',type:'lookCode',lookCode:'SCHEDULED_SYSTEM_MODULE'}
+
+                ]"  ng-model="params"></div>
+
+                    <!--------------------- ./  输入表单  --->
+                </form>
+                <!--------------------- ./  输入表单  --->
+                <!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+                <div class="data-table ">
+                    <div base-data-table="dataTable"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="schedulingError"
+                         data-func-column="[{'text':'查看','callback':'btnDetail'}]"
+                         data-legend="[
+                          {'value':'jobName','name':'请求名称'},
+                           {'value':'description','name':'描述'},
+                           {'value':'creationDate','name':'执行报错时间'},
+                           {'value':'statusMeaning','name':'状态'},
+                           {'value':'scheduleData','name':'传入参数'},
+                            {'value':'status','name':'错误状态'},
+                         ]"
+                    ></div>
+                </div>
+                <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="lookLog" data-backdrop="static"
+         data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="lookLog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">查看错误日志</h4>
+                </div>
+                <div class="modal-body ">
+						<textarea class="form-control " ng-model="logDetail"
+                                  style="height: 300px" readonly>
+
+                        </textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default mr10"
+                            data-dismiss="modal">返回</button>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal -->
+        </div>
+    </div>
+</div>

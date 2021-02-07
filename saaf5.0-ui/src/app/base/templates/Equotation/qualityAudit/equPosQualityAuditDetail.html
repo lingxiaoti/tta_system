@@ -1,0 +1,306 @@
+<div ng-controller="equPosQualityAuditDetailCtrl" class="bigdata">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+
+
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white p5">
+            <div class="btn-group btn-group-xs pull-right ml10" id="outputButton">
+                <button type="button" ng-click="btnTP()" permission-btn="btnTP"
+                        data-validate-form="userForm"
+                        ng-disabled="TPShowFlag"
+                        class="btn btn-default">
+                    <i class="fa fa-square-o"></i>{{$l('特批')}}
+                </button>
+                <button type="button" ng-click="btnSave()" permission-btn="btnSave" data-validate-form="userForm"
+                        class="btn btn-default">
+                    <i class="fa fa-square-o"></i>{{$l('保存')}}
+                </button>
+
+                <button type="button" ng-click="btnSubmit()" permission-btn="btnSubmit"
+                        data-validate-form="userForm"
+                        ng-disabled="readonlyFlag"
+                        class="btn btn-default">
+                    <i class="fa fa-square-o"></i>{{$l('提交')}}
+                </button>
+            </div>
+            <div class="btn-group btn-group-xs ">
+                <button class="btn btn-primary" ng-click="fullWindow($event)"><i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                </button>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}"
+                 data-des="此节点必需-滚动内容及指令">
+
+                <!--------------------- 输入表单  --->
+
+                <div class=" mt10 pb5  oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form id="userForm" name="userForm">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>{{$l('供应商质量审核详情')}}</span>
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100"><i
+                                        class="red">*</i>{{$l('业务类型')}}:</span></label>
+                                <select class="form-control radius3" required ng-model="program.sceneType"
+                                        ng-change="sceneTypeChangeEvent()" ng-disabled="readonlyFlag">
+                                    <option ng-hide="data.lookupCode!='20' && data.lookupCode!='40' && data.lookupCode!='50'"
+                                            saaf-select-lookupcode="EQU_SUPPLIER_SCENE_TYPE"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i
+                                            class="red">*</i>{{$l('供应商名称')}}:</span></label>
+                                <input type="text" class="form-control radius3" readonly
+                                       ng-model="program.supplierName"/>
+                                <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="selectSupplierInfo()" type="button" ng-if="showFlag">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('供应商档案')}}:</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="program.supplierNumber">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('单据编号')}}:</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="program.qualityAuditNumber">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('单据状态')}}:</span></label>
+                                <select class="form-control input-xs" ng-model="program.qualityAuditStatus" disabled>
+                                    <option saaf-select-lookupcode="EQU_QUALITY_AUDIT_STATUS"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('创建时间')}}:</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="program.creationDate">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('创建人')}}:</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="program.userFullName">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100"><i
+                                            class="red">*</i>{{$l('资质审查单号')}}:</span></label>
+                                <input type="text" class="form-control radius3"
+                                       ng-model="program.qualificationAuditNumber" readonly/>
+                                <span class="input-group-btn ng-scope">
+                                <button class="btn btn-default" ng-click="getQualificationCode()" type="button" ng-if="showFlag">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('资质审查单据状态')}}:</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="program.qualificationStatusMeaning">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100"><i
+                                        class="red">*</i>{{$l('信用审核单号')}}:</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="program.creditAuditNumber">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100"><i
+                                        class="red">*</i>{{$l('信用审核分数')}}:</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="program.creditAuditScoreMeaning">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100"><i
+                                        class="red">*</i>{{$l('信用审核结果')}}:</span></label>
+                                <input type="text" class="form-control radius3" disabled
+                                       ng-model="program.creditAuditResuleMeaning">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100"><i
+                                        class="red">*</i>{{$l('质量审核分数')}}:</span></label>
+                                <input type="text" class="form-control radius3" ng-disabled="readonlyFlag"
+                                       ng-model="program.qualityAuditScore">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i
+                                        class="red">*</i>{{$l('质量审核结果')}}:</span></label>
+                                <select class="form-control input-xs" ng-model="program.qualityAuditResult" ng-disabled="readonlyFlag">
+                                    <option saaf-select-lookupcode="EQU_QUALITY_AUDIT_RESULT"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i ng-if="program.qualityAuditResult == '10'"
+                                        class="red">*</i>{{$l('有效期限')}}:</span></label>
+                                <input type="text" class="form-control radius3 input-xs"
+                                       date-time-picker data-is-today="false" name="effectiveDate"
+                                       data-date-format="yyyy-mm-dd"
+                                       ng-disabled="readonlyFlag"
+                                       data-min-View="2" ng-model="program.effectiveDate" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">{{$l('质量审核日期')}}:</span></label>
+                                <input type="text" class="form-control radius3 input-xs"
+                                       date-time-picker data-is-today="false" name="qualityAuditDate"
+                                       data-date-format="yyyy-mm-dd"
+                                       ng-disabled="readonlyFlag"
+                                       data-min-View="2" ng-model="program.qualityAuditDate" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">*</i>{{$l('审核CAP报告')}}:</span></label>
+                                <input type="file" name="file" ng-if="program.auditCapReportId==null && showFlag" id="auditCapReportFile"
+                                       onchange="angular.element(this).scope().uploadAuditCapReportFile()"
+                                       emms-file-upload="myFile">
+                                <span class="input-group-addon bn" ng-if="program.auditCapReportId!=null"
+                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{program.auditCapReportPath}}"
+                                       target="_blank">{{program.auditCapReportName}}
+                                    </a>
+                                </span>
+                                <span type="button" ng-click="changeAuditCapReportFile()" ng-if="program.auditCapReportId!=null && showFlag"
+                                      class="btn btn-primary btn-xs">
+                                    <i class="fa fa-plus">{{$l('重新上传')}}</i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">{{$l('CAP整改汇总')}}:</span></label>
+                                <input type="file" name="file" ng-if="program.capRectificationSummaryId==null" id="capRectificationSummaryFile"
+                                       onchange="angular.element(this).scope().uploadCapRectificationSummaryFile()"
+                                       emms-file-upload="myFile">
+                                <span class="input-group-addon bn" ng-if="program.capRectificationSummaryId!=null"
+                                      style="width: 230px;text-align: left;height:23px;display:inline-block;">
+                                    <a class="ellipsis" style="color:blue;display: block;width: 220px;"
+                                       href="{{program.capRectificationSummaryPath}}"
+                                       target="_blank">{{program.capRectificationSummaryName}}
+                                    </a>
+                                </span>
+                                <span type="button" ng-click="changeCapRectificationSummaryFile()" ng-if="program.capRectificationSummaryId!=null"
+                                      class="btn btn-primary btn-xs">
+                                    <i class="fa fa-plus">{{$l('重新上传')}}</i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span class="w100">{{$l('备注说明')}}:</span></label>
+                                <!--<textarea rows="2" cols="171"-->
+                                          <!--ng-model="program.remark"></textarea>-->
+                                <textarea class="form-control radius3" rows="3"
+                                          style="height: auto"
+                                          name="remark"
+                                          ng-disabled="readonlyFlag"
+                                          ng-model="program.remark"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div lov-list="selectSupplierLov" role="dialog" data-title="选择供应商" id="selectSupplierLov" ng-model="current.em"
+             data-url="findSupplierInfoLov"
+             data-dynamic-params='supplierSelectParams'
+             data-callback="selectSupplierReturn"
+             data-auto-request="true"
+             data-return-type="key"
+             data-pagination="{'pageIndex':'1','pageRows':'5'}"
+             data-checked-type="radio"
+             data-keys="{'key':'supplierNumber','value':'supplierNumber','name':'供应商档案号'}"
+             data-show-index="false"
+             data-type="competitor"
+             data-other-column="[{'name':'供应商名称','key':'supplierName'}]"
+             data-search-key="[{'key':'supplierName','placeholder':'供应商名称'},
+                          {'key':'supplierNumber','placeholder':'供应商档案号'}]"
+        >
+        </div>
+
+        <div lov-list="selectQualificationLov" role="dialog" data-title="选择资质审查单" id="selectQualificationLov" ng-model="current.em"
+             data-url="findQualificationList"
+             data-dynamic-params='qualificationParams'
+             data-callback="selectQualificationReturn"
+             data-auto-request="true"
+             data-return-type="key"
+             data-pagination="{'pageIndex':'1','pageRows':'5'}"
+             data-checked-type="radio"
+             data-keys="{'key':'qualificationNumber','value':'qualificationNumber','name':'资质审查单据号'}"
+             data-show-index="false"
+             data-type="competitor"
+             data-other-column="[{'name':'供应商名称','key':'supplierName'},{'name':'单据状态','key':'qualificationStatusMeaning'},{'name':'业务类型','key':'sceneTypeMeaning'},{'name':'创建时间','key':'creationDate'},{'name':'创建人','key':'userFullName'}]"
+             data-search-key="[{'key':'qualificationNumber','placeholder':'资质审查单据号'}]"
+        >
+        </div>
+        </form>
+    </div>
+</div>

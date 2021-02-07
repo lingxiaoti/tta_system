@@ -1,0 +1,126 @@
+<div ng-controller="qualificationCtrl" class="gridtable">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="search(1)">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="restore(1)">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs" permission-buttons="btnNew"></div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <!--------------------- 输入表单  --->
+                <div class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('供应商名称')}}:</span></label>
+                            <input type="text" class="form-control radius3" name="supplierName_like"
+                                   ng-model="params.supplierName_like" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('资质审查单号')}}:</span></label>
+                            <input type="text" class="form-control radius3" name="qualificationNumber_like"
+                                   ng-model="params.qualificationNumber_like" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('单据状态')}}:</span></label>
+                            <select class="form-control radius3" ng-model="params.qualificationStatus">
+                                <!--不是供应商就不能查询拟定的状态-->
+                                <option></option>
+                                <option saaf-select-lookupcode="EQU_QUALIFICATION_STATUS"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">{{$l('创建日期从')}}:</span></label>
+                            <input type="text" class="form-control radius3 input-xs"
+                                   date-time-picker data-is-today="false" name="creationDate_gte"
+                                   data-date-format="yyyy-mm-dd" data-enddate="{{params.creationDate_lte}}"
+                                   data-min-View="2" ng-model="params.creationDate_gte" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span
+                                    class="w100">{{$l('创建日期至')}}:</span></label>
+                            <input type="text" class="form-control radius3 input-xs"
+                                   date-time-picker data-is-today="false" name="creationDate_lte"
+                                   data-date-format="yyyy-mm-dd" data-stratdate="{{params.creationDate_gte}}"
+                                   data-min-View="2" ng-model="params.creationDate_lte" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('业务类型')}}:</span></label>
+                            <select class="form-control radius3" ng-model="params.sceneType">
+                                <!--不是供应商就不能查询拟定的状态-->
+                                <option value=""></option>
+                                <option ng-hide = "data.description!=params.deptCode" saaf-select-lookupcode="EQU_SUPPLIER_SCENE_TYPE"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-4 col-md-3">
+                        <div class="input-group input-group-xs">
+                            <label class="input-group-addon bn"><span class="w100">{{$l('准入部门')}}:</span></label>
+                            <input type="text" class="form-control radius3" name="deptName" readonly
+                                   ng-model="params.deptName" required>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-callback="[{'value':'qualificationNumber','callback':'saveOrUpdate'}]"
+                         data-url="findQualificationList"
+                         data-func-column="[{text:'删除',callback:'delete'}]"
+                         data-legend="[
+                             {'value':'qualificationNumber','name':'资质审查单号'},
+                             {'value':'supplierName','name':'供应商名称'},
+                             {'value':'qualificationStatusMeaning','name':'单据状态'},
+                             {'value':'sceneTypeMeaning','name':'业务类型'},
+                             {'value':'creationDate','name':'创建时间','formatDate':'yyyy-MM-dd HH:mm:ss'},
+							 {'value':'userFullName','name':'创建人'}
+						 ]"
+                    ></div>
+                </div>
+                <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+            </div>
+        </div>
+    </form>
+</div>

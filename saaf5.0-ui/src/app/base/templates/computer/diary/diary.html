@@ -1,0 +1,101 @@
+<div ng-controller="logCtrl" class="gridtable">
+    <div class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令">
+        <!--------------------- 按钮--->
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ">
+                    <div class="btn-group btn-group-xs ml10">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)" validate-form-btn="searchForm">
+                            <i class="fa fa-search" aria-hidden="true"></i>搜索
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>重置
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs ml10" permission-buttons="">
+                        　
+                    </div>
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                  <!--  <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>高级查询
+                    </button>-->
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>数据全屏
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!---------------------  / .按钮  --->
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{cursorcolor: '#333333',cursorwidth:10,zindex:1}" data-des="此节点必需-滚动内容及指令">
+                <!--------------------- 输入表单  --->
+                <form name="searchForm" class=" mt10 pb5 input-form bb oh" input-form data-des="此节点必需－用于识别输入表单的指令">
+                    <div search-form
+                         data-legend="[
+                        {key:'collectionName',label:'模块别名', type:'lookupCode', lookupCode:'MONGO_COLLECTION_NAME', required:true },
+                        {key:'logLevel',label:'日志级别',type:'lookupCode', lookupCode:'MONGO_LOG_LEVEL'},
+                         {key:'findByDate',label:'日期',type:'time',isToday:true},
+                         {key:'message',label:'信息'},
+                         {key:'className',label:'类名'}
+                        ]"
+                         ng-model="params"
+                    ></div>
+                </form>
+                <!--------------------- ./  输入表单  --->
+                <!--------------------- ./  数据　相关html代码，请写在这里面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓　  --->
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         ng-params="params"
+                         data-auto-request="false"
+                         data-show-index="true"
+                         data-url="logList"
+                         data-callback="[{'value':'message','callback':'showDetail'}]"
+                         data-legend="[
+                          {value:'time',name:'日志时间'},
+                          {value:'logLevel',name:'日志级别'},
+                          {value:'threadName',name:'线程名称'},
+                          {value:'lineNumber',name:'行号'},
+                          {value:'className',name:'类名'},
+                          {value:'message',name:'信息'},
+                          {value:'ipAddress',name:'IP地址'},
+                          {value:'hostName',name:'主机名'}
+                         ]"
+                    ></div>
+                </div>
+                <!--------------------- ./  数据　　↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑  --->
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalShowDetail" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        日志信息详情
+                    </h4>
+                </div>
+
+                <div class="modal-body ">
+                    <div class="pl30 pr30">
+                        <textarea class="form-control" rows="8" readonly>{{ detail }}</textarea>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer ">
+                    <div style="text-align:center">
+                        <button style="" type="button" class="btn btn-default" data-dismiss="modal"
+                                aria-hidden="true">{{ $l('关闭')}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.modal -->
+</div>

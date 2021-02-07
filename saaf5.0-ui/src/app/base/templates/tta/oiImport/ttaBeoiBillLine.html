@@ -1,0 +1,397 @@
+<div ng-controller="ttaBeoiBillLineCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+        <div class="bg-gray-white bt">
+            <div class="bg-gray-white p5">
+                <div class="pull-right ml10">
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn btn-default" type="button" ng-click="dataTable.search(1)">
+                            <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                        </button>
+                        <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                            <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-xs " permission-buttons="btnNew,btnModify,btnDel,PLSC">
+
+                    </div>
+                    <!-- 导入、下载模板start -->
+                    <div class="btn-group btn-group-xs" permission-btn-group="btnImport" ng-style="myStyle" id="isSq">
+                        <button  class="btn btn-default  a-black "  onclick="window.location.href='app/base/templates/tta/exampleFlie/ttaBeoiBillLine.xlsx'" ><i class="fa fa-file-excel-o"></i>下载模板</button>
+                        <button  class="btn btn-default  a-black "   ng-click="daoru()" ><i class="fa fa-upload"></i>导入</button>
+
+                    </div>
+                    <!-- 导入、下载模板end -->
+
+                </div>
+
+                <div class="btn-group btn-group-xs ">
+                    <button type="button" class="btn  btn-warning" ng-click="moreInput($event)">
+                        <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="fullWindow($event)">
+                        <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+
+
+
+                <!--------------------- 输入表单  --->
+
+                <div class=" mt10 pb5  oh"
+                     data-des="此节点必需－用于识别输入表单的指令">
+
+                    <form id="contractForm" name="contractForm">
+                        <header class="col-xs-12 mb10">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>单据头信息</span>
+
+
+                        </header>
+
+                        <div class="form-group col-xs-4 col-md-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w110">月份：</span></label>
+                                <input type="text" class="form-control radius3"
+                                       date-time-picker="" data-date-format="yyyy-mm"
+                                       data-start-view="3" data-min-view="3" data-max-view="3"
+                                       ng-model="params.accountMonth" >
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w120">供应商编号：</span></label>
+                                <input  type="text" ng-model="params.rmsCode"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100">供应商名称:</span></label>
+                                <input  type="text" ng-model="params.venderName"
+                                        class="form-control radius3">
+
+                            </div>
+                        </div>
+
+                        <div class="row"></div>
+
+                    </form>
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="false"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="findBEOIPagination"
+                         data-legend="[
+                                {'value':'accountMonth','name':'年月'},
+                                {'value':'rmsCode','name':'供应商编号'},
+                                {'value':'venderName','name':'供应商名称'},
+                                {'value':'bookInJv','name':'JV'},
+                                {'value':'bookInJv1','name':'供应商编号+JV'},
+                                {'value':'buyer','name':'采购'},
+                                {'value':'tc','name':'TC采购总监'},
+                                {'value':'department','name':'部门'},
+                                {'value':'brand','name':'品牌'},
+                                {'value':'venderab','name':'供应商属性'},
+                                {'value':'userContractId','name':'合同编号'},
+                                {'value':'cooperateStatus','name':'供应商类型'},
+                                {'value':'venderType','name':'合作状态'},
+                                {'value':'familyPlaningFlag','name':'计生供应商'},
+                                {'value':'validBeginDate','name':'合同有效期开始日期'},
+                                {'value':'validEndDate','name':'合同有效期结束日期'},
+                                {'value':'pickUpRate','name':'发票折扣比例'},
+                                {'value':'venderContainTax','name':'发票折扣比例是否含税'},
+                                {'value':'purchase','name':'采购额（折扣前）'},
+                                {'value':'goodsReturn','name':'退货额（折扣前）'},
+                                {'value':'netPur','name':'净采购额（折扣前）'},
+                                {'value':'dsd','name':'免送额（折扣前）'},
+                                {'value':'purchaseOrigin','name':'折扣后进货额'},
+                                {'value':'goodsReturnOrigin','name':'折扣后退货额'},
+                                {'value':'netPurOrigin','name':'折扣后净采购额'},
+                                {'value':'pyPurchase','name':'以前年度的进货额'},
+                                {'value':'pyGoodsReturn','name':'以前年度的退货额'},
+                                {'value':'pyNetPur','name':'以前年度的净采购额(S+T)'},
+                                {'value':'pydsd','name':'以前年度的DSD(免送额)'},
+                                {'value':'monthPur','name':'本月采购额计算'},
+                                {'value':'monthCount','name':'本月计算'},
+                                {'value':'monthAbi','name':'本月计算-ABI(TTA)'},
+                                {'value':'monthAbiOntop','name':'本月计算-ABI(On_top)'},
+                                {'value':'yearAbi','name':'以前年度计算-ABI(TTA)'},
+                                {'value':'yearAbiOntop','name':'以前年度计算-ABI(On_top)'},
+                                {'value':'contractAdj','name':'合同调整'},
+                                {'value':'billAdj','name':'对帐调整'},
+                                {'value':'yearContractAdj','name':'以前年度合同调整'},
+                                {'value':'yearBillAdj','name':'以前年度对帐调整'},
+                                {'value':'yearPurchaseCount','name':'以前年度采购额计算/PRG补收/自查补收'},
+                                {'value':'apOiTotalTax','name':'AP_OI_Total(含税)'},
+                                {'value':'apOiTotalNotax','name':'AP_OI_Total(不含税-16%VAT)'},
+                                {'value':'tax16','name':'税金(16%VAT)'},
+                                {'value':'noTax13','name':'AP_OI_Total(不含税-13%VAT)'},
+                                {'value':'tax13','name':'税金(13%VAT)'},
+                                {'value':'noTax10','name':'AP_OI_Total(不含税-10%VAT)'},
+                                {'value':'tax10','name':'税金(10%VAT)'},
+                                {'value':'purDisctContractText','name':'条款-一般购货折扣'},
+                                {'value':'purDisctContractValue','name':'条款（%）-一般购货折扣'},
+                                {'value':'purDisctSumMoney','name':'本月采购额计算-一般购货折扣'},
+                                {'value':'purDisctContractAdj','name':'本月合同调整-一般购货折扣'},
+                                {'value':'purDisctReconAdj','name':'本月对帐调整-一般购货折扣'},
+                                {'value':'purDisctLastyearConAdj','name':'以前年度合同调整-一般购货折扣'},
+                                {'value':'purDisctLastyearRecAdj','name':'以前年度对帐调整-一般购货折扣'},
+                                {'value':'purDisctLastyearAudAdj','name':'以前年度采购额计算/PRG调整/自查调整-一般购货折扣'},
+                                {'value':'purDisctMemo','name':'备注一般购货折扣'},
+                                {'value':'purDisctIncludeTax','name':'一般购货折扣Total'},
+                                {'value':'purDisctIncludeNotax','name':'一般购货折扣Total(不含税)'},
+                                {'value':'earlypayDisctContractText','name':'条款-（提前付款）购货折扣'},
+                                {'value':'earlypayDisctContractValue','name':'条款（%）-（提前付款）购货折扣'},
+                                {'value':'earlypayDisctSumMoney','name':'本月采购额计算-（提前付款）购货折扣'},
+                                {'value':'earlypayDisctContractAdj','name':'本月合同调整-（提前付款）购货折扣'},
+                                {'value':'earlypayDisctReconAdj','name':'本月对帐调整-（提前付款）购货折扣'},
+                                {'value':'earlypayDisLastyearConAdj','name':'以前年度合同调整-（提前付款）购货折扣'},
+                                {'value':'earlypayDisLastyearRecAdj','name':'以前年度对帐调整-（提前付款）购货折扣'},
+                                {'value':'earlypayDisLastyearAudAdj	','name':'以前年度采购额计算/PRG调整/自查调整-（提前付款）购货折扣'},
+                                {'value':'earlypayDisctMemo','name':'备注-（提前付款）购货折扣'},
+                                {'value':'earlypayDisctIncludeTax','name':'(提前付款）购货折扣Total'},
+                                {'value':'earlypayDisctIncludeNotax','name':'（提前付款）购货折扣Total(不含税)'},
+                                {'value':'promotDisctContractText','name':'条款-促销折扣'},
+                                {'value':'promotDisctContractValue','name':'条款（%）-促销折扣'},
+                                {'value':'promotDisctSumMoney','name':'本月采购额计算-促销折扣'},
+                                {'value':'promotDisctContractAdj','name':'本月合同调整-促销折扣'},
+                                {'value':'promotDisctReconAdj','name':'本月对帐调整-促销折扣'},
+                                {'value':'promotDisctLastyearConAdj','name':'以前年度合同调整-促销折扣'},
+                                {'value':'promotDisctLastyearRecAdj','name':'以前年度对帐调整-促销折扣'},
+                                {'value':'promotDisctLastyearAudAdj','name':'以前年度采购额计算/PRG&调整/自查调整-促销折扣'},
+                                {'value':'promotDisctMemo','name':'备注-促销折扣'},
+                                {'value':'promotDisctIncludeTax','name':'促销折扣Total'},
+                                {'value':'promotDisctIncludeNotax','name':'促销折扣Total(不含税)'},
+                                {'value':'distriDisctContractText','name':'条款-集中收货折扣'},
+                                {'value':'distriDisctContractValue','name':'条款（%）-集中收货折扣'},
+                                {'value':'distriDisctSumMoney','name':'本月采购额计算-集中收货折扣'},
+                                {'value':'distriDisctContractAdj','name':'本月合同调整-集中收货折扣'},
+                                {'value':'distriDisctReconAdj','name':'本月对帐调整-集中收货折扣'},
+                                {'value':'distriDisctLastyearConAdj','name':'以前年度合同调整-集中收货折扣'},
+                                {'value':'distriDisctLastyearRecAdj','name':'以前年度对帐调整-集中收货折扣'},
+                                {'value':'distriDisctLastyearAudAdj','name':'以前年度采购额计算/PRG调整/自查调整-集中收货折扣'},
+                                {'value':'distriDisctMemo','name':'备注-集中收货折扣'},
+                                {'value':'distriDisctIncludeTax','name':'集中收货折扣Total'},
+                                {'value':'distriDisctIncludeNotax','name':'集中收货折扣Total(不含税)'},
+                                {'value':'dgdsDisctContractText','name':'条款-（残损）购货折扣'},
+                                {'value':'dgdsDisctContractValue','name':'条款（%）-（残损）购货折扣'},
+                                {'value':'dgdsDisctSumMoney','name':'本月采购额计算-（残损）购货折扣'},
+                                {'value':'dgdsDisctContractAdj','name':'本月合同调整-（残损）购货折扣'},
+                                {'value':'dgdsDisctReconAdj','name':'本月对帐调整-（残损）购货折扣'},
+                                {'value':'dgdsDisctLastyearConAdj','name':'以前年度合同调整-（残损）购货折扣'},
+                                {'value':'dgdsDisctLastyearRecAdj','name':'以前年度对帐调整-（残损）购货折扣'},
+                                {'value':'dgdsDisctLastyearAudAdj','name':'以前年度采购额计算/PRG调整/自查调整-（残损）购货折扣'},
+                                {'value':'dgdsDisctMemo','name':'备注-（残损）购货折扣'},
+                                {'value':'dgdsDisctIncludeTax','name':'（残损）购货折扣Total'},
+                                {'value':'dgdsDisctIncludeNotax','name':'（残损）购货折扣Total(不含税)'},
+                                {'value':'itrDisctContractText','name':'条款-目标退佣'},
+                                {'value':'itrDisctContractValue','name':'本年度目标计算-目标退佣'},
+                                {'value':'itrDisctSumMoney','name':'本月合同调整-目标退佣'},
+                                {'value':'itrDisctContractAdj','name':'本月对帐调整-目标退佣'},
+                                {'value':'itrDisctReconAdj','name':'以前年度合同调整-目标退佣'},
+                                {'value':'itrDisctLastyearConAdj','name':'以前年度对帐调整-目标退佣'},
+                                {'value':'itrDisctLastyearRecAdj','name':'以前年度采购额计算/PRG调整/自查调整-目标退佣'},
+                                {'value':'itrDisctLastyearAudAdj','name':'备注-目标退佣'},
+                                {'value':'itrDisctMemo','name':'目标退佣Total'},
+                                {'value':'itrDisctIncludeTax','name':'目标退佣(不含税)Total'},
+                                {'value':'itrDisctIncludeNotax','name':'达到目标条款相应的点数目标退佣'},
+                                {'value':'bsdtDisctContractText','name':'条款-商业发展支持'},
+                                {'value':'bsdtDisctContractValue','name':'条款（%）-商业发展支持'},
+                                {'value':'bsdtDisctSumMoney','name':'本月采购额计算-商业发展支持'},
+                                {'value':'bsdtDisctContractAdj','name':'本月合同调整-商业发展支持'},
+                                {'value':'bsdtDisctReconAdj','name':'本月对帐调整-商业发展支持'},
+                                {'value':'bsdtDisctLastyearConAdj','name':'以前年度合同调整-商业发展支持'},
+                                {'value':'bsdtDisctLastyearRecAdj','name':'以前年度对帐调整-商业发展支持'},
+                                {'value':'bsdtDisctLastyearAudAdj','name':'以前年度采购额计算/PRG调整/自查调整-商业发展支持'},
+                                {'value':'bsdtDisctMemo','name':'备注-商业发展支持'},
+                                {'value':'bsdtDisctIncludeTax','name':'商业发展支持Total'},
+                                {'value':'bsdtDisctIncludeNotax','name':'商业发展支持Total(不含税)'},
+                                {'value':'ldiDisctContractText','name':'条款-延误送货罚款'},
+                                {'value':'ldiDisctContractValue','name':'条款（%）-延误送货罚款'},
+                                {'value':'ldiDisctSumMoney','name':'本月计算-延误送货罚款'},
+                                {'value':'ldiDisctContractAdj','name':'本月合同调整-延误送货罚款'},
+                                {'value':'ldiDisctReconAdj','name':'本月对帐调整-延误送货罚款'},
+                                {'value':'ldiDisctLastyearConAdj','name':'以前年度合同调整-延误送货罚款'},
+                                {'value':'ldiDisctLastyearRecAdj','name':'以前年度对帐调整-延误送货罚款'},
+                                {'value':'ldiDisctLastyearAudAdj','name':'以前年度PRG调整/自查调整-延误送货罚款'},
+                                {'value':'ldiDisctMemo','name':'备注-延误送货罚款'},
+                                {'value':'ldiDisctIncludeTax','name':'延误送货罚款Total'},
+                                {'value':'ldiDisctIncludeNotax','name':'延误送货罚款Total(不含税)'},
+                                {'value':'nonfpDisctContractText','name':'条款-满足率低于95%罚款'},
+                                {'value':'nonfpDisctContractValue','name':'条款（%）-满足率低于95%罚款'},
+                                {'value':'nonfpDisctSumMoney','name':'本月计算-满足率低于95%罚款'},
+                                {'value':'nonfpDisctContractAdj','name':'本月合同调整-满足率低于95%罚款'},
+                                {'value':'nonfpDisctReconAdj','name':'本月对帐调整-满足率低于95%罚款'},
+                                {'value':'nonfpDisctLastyearConAdj','name':'以前年度合同调整-满足率低于95%罚款'},
+                                {'value':'nonfpDisctLastyearRecAdj','name':'以前年度对帐调整-满足率低于95%罚款'},
+                                {'value':'nonfpDisctLastyearAudAdj','name':'以前年度PRG调整/自查调整-满足率低于95%罚款'},
+                                {'value':'nonfpDisctMemo','name':'备注-满足率低于95%罚款'},
+                                {'value':'nonfpDisctIncludeTax','name':'满足率低于95%罚款Total'},
+                                {'value':'nonfpDisctIncludeNotax','name':'满足率低于95%罚款Total(不含税)'},
+                                {'value':'couDisctContractText','name':'条款-优惠券'},
+                                {'value':'couDisctContractValue','name':'条款（%）-优惠券'},
+                                {'value':'couDisctSumMoney','name':'本月计算-优惠券'},
+                                {'value':'couDisctContractAdj','name':'本月合同调整-优惠券'},
+                                {'value':'couDisctReconAdj','name':'本月对帐调整-优惠券'},
+                                {'value':'couDisctLastyearConAdj','name':'以前年度合同调整-优惠券'},
+                                {'value':'couDisctLastyearRecAdj','name':'以前年度对帐调整-优惠券'},
+                                {'value':'couDisctLastyearAudAdj','name':'以前年度PRG调整/自查调整-优惠券'},
+                                {'value':'couDisctMemo','name':'备注-优惠券'},
+                                {'value':'couDisctIncludeTax','name':'优惠券Total'},
+                                {'value':'couDisctIncludeNotax','name':'优惠券Total(不含税)'},
+                                {'value':'vipDisctContractText','name':'条款-会员优惠'},
+                                {'value':'vipDisctContractValue','name':'条款（%）-会员优惠'},
+                                {'value':'vipDisctSumMoney','name':'本月计算-会员优惠'},
+                                {'value':'vipDisctContractAdj','name':'本月合同调整-会员优惠'},
+                                {'value':'vipDisctReconAdj','name':'本月对帐调整-会员优惠'},
+                                {'value':'vipDisctLastyearConAdj','name':'以前年度合同调整-会员优惠'},
+                                {'value':'vipDisctLastyearRecAdj','name':'以前年度对帐调整-会员优惠'},
+                                {'value':'vipDisctLastyearAudAdj','name':'以前年度PRG调整/自查调整-会员优惠'},
+                                {'value':'vipDisctMemo','name':'备注-会员优惠'},
+                                {'value':'vipDisctIncludeTax','name':'会员优惠Total'},
+                                {'value':'vipDisctIncludeNotax','name':'会员优惠Total(不含税)'},
+                                {'value':'uncontrDisctContractText','name':'条款-未在合同上的提早付款折扣'},
+                                {'value':'uncontrDisctContractValue','name':'条款（%）-未在合同上的提早付款折扣'},
+                                {'value':'uncontrDisctSumMoney','name':'本月计算-未在合同上的提早付款折扣'},
+                                {'value':'uncontrDisctContractAdj','name':'本月合同调整-未在合同上的提早付款折扣'},
+                                {'value':'uncontrDisctReconAdj','name':'本月对帐调整-未在合同上的提早付款折扣'},
+                                {'value':'uncontrDisLastyearConAdj','name':'以前年度合同调整-未在合同上的提早付款折扣'},
+                                {'value':'uncontrDisLastyearRecAdj','name':'以前年度对帐调整-未在合同上的提早付款折扣'},
+                                {'value':'uncontrDisLastyearAudAdj','name':'以前年度PRG调整/自查调整-未在合同上的提早付款折扣'},
+                                {'value':'uncontrDisctMemo','name':'备注-未在合同上的提早付款折扣'},
+                                {'value':'uncontrDisctIncludeTax','name':'未在合同上的提早付款折扣Total'},
+                                {'value':'uncontrDisctIncludeNotax','name':'未在合同上的提早付款折扣Total(不含税)'},
+                                {'value':'costRedIncome','name':'条款-成本补差'},
+                                {'value':'costRedIncomeValue','name':'条款（%）-成本补差'},
+                                {'value':'costRedIncomeCurmonTta','name':'本月计算(TTA)-成本补差'},
+                                {'value':'costRedIncomeCurmonOntop','name':'本月计算(ON_TOP)-成本补差'},
+                                {'value':'costRedIncomePyyearTta','name':'以前年度计算(TTA)-成本补差'},
+                                {'value':'costRedIncomePyyearOntop','name':'以前年度计算(ON_TOP)-成本补差'},
+                                {'value':'costRedContractAdj','name':'本月合同调整-成本补差'},
+                                {'value':'costRedReconAdj','name':'本月对帐调整-成本补差'},
+                                {'value':'costRedLastyearConAdj','name':'以前年度合同调整-成本补差'},
+                                {'value':'costRedLastyearRecAdj','name':'以前年度对帐调整-成本补差'},
+                                {'value':'costRedLastyearAudAdj','name':'以前年度PRG调整/自查调整-成本补差'},
+                                {'value':'costRedMemo','name':'备注-成本补差'},
+                                {'value':'costRedIncludeTax','name':'成本补差Total'},
+                                {'value':'costDisctExcludeNotax','name':'成本补差Total(不含税)'},
+                                {'value':'otherOem','name':'条款-OEM试用装'},
+                                {'value':'otherOemValue','name':'条款（%）-OEM试用装'},
+                                {'value':'otherOemMonthTta','name':'本月计算(TTA)-OEM试用装'},
+                                {'value':'otherOemMonthOntop','name':'本月计算(ON_TOP)-OEM试用装'},
+                                {'value':'otherOemPyyearTta','name':'以前年度计算(TTA)-OEM试用装'},
+                                {'value':'otherOemPyyearOntop','name':'以前年度计算(ON_TOP)-OEM试用装'},
+                                {'value':'otherOemContractAdj','name':'本月合同调整-OEM试用装'},
+                                {'value':'otherOemReconAdj','name':'本月对帐调整-OEM试用装'},
+                                {'value':'otherOemLastyearConAdj','name':'以前年度合同调整-OEM试用装'},
+                                {'value':'otherOemLastyearRecAdj','name':'以前年度对帐调整-OEM试用装'},
+                                {'value':'otherOemLastyearAudAdj','name':'以前年度PRG调整/自查调整-OEM试用装'},
+                                {'value':'otherOemMemo','name':'备注-OEM试用装'},
+                                {'value':'otherOemIncludeTax','name':'OEM试用装Total'},
+                                {'value':'otherOemExcludeNotax','name':'OEM试用装otal(不含税)'},
+                                {'value':'creationDate','name':'创建日期'},
+                                {'value':'createdBy','name':'创建人'},
+                                {'value':'lastUpdatedBy','name':'更新人'},
+                                {'value':'lastUpdateDate','name':'更新日期'},
+                                {'value':'lastUpdateLogin','name':'最后登录人'},
+                                {'value':'versionNum','name':'版本号'}
+                             ]"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <div class="modal fade" id="excelTtaBeoiBillLine" data-des="excel_ttaBeoiBillLine" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        导入
+                    </h4>
+                </div>
+                <form class="ngValid" name="funcMenuForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">选择文件</span></label>
+                                <input type="file" required accept="*.xlsx"  id="fileUpLoad">
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="save(funcMenuForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="PLDeleteTtaBeoiBillLine" data-des="批量删除" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog " style="width: 300px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabell">
+                        选择月份
+                    </h4>
+                </div>
+                <form class="ngValid" name="TtaTermsAcCountForm"  >
+                    <div class="modal-body">
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn">
+                                    <span class="w100">月份</span></label>
+                                <input type="text" class="form-control radius3" required
+                                       date-time-picker="" data-date-format="yyyy-mm"
+                                       data-start-view="3" data-min-view="3" data-max-view="3"
+                                       ng-model="paramsPL.month" >
+                            </div>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+
+                    <div class="modal-footer ">
+                        <div style="text-align:center">
+                            <button style="" type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button ng-click="saveWindow(TtaTermsAcCountForm.$invalid)" validate-form-btn="" data-validate-form="funcMenuForm" id="saveButton1" class="btn btn-primary mr10">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+</div>

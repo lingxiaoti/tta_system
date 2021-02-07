@@ -1,0 +1,299 @@
+<div ng-controller="budgetBatchSaveCtrl" class="gridtable">
+    <div class="data-table" id="processForm" data-api-post="budgetBatchForm"
+         data-api-get="findBatchHeadAndLine" data-api-del="" data-api-update="budgetBatchForm">
+
+        <div resp-change="" style="display: none"></div>
+        <header class="col-xs-12 mb10">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+            <span class="fontwB">录入批次头</span>
+        </header>
+        <div class="form-group col-xs-4 col-md-4">
+            <div class="input-group input-group-xs">
+                <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>渠道</span></label>
+                <select type="text" id="channelType" class="form-control radius3" name="channelType" required
+                        ng-model="formParams.channelType" ng-disabled="edit" ng-if="action=='new'||action=='edit'||action=='draft'||action=='refusal'"
+                        ng-change="dataTableAdd.changeHChannel(formParams.channelType)">
+                    <option ng-repeat="cht in dataTableAdd.channelHList track by $index" value="{{cht.channelCode}}"
+                            ng-selected="formParams.channelType ==cht.channelCode ">{{cht.channelName}}
+                    </option>
+                </select>
+                <input type="text" class="form-control radius3" readonly ng-model="formParams.channelName"
+                       ng-if="action!='new'&&action!='edit'&&action!='draft'&&action!='refusal'">
+            </div>
+        </div>
+        <div class="form-group col-xs-4 col-md-4">
+            <div class="input-group input-group-xs">
+                <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>期间类型</span></label>
+                <div lookup-code="PERIOD_TYPE" class="form-control radius3" required="true"
+                     look-disabled="action!='new'" ng-if="action=='new'||action=='edit'||action=='draft'||action=='refusal'"
+                     ng-model="formParams.periodType"></div>
+                <input type="text" class="form-control radius3" readonly ng-model="formParams.periodTypeName"
+                       ng-if="action!='new'&&action!='edit'&&action!='draft'&&action!='refusal'">
+            </div>
+        </div>
+
+
+        <div class="form-group col-xs-4 col-md-4">
+            <div class="input-group input-group-xs">
+                <label class="input-group-addon bn"><span class="w100">状态</span></label>
+                <div lookup-code="BATCH_STATUS" class="form-control radius3" required="true" disabled
+                     ng-if="action=='new'||action=='edit'||action=='draft'||action=='refusal'"
+                     ng-model="formParams.bcBudgetBatchStatus"></div>
+                <input type="text" class="form-control radius3" readonly ng-model="formParams.statusName"
+                       ng-if="action!='new'&&action!='edit'&&action!='draft'&&action!='refusal'">
+            </div>
+        </div>
+
+        <div class="form-group col-xs-4 col-md-4" ng-show="edit">
+            <div class="input-group input-group-xs">
+                <label class="input-group-addon bn"><span class="w100">人员</span></label>
+                <input type="text" readonly class="form-control radius3"
+                       ng-model="formParams.personName">
+            </div>
+        </div>
+        <div class="form-group col-xs-4 col-md-4" ng-show="edit">
+            <div class="input-group input-group-xs">
+                <label class="input-group-addon bn"><span class="w100">当前权限人</span></label>
+                <input type="text" readonly class="form-control radius3"
+                       ng-model="formParams.substitutePersonName">
+            </div>
+        </div>
+        <div class="form-group col-xs-4 col-md-4" ng-show="edit">
+            <div class="input-group input-group-xs">
+                <label class="input-group-addon bn"><span class="w100">批次编号</span></label>
+                <input type="text" readonly class="form-control radius3"
+                       ng-model="formParams.bcBudgetBatchCode">
+            </div>
+        </div>
+
+        <div class="form-group col-xs-4 col-md-4">
+            <div class="input-group input-group-xs" ng-init="formParams.isUnconditionalCost='N'">
+                <label class="input-group-addon bn"><span class="w100">无条件费用</span></label>
+                <label class="radio-inline">
+                    <input type="radio" ng-model="formParams.isUnconditionalCost"
+                           name="isUnconditionalCost" id="isUnconditionalCost1" value="Y"> 是
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" ng-model="formParams.isUnconditionalCost"
+                           name="isUnconditionalCost" id="isUnconditionalCost2" value="N"> 否
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group col-xs-4 col-md-4">
+            <div class="input-group input-group-xs">
+                <label class="input-group-addon bn"><span class="w100"><i class="red">*</i>职位</span></label>
+                <select type="text" id="position" class="form-control radius3" name="position" required
+                        ng-if="action=='new'||action=='edit'||action=='draft'||action=='refusal'"
+                        ng-model="formParams.positionId" ng-options="pt.positionId as pt.positionName for pt in dataTableAdd.positionData">
+                    <!--<option ng-repeat="pt in dataTableAdd.positionData track by $index" ng-value="pt.positionId"-->
+                    <!--ng-selected="formParams.positionId ==pt.positionId ">{{pt.positionName}}-->
+                    <!--</option>-->
+                    <input type="text" class="form-control radius3" readonly ng-model="formParams.positionName"
+                           ng-if="action!='new'&&action!='edit'&&action!='draft'&&action!='refusal'">
+                </select>
+                <!--<input type="text" class="form-control radius3" disabled ng-model="formParams.positionName"-->
+                <!--ng-if="action!='new'&&action!='edit'&&action!='draft'&&action!='refusal'">-->
+            </div>
+        </div>
+
+        <div class="form-group col-xs-4 col-md-4" ng-show="edit">
+            <div class="input-group input-group-xs">
+                <label class="input-group-addon bn"><span class="w100">单据来源</span></label>
+                <input type="text" readonly class="form-control radius3"
+                       ng-model="formParams.sourceType">
+            </div>
+        </div>
+        <div class="form-group col-xs-4 col-md-4" ng-show="edit">
+            <div class="input-group input-group-xs">
+                <label class="input-group-addon bn"><span class="w100">来源单据编号</span></label>
+                <input type="text" readonly class="form-control radius3"
+                       ng-model="formParams.sourceCode">
+            </div>
+        </div>
+
+        <div class="form-group col-xs-4 col-md-4" ng-show="edit">
+            <div class="input-group input-group-xs">
+                <label class="input-group-addon bn"><span class="w100">调整金额汇总</span></label>
+                <input type="text" readonly class="form-control radius3"
+                       ng-model="formParams.sumsCount">
+            </div>
+        </div>
+        <div class="form-group col-xs-12 col-md-12">
+            <div class="input-group input-group-xs">
+                <label class="input-group-addon bn"><span class="w100">备注</span></label>
+                <textarea class="form-control" rows="3" ng-model="formParams.bcBudgetBatchDesc"
+                          max-textarea-cn="100"
+                          style="height: auto"></textarea>
+
+            </div>
+        </div>
+
+        <header class="col-xs-12 mb10" style="padding-top:15px">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+            <span class="fontwB">录入批次行</span>
+            <div class="pull-right" ng-hide="action == 'detail'">
+                <button class="btn btn-primary btn-xs" type="button" ng-click="dataTableAdd.addRow()">
+                    {{$l('新增行')}}
+                </button>
+                <button style="margin: 0 3px" class="btn btn-primary btn-xs" type="button" ng-click="downloadTmp()">
+                    {{$l('下载批次行模版')}}
+                </button>
+                <div class="btn btn-primary btn-xs fileDiv"
+                     ng-class="{'fileBtn_disable':action!='new' && action!='draft'}">导入
+                    <upload-file resp-id="respId" curobj="uploadObj" upload-url="bcUploadUrl"
+                                 upcb="uploadcb"></upload-file>
+                </div>
+            </div>
+        </header>
+
+        <div style="clear: both"></div>
+        <div ng-show="importMsg" class="red" style="text-indent: 24px; padding: 5px 20px;">{{importMsg}}</div>
+        <div class="" ng-nicescroll="" id="nicescroll_add"
+             nice-option="{oneaxismousemode:true,railvalign: 'bottom',cursorcolor:'#1e90c2'}">
+            <table class="nicescroll-height report-data" id="data_table_main_add">
+                <thead>
+                <tr>
+                    <th style="width: 60px;">序号</th>
+                    <th ng-repeat="title in dataTableAdd.legend track by $index">
+                        <i ng-hide="title=='备注' || title=='操作'" class="red">*</i>{{title}}
+                    </th>
+                </tr>
+                </thead>
+                <tbody ng-style="tableStyle" ng-nicescroll="" ng-if="dataTableAdd.data.length">
+                <tr ng-repeat=" item in dataTableAdd.data track by $index " ng-click="dataTableAdd.rowIndex=$index">
+                    <td style="width: 60px;">{{$index+1}}</td>
+                    <td class="input-group-xs" ng-click="dataTableAdd.rowBtnClick($index)">
+                        <div class="input-group-xs">
+                            <div lookup-code="CHANNEL_TYPE" class="form-control radius3" required="true"
+                                 ng-if="action=='new'||action=='edit'||action=='draft'||action=='refusal'"
+                                 data-callback="channelTypeLineChange"
+                                 ng-model="item.channelType">
+                            </div>
+                            <input type="text" class="form-control radius3" readonly ng-model="item.channelName"
+                                   ng-if="action!='new'&&action!='edit'&&action!='draft'&&action!='refusal'">
+                        </div>
+                        <!--.行上的渠道需改为不受头上的渠道限制，可以选择所有的渠道信息。（已跟田确认）2018-0912
+                        <select type="text" id="channelTypeLine" class="form-control radius3" name="channelTypeLine" required-->
+                        <!--ng-model="item.channelType">-->
+                        <!--<option ng-repeat="clt in dataTableAdd.channelLineList track by $index" ng-value="clt.channelCode" ng-selected="item.channelType ==clt.channelCode">{{clt.channelName}}</option>-->
+
+                        <!--</select>-->
+                    </td>
+
+                    <td class="w300">
+                        <div class="input-group input-group-xs">
+                            <input type="text" class="form-control radius3 readonly-white" name="departmentLine" required
+                                   ng-model="item.departmentName" title="{{item.departmentName}}" readonly>
+                            <span class="input-group-btn input-xs" style="padding: 0;">
+                                <button type="button" class="btn btn-default accountBtn" data-toggle="modal" data-target="#scrapSheetApplicant"
+                                        ng-disabled="!item.channelType" ng-click="dataTableAdd.rowBtnClick($index)">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </td>
+
+                    <td>
+                        <input type="text" date-time-picker data-date-format="yyyy-mm-dd" data-min-view="2" name="expenseDate" required
+                               class="form-control input-xs radius3" ng-model="item.expenseDate" title="{{item.expenseDate}}"/>
+                    </td>
+
+                    <td>
+                        <div class="input-group input-group-xs">
+                            <input type="text" readonly class="form-control radius3 readonly-white" name="expenseAccountLine"
+                                   required ng-model="item.expenseAccountName" title="{{item.expenseAccountName}}">
+                            <span class="input-group-btn input-xs" style="padding: 0;">
+                                <button type="button" class="btn btn-default accountBtn" data-toggle="modal" data-target="#expSubject"
+                                        ng-disabled="!item.channelType" ng-click="dataTableAdd.rowBtnClick($index)">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </td>
+
+                    <td>
+                        <input type="number" class="form-control input-xs radius3" ng-model="item.adjustAmount" name="adjustAmount"
+                               ng-change="changeAdjustAmount(item,'adjustAmount',2)"
+                               ng-blur="dataTableAdd.sums(dataTableAdd.data)" title="{{item.adjustAmount}}" required/>
+                    </td>
+
+                    <td>
+                        <input type="text" class="form-control input-xs radius3" name="feeSubject" max-input-cn="100" title="{{item.bcBudgetBatchLDesc}}"
+                               ng-model="item.bcBudgetBatchLDesc" onblur="this.value=this.value.substring(0,100)">
+
+                    </td>
+
+                    <td style="width: 80px;"><a ng-show="action=='new' || action=='draft'" href=""
+                                                ng-click="dataTableAdd.delete($index)">删除</a></td>
+
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+
+        <div saaf-file data-file-data="fileData" data-lookupcode="fileFilter.code" class="mt10" data-file-filter='{{fileType}}' data-view-only="fileViewOnly"
+             data-label='<header class="col-xs-12"><i class="fa fa-cog" aria-hidden="true"></i><span class="fontwB">附件</span></header>'
+             data-lookupcode-key="fileFilter.key"></div>
+    </div>
+
+    <!--费用科目-->
+    <div ems-exp-subject-select data-sel-params="{responsibilityId:respId,channelType:ctrlChannelType,isBudgetAuth:'Y'}"
+         id="expSubject" ng-model="expSubjectItem" data-search-auto="true"
+         data-keys="{key:'expenseAccountId',value:'expenseAccountName'}" data-dir-type="header"
+         data-return-key="dataTableAdd.data[dataTableAdd.rowIndex].expenseAccount"
+         data-return-value="dataTableAdd.data[dataTableAdd.rowIndex].expenseAccountName"></div>
+
+    <!--部门控件-->
+    <div ems-dept-select data-sel-params="{respId:respId}" id="deptInfo" ng-model="deptModel"
+         data-keys="{key:'departmentId',value:'departmentName'}"
+         data-return-key="dataTableAdd.data[dataTableAdd.rowIndex].departmentId"
+         data-return-value="dataTableAdd.data[dataTableAdd.rowIndex].departmentName"></div>
+
+    <!--oa通用的部门选择-->
+    <div lov-list="applicant" role="dialog" data-title="请选择申请部门" id="scrapSheetApplicant" ng-model="code3" class=""
+         data-url="orgFindDeptInfo"
+         data-auto-request="false"
+         data-dynamic-params="{respId:ctrlRespId,channelCode:dataTableAdd.data[dataTableAdd.rowIndex].channelType}"
+         data-callback="departSelect"
+         data-cancel-callback="cancelDtSelect"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'departmentId','value':'departmentName',hide:'true'}"
+         data-other-column="[{'name':'部门编码','key':'departmentCode'},{'name':'部门名称',key:'departmentName'}]"
+         data-show-index="false"
+         data-type="competitor"
+         data-search-key="[{'key':'departmentName','placeholder':'部门名称'}]"
+    >
+    </div>
+
+    <style type="text/css">
+        .fileBtn {
+            opacity: 0;
+            position: absolute;
+            top: -2px;
+            left: -8px;
+            height: 34px;
+            width: 80px;
+            padding: 5px 0;
+            overflow: hidden;
+        }
+
+        .fileDiv {
+            cursor: pointer;
+            position: relative;
+            border-radius: 3px;
+            overflow: hidden;
+            display: inline-table;
+        }
+
+        .fileBtn_disable, .fileBtn_disable:hover {
+            background-color: #85b4dd;
+            border-color: #7cacd4;
+        }
+
+    </style>
+
+</div>

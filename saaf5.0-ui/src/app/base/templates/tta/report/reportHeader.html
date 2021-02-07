@@ -1,0 +1,614 @@
+<div ng-controller="reportHeaderCtrl" class="bigdata">
+    <form class="form bg-white" inner-frame data-des="此节点必需－内框页面的指令" ng-submit="dataTable.search(1)">
+            <!--------------------- 按钮--->
+            <div class="bg-gray-white bt">
+                <div class="bg-gray-white p5">
+                    <div class="pull-right">
+                        <div class="btn-group btn-group-xs ">
+                            <button class="btn btn-default" type="button" ng-click="params.respId=ctrlRespId;dataTable.search(1)">
+                                <i class="fa fa-search" aria-hidden="true"></i>{{$l('搜索')}}
+                            </button>
+                            <button class="btn btn-default" type="button" ng-click="dataTable.restore()">
+                                <i class="fa fa-undo" aria-hidden="true"></i>{{$l('重置')}}
+                            </button>
+                        </div>
+                        <div class="btn-group btn-group-xs ml10" permission-buttons="btnNew,btnModify,btnDel,FBOI,btnPowerSearch"></div>
+                    </div>
+
+                    <div class="btn-group btn-group-xs ">
+                        <button class="btn  btn-warning" ng-click="moreInput($event)">
+                            <i class="fa fa-chevron-circle-down"></i>{{$l('高级查询')}}
+                        </button>
+                        <button class="btn btn-primary" ng-click="fullWindow($event)">
+                            <i class="fa fa-square-o"></i>{{$l('数据全屏')}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!---------------------  / .按钮  --->
+
+        <div main-scroll-style data-des="此节点必需－用户计算滚动区域高度">
+            <div class="nicescroll-height  bg-white " ng-nicescroll
+                 nice-option="{{niceOpction}}" data-des="此节点必需-滚动内容及指令">
+                <div class=" mt10 pb5 input-form bb oh" input-form
+                     data-des="此节点必需－用于识别输入表单的指令">
+                    <div search-form
+                         data-legend="{{searchLegend}}"
+                         ng-model="params"
+                    ></div>
+                </div>
+
+                <div class="data-table">
+                    <div base-data-table="dataTable"
+                         data-auto-request="true"
+                         ng-params="params"
+                         data-show-index="true"
+                         data-url="reportHeaderFind"
+                         data-legend="{{legend}}"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+    <div lov-list="selectTtaOiCwList" role="dialog" data-title="C&W【新增】" id="selectTtaOiCw" ng-model="current.em"
+         data-url="findPogPagination"
+         data-dynamic-params='{"flag": "CREATE"}'
+         data-callback="selectCwReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'pogSpaceLineId','value':'promotionSection','name':'促销期间'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'是否生成','key':'isCreate'}]"
+         data-search-key="[{'key':'promotionSection','placeholder':'促销期间'},
+                              {'key':'isCreate','placeholder':'是否已经生成'}]"
+    >
+    </div>
+
+
+    <!-- DM权限控制 start -->
+    <div role="dialog" class="modal fade" id="selectDmSearch" data-des="DM权限查询" data-backdrop="static" tabindex="-1" >
+        <div class="modal-dialog" style="width: 950px; height: 300px">
+            <!--addModalForm start-->
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        DM权限查询
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.groupCode" class="form-control" placeholder="请输入groupCode">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.groupDesc" class="form-control" placeholder="请输入groupDesc">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.deptCode" class="form-control" placeholder="请输入deptCode">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.deptDesc" class="form-control" placeholder="请输入deptDesc">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.brandCn" class="form-control" placeholder="请输入brandCn">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-1">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary"  type="button" ng-click="deptGroupTable.search(1)">查询</button>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-1">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary"  type="button" ng-click="deptGroupTable.restore()">重置</button>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="data-table">
+                            <div base-data-table="deptGroupTable"
+                                 data-auto-request="true"
+                                 ng-params="powerParam"
+                                 data-show-index="true"
+                                 data-url="findDmNotExistPagination"
+                                 data-keys="{'key':'groupCode'}"
+                                 data-page-size="10"
+                                 data-legend="[
+                                     {'value':'groupCode','name':'GROUP_CODE'},
+                                     {'value':'groupDesc','name':'GROUP_DESC'},
+                                     {'value':'deptCode','name':'DEPT_CODE'},
+                                     {'value':'deptDesc','name':'DEPT_DESC'},
+                                     {'value':'brandCn','name':'BRAND_CN'},
+                                    ]"><!-- {'value':'isSql','name':'是否sql文本'},-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+                </div>
+            </div>
+            <!--addModalForm end-->
+        </div>
+    </div>
+    <!-- DM权限控制 end -->
+
+    <!-- OSD权限查询start--->
+    <div role="dialog" class="modal fade" id="selectOsdSearch" data-des="OSD权限查询" data-backdrop="static" tabindex="-1" >
+        <div class="modal-dialog" style="width: 950px; height: 300px">
+            <!--addModalForm start-->
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        OSD权限查询
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.groupCode" class="form-control" placeholder="请输入groupCode">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.groupDesc" class="form-control" placeholder="请输入groupDesc">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.deptCode" class="form-control" placeholder="请输入deptCode">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.deptDesc" class="form-control" placeholder="请输入deptDesc">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.brandCn" class="form-control" placeholder="请输入brandCn">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-1">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary"  type="button" ng-click="osdDeptGroupTable.search(1)">查询</button>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-1">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary"  type="button" ng-click="osdDeptGroupTable.restore()">重置</button>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="data-table">
+                            <div base-data-table="osdDeptGroupTable"
+                                 data-auto-request="true"
+                                 ng-params="powerParam"
+                                 data-show-index="true"
+                                 data-url="findOsdNotExistPagination"
+                                 data-keys="{'key':'groupCode'}"
+                                 data-page-size="10"
+                                 data-legend="[
+                                     {'value':'groupCode','name':'GROUP_CODE'},
+                                     {'value':'groupDesc','name':'GROUP_DESC'},
+                                     {'value':'deptCode','name':'DEPT_CODE'},
+                                     {'value':'deptDesc','name':'DEPT_DESC'},
+                                     {'value':'brandCn','name':'BRAND_CN'},
+                                    ]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+                </div>
+            </div>
+            <!--addModalForm end-->
+        </div>
+    </div>
+    <!-- OSD权限查询end--->
+
+    <!-- CW权限查询 start --->
+    <div role="dialog" class="modal fade" id="selectCwSearch" data-des="CW权限查询" data-backdrop="static" tabindex="-1" >
+        <div class="modal-dialog" style="width: 950px; height: 300px">
+            <!--addModalForm start-->
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        CW权限查询
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.groupCode" class="form-control" placeholder="请输入groupCode">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.groupDesc" class="form-control" placeholder="请输入groupDesc">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.deptCode" class="form-control" placeholder="请输入deptCode">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.deptDesc" class="form-control" placeholder="请输入deptDesc">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.brandCn" class="form-control" placeholder="请输入brandCn">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-1">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary"  type="button" ng-click="cwDeptGroupTable.search(1)">查询</button>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-1">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary"  type="button" ng-click="cwDeptGroupTable.restore()">重置</button>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="data-table">
+                            <div base-data-table="cwDeptGroupTable"
+                                 data-auto-request="true"
+                                 ng-params="powerParam"
+                                 data-show-index="true"
+                                 data-url="findCwNotExistPagination"
+                                 data-keys="{'key':'groupCode'}"
+                                 data-page-size="10"
+                                 data-legend="[
+                                     {'value':'groupCode','name':'GROUP_CODE'},
+                                     {'value':'groupDesc','name':'GROUP_DESC'},
+                                     {'value':'deptCode','name':'DEPT_CODE'},
+                                     {'value':'deptDesc','name':'DEPT_DESC'},
+                                     {'value':'brandCn','name':'BRAND_CN'},
+                                    ]"><!-- {'value':'isSql','name':'是否sql文本'},-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+                </div>
+            </div>
+            <!--addModalForm end-->
+        </div>
+    </div>
+    <!-- CW权限查询 end --->
+
+    <!-- NPP权限查询 start --->
+    <div role="dialog" class="modal fade" id="selectNPPSearch" data-des="NPP权限查询" data-backdrop="static" tabindex="-1" >
+        <div class="modal-dialog" style="width: 950px; height: 300px">
+            <!--addModalForm start-->
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        NPP权限查询
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.groupCode" class="form-control" placeholder="请输入groupCode">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.groupDesc" class="form-control" placeholder="请输入groupDesc">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.deptCode" class="form-control" placeholder="请输入deptCode">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.deptDesc" class="form-control" placeholder="请输入deptDesc">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.brandCn" class="form-control" placeholder="请输入brandCn">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-1">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary"  type="button" ng-click="nppDeptGroupTable.search(1)">查询</button>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-1">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary"  type="button" ng-click="nppDeptGroupTable.restore()">重置</button>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="data-table">
+                            <div base-data-table="nppDeptGroupTable"
+                                 data-auto-request="true"
+                                 ng-params="powerParam"
+                                 data-show-index="true"
+                                 data-url="findNPPNotExistPagination"
+                                 data-keys="{'key':'groupCode'}"
+                                 data-page-size="10"
+                                 data-legend="[
+                                     {'value':'groupCode','name':'GROUP_CODE'},
+                                     {'value':'groupDesc','name':'GROUP_DESC'},
+                                     {'value':'deptCode','name':'DEPT_CODE'},
+                                     {'value':'deptDesc','name':'DEPT_DESC'},
+                                     {'value':'brandCn','name':'BRAND_CN'},
+                                    ]"><!-- {'value':'isSql','name':'是否sql文本'},-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+                </div>
+            </div>
+            <!--addModalForm end-->
+        </div>
+    </div>
+    <!-- NPP权限查询 end --->
+
+    <!-- HWB权限查询 start --->
+    <div role="dialog" class="modal fade" id="selectHwbSearch" data-des="HWB权限查询" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog" style="width: 950px; height: 300px">
+            <!--addModalForm start-->
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        HWB权限查询
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.groupCode" class="form-control" placeholder="请输入groupCode">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.groupDesc" class="form-control" placeholder="请输入groupDesc">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.deptCode" class="form-control" placeholder="请输入deptCode">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.deptDesc" class="form-control" placeholder="请输入deptDesc">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-2">
+                        <div class="input-group input-group-xs">
+                            <input ng-model="powerParam.brandCn" class="form-control" placeholder="请输入brandCn">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-1">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary"  type="button" ng-click="hwbDeptGroupTable.search(1)">查询</button>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-1">
+                        <div class="input-group input-group-xs">
+                            <button class="btn btn-xs btn-primary"  type="button" ng-click="hwbDeptGroupTable.restore()">重置</button>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="data-table">
+                            <div base-data-table="hwbDeptGroupTable"
+                                 data-auto-request="true"
+                                 ng-params="powerParam"
+                                 data-show-index="true"
+                                 data-url="findHwbNotExistPagination"
+                                 data-keys="{'key':'groupCode'}"
+                                 data-page-size="10"
+                                 data-legend="[
+                                     {'value':'groupCode','name':'GROUP_CODE'},
+                                     {'value':'groupDesc','name':'GROUP_DESC'},
+                                     {'value':'deptCode','name':'DEPT_CODE'},
+                                     {'value':'deptDesc','name':'DEPT_DESC'},
+                                     {'value':'brandCn','name':'BRAND_CN'},
+                                    ]"><!-- {'value':'isSql','name':'是否sql文本'},-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cb"></div>
+                </div>
+            </div>
+            <!--addModalForm end-->
+        </div>
+    </div>
+    <!-- HWB权限查询 end --->
+
+
+    <div lov-list="selectTtaOiOSDList" role="dialog" data-title="OSD【新增】" id="selectTtaOiOSD" ng-model="current.em"
+         data-url="findTtaOsdBaseLinePagination"
+         data-dynamic-params='{"flag": "CREATE"}'
+         data-callback="selectOSDReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'osdBaseLineId','value':'promotionSection','name':'促销期间'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'是否生成','key':'isCreate'}]"
+         data-search-key="[{'key':'promotionSection','placeholder':'促销期间'},
+                              {'key':'isCreate','placeholder':'是否已经生成'}]"
+    >
+    </div>
+
+
+    <!--dm start -->
+    <div lov-list="selectTtaOiDMList" role="dialog" data-title="DM【新增】" id="selectTtaOiDM" ng-model="current.em"
+         data-url="findDmCreateInfo"
+         data-dynamic-params='{"flag": "CREATE"}'
+         data-callback="selectDmReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'durationPeriod','value':'durationPeriod','name':'促销档期'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'是否生成','key':'isCreate'}]"
+         data-search-key="[{'key':'durationPeriod','placeholder':'促销档期'},
+                          {'key':'isCreate','placeholder':'是否已经生成'}]"
+    >
+    </div>
+    <!--dm end -->
+
+    <div lov-list="selectTtaOiHwbList" role="dialog" data-title="HWB【新增】" id="selectTtaOiHwb" ng-model="current.em"
+         data-url="findHwbPagination"
+         data-dynamic-params='{"flag": "CREATE"}'
+         data-callback="selectHwbReturn"
+         data-auto-request="true"
+         data-return-type="key"
+         data-pagination="{'pageIndex':'1','pageRows':'5'}"
+         data-checked-type="radio"
+         data-keys="{'key':'pogSpaceLineId','value':'promotionSection','name':'促销期间'}"
+         data-show-index="false"
+         data-type="competitor"
+         data-other-column="[{'name':'是否生成','key':'isCreate'}]"
+         data-search-key="[{'key':'promotionSection','placeholder':'促销期间'},
+                              {'key':'isCreate','placeholder':'是否已经生成'}]"
+    >
+    </div>
+
+    <!--NPP start-->
+    <div class="modal fade" id="NppModal" data-des="新增" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <form name="NppModalForm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close"
+                                data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            NPP【新增】
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">*</i>年月:</span></label>
+                                <input type="text" required class="form-control radius3 input-xs"
+                                       date-time-picker data-is-today="true" name="yearMonth"
+                                       data-date-format="yyyy-mm"
+                                       data-min-View="3" ng-model="addDate.yearMonth"
+                                       autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="cb"></div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button   type="button" validate-form-btn="NppModalForm"  validate-form-btn="" ng-click="NppNewProductData(NppModalForm.$invalid)"
+                                  class="btn btn-warning btn-sm">
+                            <span class="fa fa-plus"> 确定新增</span></button>
+                        <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal"
+                                aria-label="Close"><span class="fa ">取消</span>
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </form>
+        </div><!-- /.modal -->
+    </div>
+    <!--NPP end-->
+
+    <!--FG start-->
+    <div class="modal fade" id="freeGoodModal" data-des="新增" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <form name="freeGoodModalForm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close"
+                                data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">
+                            FreeGood【新增】
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group col-xs-6 col-md-6">
+                            <div class="input-group input-group-xs">
+                                <label class="input-group-addon bn"><span
+                                        class="w100"><i class="red">*</i>年:</span></label>
+                                <input type="text" required class="form-control radius3 input-xs"
+                                       date-time-picker data-is-today="true" name="yearMonth"
+                                       data-date-format="yyyy"
+                                       data-min-View="3" ng-model="addDate.yearMonth"
+                                       autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="cb"></div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button   type="button" validate-form-btn="freeGoodModalForm"  validate-form-btn="" ng-click="freeGoodsNewData(freeGoodModalForm.$invalid)"
+                                  class="btn btn-warning btn-sm">
+                            <span class="fa fa-plus"> 确定新增</span></button>
+                        <button type="reset" class="btn btn-default btn-sm" data-dismiss="modal"
+                                aria-label="Close"><span class="fa ">取消</span>
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </form>
+        </div><!-- /.modal -->
+    </div>
+    <!--FG end-->
+
+</div>

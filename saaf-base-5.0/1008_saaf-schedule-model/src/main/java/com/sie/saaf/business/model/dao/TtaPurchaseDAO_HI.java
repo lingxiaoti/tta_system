@@ -1,0 +1,21 @@
+package com.sie.saaf.business.model.dao;
+
+import com.sie.saaf.common.model.dao.BaseCommonDAO_HI;
+import com.sie.saaf.business.model.entities.TtaPurchaseEntity_HI;
+import org.springframework.stereotype.Component;
+import com.alibaba.fastjson.JSONObject;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Component("ttaPurchaseDAO_HI")
+public class TtaPurchaseDAO_HI extends BaseCommonDAO_HI<TtaPurchaseEntity_HI> {
+	private static final Logger LOGGER = LoggerFactory.getLogger(TtaPurchaseDAO_HI.class);
+
+	public TtaPurchaseDAO_HI() {
+		super();
+	}
+
+}

@@ -1,0 +1,237 @@
+@import "init";
+
+.basepage {
+  .btn-group a.btn {
+    //color:inherit;
+  }
+  #buttonGroupArea {
+    border: 1px dotted #ccc;
+    padding: 3px 15px;
+    border-radius: 4px;
+    min-height: 24px;
+  }
+  .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control, .timer-two input[disabled], button[disabled] {
+    background-color: inherit;
+    cursor: default;
+  }
+
+  .modal-body {
+    max-height: 360px;
+    overflow-y: auto;
+  }
+
+  form small {
+    color: #999;
+    padding-bottom: 10px;
+  }
+  .form-control:focus {
+    border-color: #ccc;
+    outline: 0;
+    box-shadow: none;
+  }
+  input, select, label, textarea {
+    cursor: default !important;
+  }
+  textarea {
+    height: auto !important;
+  }
+  .table {
+    margin-bottom: 0;
+  }
+  select, input {
+    z-index: 0;
+  }
+  .table tbody > tr:hover {
+    background-color: #fff;
+  }
+
+  .data-component {
+    width: 100%;
+  }
+  .form-group-sm {
+    padding-bottom: 10px;
+    min-height: 36px;
+    clear: both;
+
+    label {
+      font-weight: normal;
+    }
+  }
+
+  .autocomplete {
+    position: absolute;
+    background-color: #fff;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    //border:1px solid #ccc;
+    box-shadow: #999 0 0 4px;
+    margin: 0 15px;
+    padding-top: 10px;
+    max-height: 210px;
+    overflow-y: auto;
+    li {
+      position: relative;
+
+    }
+  }
+  .components {
+    padding: 10px;
+    .nav > li > a {
+      padding: 6px 8px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      min-height: 30px;
+      font-size: 12px;
+    }
+
+    .tab-content {
+      padding-top: 10px;
+    }
+    .form-group {
+      padding: 5px 10px;
+      background-color: #fff;
+      border: 1px dotted #ccc;
+    }
+    .form-group:hover {
+      box-shadow: #ccc 0 0 3px;
+      z-index: 10000;
+    }
+
+  }
+  .sortable-chosen {
+    box-shadow: #00a0e9 0 0 10px !important;
+    border: 1px solid #0099ee;
+    z-index: 10;
+  }
+  .sortable-ghost {
+    opacity: .6;
+  }
+
+  .urlIndexActive {
+    li:active, li.active, li:focus, li:hover {
+      background-color: #ccc;
+    }
+  }
+
+  .js-remove, .fa-pencil {
+    line-height: 16px;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    position: absolute;
+
+    visibility: hidden;
+    cursor: pointer;
+    color: #c00;
+    font-style: normal;
+  }
+  .layout {
+    border: 1px dotted @brand-primary;
+    padding:15px;
+    .layout-list {
+      min-height: 30px;
+    }
+
+  }
+  #DesignStage {
+    fieldset {
+      border: 1px dotted #eee;
+      margin-bottom: 15px;
+    }
+
+    .layout {
+      .js-remove, .fa-pencil {
+        visibility: hidden;
+        top: auto;
+        right: -3px;
+      }
+      .js-remove {
+        bottom: 0;
+      }
+      .fa-pencil {
+        top: -5px;
+      }
+      &:hover {
+        .js-remove, .fa-pencil {
+          visibility: visible;
+        }
+        .form-group{
+          .js-remove, .fa-pencil {
+            visibility: hidden;
+          }
+          &:hover{
+            .js-remove, .fa-pencil {
+              visibility: visible;
+            }
+
+
+          }
+        }
+      }
+
+      .btn {
+        position:relative;
+        margin:0 6px;
+        display: inline-block;
+        .js-remove, .fa-pencil {
+          visibility: visible;
+          right: -5px;
+        }
+
+      }
+    }
+
+    .form-group {
+      //transition: width 0.5s;
+      padding: 6px 15px;
+      &:hover {
+        padding: 5px 14px;
+        border: 1px dotted #ccc;
+        .js-remove, .fa-pencil {
+          visibility: visible;
+          top: auto;
+          right: -3px;
+        }
+        .js-remove {
+          bottom: 0;
+        }
+        .fa-pencil {
+          top: -5px;
+        }
+      }
+
+    }
+
+  }
+  #buttonGroupArea {
+    .btn {
+      .js-remove, .fa-pencil {
+        visibility: visible;
+        bottom: -17px;
+        top: auto;
+        margin-right: 0;
+        padding: 0 3px;
+      }
+      .js-remove {
+        right: 6px;
+      }
+      .fa-pencil {
+        left: 6px;
+      }
+    }
+  }
+
+
+
+
+
+}
+
+.pageperview{
+.layout{
+  border:none;
+}
+}

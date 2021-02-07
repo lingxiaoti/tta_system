@@ -1,0 +1,123 @@
+server:
+  port: 3311
+  tomcat:
+    max-threads: 2000
+    accept-count: 200
+    max-connections: 2000
+    max-http-post-size: -1
+    uri-encoding: UTF-8 #配置字符集
+#  context-path: /ttaServer
+
+management:
+  security:
+    enabled : false
+
+spring:
+  application:
+    name: 3001-saaf-equotation-server
+#  zipkin:
+#    base-url: http://admin:admin@${eureka.instance.hostname}:8761
+#  mail:
+#    host: smtp.exmail.qq.com
+#    username: xxxx@chinasie.com
+#    password: xxxx
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#            required: true
+  http:
+  #文件上传配置
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 200MB
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+
+eureka:
+  client:
+    serviceUrl:
+#       本地测试
+#      defaultZone: http://admin:admin@${eureka.instance.hostname}:${eureka.instance.port}/eureka/ #多个注册中心用逗号分隔
+#      uat环境
+      defaultZone: http://admin:admin@10.82.24.172:8760/eureka/,http://admin:admin@10.82.24.173:8760/eureka/ #多个注册中心用逗号分隔
+#      生产环境
+#      defaultZone: http://admin:admin@10.82.31.208:8760/eureka/ #多个注册中心用逗号分隔
+
+  instance:
+    metadata-map:
+          management:
+            context-path: /${server.context-path}
+#本地环境
+#    hostname: localhost
+#测试环境
+#    hostname: 139.159.228.191
+#uat环境
+    hostname: 10.82.24.173
+#生产环境
+#    hostname: 10.82.31.208
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    prefer-ip-address: true
+    port: 8760
+
+#阿里oss 配置
+oss:
+  endpoint: http://oss-cn-shenzhen.aliyuncs.com
+  accessKeyId: LTAIR3y4zOJRynX7
+  accessKeySecret: jhxrupOChDUWc6kVvSWff9Y1Z0oDhp
+  bucketName: saaf
+  accessProtocol: http://
+
+#fastdfs配置-生产环境
+#fastdfs:
+#  connect_timeout_in_seconds: 2
+#  network_timeout_in_seconds: 30
+#  charset: utf-8
+#  http_anti_steal_token: false
+#  http_secret_key: FastDFS1234567890
+#  http_tracker_http_port: 80
+#  tracker_servers: #TrackerList参数,支持多个
+#  - 10.82.28.126:22122
+#  thumb_image: #缩略图生成参数
+#    width: 150
+#    height: 150
+#  access: #访问地址
+#    address: 10.82.28.126
+#    http_type: http://
+#    http_port: 8888
+
+#fastdfs配置
+fastdfs:
+  connect_timeout_in_seconds: 2
+  network_timeout_in_seconds: 30
+  charset: utf-8
+  http_anti_steal_token: false
+  http_secret_key: FastDFS1234567890
+  http_tracker_http_port: 80
+  tracker_servers: #TrackerList参数,支持多个
+#  uat
+    - 10.82.24.177:22122
+#    测试环境
+#    - 139.159.229.31:22122
+#    - 139.159.229.33:22122
+  thumb_image: #缩略图生成参数
+    width: 150
+    height: 150
+  access: #访问地址
+#  uat
+#   address: 10.82.24.177
+   address: 124.172.191.124
+#   测试环境
+#   address: 139.159.229.31
+   http_type: http://
+   http_port: 8080
+#   http_port: 8081
